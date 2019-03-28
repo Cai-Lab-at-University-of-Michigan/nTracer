@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir=".." name="_nTracer-pkg-1.1.1-IDE">
+    <property file="nbproject/nbjdk.properties"/>
+    <property location="${netbeans.user}/build.properties" name="user.properties.file"/>
+    <property file="${user.properties.file}"/>
+    <import file="jdk.xml"/>
+    <import file="../build.xml"/>
+    <target name="-profile-check">
+        <startprofiler freeform="true"/>
+    </target>
+    <!-- TODO: edit the following target according to your needs -->
+    <!-- (more info: http://netbeans.org/kb/articles/freeform-config.html#profilej2se) -->
+    <target depends="-jdk-init,-profile-check" description="Run application." if="profiler.configured" name="profile-nb">
+        <fail unless="main.class">Must set property 'main.class' (e.g. in build.properties)</fail>
+        <java classname="${main.class}" dir="${working.dir}" failonerror="true" fork="true">
+            <classpath path="${run.cp}"/>
+            <jvmarg value="-ea"/>
+            <jvmarg line="${agent.jvmargs}"/>
+        </java>
+    </target>
+</project>

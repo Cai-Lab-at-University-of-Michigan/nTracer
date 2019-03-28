@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir=".." name="_nTracer-pkg-1.1.0">
+    <property file="nbproject/nbjdk.properties"/>
+    <property location="${netbeans.user}/build.properties" name="user.properties.file"/>
+    <property file="${user.properties.file}"/>
+    <import file="jdk.xml"/>
+    <target depends="-jdk-init" name="jar">
+        <ant inheritall="false" target="jar"/>
+    </target>
+    <target depends="-jdk-init" name="clean">
+        <ant inheritall="false" target="clean"/>
+    </target>
+    <target depends="-jdk-init" name="run">
+        <ant inheritall="false" target="run"/>
+    </target>
+    <target depends="-jdk-init" name="show-javadoc">
+        <ant antfile="nbproject/netbeans-targets.xml" inheritall="false" target="show-javadoc"/>
+    </target>
+    <target depends="-jdk-init" name="run-tests">
+        <ant inheritall="false" target="run-tests"/>
+    </target>
+    <target depends="-jdk-init,-jdk-presetdef-nbjpdastart" name="debug">
+        <ant antfile="nbproject/netbeans-targets.xml" inheritall="false" target="debug"/>
+    </target>
+    <target depends="-jdk-init" name="compile-selected">
+        <ant antfile="nbproject/file-targets.xml" inheritall="false" target="compile-selected"/>
+    </target>
+    <target depends="-jdk-init" name="compile-selected-test">
+        <ant antfile="nbproject/file-targets.xml" inheritall="false" target="compile-selected-test"/>
+    </target>
+    <target depends="-jdk-init" name="run-selected-tests">
+        <ant antfile="nbproject/file-targets.xml" inheritall="false" target="run-selected-tests"/>
+    </target>
+    <target depends="-jdk-init,-jdk-presetdef-nbjpdastart" name="debug-test">
+        <ant antfile="nbproject/netbeans-targets.xml" inheritall="false" target="debug-test"/>
+    </target>
+    <target depends="-jdk-init,-jdk-presetdef-nbjpdastart" name="debug-fix">
+        <ant antfile="nbproject/netbeans-targets.xml" inheritall="false" target="debug-fix"/>
+    </target>
+</project>

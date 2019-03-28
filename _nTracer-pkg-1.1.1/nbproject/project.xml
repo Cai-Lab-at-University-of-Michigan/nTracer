@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://www.netbeans.org/ns/project/1">
+    <type>org.netbeans.modules.ant.freeform</type>
+    <configuration>
+        <general-data xmlns="http://www.netbeans.org/ns/freeform-project/1">
+            <name>_nTracer-pkg-1.1.1</name>
+        </general-data>
+        <general-data xmlns="http://www.netbeans.org/ns/freeform-project/2">
+            <name>_nTracer-pkg-1.1.1</name>
+            <properties>
+                <property-file>user.build.properties</property-file>
+                <property-file>build.properties</property-file>
+            </properties>
+            <folders>
+                <source-folder>
+                    <label>nb-ij-plugin-pkg</label>
+                    <location>.</location>
+                    <encoding>windows-1252</encoding>
+                </source-folder>
+                <source-folder>
+                    <label>src</label>
+                    <type>java</type>
+                    <location>src</location>
+                    <encoding>windows-1252</encoding>
+                </source-folder>
+            </folders>
+            <ide-actions>
+                <action name="build">
+                    <target>jar</target>
+                </action>
+                <action name="clean">
+                    <target>clean</target>
+                </action>
+                <action name="rebuild">
+                    <target>clean</target>
+                    <target>jar</target>
+                </action>
+                <action name="run">
+                    <target>run</target>
+                </action>
+                <action name="javadoc">
+                    <script>nbproject/netbeans-targets.xml</script>
+                    <target>show-javadoc</target>
+                </action>
+                <action name="test">
+                    <target>run-tests</target>
+                </action>
+                <action name="debug">
+                    <script>nbproject/netbeans-targets.xml</script>
+                    <target>debug</target>
+                </action>
+                <action name="compile.single">
+                    <script>nbproject/file-targets.xml</script>
+                    <target>compile-selected</target>
+                    <context>
+                        <property>includes</property>
+                        <folder>${src.dir}</folder>
+                        <pattern>\.java$</pattern>
+                        <format>relative-path</format>
+                        <arity>
+                            <separated-files>,</separated-files>
+                        </arity>
+                    </context>
+                </action>
+                <action name="compile.single">
+                    <script>nbproject/file-targets.xml</script>
+                    <target>compile-selected-test</target>
+                    <context>
+                        <property>includes</property>
+                        <folder>${test.dir}</folder>
+                        <pattern>\.java$</pattern>
+                        <format>relative-path</format>
+                        <arity>
+                            <separated-files>,</separated-files>
+                        </arity>
+                    </context>
+                </action>
+                <action name="run.single">
+                    <target>run</target>
+                    <context>
+                        <property>main.class</property>
+                        <folder>${src.dir}</folder>
+                        <pattern>\.java$</pattern>
+                        <format>java-name</format>
+                        <arity>
+                            <one-file-only/>
+                        </arity>
+                    </context>
+                </action>
+                <action name="debug.single">
+                    <script>nbproject/netbeans-targets.xml</script>
+                    <target>debug</target>
+                    <context>
+                        <property>main.class</property>
+                        <folder>${src.dir}</folder>
+                        <pattern>\.java$</pattern>
+                        <format>java-name</format>
+                        <arity>
+                            <one-file-only/>
+                        </arity>
+                    </context>
+                </action>
+                <action name="test.single">
+                    <script>nbproject/file-targets.xml</script>
+                    <target>run-selected-tests</target>
+                    <context>
+                        <property>includes</property>
+                        <folder>${test.dir}</folder>
+                        <pattern>\.java$</pattern>
+                        <format>relative-path</format>
+                        <arity>
+                            <separated-files>,</separated-files>
+                        </arity>
+                    </context>
+                </action>
+                <action name="debug.test.single">
+                    <script>nbproject/netbeans-targets.xml</script>
+                    <target>debug-test</target>
+                    <context>
+                        <property>test</property>
+                        <folder>${test.dir}</folder>
+                        <pattern>\.java$</pattern>
+                        <format>java-name</format>
+                        <arity>
+                            <one-file-only/>
+                        </arity>
+                    </context>
+                </action>
+                <action name="debug.fix">
+                    <script>nbproject/netbeans-targets.xml</script>
+                    <target>debug-fix</target>
+                    <context>
+                        <property>class</property>
+                        <folder>${src.dir}</folder>
+                        <pattern>\.java$</pattern>
+                        <format>relative-path-noext</format>
+                        <arity>
+                            <one-file-only/>
+                        </arity>
+                    </context>
+                </action>
+                <action name="profile">
+                    <script>nbproject/ide-targets.xml</script>
+                    <target>profile-nb</target>
+                </action>
+            </ide-actions>
+            <view>
+                <items>
+                    <source-folder style="packages">
+                        <label>src</label>
+                        <location>src</location>
+                    </source-folder>
+                </items>
+                <context-menu>
+                    <ide-action name="build"/>
+                    <ide-action name="rebuild"/>
+                    <ide-action name="clean"/>
+                    <ide-action name="javadoc"/>
+                    <ide-action name="run"/>
+                    <ide-action name="test"/>
+                    <ide-action name="debug"/>
+                    <separator/>
+                    <ide-action name="profile"/>
+                </context-menu>
+            </view>
+            <subprojects/>
+        </general-data>
+        <java-data xmlns="http://www.netbeans.org/ns/freeform-project-java/4">
+            <compilation-unit>
+                <package-root>src</package-root>
+                <classpath mode="compile">..\source;..\ImageJ\ij.jar;lib/ssj-2.5.jar;lib/imagescience-2.4.1.jar;lib/Jama-1.0.2.jar;lib/3Dviewer.jar;lib/j3dcore.jar;lib/j3dutils.jar;lib/vecmath.jar;lib/imagingbook.jar</classpath>
+                <source-level>1.8</source-level>
+            </compilation-unit>
+        </java-data>
+    </configuration>
+</project>
