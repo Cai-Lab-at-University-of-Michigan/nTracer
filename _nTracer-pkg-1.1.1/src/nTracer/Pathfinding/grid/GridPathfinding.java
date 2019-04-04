@@ -18,9 +18,9 @@ public class GridPathfinding implements Pathfinding{
 	
 	@Override
 	public GridPath getPath(Location s, Location e, Map m) {
-		GridLocation start = (GridLocation)s;
-		GridLocation end = (GridLocation)e;
-		GridMap map = (GridMap)m;
+		GridLocation start = (GridLocation) s;
+		GridLocation end = (GridLocation) e;
+		GridMap map = (GridMap) m;
 		
 		astar = new GridAstar(start, end, map, heuristic);
 		

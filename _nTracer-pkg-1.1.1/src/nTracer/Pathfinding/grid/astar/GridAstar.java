@@ -45,12 +45,14 @@ public class GridAstar implements Astar {
         GridPath path = null;
 
         if (!isValid3D(start.getX(), start.getY(), start.getZ()) || !isValid3D(end.getX(), end.getY(), end.getZ())) {
-            IJ.error("is NOT valid!");
-            return null;
+            IJ.error( "Start or ending location is NOT valid!" );
+            return path;
         }
+        
         GridLocationAstar startingLocation = new GridLocationAstar(start.getX(), start.getY(), start.getZ(), start.isEnd(), 0, -1);
         sortedLocationList.add(startingLocation);
         distanceMap.set(start.getX(), start.getY(), start.getZ(), startingLocation.getDoneDistance());
+        
         GridLocationAstar location;
         boolean endIsFound = false;
         int count = 0, MAX_COUNT = 5000;
@@ -204,18 +206,14 @@ public class GridAstar implements Astar {
     }
 
     private void addLocation(int x, int y, int z, GridLocationAstar previousLocation) {
-        GridLocationAstar location;
-
-        location = createLocation(x, y, z, previousLocation);
+        GridLocationAstar location = createLocation(x, y, z, previousLocation);
         sortedLocationList.add(location);
-        //IJ.log("sortedLocationList added");
+        
         double dist = Math.min(location.getDoneDistance(), distanceMap.get(x, y, z));
         distanceMap.set(x, y, z, dist);
-        //IJ.log("distanceMap set");
     }
 
     private boolean isValid3D(int x, int y, int z) {
-        //IJ.log("X:"+x+"-"+sizeX+"; Y:"+y+"-"+sizeY+"; Z:"+z+"-"+sizeZ);
         return x >= 0 && x < sizeX && y >= 0 && y < sizeY && z >= 0 && z < sizeZ;
     }
 
@@ -225,16 +223,6 @@ public class GridAstar implements Astar {
 
     
     private double getNeighborDist(int x, int y, int z) {
-        double result = 1;
-        /*
-        int dx = x - nx;
-        int dy = y - ny;
-        result += Math.sqrt(dx*dx + dy*dy);
-         *      // IJ.log("eucl dist = "+result);
-         * 
-         */
-        result = map.get(x, y, z);
-        //IJ.log("int weighted = "+result);
-        return result;
+        return map.get(x, y, z);
     }
 }

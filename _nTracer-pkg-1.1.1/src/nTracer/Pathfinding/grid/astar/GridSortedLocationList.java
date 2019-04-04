@@ -10,7 +10,7 @@ public class GridSortedLocationList implements SortedLocationList{
 	private ArrayList<GridLocationAstar> locationList;
 	
 	public GridSortedLocationList(){
-		locationList = new ArrayList<GridLocationAstar>();
+		locationList = new ArrayList<>();
 	}
 	
 	@Override
@@ -20,7 +20,7 @@ public class GridSortedLocationList implements SortedLocationList{
 	
 	@Override
 	public void add(Location loc){
-		GridLocationAstar location = (GridLocationAstar)loc;
+		GridLocationAstar location = (GridLocationAstar) loc;
 		addInOrder(location);
 	}
 
@@ -32,25 +32,19 @@ public class GridSortedLocationList implements SortedLocationList{
 		return null; //TODO throw end of list exception
 	}
 	
-	private void addInOrder(GridLocationAstar location){
-		GridLocationAstar tempLocation;
-		if(locationList.size() == 0){
-			locationList.add(location);
-			return;
-		}
-		for(int i=0; i<locationList.size(); i++){
-			tempLocation = locationList.get(i);
-			if(location.getTotalDistance() < tempLocation.getTotalDistance()){
+	private void addInOrder(GridLocationAstar location){                
+		for(int i=0; i<locationList.size(); i++){ //TODO This should be replaced with a binary search
+			if(location.getTotalDistance() < locationList.get(i).getTotalDistance()){
 				locationList.add(i, location);
 				return;
 			}
 		}
+                
 		locationList.add(location);
 	}
 	
 	public String toString(){
-		String result = locationList.size() + "";
-		return result;
+		return locationList.size() + "";
 	}
 
 }

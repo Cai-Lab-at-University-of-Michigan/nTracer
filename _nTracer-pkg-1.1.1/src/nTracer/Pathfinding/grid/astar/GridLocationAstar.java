@@ -9,6 +9,7 @@ public class GridLocationAstar extends GridLocation{
 	
 	public GridLocationAstar(int x, int y, int z, boolean end, double doneDist, double todoDist) {
 		super(x, y, z, end);
+                
 		this.doneDist = doneDist;
 		this.todoDist = todoDist;
 	}
