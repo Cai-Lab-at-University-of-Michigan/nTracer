@@ -1,16 +1,15 @@
 package nTracer.Pathfinding.grid.util;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import ij.ImagePlus;
 import ij.ImageStack;
 
 public class GridDouble {
 
-    protected int sizeX;
-    protected int sizeY;
-    protected int sizeZ;
-    protected double[][][] gridMap;
+    private int sizeX;
+    private int sizeY;
+    private int sizeZ;
+    public double[][][] gridMap;
 
     public GridDouble(int x, int y, int z) {
         sizeX = x;
@@ -30,10 +29,11 @@ public class GridDouble {
         gridMap = new double[ getSizeX() ][ getSizeY() ][ getSizeZ() ];
         initialize(1);
         
-        for (int i = 0; i < sizeX; i++) {
-            for (int j = 0; j < sizeY; j++) {
-                for (int k = 0; k < sizeZ; k++) {
-                    gridMap[i][j][k] = (double) stk.getProcessor(k+1).getf(i, j);
+        for (int k = 0; k < sizeZ; k++) {
+            float[][] ipData = stk.getProcessor(k+1).getFloatArray();
+            for (int i = 0; i < sizeX; i++) {
+                for (int j = 0; j < sizeY; j++) {
+                    gridMap[i][j][k] = (double) ipData[i][j];
                 }
             }
         }
@@ -42,13 +42,7 @@ public class GridDouble {
     @Override
     public GridDouble clone() {
         GridDouble newList = new GridDouble(sizeX, sizeY, sizeZ);
-        for (int i = 0; i < sizeX; i++) {
-            for (int j = 0; j < sizeY; j++) {
-                for (int k = 0; k < sizeZ; k++) {
-                    newList.set(i, j, k, get(i, j, k));
-                }
-            }
-        }
+        newList.gridMap = gridMap.clone();
         return newList;
     }
 
