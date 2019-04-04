@@ -1,6 +1,7 @@
 package nTracer.Pathfinding.grid.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import ij.ImagePlus;
 import ij.ImageStack;
 
@@ -9,19 +10,14 @@ public class GridDouble {
     protected int sizeX;
     protected int sizeY;
     protected int sizeZ;
-    protected ArrayList<ArrayList<ArrayList<Double>>> gridMap;
+    protected double[][][] gridMap;
 
     public GridDouble(int x, int y, int z) {
         sizeX = x;
         sizeY = y;
         sizeZ = z;
-        gridMap = new ArrayList<>();
-        for (int i = 0; i < x; i++) {
-            gridMap.add(new ArrayList<>());
-            for (int j = 0; j < y; j++) {
-                gridMap.get(i).add(new ArrayList<>());
-            }
-        }
+        
+        gridMap = new double[ getSizeX() ][ getSizeY() ][ getSizeZ() ];
         initialize(1);
     }
 
@@ -31,18 +27,19 @@ public class GridDouble {
         sizeZ = imp.getNSlices();
         ImageStack stk = imp.getImageStack();
 
-        gridMap = new ArrayList<>();
+        gridMap = new double[ getSizeX() ][ getSizeY() ][ getSizeZ() ];
+        initialize(1);
+        
         for (int i = 0; i < sizeX; i++) {
-            gridMap.add(new ArrayList<>());
             for (int j = 0; j < sizeY; j++) {
-                gridMap.get(i).add(new ArrayList<>());
-                for (int k = 1; k <= sizeZ; k++) {
-                    gridMap.get(i).get(j).add((double) stk.getProcessor(k).getf(i, j));
+                for (int k = 0; k < sizeZ; k++) {
+                    gridMap[i][j][k] = (double) stk.getProcessor(k+1).getf(i, j);
                 }
             }
         }
     }
 
+    @Override
     public GridDouble clone() {
         GridDouble newList = new GridDouble(sizeX, sizeY, sizeZ);
         for (int i = 0; i < sizeX; i++) {
@@ -56,11 +53,11 @@ public class GridDouble {
     }
 
     public void set(int x, int y, int z, double value) {
-        gridMap.get(x).get(y).set(z, value);
+        gridMap[x][y][z] = value;
     }
 
     public double get(int x, int y, int z) {
-        return gridMap.get(x).get(y).get(z);
+        return gridMap[x][y][z];
     }
 
     public int getSizeX() {
@@ -76,22 +73,14 @@ public class GridDouble {
     }
 
     public void reset(double value) {
-        for (int i = 0; i < sizeX; i++) {
-            for (int j = 0; j < sizeY; j++) {
-                for (int k = 0; k < sizeZ; k++) {
-                    set(i, j, k, value);
-                }
+        for( double[][] row : gridMap ) {
+            for( double[] rowCol : row ) {
+                Arrays.fill( rowCol, value );
             }
         }
     }
 
     private void initialize(double value) {
-        for (int i = 0; i < sizeX; i++) {
-            for (int j = 0; j < sizeY; j++) {
-                for (int k = 0; k < sizeZ; k++) {
-                    gridMap.get(i).get(j).add(value);
-                }
-            }
-        }
+        reset( value );
     }
 }
