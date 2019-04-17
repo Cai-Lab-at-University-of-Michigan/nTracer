@@ -14,7 +14,7 @@ public class GridPath implements Path{
 	
 	public ArrayList<GridLocation> getList(){
             //IJ.log("path generated, size="+locationList.size());
-		ArrayList<GridLocation> locList = new ArrayList<GridLocation>();
+		ArrayList<GridLocation> locList = new ArrayList<>();
 		for(int i=0; i<locationList.size(); i++){
 			locList.add(locationList.get(i));
                         //IJ.log(i+"");

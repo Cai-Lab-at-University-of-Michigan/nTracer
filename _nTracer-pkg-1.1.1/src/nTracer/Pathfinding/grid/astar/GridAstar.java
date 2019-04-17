@@ -30,21 +30,27 @@ public class GridAstar implements Astar {
         this.end = end;
         this.map = map;
         this.heuristic = heuristic;
+        
         sizeX = map.getSizeX();
         sizeY = map.getSizeY();
         sizeZ = map.getSizeZ();
+        
         visitedMap = new GridDouble(sizeX, sizeY, sizeZ);
         visitedMap.reset(unvisited);
         distanceMap = new GridDouble(sizeX, sizeY, sizeZ);
         distanceMap.reset(Integer.MAX_VALUE);
+        
         sortedLocationList = new GridSortedLocationList();
     }
 
     @Override
     public GridPath getPath() {
+        System.out.print("Running GetPath");
+        long startTime = System.nanoTime();
+        
         GridPath path = null;
 
-        if (!isValid3D(start.getX(), start.getY(), start.getZ()) || !isValid3D(end.getX(), end.getY(), end.getZ())) {
+        if ( !isValid3D(start.getX(), start.getY(), start.getZ()) || !isValid3D(end.getX(), end.getY(), end.getZ()) ) {
             IJ.error( "Start or ending location is NOT valid!" );
             return path;
         }
@@ -67,7 +73,6 @@ public class GridAstar implements Astar {
             visitedMap.set(location.getX(), location.getY(), location.getZ(), visited);
             if (location.isEnd()) {
                 endIsFound = true;
-//IJ.log("end found");
                 break;
             }
             addAdjacent(location);
@@ -80,10 +85,13 @@ public class GridAstar implements Astar {
 
         //Resolve path...
         if (endIsFound) {
-//IJ.log("path found");
             path = traceBackThePath();
         }
-//IJ.log("whole path length = "+path.getList().size());
+        //IJ.log("whole path length = "+path.getList().size());
+        
+        double diff = System.nanoTime()-startTime;
+        diff /= 1000000000;
+        System.out.println( "Time Delta: " + diff );
 
         return path;
     }
@@ -116,7 +124,7 @@ public class GridAstar implements Astar {
         GridPath path;
         GridLocation currentLocation;
 
-        ArrayList<GridLocation> locationList = new ArrayList<GridLocation>();
+        ArrayList<GridLocation> locationList = new ArrayList<>();
 
         currentLocation = end;
         int x = currentLocation.getX();
@@ -169,10 +177,7 @@ public class GridAstar implements Astar {
     }
 
     private GridLocation createLocation(int x, int y, int z) {
-        boolean isEnd = false;
-        if (x == end.getX() && y == end.getY() && z == end.getZ()) {
-            isEnd = true;
-        }
+        boolean isEnd = (x == end.getX() && y == end.getY() && z == end.getZ());
         return new GridLocation(x, y, z, isEnd);
     }
 
@@ -221,7 +226,6 @@ public class GridAstar implements Astar {
         return isValid3D(x, y, z) && visitedMap.get(x, y, z) == unvisited;
     }
 
-    
     private double getNeighborDist(int x, int y, int z) {
         return map.get(x, y, z);
     }
