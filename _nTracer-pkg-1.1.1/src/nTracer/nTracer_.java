@@ -155,6 +155,8 @@ public class nTracer_
         MouseMotionListener,
         MouseWheelListener,
         KeyListener {
+    
+    private int last_current_z = -1;
 
     public nTracer_() {
         // set DataHandeler to handel data
@@ -8665,22 +8667,23 @@ public class nTracer_
         info_jLabel.setText(messega);
     }
     
-    private void updateZprojectionImp() {
+    private void updateZprojectionImp() {        
         if (projectionUpdate_jCheckBox.isSelected()) {
-//        double[] disRangeMin = new double[impNChannel];
-//        double[] disRangeMax = new double[impNChannel];
             int impZprojC = impZproj.getC();
-//        for (int i=0; i<impNChannel; i++){
-//           impZproj.setC(i+1);
-//            disRangeMin [i] = impZproj.getDisplayRangeMin();
-//            IJ.log("disRangeMin"+(i+1)+" = "+disRangeMin [i]);
-//            disRangeMax [i] = impZproj.getDisplayRangeMax();
-//            IJ.log("disRangeMax"+(i+1)+" = "+disRangeMax [i]);
-//        }
 
             int currentZ = imp.getZ();
             int minZ = currentZ - zProjInterval;
             int maxZ = currentZ + zProjInterval;
+            
+            System.out.println( String.valueOf(currentZ) + ' ' + String.valueOf(minZ) + ' ' + String.valueOf(maxZ) + ' ' + String.valueOf(last_current_z) );
+            
+            if( currentZ == last_current_z ) {
+                
+                System.out.println( "RUNNING UPDATE" ); return;
+            } else {
+                last_current_z = currentZ;
+            }
+            
             if (minZ < 1) {
                 minZ = 1;
             } else if (maxZ > impNSlice) {
@@ -8702,8 +8705,7 @@ public class nTracer_
                 roiYmin = roiYmid - zProjXY / 2 + 1;
                 roiYmax = roiYmid + zProjXY / 2 - 1;
             }
-        //IJ.log("roiXmin="+roiXmin+", roiXmax="+roiXmax+", roiYmin="+roiYmin+", roiYmax="+roiYmax);
-            //IJ.log("roiXmid = "+roiXmid+", roiYmid = "+roiYmid);
+            
             imp.setRoi(roiXmin, roiYmin, roiXmax - roiXmin, roiYmax - roiYmin);
             ImagePlus impCrop = new Duplicator().run(imp, 1, impNChannel, minZ, maxZ, 1, impNFrame);
             impCrop.setOverlay(null);
@@ -8728,10 +8730,6 @@ public class nTracer_
             }
             impZproj.setActiveChannels(chActSetting);
             impZproj.setC(impZprojC);
-
-//        for (int i=0; i<impNChannel; i++){
-//            impZproj.setDisplayRange(disRangeMin [i], disRangeMax [i], i+1);
-//        }
         }
     }
     // </editor-fold>

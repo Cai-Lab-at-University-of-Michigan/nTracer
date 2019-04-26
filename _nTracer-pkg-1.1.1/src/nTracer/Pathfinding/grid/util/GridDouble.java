@@ -16,7 +16,7 @@ public class GridDouble {
         sizeY = y;
         sizeZ = z;
         
-        gridMap = new double[ getSizeX() ][ getSizeY() ][ getSizeZ() ];
+        gridMap = new double[ getSizeZ() ][ getSizeX() ][ getSizeY() ];
         initialize(1);
     }
 
@@ -26,14 +26,17 @@ public class GridDouble {
         sizeZ = imp.getNSlices();
         ImageStack stk = imp.getImageStack();
 
-        gridMap = new double[ getSizeX() ][ getSizeY() ][ getSizeZ() ];
+        gridMap = new double[ getSizeZ() ][ getSizeX() ][ getSizeY() ];
         initialize(1);
         
         for (int k = 0; k < sizeZ; k++) {
+            // Get data from IJ buffer:
             float[][] ipData = stk.getProcessor(k+1).getFloatArray();
+            
+            // Assign IJ data to grid:
             for (int i = 0; i < sizeX; i++) {
                 for (int j = 0; j < sizeY; j++) {
-                    gridMap[i][j][k] = (double) ipData[i][j];
+                    gridMap[k][i][j] = (double) ipData[i][j];
                 }
             }
         }
@@ -47,11 +50,11 @@ public class GridDouble {
     }
 
     public void set(int x, int y, int z, double value) {
-        gridMap[x][y][z] = value;
+        gridMap[z][x][y] = value;
     }
 
     public double get(int x, int y, int z) {
-        return gridMap[x][y][z];
+        return gridMap[z][x][y];
     }
 
     public int getSizeX() {
