@@ -8423,6 +8423,9 @@ public class nTracer_
     @Override
     public void keyTyped(KeyEvent keyevent) {
         //IJ.log(keyevent.getKeyChar() + " = " + (int) keyevent.getKeyChar());
+        int xIn, yIn, xOut, yOut;
+        Point locIn, locOut;
+        
         switch ((int) keyevent.getKeyChar()) {
             case 1: // 'ctrl-a'
                 break;
@@ -8471,6 +8474,19 @@ public class nTracer_
                 }                
                 break;
             case 45: // '-'
+                locOut = cns.getCursorLoc();
+                if (!cns.cursorOverImage()) {
+                    Rectangle srcRect = cns.getSrcRect();
+                    locOut.x = srcRect.x + srcRect.width / 2;
+                    locOut.y = srcRect.y + srcRect.height / 2;
+                }
+                xOut = cns.screenX(locOut.x);
+                yOut = cns.screenY(locOut.y);
+                cns.zoomOut(xOut, yOut);
+                if (cns.getMagnification() <= 1.0) {
+                    imp.repaintWindow();
+                }
+                updateZprojectionImp();
                 break;
             case 46: // '.'
                 if (zProjectionInterval_jSpinner.getNextValue()!=null){
@@ -8530,6 +8546,19 @@ public class nTracer_
             case 57: // '9'
                 break;
             case 61: // '='
+                locIn = cns.getCursorLoc();
+                if (!cns.cursorOverImage()) {
+                    Rectangle srcRect = cns.getSrcRect();
+                    locIn.x = srcRect.x + srcRect.width / 2;
+                    locIn.y = srcRect.y + srcRect.height / 2;
+                }
+                xIn = cns.screenX(locIn.x);
+                yIn = cns.screenY(locIn.y);
+                cns.zoomIn(xIn, yIn);
+                if (cns.getMagnification() <= 1.0) {
+                    imp.repaintWindow();
+                }
+                updateZprojectionImp();
                 break;
             case 65: // 'A'
                 //if (keyevent.getSource().equals(cns)) {
@@ -8585,14 +8614,14 @@ public class nTracer_
                 jumpToNextSynapse();
                 break;
             case 113: // 'q'
-                Point locOut = cns.getCursorLoc();
+                locOut = cns.getCursorLoc();
                 if (!cns.cursorOverImage()) {
                     Rectangle srcRect = cns.getSrcRect();
                     locOut.x = srcRect.x + srcRect.width / 2;
                     locOut.y = srcRect.y + srcRect.height / 2;
                 }
-                int xOut = cns.screenX(locOut.x);
-                int yOut = cns.screenY(locOut.y);
+                xOut = cns.screenX(locOut.x);
+                yOut = cns.screenY(locOut.y);
                 cns.zoomOut(xOut, yOut);
                 if (cns.getMagnification() <= 1.0) {
                     imp.repaintWindow();
@@ -8611,14 +8640,14 @@ public class nTracer_
                 updateDisplay();
                 break;
             case 119: // 'w' 
-                Point locIn = cns.getCursorLoc();
+                locIn = cns.getCursorLoc();
                 if (!cns.cursorOverImage()) {
                     Rectangle srcRect = cns.getSrcRect();
                     locIn.x = srcRect.x + srcRect.width / 2;
                     locIn.y = srcRect.y + srcRect.height / 2;
                 }
-                int xIn = cns.screenX(locIn.x);
-                int yIn = cns.screenY(locIn.y);
+                xIn = cns.screenX(locIn.x);
+                yIn = cns.screenY(locIn.y);
                 cns.zoomIn(xIn, yIn);
                 if (cns.getMagnification() <= 1.0) {
                     imp.repaintWindow();
@@ -8706,7 +8735,7 @@ public class nTracer_
         int minZ = currentZ - zProjInterval;
         int maxZ = currentZ + zProjInterval;
 
-        System.out.println( String.valueOf(currentZ) + ' ' + String.valueOf(minZ) + ' ' + String.valueOf(maxZ) + ' ' + String.valueOf(last_current_z) );
+        //System.out.println( String.valueOf(currentZ) + ' ' + String.valueOf(minZ) + ' ' + String.valueOf(maxZ) + ' ' + String.valueOf(last_current_z) );
 
         if( currentZ == last_current_z ) {
             return;
