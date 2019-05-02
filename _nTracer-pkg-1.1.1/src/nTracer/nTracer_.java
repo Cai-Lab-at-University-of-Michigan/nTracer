@@ -118,7 +118,6 @@ import ij.plugin.RGBStackMerge;
 import ij.plugin.frame.MemoryMonitor;
 import ij.plugin.Duplicator;
 import ij.plugin.ZProjector;
-import ij.plugin.Zoom;
 import ij.process.ByteProcessor;
 import ij.process.FloatPolygon;
 
@@ -143,6 +142,9 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.*;
 
+import java.time.Duration;
+import java.time.Instant;
+
 /**
  *
  * @author Dawen Cai <dwcai@umich.edu>
@@ -157,74 +159,79 @@ public class nTracer_
         KeyListener {
     
     private int last_current_z = -1;
+    Instant last_z_update_time = Instant.now();
 
     public nTracer_() {
-        // set DataHandeler to handel data
+        // set DataHandler to handle data
         IO = new ntIO();
         analysis = new ntAnalysis();
         Functions = new ntTracing();
         DataHandeler = new ntDataHandler();
-        if (IJ.isJava18()) {
-            setupFeelsAndTools(); // needs to be done before set up GUI        
-            // set up GUI
-            initComponents();
-
-            semiAutoTracing_jRadioButton.setVisible(true);
-            autoTracing_jRadioButton.setVisible(false);
-            linkRadius_jLabel.setVisible(false);
-            linkRadius_jSpinner.setVisible(false);
-
-            overlayPointBox_jCheckBox.setVisible(true);
-            overlayPointBox_jCheckBox.setEnabled(true);
-            colorThreshold = (Float) (colorThreshold_jSpinner.getValue());
-            intensityThreshold = (Float) (intensityThreshold_jSpinner.getValue());
-            xyRadius = (Integer) (xyRadius_jSpinner.getValue());
-            zRadius = (Integer) (zRadius_jSpinner.getValue());
-            outLinkXYradius = (Integer) (linkRadius_jSpinner.getValue());
-            extendDisplayPoints = (Integer) extendSelectedDisplayPoints_jSpinner.getValue();
-            somaLine = (Integer) somaLineWidth_jSpinner.getValue() * 0.5f;
-            neuronLine = (Integer) neuronLineWidth_jSpinner.getValue() * 0.5f;
-            arborLine = (Integer) arborLineWidth_jSpinner.getValue() * 0.5f;
-            branchLine = (Integer) branchLineWidth_jSpinner.getValue() * 0.5f;
-            spineLine = (Integer) spineLineWidth_jSpinner.getValue() * 0.5f;
-            synapseRadius = (Integer) synapseRadius_jSpinner.getValue() * 1.0f;
-            pointBoxLine = (Integer) pointBoxLineWidth_jSpinner.getValue() * 0.5f;
-            pointBoxRadius = (Integer) pointBoxRadiu_jSpinner.getValue();
-            synapseSize = synapseRadius * 2 + 1;
-            lineWidthOffset = (Integer) allNeuronLineWidthOffset_jSpinner.getValue() * 0.5f;
-            allSomaLine = (somaLine - lineWidthOffset > 0.5) ? somaLine - lineWidthOffset : 0.5f;
-            allNeuronLine = (neuronLine - lineWidthOffset > 0.5) ? neuronLine - lineWidthOffset : 0.5f;
-            allSpineLine = (spineLine - lineWidthOffset > 0.5) ? spineLine - lineWidthOffset : 0.5f;
-            allSynapseRadius = (synapseRadius - lineWidthOffset / 2 > 0.5) ? synapseRadius - lineWidthOffset / 2 : 0.5;
-            allSynapseSize = allSynapseRadius * 2;
-            //IJ.log("displayDepth = +/- "+extendDisplayPoints);
-
-            initHistory();
-            initPointTable();
-            initNeuriteTree();
-            initSomaTree();
-            initSpineTree();
-            deselectInvisualizeAllChannelCheckboxes();
-            //visualizeDisableAllChannelCheckboxes();
-            disableSpinners();
-            cropData_jMenuItem.setVisible(false);
-            debug_jMenu.setVisible(false);
-            this.setVisible(true);
-            nTracerVersion = this.getTitle() + "  <->  pixel resolutions (x, y, z) um/pixel: ";
-            if (!openImage()) {
-                quit();
-                return;
-            }
-            IJ.run("Brightness/Contrast...");
-            IJ.run("Channels Tool...", "");
-            IJ.run("Misc...", "divide=Infinity require");
-            //IJ.run("Synchronize Windows", "");
-            MemoryMonitor mm = new MemoryMonitor();
-            mm.run(" ");
-        } else {
+        
+        if (!IJ.isJava18()) {
             nTracerVersion = " ";
             IJ.error("Fiji/ImageJ-Java8 version is required !");
+            return;
         }
+        
+        setupFeelsAndTools(); // needs to be done before set up GUI        
+        // set up GUI
+        initComponents();
+
+        semiAutoTracing_jRadioButton.setVisible(true);
+        autoTracing_jRadioButton.setVisible(false);
+        linkRadius_jLabel.setVisible(false);
+        linkRadius_jSpinner.setVisible(false);
+
+        overlayPointBox_jCheckBox.setVisible(true);
+        overlayPointBox_jCheckBox.setEnabled(true);
+        colorThreshold = (Float) (colorThreshold_jSpinner.getValue());
+        intensityThreshold = (Float) (intensityThreshold_jSpinner.getValue());
+        xyRadius = (Integer) (xyRadius_jSpinner.getValue());
+        zRadius = (Integer) (zRadius_jSpinner.getValue());
+        outLinkXYradius = (Integer) (linkRadius_jSpinner.getValue());
+        extendDisplayPoints = (Integer) extendSelectedDisplayPoints_jSpinner.getValue();
+        somaLine = (Integer) somaLineWidth_jSpinner.getValue() * 0.5f;
+        neuronLine = (Integer) neuronLineWidth_jSpinner.getValue() * 0.5f;
+        arborLine = (Integer) arborLineWidth_jSpinner.getValue() * 0.5f;
+        branchLine = (Integer) branchLineWidth_jSpinner.getValue() * 0.5f;
+        spineLine = (Integer) spineLineWidth_jSpinner.getValue() * 0.5f;
+        synapseRadius = (Integer) synapseRadius_jSpinner.getValue() * 1.0f;
+        pointBoxLine = (Integer) pointBoxLineWidth_jSpinner.getValue() * 0.5f;
+        pointBoxRadius = (Integer) pointBoxRadiu_jSpinner.getValue();
+        synapseSize = synapseRadius * 2 + 1;
+        lineWidthOffset = (Integer) allNeuronLineWidthOffset_jSpinner.getValue() * 0.5f;
+        allSomaLine = (somaLine - lineWidthOffset > 0.5) ? somaLine - lineWidthOffset : 0.5f;
+        allNeuronLine = (neuronLine - lineWidthOffset > 0.5) ? neuronLine - lineWidthOffset : 0.5f;
+        allSpineLine = (spineLine - lineWidthOffset > 0.5) ? spineLine - lineWidthOffset : 0.5f;
+        allSynapseRadius = (synapseRadius - lineWidthOffset / 2 > 0.5) ? synapseRadius - lineWidthOffset / 2 : 0.5;
+        allSynapseSize = allSynapseRadius * 2;
+        //IJ.log("displayDepth = +/- "+extendDisplayPoints);
+
+        initHistory();
+        initPointTable();
+        initNeuriteTree();
+        initSomaTree();
+        initSpineTree();
+        deselectInvisualizeAllChannelCheckboxes();
+        //visualizeDisableAllChannelCheckboxes();
+        disableSpinners();
+        cropData_jMenuItem.setVisible(false);
+        debug_jMenu.setVisible(false);
+        this.setVisible(true);
+        nTracerVersion = this.getTitle() + "  - pixel resolutions (x, y, z) um/pixel: ";
+         
+        if (!openImage()) {
+            quit();
+            return;
+        }
+        
+        IJ.run("Brightness/Contrast...");
+        IJ.run("Channels Tool...", "");
+        IJ.run("Misc...", "divide=Infinity require");
+        //IJ.run("Synchronize Windows", "");
+        MemoryMonitor mm = new MemoryMonitor();
+        mm.run(" ");
     }
 
     // <editor-fold defaultstate="collapsed" desc="methods for setting up GUI views and Table/Tree components">
@@ -2960,6 +2967,8 @@ public class nTracer_
     }// </editor-fold>//GEN-END:initComponents
 
     private boolean openImage() {
+        System.err.println("OpenImage Ran");
+        
         System.gc();
         System.gc();
         imp = IO.loadImage();
@@ -2995,11 +3004,13 @@ public class nTracer_
             IJ.run(imp, "Green", "");
             imp.setC(1);
         }
+        
         if (impNChannel > 8) {
             IJ.error("Image needs to be 8 channels or less!");
             quit();
             return;
-        }       
+        }
+        
         startPoint = new int[7];
         endPoint = new int[7];
         initImage();
@@ -3090,12 +3101,14 @@ public class nTracer_
         gd.addNumericField("y resolution", cal.pixelHeight, 3, 8, "um/pixel");
         gd.addNumericField("z resolution", cal.pixelDepth, 3, 8, "um/pixel");
         gd.showDialog();
+        
         if (gd.wasOKed()){
             cal.pixelWidth = gd.getNextNumber();
             cal.pixelHeight = gd.getNextNumber();
             cal.pixelDepth = gd.getNextNumber();        
             cal.setUnit("\u00B5m");            
         }
+        
         if (!(cal.pixelWidth == oriCal.pixelWidth && cal.pixelHeight == oriCal.pixelHeight && cal.pixelDepth == oriCal.pixelDepth)) {
             YesNoCancelDialog yncDialog = new YesNoCancelDialog(new java.awt.Frame(),
                     "Save image ...", "Image calibration changed !"+"\n"+"Do you want to save new calibration to image?");
@@ -3103,15 +3116,17 @@ public class nTracer_
                 IJ.save(imp, IJ.getDirectory("image")+"/"+imp.getTitle());
             }
         }
+        
         if (!cal.getUnit().equals("\u00B5m") || cal.pixelWidth < 0 || cal.pixelHeight < 0 || cal.pixelDepth < 0){
             cal.pixelWidth = 0;
             cal.pixelHeight = 0;
             cal.pixelDepth = 0;
         }
+        
         xyzResolutions[0] = cal.pixelWidth;
         xyzResolutions[1] = cal.pixelHeight;
         xyzResolutions[2] = cal.pixelDepth;     
-        this.setTitle(nTracerVersion + "(" + xyzResolutions[0] + ", " + xyzResolutions[1] + ", " + xyzResolutions[2] + "}");
+        this.setTitle(nTracerVersion + "(" + xyzResolutions[0] + ", " + xyzResolutions[1] + ", " + xyzResolutions[2] + ")");
         int currentZ = imp.getZ();
         imp.setZ(1);
         imp.setZ(imp.getNSlices());
@@ -6165,6 +6180,7 @@ public class nTracer_
             saveHistory();
         }
     }
+    
     private void removeAllConnectionsFromPrimaryAndChild(ntNeuronNode primaryNode, 
             boolean keepPrimaryNodeSynapse, boolean keepTargetNodeSynapse) {
         ArrayList<String[]> result = primaryNode.getTracingResult();
@@ -6195,6 +6211,7 @@ public class nTracer_
             removeAllConnectionsFromPrimaryAndChild(childNode, keepPrimaryNodeSynapse, keepTargetNodeSynapse);
         }
     }
+    
     private void setTracingTypeToPrimaryAndChild(ntNeuronNode primaryNode, String type, boolean keepSpine){
         ArrayList<String[]> result = primaryNode.getTracingResult();
         boolean traceComplete = primaryNode.isComplete();
@@ -6947,8 +6964,10 @@ public class nTracer_
             }
             if (prefixName.endsWith(".tif")) {
                 prefixName = prefixName.substring(0, prefixName.length() - 4);
+            } else if (prefixName.endsWith(".tiff")) {
+                prefixName = prefixName.substring(0, prefixName.length() - 5);
             }
-            GenericDialog gd = new GenericDialog("Export Ssynapse ...");
+            GenericDialog gd = new GenericDialog("Export Synapse ...");
             gd.addMessage("x/y/z resolutions (0 = unknown resolution)");
             gd.addNumericField("x: ", xyzResolutions[0], 3, 6, " um / pixel");
             gd.addNumericField("y: ", xyzResolutions[1], 3, 6, " um / pixel");
@@ -8368,11 +8387,13 @@ public class nTracer_
     public void mouseWheelMoved(MouseWheelEvent event) {
         synchronized (this) {
             int slice = imp.getZ() + event.getWheelRotation();
+            
             if (slice < 1) {
                 slice = 1;
             } else if (slice > impNSlice) {
                 slice = impNSlice;
             }
+            
             imp.setZ(slice);
             updateZprojectionImp();
         }
@@ -8667,70 +8688,81 @@ public class nTracer_
         info_jLabel.setText(messega);
     }
     
-    private void updateZprojectionImp() {        
-        if (projectionUpdate_jCheckBox.isSelected()) {
-            int impZprojC = impZproj.getC();
-
-            int currentZ = imp.getZ();
-            int minZ = currentZ - zProjInterval;
-            int maxZ = currentZ + zProjInterval;
-            
-            System.out.println( String.valueOf(currentZ) + ' ' + String.valueOf(minZ) + ' ' + String.valueOf(maxZ) + ' ' + String.valueOf(last_current_z) );
-            
-            if( currentZ == last_current_z ) {
-                
-                System.out.println( "RUNNING UPDATE" ); return;
-            } else {
-                last_current_z = currentZ;
-            }
-            
-            if (minZ < 1) {
-                minZ = 1;
-            } else if (maxZ > impNSlice) {
-                maxZ = impNSlice;
-            }
-
-            Roi impRoi = imp.getRoi();
-            roiXmin = cns.offScreenX(0);
-            int roiXmax = cns.offScreenX(cns.getWidth()) - 1;
-            int roiXmid = (roiXmin + roiXmax) / 2;
-            roiYmin = cns.offScreenY(0);
-            int roiYmax = cns.offScreenY(cns.getHeight()) - 1;
-            int roiYmid = (roiYmin + roiYmax) / 2;
-            if (roiXmax - roiXmin > zProjXY) {
-                roiXmin = roiXmid - zProjXY / 2 + 1;
-                roiXmax = roiXmid + zProjXY / 2 - 1;
-            }
-            if (roiYmax - roiYmin > zProjXY) {
-                roiYmin = roiYmid - zProjXY / 2 + 1;
-                roiYmax = roiYmid + zProjXY / 2 - 1;
-            }
-            
-            imp.setRoi(roiXmin, roiYmin, roiXmax - roiXmin, roiYmax - roiYmin);
-            ImagePlus impCrop = new Duplicator().run(imp, 1, impNChannel, minZ, maxZ, 1, impNFrame);
-            impCrop.setOverlay(null);
-            imp.setRoi(impRoi);
-            ImagePlus temp = new ZProjector().run(impCrop, "max", 1, impCrop.getNSlices());
-            impZproj.setImage(temp);
-            impZproj.setOverlay(null);
-            winZproj.setSize(win.getSize());
-            cnsZproj.setMagnification(cns.getMagnification());
-            impZproj.updateAndDraw();
-            temp.close();
-            impCrop.close();
-
-            boolean[] chActive = cmp.getActiveChannels();
-            String chActSetting = "";
-            for (int c = 0; c < chActive.length; c++) {
-                if (chActive[c]) {
-                    chActSetting = chActSetting + "1";
-                } else {
-                    chActSetting = chActSetting + "0";
-                }
-            }
-            impZproj.setActiveChannels(chActSetting);
-            impZproj.setC(impZprojC);
+    private void updateZprojectionImp() {
+        if (!projectionUpdate_jCheckBox.isSelected()) {
+            return;
         }
+        
+        final long dT_limit = 150; // Time limit between z-projection update
+        if( Duration.between(last_z_update_time, Instant.now() ).toMillis() < dT_limit ) {
+            //System.out.println("Skipping Z-Projection...");
+            return;
+        }
+        last_z_update_time = Instant.now();
+        
+        int impZprojC = impZproj.getC();
+
+        int currentZ = imp.getZ();
+        int minZ = currentZ - zProjInterval;
+        int maxZ = currentZ + zProjInterval;
+
+        System.out.println( String.valueOf(currentZ) + ' ' + String.valueOf(minZ) + ' ' + String.valueOf(maxZ) + ' ' + String.valueOf(last_current_z) );
+
+        if( currentZ == last_current_z ) {
+            return;
+        } else {
+            last_current_z = currentZ;
+        }
+
+        if (minZ < 1) {
+            minZ = 1;
+        } else if (maxZ > impNSlice) {
+            maxZ = impNSlice;
+        }
+
+        Roi impRoi = imp.getRoi();
+        roiXmin = cns.offScreenX(0);
+        int roiXmax = cns.offScreenX(cns.getWidth()) - 1;
+        int roiXmid = (roiXmin + roiXmax) / 2;
+        roiYmin = cns.offScreenY(0);
+        int roiYmax = cns.offScreenY(cns.getHeight()) - 1;
+        int roiYmid = (roiYmin + roiYmax) / 2;
+        if (roiXmax - roiXmin > zProjXY) {
+            roiXmin = roiXmid - zProjXY / 2 + 1;
+            roiXmax = roiXmid + zProjXY / 2 - 1;
+        }
+        if (roiYmax - roiYmin > zProjXY) {
+            roiYmin = roiYmid - zProjXY / 2 + 1;
+            roiYmax = roiYmid + zProjXY / 2 - 1;
+        }
+
+        imp.setRoi(roiXmin, roiYmin, roiXmax - roiXmin, roiYmax - roiYmin);
+        ImagePlus impCrop = new Duplicator().run(imp, 1, impNChannel, minZ, maxZ, 1, impNFrame);
+        impCrop.setOverlay(null);
+        imp.setRoi(impRoi);
+        
+        ImagePlus temp = new ZProjector().run(impCrop, "max", 1, impCrop.getNSlices());
+        impZproj.setImage(temp);
+        impZproj.setOverlay(null);
+        winZproj.setSize(win.getSize());
+        cnsZproj.setMagnification(cns.getMagnification());
+        impZproj.updateAndDraw();
+        
+        temp.close();
+        impCrop.close();
+
+        boolean[] chActive = cmp.getActiveChannels();
+        String chActSetting = "";
+        for (int c = 0; c < chActive.length; c++) {
+            if (chActive[c]) {
+                chActSetting = chActSetting + "1";
+            } else {
+                chActSetting = chActSetting + "0";
+            }
+        }
+        
+        impZproj.setActiveChannels(chActSetting);
+        impZproj.setC(impZprojC);
     }
     // </editor-fold>
 
