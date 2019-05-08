@@ -3,10 +3,10 @@
     <type>org.netbeans.modules.ant.freeform</type>
     <configuration>
         <general-data xmlns="http://www.netbeans.org/ns/freeform-project/1">
-            <name>_nTracer-pkg-1.1.1</name>
+            <name>_nTracer-pkg</name>
         </general-data>
         <general-data xmlns="http://www.netbeans.org/ns/freeform-project/2">
-            <name>_nTracer-pkg-1.1.1</name>
+            <name>_nTracer-pkg</name>
             <properties>
                 <property-file>user.build.properties</property-file>
                 <property-file>build.properties</property-file>

@@ -86,6 +86,7 @@ public class GridAstar implements Astar {
         //Resolve path...
         if (endIsFound) {
             path = traceBackThePath();
+            System.out.println(path);
         }
         //IJ.log("whole path length = "+path.getList().size());
         
