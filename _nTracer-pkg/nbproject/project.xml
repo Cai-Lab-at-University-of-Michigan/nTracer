@@ -168,7 +168,7 @@
         <java-data xmlns="http://www.netbeans.org/ns/freeform-project-java/4">
             <compilation-unit>
                 <package-root>src</package-root>
-                <classpath mode="compile">..\source;..\ImageJ\ij.jar;lib/ssj-2.5.jar;lib/imagescience-2.4.1.jar;lib/Jama-1.0.2.jar;lib/3Dviewer.jar;lib/j3dcore.jar;lib/j3dutils.jar;lib/vecmath.jar;lib/imagingbook.jar</classpath>
+                <classpath mode="compile">../source:lib/ssj-2.5.jar:lib/imagescience-2.4.1.jar:lib/Jama-1.0.2.jar:lib/3Dviewer.jar:lib/j3dcore.jar:lib/j3dutils.jar:lib/vecmath.jar:lib/imagingbook.jar:../ImageJ/jars/ij-1.52n.jar</classpath>
                 <source-level>1.8</source-level>
             </compilation-unit>
         </java-data>
