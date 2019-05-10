@@ -48,17 +48,23 @@ public class ntIO {
     }
 
     public ImagePlus loadImage() {
-        IJ.open();
+        //IJ.open(); // Leaving this off allows spawning from currently open image
         ImagePlus imp = WindowManager.getCurrentImage();
-        if (imp == null) {
-            IJ.error("No Image Opened!");
+        
+        if( imp == null ) IJ.open();
+        imp = WindowManager.getCurrentImage();
+        
+        if( imp == null ) {
+            IJ.error( "No Image Opened!" );
             return null;
-        } 
+        }
+        
         //else if (!imp.isComposite()) {
         //    IJ.error("Requires Composite Image!");
         //    imp.close();
         //    return null;
         //}
+        
         Prefs.requireControlKey = true;
         return imp;
     }

@@ -158,10 +158,13 @@ public class nTracer_
         MouseWheelListener,
         KeyListener {
     
-    private int last_current_z = -1;
-    Instant last_z_update_time = Instant.now();
+    private int last_current_z;
+    private Instant last_z_update_time;
 
     public nTracer_() {
+        this.last_current_z = -1;
+        this.last_z_update_time = Instant.now();
+        
         // set DataHandler to handle data
         IO = new ntIO();
         analysis = new ntAnalysis();
@@ -2972,14 +2975,12 @@ public class nTracer_
         System.gc();
         System.gc();
         imp = IO.loadImage();
-        if (imp == null) {
+        if (imp == null)
             return false;
-        } else {
-            initiateTracing();
-            System.gc();
-            System.gc();
-            return true;
-        }
+        
+        initiateTracing();
+        System.gc();
+        return true;
     }
 
     private void initiateTracing() {
@@ -3024,6 +3025,7 @@ public class nTracer_
         startAutosave(autosaveIntervalMin);
         initImageZproj();
     }
+    
     private void initImage() {
         impWidth = imp.getWidth();
         impHeight = imp.getHeight();
