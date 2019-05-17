@@ -2,38 +2,33 @@ package nTracer;
 
 import ij.*;
 import ij.process.*;
-import ij.gui.*;
 import ij.io.*;
 import ij.plugin.PlugIn;
-import java.awt.*;
+import java.util.*;
 import java.io.*;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Queue;
 
 /**
  * This plugin opens a multi-page TIFF file as a virtual stack. It implements
  * the File/Import/TIFF Virtual Stack command.
  */
-public class FileInfoVirtualStack_MEMOIZE extends VirtualStack implements PlugIn {
-
-    private FileInfo[] info;
-    private int nImages;
+public class BufferedVirtualStack extends VirtualStack implements PlugIn {
+    protected List<FileInfo> info;
 
     /* Default constructor. */
-    public FileInfoVirtualStack_MEMOIZE() {
+    public BufferedVirtualStack() {
         this.processor_fifo = new LinkedList<>();
         this.processor_buffer = new HashMap<>();
+        this.info = new ArrayList<>();
     }
 
     /* Constructs a FileInfoVirtualStack from a FileInfo object. */
-    public FileInfoVirtualStack_MEMOIZE(FileInfo fi) {
+    public BufferedVirtualStack(FileInfo fi) {
         this.processor_fifo = new LinkedList<>();
         this.processor_buffer = new HashMap<>();
-        info = new FileInfo[1];
-        info[0] = fi;
+        this.info = new ArrayList<>();
+        
+        info.add( fi );
+        
         ImagePlus imp = open();
         if (imp != null) {
             imp.show();
@@ -42,11 +37,13 @@ public class FileInfoVirtualStack_MEMOIZE extends VirtualStack implements PlugIn
 
     /* Constructs a FileInfoVirtualStack from a FileInfo 
 		object and displays it if 'show' is true. */
-    public FileInfoVirtualStack_MEMOIZE(FileInfo fi, boolean show) {
+    public BufferedVirtualStack(FileInfo fi, boolean show) {
         this.processor_fifo = new LinkedList<>();
         this.processor_buffer = new HashMap<>();
-        info = new FileInfo[1];
-        info[0] = fi;
+        this.info = new ArrayList<>();
+        
+        info.add( fi );
+
         ImagePlus imp = open();
         if (imp != null && show) {
             imp.show();
@@ -63,7 +60,7 @@ public class FileInfoVirtualStack_MEMOIZE extends VirtualStack implements PlugIn
         if (name == null) {
             return null;
         }
-        FileInfoVirtualStack_MEMOIZE stack = new FileInfoVirtualStack_MEMOIZE();
+        BufferedVirtualStack stack = new BufferedVirtualStack();
         stack.init(dir, name);
         if (stack.info == null) {
             return null;
@@ -100,7 +97,7 @@ public class FileInfoVirtualStack_MEMOIZE extends VirtualStack implements PlugIn
         }
         IJ.showStatus("Decoding TIFF header...");
         try {
-            info = td.getTiffInfo();
+            info = Arrays.asList( td.getTiffInfo() );
         } catch (IOException e) {
             String msg = e.getMessage();
             if (msg == null || msg.equals("")) {
@@ -109,34 +106,37 @@ public class FileInfoVirtualStack_MEMOIZE extends VirtualStack implements PlugIn
             IJ.error("TiffDecoder", msg);
             return;
         }
-        if (info == null || info.length == 0) {
+        if (info == null || info.isEmpty()) {
             IJ.error("Virtual Stack", "This does not appear to be a TIFF stack");
             return;
         }
         if (IJ.debugMode) {
-            IJ.log(info[0].debugInfo);
+            IJ.log(info.get(0).debugInfo);
         }
 
     }
 
     private ImagePlus open() {
-        FileInfo fi = info[0];
+        FileInfo fi = info.get(0);
         int n = fi.nImages;
-        if (info.length == 1 && n > 1) {
-            info = new FileInfo[n];
+        
+        if (info.size() == 1 && n > 1) {
+            info = new ArrayList<>();
             long size = fi.width * fi.height * fi.getBytesPerPixel();
             for (int i = 0; i < n; i++) {
-                info[i] = (FileInfo) fi.clone();
-                info[i].nImages = 1;
-                info[i].longOffset = fi.getOffset() + i * (size + fi.gapBetweenImages);
+                FileInfo toadd = (FileInfo) fi.clone();
+                toadd.nImages = 1;
+                toadd.longOffset = fi.getOffset() + i * (size + fi.gapBetweenImages);
+                info.add( toadd );
             }
         }
-        nImages = info.length;
-        FileOpener fo = new FileOpener(info[0]);
+        
+        FileOpener fo = new FileOpener(info.get(0));
         ImagePlus imp = fo.open(false);
-        if (nImages == 1 && fi.fileType == FileInfo.RGB48) {
+        if ( getSize() == 1 && fi.fileType == FileInfo.RGB48) {
             return imp;
         }
+        
         Properties props = fo.decodeDescriptionString(fi);
         ImagePlus imp2 = new ImagePlus(fi.fileName, this);
         imp2.setFileInfo(fi);
@@ -152,17 +152,18 @@ public class FileInfoVirtualStack_MEMOIZE extends VirtualStack implements PlugIn
             int channels = getInt(props, "channels");
             int slices = getInt(props, "slices");
             int frames = getInt(props, "frames");
-            if (channels * slices * frames == nImages) {
+            if ( channels * slices * frames == getSize() ) {
                 imp2.setDimensions(channels, slices, frames);
                 if (getBoolean(props, "hyperstack")) {
                     imp2.setOpenAsHyperStack(true);
                 }
             }
+            
             if (channels > 1 && fi.description != null) {
                 int mode = IJ.COMPOSITE;
-                if (fi.description.indexOf("mode=color") != -1) {
+                if ( fi.description.contains("mode=color") ) {
                     mode = IJ.COLOR;
-                } else if (fi.description.indexOf("mode=gray") != -1) {
+                } else if ( fi.description.contains("mode=gray") ) {
                     mode = IJ.GRAYSCALE;
                 }
                 imp2 = new CompositeImage(imp2, mode);
@@ -190,25 +191,24 @@ public class FileInfoVirtualStack_MEMOIZE extends VirtualStack implements PlugIn
 
     boolean getBoolean(Properties props, String key) {
         String s = props.getProperty(key);
-        return s != null && s.equals("true") ? true : false;
+        return s != null && s.equals("true");
     }
 
     /**
      * Deletes the specified image, were 1<=n<=nImages.
      */
     public void deleteSlice(int n) {
-        if (n < 1 || n > nImages) {
+        if (n < 1 || n > getSize()) {
             throw new IllegalArgumentException("Argument out of range: " + n);
         }
-        if (nImages < 1) {
+        
+        if (getSize() == 0) {
             return;
         }
-        for (int i = n; i < nImages; i++) {
-            info[i - 1] = info[i];
-        }
-        info[nImages - 1] = null;
-        nImages--;
+        
+        info.remove(n-1);
     }
+
     /**
      * Returns an ImageProcessor for the specified image, were 1<=n<=nImages.
      * Returns null if the stack is empty.
@@ -216,12 +216,14 @@ public class FileInfoVirtualStack_MEMOIZE extends VirtualStack implements PlugIn
     protected Map<Integer,ImageProcessor> processor_buffer;
     protected int proc_buffer_MAX = 300; // 300 * ~20MB -> ~6GB? 100 * ~30MB -> ~2GB?
     protected Queue<Integer> processor_fifo;
+    protected int buffer_clean_count = 0;
+    
     public ImageProcessor getProcessor(int n){
         //IJ.log("Current Cache Size: " + processor_fifo.size());
         if( processor_fifo.size() > proc_buffer_MAX ) {
-            int to_pop = processor_fifo.remove();
-            processor_buffer.remove(to_pop);
-            System.gc();
+            processor_buffer.remove( processor_fifo.remove() );
+            buffer_clean_count++;
+            if( buffer_clean_count % 10 == 0 ) System.gc();
         }
         
         if( processor_buffer.containsKey(n) ){
@@ -230,7 +232,7 @@ public class FileInfoVirtualStack_MEMOIZE extends VirtualStack implements PlugIn
         } else {
             //IJ.log( "Cache MISS (" + n + ")");
             ImageProcessor ip = getProcessor_internal(n);
-            processor_buffer.put( n, ip );
+            processor_buffer.put(n, ip);
             processor_fifo.add(n);
             return ip;
         }
@@ -238,26 +240,28 @@ public class FileInfoVirtualStack_MEMOIZE extends VirtualStack implements PlugIn
     
     public ImageProcessor getProcessor_internal(int n) {
         //IJ.log("Loading Processor " + n + "...");
-        if (n < 1 || n > nImages) {
+        if ( isOutOfRange(n) ) {
             throw new IllegalArgumentException("Argument out of range: " + n);
         }
+        
         //if (n>1) IJ.log("  "+(info[n-1].getOffset()-info[n-2].getOffset()));
-        info[n - 1].nImages = 1; // why is this needed?
+        info.get(n-1).nImages = 1; // why is this needed?
+        
         ImagePlus imp = null;
+        long t0 = System.currentTimeMillis(); // Used by debug, but doesn't hurt to not use
+        FileOpener fo = new FileOpener( info.get(n-1) );
+        imp = fo.open(false);
+
         if (IJ.debugMode) {
-            long t0 = System.currentTimeMillis();
-            FileOpener fo = new FileOpener(info[n - 1]);
-            imp = fo.open(false);
-            IJ.log("FileInfoVirtualStack: " + n + ", offset=" + info[n - 1].getOffset() + ", " + (System.currentTimeMillis() - t0) + "ms");
-        } else {
-            FileOpener fo = new FileOpener(info[n - 1]);
-            imp = fo.open(false);
+            t0 = System.currentTimeMillis() - t0; // calc time delta
+            IJ.log( "FileInfoVirtualStack: " + n + ", offset=" + info.get(n-1).getOffset() + ", " + t0 + "ms" );
         }
+        
         if (imp != null) {
             return imp.getProcessor();
         } else {
             int w = getWidth(), h = getHeight();
-            IJ.log("Read error or file not found (" + n + "): " + info[n - 1].directory + info[n - 1].fileName);
+            IJ.log( "Read error or file not found (" + n + "): " + info.get(n-1).directory + " " + info.get(n-1).fileName );
             switch (getBitDepth()) {
                 case 8:
                     return new ByteProcessor(w, h);
@@ -274,49 +278,50 @@ public class FileInfoVirtualStack_MEMOIZE extends VirtualStack implements PlugIn
     }
 
     /**
-     * Returns the number of images in this stack.
-     */
-    public int getSize() {
-        return nImages;
-    }
-
-    /**
      * Returns the label of the Nth image.
      */
     public String getSliceLabel(int n) {
-        if (n < 1 || n > nImages) {
+        if ( isOutOfRange(n) ) {
             throw new IllegalArgumentException("Argument out of range: " + n);
         }
-        if (info[0].sliceLabels == null || info[0].sliceLabels.length != nImages) {
+        
+        if ( info.get(0).sliceLabels == null || info.get(0).sliceLabels.length != getSize() ) {
             return null;
-        } else {
-            return info[0].sliceLabels[n - 1];
         }
+        
+        return info.get(0).sliceLabels[n - 1];
     }
 
     public int getWidth() {
-        return info[0].width;
+        return info.get(0).width;
     }
 
     public int getHeight() {
-        return info[0].height;
+        return info.get(0).height;
+    }
+    
+    /**
+     * Returns the number of images in this stack.
+     */
+    public int getSize() {
+        return info.size();
+    }
+    
+    /**
+     * Checks if a given 'n' is a valid processor index
+     * 
+     * @param n a test index variable
+     * @return (boolean) True if n is a valid processor, false otherwise
+     */
+    public boolean isOutOfRange( int n ) {
+        return n < 1 || n > getSize();
     }
 
     /**
      * Adds an image to this stack.
      */
     public synchronized void addImage(FileInfo fileInfo) {
-        nImages++;
-        //IJ.log("addImage: "+nImages+"	"+fileInfo);
-        if (info == null) {
-            info = new FileInfo[250];
-        }
-        if (nImages == info.length) {
-            FileInfo[] tmp = new FileInfo[nImages * 2];
-            System.arraycopy(info, 0, tmp, 0, nImages);
-            info = tmp;
-        }
-        info[nImages - 1] = fileInfo;
+        info.add( fileInfo );
     }
 
 }
