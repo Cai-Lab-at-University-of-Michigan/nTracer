@@ -2970,7 +2970,7 @@ public class nTracer_
     }// </editor-fold>//GEN-END:initComponents
 
     private boolean openImage() {
-        System.err.println("OpenImage Ran");
+        //System.err.println("OpenImage Ran");
         
         System.gc();
         System.gc();
