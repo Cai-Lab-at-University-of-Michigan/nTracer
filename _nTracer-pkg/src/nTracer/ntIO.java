@@ -9,17 +9,12 @@ package nTracer;
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-import ij.plugin.FileInfoVirtualStack;
 import ij.IJ;
 import ij.Prefs;
 import ij.WindowManager;
 import ij.ImagePlus;
-import ij.ImageStack;
-import ij.gui.Overlay;
-import ij.gui.Roi;
 import ij.io.OpenDialog;
 import ij.io.Opener;
-import ij.plugin.HyperStackConverter;
 import java.awt.Rectangle;
 
 import java.io.*;
@@ -35,7 +30,6 @@ import java.util.zip.ZipOutputStream;
 import javax.swing.*;
 import javax.swing.tree.*;
 import javax.swing.tree.DefaultTreeModel;
-import static nTracer.nTracer_.imp;
 
 /**
  *

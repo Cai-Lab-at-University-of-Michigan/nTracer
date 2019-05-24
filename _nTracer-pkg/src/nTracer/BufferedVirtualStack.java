@@ -6,6 +6,8 @@ import ij.io.*;
 import ij.plugin.PlugIn;
 import java.util.*;
 import java.io.*;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * This plugin opens a multi-page TIFF file as a virtual stack. It implements
@@ -218,24 +220,34 @@ public class BufferedVirtualStack extends VirtualStack implements PlugIn {
     protected Queue<Integer> processor_fifo;
     protected int buffer_clean_count = 0;
     
+    Lock test_lock = new ReentrantLock();
+    
     public ImageProcessor getProcessor(int n){
         //IJ.log("Current Cache Size: " + processor_fifo.size());
+        
+        test_lock.lock();
         if( processor_fifo.size() > proc_buffer_MAX ) {
-            processor_buffer.remove( processor_fifo.remove() );
+            int to_remove = processor_fifo.remove();
+            //IJ.log( "\tClearing Cache Item " + to_remove );
+            processor_buffer.remove( to_remove );
+            
             buffer_clean_count++;
             if( buffer_clean_count % 10 == 0 ) System.gc();
         }
         
+        ImageProcessor to_return = null;
         if( processor_buffer.containsKey(n) ){
             //IJ.log("Cache HIT (" + n + ") " + processor_buffer.size()) ;
-            return processor_buffer.get(n);
+            to_return = processor_buffer.get(n);
         } else {
             //IJ.log( "Cache MISS (" + n + ")");
-            ImageProcessor ip = getProcessor_internal(n);
-            processor_buffer.put(n, ip);
+            to_return = getProcessor_internal(n);
+            processor_buffer.put(n, to_return);
             processor_fifo.add(n);
-            return ip;
         }
+        test_lock.unlock();
+        
+        return to_return;
     }
     
     public ImageProcessor getProcessor_internal(int n) {
@@ -247,10 +259,9 @@ public class BufferedVirtualStack extends VirtualStack implements PlugIn {
         //if (n>1) IJ.log("  "+(info[n-1].getOffset()-info[n-2].getOffset()));
         info.get(n-1).nImages = 1; // why is this needed?
         
-        ImagePlus imp = null;
         long t0 = System.currentTimeMillis(); // Used by debug, but doesn't hurt to not use
         FileOpener fo = new FileOpener( info.get(n-1) );
-        imp = fo.open(false);
+        ImagePlus imp = fo.open(false);
 
         if (IJ.debugMode) {
             t0 = System.currentTimeMillis() - t0; // calc time delta

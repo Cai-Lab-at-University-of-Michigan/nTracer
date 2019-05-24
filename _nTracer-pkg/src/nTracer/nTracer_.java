@@ -162,6 +162,9 @@ public class nTracer_
     private Instant last_z_update_time;
 
     public nTracer_() {
+        MemoryMonitor mm = new MemoryMonitor();
+        mm.run(" ");
+        
         this.last_current_z = -1;
         this.last_z_update_time = Instant.now();
         
@@ -233,8 +236,7 @@ public class nTracer_
         IJ.run("Channels Tool...", "");
         IJ.run("Misc...", "divide=Infinity require");
         //IJ.run("Synchronize Windows", "");
-        MemoryMonitor mm = new MemoryMonitor();
-        mm.run(" ");
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="methods for setting up GUI views and Table/Tree components">
@@ -6242,7 +6244,7 @@ public class nTracer_
             }
         }
         if (!traceComplete){
-            primaryNode.toogleComplete();
+            primaryNode.toggleComplete();
         }        
     }
  
@@ -6908,7 +6910,7 @@ public class nTracer_
             TreePath[] selectedPaths = neuronList_jTree.getSelectionPaths();
             for (TreePath selectedPath : selectedPaths) {
                 ntNeuronNode node = (ntNeuronNode) selectedPath.getLastPathComponent();
-                node.toogleComplete();
+                node.toggleComplete();
             }
             updateTrees();
             restoreTreeExpansionSelectionStatus();
@@ -9141,44 +9143,59 @@ public class nTracer_
         return allPoints;
     }
     
-    private Color getNeuronColorFromNode(ntNeuronNode node, float alpha) {
+    private Color getNeuronColorFromNode( ntNeuronNode node, float alpha ) {
+        Color toreturn = node.getNeuronColor();
+        
+        if( toreturn == null ) { // catch lift-over condition
+            toreturn = this.getNeuronColorFromNodeOriginal( node, alpha );
+            node.setNeuronColor( toreturn );
+        }
+        
+        float[] cc = toreturn.getRGBComponents(null); // decompose to add alpha
+        toreturn = new Color( cc[0], cc[1], cc[2], alpha );
+        
+        return toreturn;
+    }
+    
+    private Color getNeuronColorFromNodeOriginal(ntNeuronNode node, float alpha) {
+        IJ.log( "Running gNCFN!" );
+        
+        System.out.println( node );
+        
         ArrayList<int[]> neuronPoints = getAllPrimaryBranchPoints(node);
 
         if (neuronPoints.isEmpty()) {
             return Color.white;
-        } else {
-            float[] tempColor = new float[impNChannel];
-            for (int channel = 0; channel < impNChannel; channel++) {
-                tempColor[channel] = 0;
-            }
-            for (int[] neuronPt : neuronPoints) {
-                for (int channel = 0; channel < impNChannel; channel++) {
-                    if (analysisChannels[channel]) {
-                        int index = imp.getStackIndex(channel + 1, neuronPt[3], imp.getFrame());
-                        // retrive color[channel] and calculate total intensity
-                        tempColor[channel] = tempColor[channel] + stk.getProcessor(index).get(neuronPt[1], neuronPt[2]);
-                    }
-                }
-            }
-
-            float[][] allChRGBratios = Functions.getAllChRGBratios();
-            float[] allChActiveFloat = Functions.getAllChActiveFloat();
-            float[] allChAnalysisFloat = Functions.getAllChAnalysisFloat();
-            float[] rgbColor = {0, 0, 0};
-
-            // calculate normalized color - normalize to the max intensity channel
-            float max = 0;
-            for (int color = 0; color < 3; color++) {
-                for (int channel = 0; channel < impNChannel; channel++) {
-                    rgbColor[color] = rgbColor[color] + (tempColor[channel] * allChActiveFloat[channel] * allChAnalysisFloat[channel] * allChRGBratios[channel][color]);
-                }
-                //IJ.log("color "+color+" = "+rgbColor[color]);
-                max = rgbColor[color] > max ? rgbColor[color] : max;
-            }
-            //IJ.log("max = "+max);
-
-            return new Color(rgbColor[0] / max, rgbColor[1] / max, rgbColor[2] / max, alpha);
         }
+        
+        float[] tempColor = new float[impNChannel];
+
+        for (int channel = 0; channel < impNChannel; channel++) {
+            for (int[] neuronPt : neuronPoints) {
+                if (!analysisChannels[channel]) continue;
+                int index = imp.getStackIndex(channel + 1, neuronPt[3], imp.getFrame());
+                // retrive color[channel] and calculate total intensity
+                tempColor[channel] += stk.getProcessor(index).get(neuronPt[1], neuronPt[2]);
+            }
+        }
+
+        float[][] allChRGBratios = Functions.getAllChRGBratios();
+        float[] allChActiveFloat = Functions.getAllChActiveFloat();
+        float[] allChAnalysisFloat = Functions.getAllChAnalysisFloat();
+        float[] rgbColor = {0, 0, 0};
+
+        // calculate normalized color - normalize to the max intensity channel
+        float max = 0;
+        for (int color = 0; color < 3; color++) {
+            for (int channel = 0; channel < impNChannel; channel++) {
+                rgbColor[color] += (tempColor[channel] * allChActiveFloat[channel] * allChAnalysisFloat[channel] * allChRGBratios[channel][color]);
+            }
+            //IJ.log("color "+color+" = "+rgbColor[color]);
+            max = rgbColor[color] > max ? rgbColor[color] : max;
+        }
+        //IJ.log("max = "+max);
+
+        return new Color(rgbColor[0] / max, rgbColor[1] / max, rgbColor[2] / max, alpha);
     }
 
     private void getOneBranchTraceRoiExtPt(Overlay[] neuriteTraceOL, Overlay[] neuriteNameOL, Overlay neuriteSynapseOL, Overlay neuriteConnectedOL,

@@ -1465,13 +1465,11 @@ IJ.log("nextPoint ("+(nextPoint[1]+xyzBoundsOffsets[0])+", "+(nextPoint[2]+xyzBo
     }
 
     private int min(int a, int b) {
-        int c = a < b ? a : b;
-        return c;
+        return a < b ? a : b;
     }
 
     private int max(int a, int b) {
-        int c = a > b ? a : b;
-        return c;
+        return a > b ? a : b;
     }
 
     // <editor-fold defaultstate="collapsed" desc="check whether X, Y, Z is out of bound">

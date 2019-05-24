@@ -1,0 +1,2302 @@
+#
+# There is insufficient memory for the Java Runtime Environment to continue.
+# Native memory allocation (mmap) failed to map 5959524352 bytes for committing reserved memory.
+# Possible reasons:
+#   The system is out of physical RAM or swap space
+# Possible solutions:
+#   Reduce memory load on the system
+#   Increase physical memory or swap space
+#   Check if swap backing store is full
+#   Decrease Java heap size (-Xmx/-Xms)
+#   Decrease number of Java threads
+#   Decrease Java thread stack sizes (-Xss)
+#   Set larger code cache with -XX:ReservedCodeCacheSize=
+# This output file may be truncated or incomplete.
+#
+#  Out of Memory Error (os_linux.cpp:2753), pid=34179, tid=0x00007febdf3f3700
+#
+# JRE version: OpenJDK Runtime Environment (8.0_212-b01) (build 1.8.0_212-b01)
+# Java VM: OpenJDK 64-Bit Server VM (25.212-b01 mixed mode linux-amd64 )
+# Core dump written. Default location: /home/loganaw/Documents/nTracer1/ImageJ/core or core.34179
+#
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x0000000001a3a000):  ConcurrentGCThread [stack: 0x00007febdf2f4000,0x00007febdf3f4000] [id=34204]
+
+Stack: [0x00007febdf2f4000,0x00007febdf3f4000],  sp=0x00007febdf3f2a10,  free space=1018k
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+V  [libjvm.so+0xa3210c]
+V  [libjvm.so+0x4ba3ca]
+V  [libjvm.so+0x89379c]
+V  [libjvm.so+0x88abff]
+V  [libjvm.so+0xa2eb09]
+V  [libjvm.so+0x489dd0]
+V  [libjvm.so+0x5b64b5]
+V  [libjvm.so+0x4a1d42]
+V  [libjvm.so+0x4a1f39]
+V  [libjvm.so+0x4a2920]
+V  [libjvm.so+0x4a4949]
+V  [libjvm.so+0x890ba4]
+
+
+---------------  P R O C E S S  ---------------
+
+Java Threads: ( => current thread )
+  0x00007feb5c070000 JavaThread "SciJava-451f87af-Thread-6" [_thread_blocked, id=36383, stack(0x00007feb577f0000,0x00007feb578f1000)]
+  0x00007feb6c091000 JavaThread "SciJava-451f87af-Thread-2" [_thread_blocked, id=36379, stack(0x00007feb693a0000,0x00007feb694a1000)]
+  0x00007feb6c07f000 JavaThread "Image Sequence..." [_thread_in_native, id=36293, stack(0x00007feb8c558000,0x00007feb8c659000)]
+  0x00007feb6c032800 JavaThread "TimerQueue" daemon [_thread_blocked, id=35174, stack(0x00007feb8d5e9000,0x00007feb8d6ea000)]
+  0x000000000192b000 JavaThread "DestroyJavaVM" [_thread_blocked, id=34179, stack(0x00007ffd45fef000,0x00007ffd460ef000)]
+  0x0000000003da2000 JavaThread "Run$_AWT-EventQueue-0" [_thread_blocked, id=34277, stack(0x00007feb8d6ea000,0x00007feb8d7eb000)]
+  0x0000000003d9a000 JavaThread "AWT-Shutdown" [_thread_blocked, id=34276, stack(0x00007feb8d7eb000,0x00007feb8d8ec000)]
+  0x00000000039cf000 JavaThread "AWT-XAWT" daemon [_thread_in_native, id=34271, stack(0x00007feb8d8ec000,0x00007feb8d9ed000)]
+  0x00000000039bf000 JavaThread "Java2D Disposer" daemon [_thread_blocked, id=34270, stack(0x00007feb8dbed000,0x00007feb8dcee000)]
+  0x00000000032f9800 JavaThread "Timer-0" daemon [_thread_blocked, id=34242, stack(0x00007feb8f5a0000,0x00007feb8f6a1000)]
+  0x0000000001b21000 JavaThread "Service Thread" daemon [_thread_blocked, id=34222, stack(0x00007febdcc22000,0x00007febdcd23000)]
+  0x0000000001b15800 JavaThread "C1 CompilerThread11" daemon [_thread_blocked, id=34221, stack(0x00007febdcd24000,0x00007febdce24000)]
+  0x0000000001b13800 JavaThread "C1 CompilerThread10" daemon [_thread_blocked, id=34220, stack(0x00007febdce25000,0x00007febdcf25000)]
+  0x0000000001b12000 JavaThread "C1 CompilerThread9" daemon [_thread_blocked, id=34219, stack(0x00007febdcf26000,0x00007febdd026000)]
+  0x0000000001b0f000 JavaThread "C1 CompilerThread8" daemon [_thread_blocked, id=34218, stack(0x00007febdd027000,0x00007febdd127000)]
+  0x0000000001b0d000 JavaThread "C2 CompilerThread7" daemon [_thread_blocked, id=34217, stack(0x00007febdd128000,0x00007febdd228000)]
+  0x0000000001b0a800 JavaThread "C2 CompilerThread6" daemon [_thread_blocked, id=34216, stack(0x00007febdd229000,0x00007febdd329000)]
+  0x0000000001b08800 JavaThread "C2 CompilerThread5" daemon [_thread_blocked, id=34215, stack(0x00007febdd32a000,0x00007febdd42a000)]
+  0x0000000001b06800 JavaThread "C2 CompilerThread4" daemon [_thread_blocked, id=34214, stack(0x00007febdd42b000,0x00007febdd52b000)]
+  0x0000000001afc000 JavaThread "C2 CompilerThread3" daemon [_thread_blocked, id=34213, stack(0x00007febdd52c000,0x00007febdd62c000)]
+  0x0000000001afa000 JavaThread "C2 CompilerThread2" daemon [_thread_blocked, id=34212, stack(0x00007febdd62d000,0x00007febdd72d000)]
+  0x0000000001af8000 JavaThread "C2 CompilerThread1" daemon [_thread_blocked, id=34211, stack(0x00007febdd72e000,0x00007febdd82e000)]
+  0x0000000001af6000 JavaThread "C2 CompilerThread0" daemon [_thread_blocked, id=34210, stack(0x00007febdd82f000,0x00007febdd92f000)]
+  0x0000000001af3800 JavaThread "Signal Dispatcher" daemon [_thread_blocked, id=34209, stack(0x00007febdd92f000,0x00007febdda30000)]
+  0x0000000001af2800 JavaThread "Surrogate Locker Thread (Concurrent GC)" daemon [_thread_blocked, id=34208, stack(0x00007febdda30000,0x00007febddb31000)]
+  0x0000000001ac0800 JavaThread "Finalizer" daemon [_thread_blocked, id=34207, stack(0x00007febddb31000,0x00007febddc32000)]
+  0x0000000001abe000 JavaThread "Reference Handler" daemon [_thread_blocked, id=34206, stack(0x00007febddc32000,0x00007febddd33000)]
+
+Other Threads:
+  0x0000000001ab4800 VMThread [stack: 0x00007febddd34000,0x00007febdde34000] [id=34205]
+  0x0000000001b23800 WatcherThread [stack: 0x00007febdcb22000,0x00007febdcc22000] [id=34223]
+
+=>0x0000000001a3a000 (exited) ConcurrentGCThread [stack: 0x00007febdf2f4000,0x00007febdf3f4000] [id=34204]
+
+VM state:not at safepoint (normal execution)
+
+VM Mutex/Monitor currently owned by a thread:  ([mutex/lock_event])
+[0x00000000019289d0] Heap_lock - owner thread: 0x0000000001a3a000
+
+Heap:
+ par new generation   total 1380160K, used 682398K [0x00007fec37a00000, 0x00007fec95390000, 0x00007fec95390000)
+  eden space 1226816K,  43% used [0x00007fec37a00000, 0x00007fec58022dd8, 0x00007fec82810000)
+  from space 153344K,  99% used [0x00007fec8bdd0000, 0x00007fec95214b40, 0x00007fec95390000)
+  to   space 153344K,   0% used [0x00007fec82810000, 0x00007fec82810000, 0x00007fec8bdd0000)
+ concurrent mark-sweep generation total 15839152K, used 12995398K [0x00007fec95390000, 0x00007ff05bf7c000, 0x00007ff880000000)
+ Metaspace       used 67788K, capacity 70794K, committed 70900K, reserved 71680K
+
+Card table byte_map: [0x00007fec317bc000,0x00007fec37a00000] byte_map_base: 0x00007fac3b5ff000
+
+Marking Bits: (CMSBitMap*) 0x0000000001a2fc68
+ Bits: [0x00007febf65f7000, 0x00007fec260a8c00)
+
+Mod Union Table: (CMSBitMap*) 0x0000000001a2fd28
+ Bits: [0x00007fec306cc000, 0x00007fec312b6c70)
+
+Polling page: 0x00007ff8db671000
+
+CodeCache: size=245760Kb used=34417Kb max_used=34686Kb free=211342Kb
+ bounds [0x00007ff8c5000000, 0x00007ff8c7220000, 0x00007ff8d4000000]
+ total_blobs=9986 nmethods=9169 adapters=726
+ compilation: enabled
+
+Compilation events (10 events):
+Event: 1883.396 Thread 0x0000000001b0d000 12032       4       net.miginfocom.layout.Grid::getMinPrefMaxSumSize (237 bytes)
+Event: 1883.405 Thread 0x0000000001b0d000 nmethod 12032 0x00007ff8c6d1d0d0 code [0x00007ff8c6d1d2a0, 0x00007ff8c6d1da78]
+Event: 1883.895 Thread 0x0000000001b15800 12033   !   3       ij.io.Opener::openTiff (102 bytes)
+Event: 1883.896 Thread 0x0000000001b15800 nmethod 12033 0x00007ff8c6b3b850 code [0x00007ff8c6b3bac0, 0x00007ff8c6b3c928]
+Event: 1884.116 Thread 0x0000000001b0f000 12034   !   3       ij.io.Opener::openTiffStack (870 bytes)
+Event: 1884.121 Thread 0x0000000001b0f000 nmethod 12034 0x00007ff8c7210ad0 code [0x00007ff8c7211220, 0x00007ff8c7216118]
+Event: 1885.462 Thread 0x0000000001b0a800 12035       4       javax.swing.SwingUtilities::layoutCompoundLabelImpl (758 bytes)
+Event: 1885.502 Thread 0x0000000001b0a800 nmethod 12035 0x00007ff8c6b5e8d0 code [0x00007ff8c6b5ec40, 0x00007ff8c6b613d8]
+Event: 1888.774 Thread 0x0000000001afa000 12036       4       net.miginfocom.layout.Grid::addToSizeGroup (80 bytes)
+Event: 1888.780 Thread 0x0000000001afa000 nmethod 12036 0x00007ff8c6447110 code [0x00007ff8c64472a0, 0x00007ff8c6447678]
+
+GC Heap History (10 events):
+Event: 1852.521 GC heap before
+{Heap before GC invocations=111 (full 25):
+ par new generation   total 1380160K, used 1378566K [0x00007fec37a00000, 0x00007fec95390000, 0x00007fec95390000)
+  eden space 1226816K,  99% used [0x00007fec37a00000, 0x00007fec827f34b8, 0x00007fec82810000)
+  from space 153344K,  99% used [0x00007fec82810000, 0x00007fec8bc5e410, 0x00007fec8bdd0000)
+  to   space 153344K,   0% used [0x00007fec8bdd0000, 0x00007fec8bdd0000, 0x00007fec95390000)
+ concurrent mark-sweep generation total 12694740K, used 7172101K [0x00007fec95390000, 0x00007fef9c0c5000, 0x00007ff880000000)
+ Metaspace       used 67646K, capacity 70676K, committed 70900K, reserved 71680K
+Event: 1852.675 GC heap after
+Heap after GC invocations=112 (full 25):
+ par new generation   total 1380160K, used 152563K [0x00007fec37a00000, 0x00007fec95390000, 0x00007fec95390000)
+  eden space 1226816K,   0% used [0x00007fec37a00000, 0x00007fec37a00000, 0x00007fec82810000)
+  from space 153344K,  99% used [0x00007fec8bdd0000, 0x00007fec952ccc10, 0x00007fec95390000)
+  to   space 153344K,   0% used [0x00007fec82810000, 0x00007fec82810000, 0x00007fec8bdd0000)
+ concurrent mark-sweep generation total 12694740K, used 8331383K [0x00007fec95390000, 0x00007fef9c0c5000, 0x00007ff880000000)
+ Metaspace       used 67646K, capacity 70676K, committed 70900K, reserved 71680K
+}
+Event: 1860.321 GC heap before
+{Heap before GC invocations=112 (full 25):
+ par new generation   total 1380160K, used 1378440K [0x00007fec37a00000, 0x00007fec95390000, 0x00007fec95390000)
+  eden space 1226816K,  99% used [0x00007fec37a00000, 0x00007fec827256b8, 0x00007fec82810000)
+  from space 153344K,  99% used [0x00007fec8bdd0000, 0x00007fec952ccc10, 0x00007fec95390000)
+  to   space 153344K,   0% used [0x00007fec82810000, 0x00007fec82810000, 0x00007fec8bdd0000)
+ concurrent mark-sweep generation total 12694740K, used 8331383K [0x00007fec95390000, 0x00007fef9c0c5000, 0x00007ff880000000)
+ Metaspace       used 67651K, capacity 70676K, committed 70900K, reserved 71680K
+Event: 1860.498 GC heap after
+Heap after GC invocations=113 (full 25):
+ par new generation   total 1380160K, used 152038K [0x00007fec37a00000, 0x00007fec95390000, 0x00007fec95390000)
+  eden space 1226816K,   0% used [0x00007fec37a00000, 0x00007fec37a00000, 0x00007fec82810000)
+  from space 153344K,  99% used [0x00007fec82810000, 0x00007fec8bc89800, 0x00007fec8bdd0000)
+  to   space 153344K,   0% used [0x00007fec8bdd0000, 0x00007fec8bdd0000, 0x00007fec95390000)
+ concurrent mark-sweep generation total 12694740K, used 9503562K [0x00007fec95390000, 0x00007fef9c0c5000, 0x00007ff880000000)
+ Metaspace       used 67651K, capacity 70676K, committed 70900K, reserved 71680K
+}
+Event: 1869.154 GC heap before
+{Heap before GC invocations=113 (full 25):
+ par new generation   total 1380160K, used 1378234K [0x00007fec37a00000, 0x00007fec95390000, 0x00007fec95390000)
+  eden space 1226816K,  99% used [0x00007fec37a00000, 0x00007fec82775310, 0x00007fec82810000)
+  from space 153344K,  99% used [0x00007fec82810000, 0x00007fec8bc89800, 0x00007fec8bdd0000)
+  to   space 153344K,   0% used [0x00007fec8bdd0000, 0x00007fec8bdd0000, 0x00007fec95390000)
+ concurrent mark-sweep generation total 15839152K, used 9505538K [0x00007fec95390000, 0x00007ff05bf7c000, 0x00007ff880000000)
+ Metaspace       used 67654K, capacity 70666K, committed 70900K, reserved 71680K
+Event: 1870.006 GC heap after
+Heap after GC invocations=114 (full 25):
+ par new generation   total 1380160K, used 151879K [0x00007fec37a00000, 0x00007fec95390000, 0x00007fec95390000)
+  eden space 1226816K,   0% used [0x00007fec37a00000, 0x00007fec37a00000, 0x00007fec82810000)
+  from space 153344K,  99% used [0x00007fec8bdd0000, 0x00007fec95221dc8, 0x00007fec95390000)
+  to   space 153344K,   0% used [0x00007fec82810000, 0x00007fec82810000, 0x00007fec8bdd0000)
+ concurrent mark-sweep generation total 15839152K, used 10672946K [0x00007fec95390000, 0x00007ff05bf7c000, 0x00007ff880000000)
+ Metaspace       used 67654K, capacity 70666K, committed 70900K, reserved 71680K
+}
+Event: 1878.628 GC heap before
+{Heap before GC invocations=114 (full 26):
+ par new generation   total 1380160K, used 1378695K [0x00007fec37a00000, 0x00007fec95390000, 0x00007fec95390000)
+  eden space 1226816K, 100% used [0x00007fec37a00000, 0x00007fec82810000, 0x00007fec82810000)
+  from space 153344K,  99% used [0x00007fec8bdd0000, 0x00007fec95221dc8, 0x00007fec95390000)
+  to   space 153344K,   0% used [0x00007fec82810000, 0x00007fec82810000, 0x00007fec8bdd0000)
+ concurrent mark-sweep generation total 15839152K, used 10672946K [0x00007fec95390000, 0x00007ff05bf7c000, 0x00007ff880000000)
+ Metaspace       used 67763K, capacity 70794K, committed 70900K, reserved 71680K
+Event: 1879.333 GC heap after
+Heap after GC invocations=115 (full 26):
+ par new generation   total 1380160K, used 151830K [0x00007fec37a00000, 0x00007fec95390000, 0x00007fec95390000)
+  eden space 1226816K,   0% used [0x00007fec37a00000, 0x00007fec37a00000, 0x00007fec82810000)
+  from space 153344K,  99% used [0x00007fec82810000, 0x00007fec8bc55850, 0x00007fec8bdd0000)
+  to   space 153344K,   0% used [0x00007fec8bdd0000, 0x00007fec8bdd0000, 0x00007fec95390000)
+ concurrent mark-sweep generation total 15839152K, used 11838322K [0x00007fec95390000, 0x00007ff05bf7c000, 0x00007ff880000000)
+ Metaspace       used 67763K, capacity 70794K, committed 70900K, reserved 71680K
+}
+Event: 1887.892 GC heap before
+{Heap before GC invocations=115 (full 26):
+ par new generation   total 1380160K, used 1378646K [0x00007fec37a00000, 0x00007fec95390000, 0x00007fec95390000)
+  eden space 1226816K, 100% used [0x00007fec37a00000, 0x00007fec82810000, 0x00007fec82810000)
+  from space 153344K,  99% used [0x00007fec82810000, 0x00007fec8bc55850, 0x00007fec8bdd0000)
+  to   space 153344K,   0% used [0x00007fec8bdd0000, 0x00007fec8bdd0000, 0x00007fec95390000)
+ concurrent mark-sweep generation total 15839152K, used 11838322K [0x00007fec95390000, 0x00007ff05bf7c000, 0x00007ff880000000)
+ Metaspace       used 67788K, capacity 70794K, committed 70900K, reserved 71680K
+Event: 1888.545 GC heap after
+Heap after GC invocations=116 (full 26):
+ par new generation   total 1380160K, used 151826K [0x00007fec37a00000, 0x00007fec95390000, 0x00007fec95390000)
+  eden space 1226816K,   0% used [0x00007fec37a00000, 0x00007fec37a00000, 0x00007fec82810000)
+  from space 153344K,  99% used [0x00007fec8bdd0000, 0x00007fec95214b40, 0x00007fec95390000)
+  to   space 153344K,   0% used [0x00007fec82810000, 0x00007fec82810000, 0x00007fec8bdd0000)
+ concurrent mark-sweep generation total 15839152K, used 12995507K [0x00007fec95390000, 0x00007ff05bf7c000, 0x00007ff880000000)
+ Metaspace       used 67788K, capacity 70794K, committed 70900K, reserved 71680K
+}
+
+Deoptimization events (10 events):
+Event: 1826.598 Thread 0x0000000003da2000 Uncommon trap: reason=bimorphic action=maybe_recompile pc=0x00007ff8c5cc18ec method=javax.swing.text.SimpleAttributeSet.getAttribute(Ljava/lang/Object;)Ljava/lang/Object; @ 14
+Event: 1827.039 Thread 0x0000000003da2000 Uncommon trap: reason=class_check action=maybe_recompile pc=0x00007ff8c57051c8 method=java.awt.event.InvocationEvent.dispatch()V @ 11
+Event: 1827.041 Thread 0x0000000003da2000 Uncommon trap: reason=class_check action=maybe_recompile pc=0x00007ff8c57051c8 method=java.awt.event.InvocationEvent.dispatch()V @ 11
+Event: 1827.041 Thread 0x0000000003da2000 Uncommon trap: reason=class_check action=maybe_recompile pc=0x00007ff8c57051c8 method=java.awt.event.InvocationEvent.dispatch()V @ 11
+Event: 1827.041 Thread 0x0000000003da2000 Uncommon trap: reason=class_check action=maybe_recompile pc=0x00007ff8c57051c8 method=java.awt.event.InvocationEvent.dispatch()V @ 11
+Event: 1839.881 Thread 0x00007feb5c070000 Uncommon trap: reason=unstable_if action=reinterpret pc=0x00007ff8c71100cc method=ij.plugin.frame.MemoryMonitor.updatePlot()V @ 178
+Event: 1855.545 Thread 0x00007feb5c070000 Uncommon trap: reason=unstable_if action=reinterpret pc=0x00007ff8c710da88 method=ij.plugin.frame.MemoryMonitor.updatePlot()V @ 31
+Event: 1880.339 Thread 0x0000000003da2000 Uncommon trap: reason=unstable_if action=reinterpret pc=0x00007ff8c6c211e0 method=java.util.concurrent.locks.AbstractQueuedSynchronizer.isOnSyncQueue(Ljava/util/concurrent/locks/AbstractQueuedSynchronizer$Node;)Z @ 22
+Event: 1885.318 Thread 0x00007feb5c068800 Uncommon trap: reason=unstable_if action=reinterpret pc=0x00007ff8c6ca6f24 method=java.util.concurrent.locks.AbstractQueuedSynchronizer.addWaiter(Ljava/util/concurrent/locks/AbstractQueuedSynchronizer$Node;)Ljava/util/concurrent/locks/AbstractQueuedSynchr
+Event: 1885.318 Thread 0x00007feb5c3f2000 Uncommon trap: reason=unstable_if action=reinterpret pc=0x00007ff8c6ca6f24 method=java.util.concurrent.locks.AbstractQueuedSynchronizer.addWaiter(Ljava/util/concurrent/locks/AbstractQueuedSynchronizer$Node;)Ljava/util/concurrent/locks/AbstractQueuedSynchr
+
+Classes redefined (0 events):
+No events
+
+Internal exceptions (10 events):
+Event: 1825.315 Thread 0x00007feb5c070000 Exception <a 'java/security/PrivilegedActionException'> (0x00007fec536f1dc0) thrown at [/build/java8-openjdk/src/jdk8u-jdk8u212-b01/hotspot/src/share/vm/prims/jvm.cpp, line 1502]
+Event: 1825.315 Thread 0x00007feb5c3f2000 Exception <a 'java/security/PrivilegedActionException'> (0x00007fec523c7460) thrown at [/build/java8-openjdk/src/jdk8u-jdk8u212-b01/hotspot/src/share/vm/prims/jvm.cpp, line 1502]
+Event: 1825.315 Thread 0x00007feb5c070000 Exception <a 'java/security/PrivilegedActionException'> (0x00007fec536f2340) thrown at [/build/java8-openjdk/src/jdk8u-jdk8u212-b01/hotspot/src/share/vm/prims/jvm.cpp, line 1502]
+Event: 1825.315 Thread 0x00007feb5c3f1000 Exception <a 'java/security/PrivilegedActionException'> (0x00007fec528914e0) thrown at [/build/java8-openjdk/src/jdk8u-jdk8u212-b01/hotspot/src/share/vm/prims/jvm.cpp, line 1502]
+Event: 1825.315 Thread 0x00007feb5c3f1000 Exception <a 'java/security/PrivilegedActionException'> (0x00007fec52891a60) thrown at [/build/java8-openjdk/src/jdk8u-jdk8u212-b01/hotspot/src/share/vm/prims/jvm.cpp, line 1502]
+Event: 1825.320 Thread 0x0000000003da2000 Exception <a 'java/lang/NoSuchMethodError': java.lang.Object.lambda$identity$2(Ljava/lang/Object;)Ljava/lang/Object;> (0x00007fec4b9e4df0) thrown at [/build/java8-openjdk/src/jdk8u-jdk8u212-b01/hotspot/src/share/vm/interpreter/linkResolver.cpp, line 620]
+Event: 1825.322 Thread 0x0000000003da2000 Exception <a 'java/lang/NoSuchMethodError': java.lang.Object.lambda$sort$0(Ljava/util/Map;Lorg/scijava/plugin/SciJavaPlugin;Lorg/scijava/plugin/SciJavaPlugin;)I> (0x00007fec4b9f8968) thrown at [/build/java8-openjdk/src/jdk8u-jdk8u212-b01/hotspot/src/share
+Event: 1825.403 Thread 0x0000000003da2000 Exception <a 'java/lang/NoSuchMethodError': java.lang.Object.lambda$actions$0(Lorg/scijava/search/SearchResult;Lorg/scijava/search/SearchActionFactory;)Z> (0x00007fec55634978) thrown at [/build/java8-openjdk/src/jdk8u-jdk8u212-b01/hotspot/src/share/vm/int
+Event: 1825.403 Thread 0x0000000003da2000 Exception <a 'java/lang/NoSuchMethodError': java.lang.Object.lambda$actions$1(Lorg/scijava/search/SearchResult;Lorg/scijava/search/SearchActionFactory;)Lorg/scijava/search/SearchAction;> (0x00007fec55639f20) thrown at [/build/java8-openjdk/src/jdk8u-jdk8u
+Event: 1827.182 Thread 0x0000000003da2000 Exception <a 'java/lang/UnsupportedOperationException': > (0x00007fec6a1d0748) thrown at [/build/java8-openjdk/src/jdk8u-jdk8u212-b01/hotspot/src/share/vm/prims/jni.cpp, line 736]
+
+Events (10 events):
+Event: 1885.318 Thread 0x00007feb5c068800 DEOPT UNPACKING pc=0x00007ff8c504547a sp=0x00007feb576ed778 mode 2
+Event: 1885.318 Thread 0x00007feb5c3f2000 DEOPT UNPACKING pc=0x00007ff8c504547a sp=0x00007feb8f39e778 mode 2
+Event: 1885.318 Thread 0x00007feb5c068800 Thread exited: 0x00007feb5c068800
+Event: 1885.318 Thread 0x00007feb5c3f2000 Thread exited: 0x00007feb5c3f2000
+Event: 1885.334 Thread 0x00007feb5c3f1000 Thread exited: 0x00007feb5c3f1000
+Event: 1887.039 Thread 0x00007feb5c40d000 Thread exited: 0x00007feb5c40d000
+Event: 1887.892 Executing VM operation: GenCollectForAllocation
+Event: 1888.545 Executing VM operation: GenCollectForAllocation done
+Event: 1892.296 Executing VM operation: CMS_Final_Remark
+Event: 1892.328 Executing VM operation: CMS_Final_Remark done
+
+
+Dynamic libraries:
+00400000-00411000 r-xp 00000000 fe:00 6846891                            /home/loganaw/Documents/nTracer1/ImageJ/ImageJ-linux64
+00611000-00612000 r--p 00011000 fe:00 6846891                            /home/loganaw/Documents/nTracer1/ImageJ/ImageJ-linux64
+00612000-00613000 rw-p 00012000 fe:00 6846891                            /home/loganaw/Documents/nTracer1/ImageJ/ImageJ-linux64
+00613000-00615000 rw-p 00000000 00:00 0 
+018d7000-03fcc000 rw-p 00000000 00:00 0                                  [heap]
+7feb28000000-7feb28021000 rw-p 00000000 00:00 0 
+7feb28021000-7feb2c000000 ---p 00000000 00:00 0 
+7feb30000000-7feb30faf000 rw-p 00000000 00:00 0 
+7feb30faf000-7feb34000000 ---p 00000000 00:00 0 
+7feb34000000-7feb34021000 rw-p 00000000 00:00 0 
+7feb34021000-7feb38000000 ---p 00000000 00:00 0 
+7feb38000000-7feb38021000 rw-p 00000000 00:00 0 
+7feb38021000-7feb3c000000 ---p 00000000 00:00 0 
+7feb3e7fd000-7feb3e7fe000 ---p 00000000 00:00 0 
+7feb3e7fe000-7feb3effe000 rw-p 00000000 00:00 0 
+7feb40000000-7feb40023000 rw-p 00000000 00:00 0 
+7feb40023000-7feb44000000 ---p 00000000 00:00 0 
+7feb44000000-7feb44022000 rw-p 00000000 00:00 0 
+7feb44022000-7feb48000000 ---p 00000000 00:00 0 
+7feb48000000-7feb4806c000 rw-p 00000000 00:00 0 
+7feb4806c000-7feb4c000000 ---p 00000000 00:00 0 
+7feb4c000000-7feb4c025000 rw-p 00000000 00:00 0 
+7feb4c025000-7feb50000000 ---p 00000000 00:00 0 
+7feb50000000-7feb50069000 rw-p 00000000 00:00 0 
+7feb50069000-7feb54000000 ---p 00000000 00:00 0 
+7feb545d3000-7feb545d4000 ---p 00000000 00:00 0 
+7feb545d4000-7feb54dd4000 rw-p 00000000 00:00 0 
+7feb54dd4000-7feb54e34000 rw-s 00000000 00:05 90046545                   /SYSV00000000 (deleted)
+7feb54e34000-7feb55034000 rw-s 00000000 00:05 90013776                   /SYSV00000000 (deleted)
+7feb55034000-7feb55036000 r--p 00000000 fe:00 7211560                    /usr/lib/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-png.so
+7feb55036000-7feb55039000 r-xp 00002000 fe:00 7211560                    /usr/lib/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-png.so
+7feb55039000-7feb5503a000 r--p 00005000 fe:00 7211560                    /usr/lib/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-png.so
+7feb5503a000-7feb5503b000 ---p 00006000 fe:00 7211560                    /usr/lib/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-png.so
+7feb5503b000-7feb5503c000 r--p 00006000 fe:00 7211560                    /usr/lib/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-png.so
+7feb5503c000-7feb5503d000 rw-p 00007000 fe:00 7211560                    /usr/lib/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-png.so
+7feb5503d000-7feb5503e000 ---p 00000000 00:00 0 
+7feb5503e000-7feb5583e000 rw-p 00000000 00:00 0 
+7feb5603f000-7feb56062000 r--p 00000000 fe:00 264186                     /usr/share/fonts/cantarell/Cantarell-Bold.otf
+7feb56062000-7feb56084000 r--p 00000000 fe:00 264696                     /usr/share/fonts/cantarell/Cantarell-Regular.otf
+7feb56084000-7feb5608d000 r--s 00000000 fe:00 6816893                    /var/cache/fontconfig/7aa040f9-dfab-40ec-9b23-8be3725415e2-le64.cache-7
+7feb5608d000-7feb560a3000 r--s 00000000 fe:00 6816848                    /var/cache/fontconfig/6f666b51-965d-4537-a152-908b399d0eb5-le64.cache-7
+7feb560a3000-7feb560ab000 r--s 00000000 fe:00 6816847                    /var/cache/fontconfig/ec03285b-1335-4296-bb18-d168d5910d65-le64.cache-7
+7feb560ab000-7feb560b6000 r--s 00000000 fe:00 6816846                    /var/cache/fontconfig/7347f3a5-e38f-43ed-94e4-200e7e58c0d5-le64.cache-7
+7feb560b6000-7feb560c0000 r--s 00000000 fe:00 6816832                    /var/cache/fontconfig/51ee11a2-88e8-4cfa-a3c2-4864c201abd8-le64.cache-7
+7feb560c0000-7feb560ca000 r--s 00000000 fe:00 6816831                    /var/cache/fontconfig/3fe1df99-baef-47d9-8cd2-8f7614c865ac-le64.cache-7
+7feb560ca000-7feb560ee000 r--s 00000000 fe:00 6833560                    /var/cache/fontconfig/3065d578-3058-4ae7-93fe-7d04a3b3e566-le64.cache-7
+7feb560ee000-7feb560ef000 ---p 00000000 00:00 0 
+7feb560ef000-7feb568ef000 rw-p 00000000 00:00 0 
+7feb572ed000-7feb574ad000 rw-p 00000000 00:00 0 
+7feb574ad000-7feb574f0000 ---p 00000000 00:00 0 
+7feb574f0000-7feb575ee000 rw-p 00000000 00:00 0 
+7feb575ee000-7feb575f1000 ---p 00000000 00:00 0 
+7feb575f1000-7feb576ef000 rw-p 00000000 00:00 0 
+7feb576ef000-7feb576f2000 ---p 00000000 00:00 0 
+7feb576f2000-7feb577f0000 rw-p 00000000 00:00 0 
+7feb577f0000-7feb577f3000 ---p 00000000 00:00 0 
+7feb577f3000-7feb578f1000 rw-p 00000000 00:00 0 
+7feb578f1000-7feb5797b000 r--p 00000000 fe:00 6958856                    /usr/lib/libstdc++.so.6.0.25
+7feb5797b000-7feb57a33000 r-xp 0008a000 fe:00 6958856                    /usr/lib/libstdc++.so.6.0.25
+7feb57a33000-7feb57a70000 r--p 00142000 fe:00 6958856                    /usr/lib/libstdc++.so.6.0.25
+7feb57a70000-7feb57a71000 ---p 0017f000 fe:00 6958856                    /usr/lib/libstdc++.so.6.0.25
+7feb57a71000-7feb57a7d000 r--p 0017f000 fe:00 6958856                    /usr/lib/libstdc++.so.6.0.25
+7feb57a7d000-7feb57a7e000 rw-p 0018b000 fe:00 6958856                    /usr/lib/libstdc++.so.6.0.25
+7feb57a7e000-7feb57a81000 rw-p 00000000 00:00 0 
+7feb57a81000-7feb594c4000 r--p 00000000 fe:00 6968807                    /usr/lib/libicudata.so.64.2
+7feb594c4000-7feb594c5000 r--p 01a42000 fe:00 6968807                    /usr/lib/libicudata.so.64.2
+7feb594c5000-7feb594ea000 r-xp 00000000 fe:00 6953420                    /usr/lib/liblzma.so.5.2.4
+7feb594ea000-7feb596e9000 ---p 00025000 fe:00 6953420                    /usr/lib/liblzma.so.5.2.4
+7feb596e9000-7feb596ea000 r--p 00024000 fe:00 6953420                    /usr/lib/liblzma.so.5.2.4
+7feb596ea000-7feb596eb000 rw-p 00025000 fe:00 6953420                    /usr/lib/liblzma.so.5.2.4
+7feb596eb000-7feb5974d000 r--p 00000000 fe:00 6970910                    /usr/lib/libicuuc.so.64.2
+7feb5974d000-7feb5982a000 r-xp 00062000 fe:00 6970910                    /usr/lib/libicuuc.so.64.2
+7feb5982a000-7feb598ad000 r--p 0013f000 fe:00 6970910                    /usr/lib/libicuuc.so.64.2
+7feb598ad000-7feb598ae000 ---p 001c2000 fe:00 6970910                    /usr/lib/libicuuc.so.64.2
+7feb598ae000-7feb598c0000 r--p 001c2000 fe:00 6970910                    /usr/lib/libicuuc.so.64.2
+7feb598c0000-7feb598c1000 rw-p 001d4000 fe:00 6970910                    /usr/lib/libicuuc.so.64.2
+7feb598c1000-7feb598c3000 rw-p 00000000 00:00 0 
+7feb598c3000-7feb598f1000 r--p 00000000 fe:00 6974693                    /usr/lib/libxml2.so.2.9.9
+7feb598f1000-7feb599d5000 r-xp 0002e000 fe:00 6974693                    /usr/lib/libxml2.so.2.9.9
+7feb599d5000-7feb59a1e000 r--p 00112000 fe:00 6974693                    /usr/lib/libxml2.so.2.9.9
+7feb59a1e000-7feb59a1f000 ---p 0015b000 fe:00 6974693                    /usr/lib/libxml2.so.2.9.9
+7feb59a1f000-7feb59a28000 r--p 0015b000 fe:00 6974693                    /usr/lib/libxml2.so.2.9.9
+7feb59a28000-7feb59a29000 rw-p 00164000 fe:00 6974693                    /usr/lib/libxml2.so.2.9.9
+7feb59a29000-7feb59a2b000 rw-p 00000000 00:00 0 
+7feb59a2b000-7feb59a35000 r--p 00000000 fe:00 6991782                    /usr/lib/libcroco-0.6.so.3.0.1
+7feb59a35000-7feb59a54000 r-xp 0000a000 fe:00 6991782                    /usr/lib/libcroco-0.6.so.3.0.1
+7feb59a54000-7feb59a64000 r--p 00029000 fe:00 6991782                    /usr/lib/libcroco-0.6.so.3.0.1
+7feb59a64000-7feb59a65000 ---p 00039000 fe:00 6991782                    /usr/lib/libcroco-0.6.so.3.0.1
+7feb59a65000-7feb59a68000 r--p 00039000 fe:00 6991782                    /usr/lib/libcroco-0.6.so.3.0.1
+7feb59a68000-7feb59a69000 rw-p 0003c000 fe:00 6991782                    /usr/lib/libcroco-0.6.so.3.0.1
+7feb59a69000-7feb59ae1000 r--p 00000000 fe:00 6977035                    /usr/lib/librsvg-2.so.2.44.13
+7feb59ae1000-7feb59df5000 r-xp 00078000 fe:00 6977035                    /usr/lib/librsvg-2.so.2.44.13
+7feb59df5000-7feb59f36000 r--p 0038c000 fe:00 6977035                    /usr/lib/librsvg-2.so.2.44.13
+7feb59f36000-7feb59f89000 r--p 004cc000 fe:00 6977035                    /usr/lib/librsvg-2.so.2.44.13
+7feb59f89000-7feb59f8a000 rw-p 0051f000 fe:00 6977035                    /usr/lib/librsvg-2.so.2.44.13
+7feb59f90000-7feb59f9a000 r--s 00000000 fe:00 6816830                    /var/cache/fontconfig/5a840277-7ef5-4eed-9445-df15b59e7cfd-le64.cache-7
+7feb59f9a000-7feb59fa8000 r--s 00000000 fe:00 6834416                    /var/cache/fontconfig/5d744cf7-5636-42b8-bd2d-0bfcb86e948c-le64.cache-7
+7feb59fa8000-7feb59fb8000 r--s 00000000 fe:00 6834415                    /var/cache/fontconfig/3bd09ca0-c8c0-4012-ba75-c67310328a6f-le64.cache-7
+7feb59fb8000-7feb59fd0000 r--s 00000000 fe:00 6840524                    /var/cache/fontconfig/95941d49-eb0e-4c43-85da-c1f0f4c73a3a-le64.cache-7
+7feb59fd0000-7feb59ff6000 r--s 00000000 fe:00 7210965                    /usr/share/mime/mime.cache
+7feb59ff6000-7feb5a012000 r--p 00000000 fe:00 7350523                    /usr/share/icons/Adwaita/icon-theme.cache
+7feb5a012000-7feb5a0bf000 r--p 00000000 fe:00 7464                       /usr/share/icons/Numix/icon-theme.cache
+7feb5a0bf000-7feb5a115000 r--p 00000000 fe:00 1062053                    /usr/share/icons/Numix-Square/icon-theme.cache
+7feb5a115000-7feb5a116000 ---p 00000000 00:00 0 
+7feb5a116000-7feb5a916000 rw-p 00000000 00:00 0 
+7feb5a916000-7feb5a917000 ---p 00000000 00:00 0 
+7feb5a917000-7feb5b117000 rw-p 00000000 00:00 0 
+7feb5b117000-7feb5b12a000 r--p 00000000 fe:00 6988743                    /usr/lib/gvfs/libgvfscommon.so
+7feb5b12a000-7feb5b144000 r-xp 00013000 fe:00 6988743                    /usr/lib/gvfs/libgvfscommon.so
+7feb5b144000-7feb5b151000 r--p 0002d000 fe:00 6988743                    /usr/lib/gvfs/libgvfscommon.so
+7feb5b151000-7feb5b152000 ---p 0003a000 fe:00 6988743                    /usr/lib/gvfs/libgvfscommon.so
+7feb5b152000-7feb5b158000 r--p 0003a000 fe:00 6988743                    /usr/lib/gvfs/libgvfscommon.so
+7feb5b158000-7feb5b159000 rw-p 00040000 fe:00 6988743                    /usr/lib/gvfs/libgvfscommon.so
+7feb5b159000-7feb5b15a000 r--p 00000000 fe:00 6949845                    /usr/lib/libcrypt-2.29.so
+7feb5b15a000-7feb5b160000 r-xp 00001000 fe:00 6949845                    /usr/lib/libcrypt-2.29.so
+7feb5b160000-7feb5b162000 r--p 00007000 fe:00 6949845                    /usr/lib/libcrypt-2.29.so
+7feb5b162000-7feb5b163000 ---p 00009000 fe:00 6949845                    /usr/lib/libcrypt-2.29.so
+7feb5b163000-7feb5b164000 r--p 00009000 fe:00 6949845                    /usr/lib/libcrypt-2.29.so
+7feb5b164000-7feb5b165000 rw-p 0000a000 fe:00 6949845                    /usr/lib/libcrypt-2.29.so
+7feb5b165000-7feb5b193000 rw-p 00000000 00:00 0 
+7feb5b193000-7feb5b198000 r-xp 00000000 fe:00 6994412                    /usr/lib/libogg.so.0.8.3
+7feb5b198000-7feb5b398000 ---p 00005000 fe:00 6994412                    /usr/lib/libogg.so.0.8.3
+7feb5b398000-7feb5b399000 r--p 00005000 fe:00 6994412                    /usr/lib/libogg.so.0.8.3
+7feb5b399000-7feb5b39a000 rw-p 00006000 fe:00 6994412                    /usr/lib/libogg.so.0.8.3
+7feb5b39a000-7feb5b3c4000 r-xp 00000000 fe:00 6995925                    /usr/lib/libvorbis.so.0.4.8
+7feb5b3c4000-7feb5b5c4000 ---p 0002a000 fe:00 6995925                    /usr/lib/libvorbis.so.0.4.8
+7feb5b5c4000-7feb5b5c5000 r--p 0002a000 fe:00 6995925                    /usr/lib/libvorbis.so.0.4.8
+7feb5b5c5000-7feb5b5c6000 rw-p 0002b000 fe:00 6995925                    /usr/lib/libvorbis.so.0.4.8
+7feb5b5c6000-7feb5b5cd000 r-xp 00000000 fe:00 6995929                    /usr/lib/libvorbisfile.so.3.3.7
+7feb5b5cd000-7feb5b7cd000 ---p 00007000 fe:00 6995929                    /usr/lib/libvorbisfile.so.3.3.7
+7feb5b7cd000-7feb5b7ce000 r--p 00007000 fe:00 6995929                    /usr/lib/libvorbisfile.so.3.3.7
+7feb5b7ce000-7feb5b7cf000 rw-p 00008000 fe:00 6995929                    /usr/lib/libvorbisfile.so.3.3.7
+7feb5b7cf000-7feb5b7d8000 r-xp 00000000 fe:00 7348437                    /usr/lib/gtk-2.0/2.10.0/engines/libpixmap.so
+7feb5b7d8000-7feb5b9d8000 ---p 00009000 fe:00 7348437                    /usr/lib/gtk-2.0/2.10.0/engines/libpixmap.so
+7feb5b9d8000-7feb5b9d9000 r--p 00009000 fe:00 7348437                    /usr/lib/gtk-2.0/2.10.0/engines/libpixmap.so
+7feb5b9d9000-7feb5b9da000 rw-p 0000a000 fe:00 7348437                    /usr/lib/gtk-2.0/2.10.0/engines/libpixmap.so
+7feb5b9da000-7feb5b9dc000 r-xp 00000000 fe:00 7351993                    /usr/lib/gtk-2.0/2.10.0/engines/libadwaita.so
+7feb5b9dc000-7feb5bbdb000 ---p 00002000 fe:00 7351993                    /usr/lib/gtk-2.0/2.10.0/engines/libadwaita.so
+7feb5bbdb000-7feb5bbdc000 r--p 00001000 fe:00 7351993                    /usr/lib/gtk-2.0/2.10.0/engines/libadwaita.so
+7feb5bbdc000-7feb5bbdd000 rw-p 00002000 fe:00 7351993                    /usr/lib/gtk-2.0/2.10.0/engines/libadwaita.so
+7feb5bbdd000-7feb5bbe3000 r-xp 00000000 fe:00 6964329                    /usr/lib/libdatrie.so.1.3.5
+7feb5bbe3000-7feb5bde2000 ---p 00006000 fe:00 6964329                    /usr/lib/libdatrie.so.1.3.5
+7feb5bde2000-7feb5bde3000 r--p 00005000 fe:00 6964329                    /usr/lib/libdatrie.so.1.3.5
+7feb5bde3000-7feb5bde4000 rw-p 00006000 fe:00 6964329                    /usr/lib/libdatrie.so.1.3.5
+7feb5bde4000-7feb5bdff000 r-xp 00000000 fe:00 6969046                    /usr/lib/libfribidi.so.0.4.0
+7feb5bdff000-7feb5bffe000 ---p 0001b000 fe:00 6969046                    /usr/lib/libfribidi.so.0.4.0
+7feb5bffe000-7feb5bfff000 r--p 0001a000 fe:00 6969046                    /usr/lib/libfribidi.so.0.4.0
+7feb5bfff000-7feb5c000000 rw-p 0001b000 fe:00 6969046                    /usr/lib/libfribidi.so.0.4.0
+7feb5c000000-7feb5c611000 rw-p 00000000 00:00 0 
+7feb5c611000-7feb60000000 ---p 00000000 00:00 0 
+7feb60000000-7feb604b8000 rw-p 00000000 00:00 0 
+7feb604b8000-7feb64000000 ---p 00000000 00:00 0 
+7feb64000000-7feb6408a000 rw-p 00000000 00:00 0 
+7feb6408a000-7feb68000000 ---p 00000000 00:00 0 
+7feb68006000-7feb6801b000 r--s 00000000 fe:00 6822872                    /var/cache/fontconfig/e3106794-3826-43b2-9c4b-e9453d2c9688-le64.cache-7
+7feb6801b000-7feb68022000 r--p 00000000 fe:00 7215470                    /usr/lib/gio/modules/libgioremote-volume-monitor.so
+7feb68022000-7feb6802c000 r-xp 00007000 fe:00 7215470                    /usr/lib/gio/modules/libgioremote-volume-monitor.so
+7feb6802c000-7feb68031000 r--p 00011000 fe:00 7215470                    /usr/lib/gio/modules/libgioremote-volume-monitor.so
+7feb68031000-7feb68032000 ---p 00016000 fe:00 7215470                    /usr/lib/gio/modules/libgioremote-volume-monitor.so
+7feb68032000-7feb68035000 r--p 00016000 fe:00 7215470                    /usr/lib/gio/modules/libgioremote-volume-monitor.so
+7feb68035000-7feb68036000 rw-p 00019000 fe:00 7215470                    /usr/lib/gio/modules/libgioremote-volume-monitor.so
+7feb68036000-7feb68038000 r--p 00000000 fe:00 6970022                    /usr/lib/libltdl.so.7.3.1
+7feb68038000-7feb6803d000 r-xp 00002000 fe:00 6970022                    /usr/lib/libltdl.so.7.3.1
+7feb6803d000-7feb6803f000 r--p 00007000 fe:00 6970022                    /usr/lib/libltdl.so.7.3.1
+7feb6803f000-7feb68040000 ---p 00009000 fe:00 6970022                    /usr/lib/libltdl.so.7.3.1
+7feb68040000-7feb68041000 r--p 00009000 fe:00 6970022                    /usr/lib/libltdl.so.7.3.1
+7feb68041000-7feb68042000 rw-p 0000a000 fe:00 6970022                    /usr/lib/libltdl.so.7.3.1
+7feb68042000-7feb6804f000 r--s 00000000 fe:00 6825564                    /var/cache/fontconfig/23e40277-8fba-4b24-9450-5069477781c3-le64.cache-7
+7feb6804f000-7feb68058000 r--s 00000000 fe:00 6833128                    /var/cache/fontconfig/ac39b7a8-f6fa-421b-b28c-08ef5e78b7fa-le64.cache-7
+7feb68058000-7feb68062000 r--p 00000000 fe:00 7215471                    /usr/lib/gio/modules/libgvfsdbus.so
+7feb68062000-7feb6807b000 r-xp 0000a000 fe:00 7215471                    /usr/lib/gio/modules/libgvfsdbus.so
+7feb6807b000-7feb68084000 r--p 00023000 fe:00 7215471                    /usr/lib/gio/modules/libgvfsdbus.so
+7feb68084000-7feb68085000 ---p 0002c000 fe:00 7215471                    /usr/lib/gio/modules/libgvfsdbus.so
+7feb68085000-7feb68087000 r--p 0002c000 fe:00 7215471                    /usr/lib/gio/modules/libgvfsdbus.so
+7feb68087000-7feb68088000 rw-p 0002e000 fe:00 7215471                    /usr/lib/gio/modules/libgvfsdbus.so
+7feb68088000-7feb68089000 r--p 00000000 fe:00 6959780                    /usr/lib/libgthread-2.0.so.0.6000.1
+7feb68089000-7feb6808a000 r-xp 00001000 fe:00 6959780                    /usr/lib/libgthread-2.0.so.0.6000.1
+7feb6808a000-7feb6808b000 r--p 00002000 fe:00 6959780                    /usr/lib/libgthread-2.0.so.0.6000.1
+7feb6808b000-7feb6808c000 r--p 00002000 fe:00 6959780                    /usr/lib/libgthread-2.0.so.0.6000.1
+7feb6808c000-7feb6808d000 rw-p 00003000 fe:00 6959780                    /usr/lib/libgthread-2.0.so.0.6000.1
+7feb6808d000-7feb68097000 r--p 00000000 fe:00 6953873                    /usr/lib/libblkid.so.1.1.0
+7feb68097000-7feb680cb000 r-xp 0000a000 fe:00 6953873                    /usr/lib/libblkid.so.1.1.0
+7feb680cb000-7feb680db000 r--p 0003e000 fe:00 6953873                    /usr/lib/libblkid.so.1.1.0
+7feb680db000-7feb680dc000 ---p 0004e000 fe:00 6953873                    /usr/lib/libblkid.so.1.1.0
+7feb680dc000-7feb680e1000 r--p 0004e000 fe:00 6953873                    /usr/lib/libblkid.so.1.1.0
+7feb680e1000-7feb680e2000 rw-p 00053000 fe:00 6953873                    /usr/lib/libblkid.so.1.1.0
+7feb680e2000-7feb680e4000 r--p 00000000 fe:00 6971015                    /usr/lib/libuuid.so.1.3.0
+7feb680e4000-7feb680e8000 r-xp 00002000 fe:00 6971015                    /usr/lib/libuuid.so.1.3.0
+7feb680e8000-7feb680e9000 r--p 00006000 fe:00 6971015                    /usr/lib/libuuid.so.1.3.0
+7feb680e9000-7feb680ea000 r--p 00006000 fe:00 6971015                    /usr/lib/libuuid.so.1.3.0
+7feb680ea000-7feb680eb000 rw-p 00007000 fe:00 6971015                    /usr/lib/libuuid.so.1.3.0
+7feb680eb000-7feb680ef000 r--p 00000000 fe:00 6972314                    /usr/lib/libexpat.so.1.6.8
+7feb680ef000-7feb6810f000 r-xp 00004000 fe:00 6972314                    /usr/lib/libexpat.so.1.6.8
+7feb6810f000-7feb68123000 r--p 00024000 fe:00 6972314                    /usr/lib/libexpat.so.1.6.8
+7feb68123000-7feb68124000 ---p 00038000 fe:00 6972314                    /usr/lib/libexpat.so.1.6.8
+7feb68124000-7feb68126000 r--p 00038000 fe:00 6972314                    /usr/lib/libexpat.so.1.6.8
+7feb68126000-7feb68127000 rw-p 0003a000 fe:00 6972314                    /usr/lib/libexpat.so.1.6.8
+7feb68127000-7feb68129000 r--p 00000000 fe:00 6959698                    /usr/lib/libffi.so.6.0.4
+7feb68129000-7feb6812e000 r-xp 00002000 fe:00 6959698                    /usr/lib/libffi.so.6.0.4
+7feb6812e000-7feb6812f000 r--p 00007000 fe:00 6959698                    /usr/lib/libffi.so.6.0.4
+7feb6812f000-7feb68130000 ---p 00008000 fe:00 6959698                    /usr/lib/libffi.so.6.0.4
+7feb68130000-7feb68131000 r--p 00008000 fe:00 6959698                    /usr/lib/libffi.so.6.0.4
+7feb68131000-7feb68132000 rw-p 00009000 fe:00 6959698                    /usr/lib/libffi.so.6.0.4
+7feb68132000-7feb68134000 r--p 00000000 fe:00 6994732                    /usr/lib/libthai.so.0.3.1
+7feb68134000-7feb68138000 r-xp 00002000 fe:00 6994732                    /usr/lib/libthai.so.0.3.1
+7feb68138000-7feb6813b000 r--p 00006000 fe:00 6994732                    /usr/lib/libthai.so.0.3.1
+7feb6813b000-7feb6813c000 r--p 00008000 fe:00 6994732                    /usr/lib/libthai.so.0.3.1
+7feb6813c000-7feb6813d000 rw-p 00009000 fe:00 6994732                    /usr/lib/libthai.so.0.3.1
+7feb6813d000-7feb68149000 r--p 00000000 fe:00 6955417                    /usr/lib/libmount.so.1.1.0
+7feb68149000-7feb68185000 r-xp 0000c000 fe:00 6955417                    /usr/lib/libmount.so.1.1.0
+7feb68185000-7feb68197000 r--p 00048000 fe:00 6955417                    /usr/lib/libmount.so.1.1.0
+7feb68197000-7feb68198000 ---p 0005a000 fe:00 6955417                    /usr/lib/libmount.so.1.1.0
+7feb68198000-7feb6819b000 r--p 0005a000 fe:00 6955417                    /usr/lib/libmount.so.1.1.0
+7feb6819b000-7feb6819c000 rw-p 0005d000 fe:00 6955417                    /usr/lib/libmount.so.1.1.0
+7feb6819c000-7feb681a2000 r--p 00000000 fe:00 6959935                    /usr/lib/libxcb-render.so.0.0.0
+7feb681a2000-7feb681a7000 r-xp 00006000 fe:00 6959935                    /usr/lib/libxcb-render.so.0.0.0
+7feb681a7000-7feb681a9000 r--p 0000b000 fe:00 6959935                    /usr/lib/libxcb-render.so.0.0.0
+7feb681a9000-7feb681aa000 ---p 0000d000 fe:00 6959935                    /usr/lib/libxcb-render.so.0.0.0
+7feb681aa000-7feb681ab000 r--p 0000d000 fe:00 6959935                    /usr/lib/libxcb-render.so.0.0.0
+7feb681ab000-7feb681ac000 rw-p 0000e000 fe:00 6959935                    /usr/lib/libxcb-render.so.0.0.0
+7feb681ac000-7feb681ad000 r--p 00000000 fe:00 6959947                    /usr/lib/libxcb-shm.so.0.0.0
+7feb681ad000-7feb681ae000 r-xp 00001000 fe:00 6959947                    /usr/lib/libxcb-shm.so.0.0.0
+7feb681ae000-7feb681af000 r--p 00002000 fe:00 6959947                    /usr/lib/libxcb-shm.so.0.0.0
+7feb681af000-7feb681b0000 r--p 00002000 fe:00 6959947                    /usr/lib/libxcb-shm.so.0.0.0
+7feb681b0000-7feb681b1000 rw-p 00003000 fe:00 6959947                    /usr/lib/libxcb-shm.so.0.0.0
+7feb681b1000-7feb681bc000 r--p 00000000 fe:00 6963435                    /usr/lib/libpixman-1.so.0.38.4
+7feb681bc000-7feb68242000 r-xp 0000b000 fe:00 6963435                    /usr/lib/libpixman-1.so.0.38.4
+7feb68242000-7feb68252000 r--p 00091000 fe:00 6963435                    /usr/lib/libpixman-1.so.0.38.4
+7feb68252000-7feb6825a000 r--p 000a0000 fe:00 6963435                    /usr/lib/libpixman-1.so.0.38.4
+7feb6825a000-7feb6825b000 rw-p 000a8000 fe:00 6963435                    /usr/lib/libpixman-1.so.0.38.4
+7feb6825b000-7feb6825d000 r--p 00000000 fe:00 6959901                    /usr/lib/libXrandr.so.2.2.0
+7feb6825d000-7feb68264000 r-xp 00002000 fe:00 6959901                    /usr/lib/libXrandr.so.2.2.0
+7feb68264000-7feb68266000 r--p 00009000 fe:00 6959901                    /usr/lib/libXrandr.so.2.2.0
+7feb68266000-7feb68267000 r--p 0000a000 fe:00 6959901                    /usr/lib/libXrandr.so.2.2.0
+7feb68267000-7feb68268000 rw-p 0000b000 fe:00 6959901                    /usr/lib/libXrandr.so.2.2.0
+7feb68268000-7feb6826a000 r-xp 00000000 fe:00 6963981                    /usr/lib/libXinerama.so.1.0.0
+7feb6826a000-7feb68469000 ---p 00002000 fe:00 6963981                    /usr/lib/libXinerama.so.1.0.0
+7feb68469000-7feb6846a000 r--p 00001000 fe:00 6963981                    /usr/lib/libXinerama.so.1.0.0
+7feb6846a000-7feb6846b000 rw-p 00002000 fe:00 6963981                    /usr/lib/libXinerama.so.1.0.0
+7feb6846b000-7feb68473000 r--p 00000000 fe:00 6963197                    /usr/lib/libfontconfig.so.1.12.0
+7feb68473000-7feb68497000 r-xp 00008000 fe:00 6963197                    /usr/lib/libfontconfig.so.1.12.0
+7feb68497000-7feb684af000 r--p 0002c000 fe:00 6963197                    /usr/lib/libfontconfig.so.1.12.0
+7feb684af000-7feb684b1000 r--p 00043000 fe:00 6963197                    /usr/lib/libfontconfig.so.1.12.0
+7feb684b1000-7feb684b2000 rw-p 00045000 fe:00 6963197                    /usr/lib/libfontconfig.so.1.12.0
+7feb684b2000-7feb684c0000 r--p 00000000 fe:00 6959777                    /usr/lib/libgobject-2.0.so.0.6000.1
+7feb684c0000-7feb684f4000 r-xp 0000e000 fe:00 6959777                    /usr/lib/libgobject-2.0.so.0.6000.1
+7feb684f4000-7feb6850c000 r--p 00042000 fe:00 6959777                    /usr/lib/libgobject-2.0.so.0.6000.1
+7feb6850c000-7feb6850f000 r--p 00059000 fe:00 6959777                    /usr/lib/libgobject-2.0.so.0.6000.1
+7feb6850f000-7feb68510000 rw-p 0005c000 fe:00 6959777                    /usr/lib/libgobject-2.0.so.0.6000.1
+7feb68510000-7feb6851d000 r--p 00000000 fe:00 7004324                    /usr/lib/libpango-1.0.so.0.4300.0
+7feb6851d000-7feb68541000 r-xp 0000d000 fe:00 7004324                    /usr/lib/libpango-1.0.so.0.4300.0
+7feb68541000-7feb68557000 r--p 00031000 fe:00 7004324                    /usr/lib/libpango-1.0.so.0.4300.0
+7feb68557000-7feb6855a000 r--p 00046000 fe:00 7004324                    /usr/lib/libpango-1.0.so.0.4300.0
+7feb6855a000-7feb6855b000 rw-p 00049000 fe:00 7004324                    /usr/lib/libpango-1.0.so.0.4300.0
+7feb6855b000-7feb68562000 r--p 00000000 fe:00 7004350                    /usr/lib/libpangoft2-1.0.so.0.4300.0
+7feb68562000-7feb6856c000 r-xp 00007000 fe:00 7004350                    /usr/lib/libpangoft2-1.0.so.0.4300.0
+7feb6856c000-7feb68570000 r--p 00011000 fe:00 7004350                    /usr/lib/libpangoft2-1.0.so.0.4300.0
+7feb68570000-7feb68571000 ---p 00015000 fe:00 7004350                    /usr/lib/libpangoft2-1.0.so.0.4300.0
+7feb68571000-7feb68572000 r--p 00015000 fe:00 7004350                    /usr/lib/libpangoft2-1.0.so.0.4300.0
+7feb68572000-7feb68573000 rw-p 00016000 fe:00 7004350                    /usr/lib/libpangoft2-1.0.so.0.4300.0
+7feb68573000-7feb685a9000 r--p 00000000 fe:00 6959757                    /usr/lib/libgio-2.0.so.0.6000.1
+7feb685a9000-7feb686a7000 r-xp 00036000 fe:00 6959757                    /usr/lib/libgio-2.0.so.0.6000.1
+7feb686a7000-7feb68724000 r--p 00134000 fe:00 6959757                    /usr/lib/libgio-2.0.so.0.6000.1
+7feb68724000-7feb68725000 ---p 001b1000 fe:00 6959757                    /usr/lib/libgio-2.0.so.0.6000.1
+7feb68725000-7feb6872c000 r--p 001b1000 fe:00 6959757                    /usr/lib/libgio-2.0.so.0.6000.1
+7feb6872c000-7feb6872d000 rw-p 001b8000 fe:00 6959757                    /usr/lib/libgio-2.0.so.0.6000.1
+7feb6872d000-7feb6872f000 rw-p 00000000 00:00 0 
+7feb6872f000-7feb68735000 r--p 00000000 fe:00 6964258                    /usr/lib/libgdk_pixbuf-2.0.so.0.3800.1
+7feb68735000-7feb6874b000 r-xp 00006000 fe:00 6964258                    /usr/lib/libgdk_pixbuf-2.0.so.0.3800.1
+7feb6874b000-7feb68753000 r--p 0001c000 fe:00 6964258                    /usr/lib/libgdk_pixbuf-2.0.so.0.3800.1
+7feb68753000-7feb68754000 ---p 00024000 fe:00 6964258                    /usr/lib/libgdk_pixbuf-2.0.so.0.3800.1
+7feb68754000-7feb68755000 r--p 00024000 fe:00 6964258                    /usr/lib/libgdk_pixbuf-2.0.so.0.3800.1
+7feb68755000-7feb68756000 rw-p 00025000 fe:00 6964258                    /usr/lib/libgdk_pixbuf-2.0.so.0.3800.1
+7feb68756000-7feb68768000 r--p 00000000 fe:00 6963939                    /usr/lib/libcairo.so.2.11600.0
+7feb68768000-7feb6883b000 r-xp 00012000 fe:00 6963939                    /usr/lib/libcairo.so.2.11600.0
+7feb6883b000-7feb68877000 r--p 000e5000 fe:00 6963939                    /usr/lib/libcairo.so.2.11600.0
+7feb68877000-7feb6887b000 r--p 00120000 fe:00 6963939                    /usr/lib/libcairo.so.2.11600.0
+7feb6887b000-7feb6887c000 rw-p 00124000 fe:00 6963939                    /usr/lib/libcairo.so.2.11600.0
+7feb6887c000-7feb6887d000 rw-p 00000000 00:00 0 
+7feb6887d000-7feb6892b000 r-xp 00000000 fe:00 6968030                    /usr/lib/libgdk-x11-2.0.so.0.2400.32
+7feb6892b000-7feb68b2b000 ---p 000ae000 fe:00 6968030                    /usr/lib/libgdk-x11-2.0.so.0.2400.32
+7feb68b2b000-7feb68b30000 r--p 000ae000 fe:00 6968030                    /usr/lib/libgdk-x11-2.0.so.0.2400.32
+7feb68b30000-7feb68b31000 rw-p 000b3000 fe:00 6968030                    /usr/lib/libgdk-x11-2.0.so.0.2400.32
+7feb68b31000-7feb68f61000 r-xp 00000000 fe:00 6968031                    /usr/lib/libgtk-x11-2.0.so.0.2400.32
+7feb68f61000-7feb69161000 ---p 00430000 fe:00 6968031                    /usr/lib/libgtk-x11-2.0.so.0.2400.32
+7feb69161000-7feb6916b000 r--p 00430000 fe:00 6968031                    /usr/lib/libgtk-x11-2.0.so.0.2400.32
+7feb6916b000-7feb6916c000 rw-p 0043a000 fe:00 6968031                    /usr/lib/libgtk-x11-2.0.so.0.2400.32
+7feb6916c000-7feb6916e000 rw-p 00000000 00:00 0 
+7feb6916e000-7feb69177000 r--s 00000000 fe:00 6816893                    /var/cache/fontconfig/7aa040f9-dfab-40ec-9b23-8be3725415e2-le64.cache-7
+7feb69177000-7feb6918d000 r--s 00000000 fe:00 6816848                    /var/cache/fontconfig/6f666b51-965d-4537-a152-908b399d0eb5-le64.cache-7
+7feb6918d000-7feb69195000 r--s 00000000 fe:00 6816847                    /var/cache/fontconfig/ec03285b-1335-4296-bb18-d168d5910d65-le64.cache-7
+7feb69195000-7feb691a0000 r--s 00000000 fe:00 6816846                    /var/cache/fontconfig/7347f3a5-e38f-43ed-94e4-200e7e58c0d5-le64.cache-7
+7feb691a0000-7feb693a0000 rw-p 00000000 00:00 0 
+7feb693a0000-7feb693a3000 ---p 00000000 00:00 0 
+7feb693a3000-7feb696a1000 rw-p 00000000 00:00 0 
+7feb696a1000-7feb698a1000 rw-p 00000000 00:00 0 
+7feb698a1000-7feb698ec000 r-xp 00000000 00:2b 5046654                    /tmp/nativelib-loader_3301740783691395079/libturbojpeg.so
+7feb698ec000-7feb69aec000 ---p 0004b000 00:2b 5046654                    /tmp/nativelib-loader_3301740783691395079/libturbojpeg.so
+7feb69aec000-7feb69aed000 r--p 0004b000 00:2b 5046654                    /tmp/nativelib-loader_3301740783691395079/libturbojpeg.so
+7feb69aed000-7feb69aee000 rw-p 0004c000 00:2b 5046654                    /tmp/nativelib-loader_3301740783691395079/libturbojpeg.so
+7feb69aee000-7feb69cfe000 rw-p 00000000 00:00 0 
+7feb69cfe000-7feb6a0fe000 rw-s 00000000 00:05 89653324                   /SYSV00000000 (deleted)
+7feb6a0fe000-7feb6a101000 ---p 00000000 00:00 0 
+7feb6a101000-7feb6a3ff000 rw-p 00000000 00:00 0 
+7feb6a3ff000-7feb6a5ff000 rw-p 00000000 00:00 0 
+7feb6a5ff000-7feb6a7f6000 rw-p 00000000 00:00 0 
+7feb6a7f6000-7feb6a7ff000 ---p 00000000 00:00 0 
+7feb6a7ff000-7feb6c000000 rw-p 00000000 00:00 0 
+7feb6c000000-7feb6c13f000 rw-p 00000000 00:00 0 
+7feb6c13f000-7feb70000000 ---p 00000000 00:00 0 
+7feb70000000-7feb704aa000 rw-p 00000000 00:00 0 
+7feb704aa000-7feb74000000 ---p 00000000 00:00 0 
+7feb74000000-7feb74021000 rw-p 00000000 00:00 0 
+7feb74021000-7feb78000000 ---p 00000000 00:00 0 
+7feb78000000-7feb78021000 rw-p 00000000 00:00 0 
+7feb78021000-7feb7c000000 ---p 00000000 00:00 0 
+7feb7c000000-7feb7c8cf000 rw-p 00000000 00:00 0 
+7feb7c8cf000-7feb80000000 ---p 00000000 00:00 0 
+7feb80000000-7feb80021000 rw-p 00000000 00:00 0 
+7feb80021000-7feb84000000 ---p 00000000 00:00 0 
+7feb84000000-7feb84046000 rw-p 00000000 00:00 0 
+7feb84046000-7feb88000000 ---p 00000000 00:00 0 
+7feb88000000-7feb88021000 rw-p 00000000 00:00 0 
+7feb88021000-7feb8c000000 ---p 00000000 00:00 0 
+7feb8c000000-7feb8c001000 r--p 00000000 fe:00 6959897                    /usr/lib/libXdamage.so.1.1.0
+7feb8c001000-7feb8c002000 r-xp 00001000 fe:00 6959897                    /usr/lib/libXdamage.so.1.1.0
+7feb8c002000-7feb8c003000 r--p 00002000 fe:00 6959897                    /usr/lib/libXdamage.so.1.1.0
+7feb8c003000-7feb8c004000 r--p 00002000 fe:00 6959897                    /usr/lib/libXdamage.so.1.1.0
+7feb8c004000-7feb8c005000 rw-p 00003000 fe:00 6959897                    /usr/lib/libXdamage.so.1.1.0
+7feb8c005000-7feb8c00f000 r--s 00000000 fe:00 6816832                    /var/cache/fontconfig/51ee11a2-88e8-4cfa-a3c2-4864c201abd8-le64.cache-7
+7feb8c00f000-7feb8c019000 r--s 00000000 fe:00 6816831                    /var/cache/fontconfig/3fe1df99-baef-47d9-8cd2-8f7614c865ac-le64.cache-7
+7feb8c019000-7feb8c023000 r--s 00000000 fe:00 6816830                    /var/cache/fontconfig/5a840277-7ef5-4eed-9445-df15b59e7cfd-le64.cache-7
+7feb8c023000-7feb8c047000 r--s 00000000 fe:00 6833560                    /var/cache/fontconfig/3065d578-3058-4ae7-93fe-7d04a3b3e566-le64.cache-7
+7feb8c04b000-7feb8c056000 r--p 00000000 fe:00 6959825                    /usr/lib/libatk-1.0.so.0.23209.1
+7feb8c056000-7feb8c064000 r-xp 0000b000 fe:00 6959825                    /usr/lib/libatk-1.0.so.0.23209.1
+7feb8c064000-7feb8c06f000 r--p 00019000 fe:00 6959825                    /usr/lib/libatk-1.0.so.0.23209.1
+7feb8c06f000-7feb8c070000 ---p 00024000 fe:00 6959825                    /usr/lib/libatk-1.0.so.0.23209.1
+7feb8c070000-7feb8c073000 r--p 00024000 fe:00 6959825                    /usr/lib/libatk-1.0.so.0.23209.1
+7feb8c073000-7feb8c074000 rw-p 00027000 fe:00 6959825                    /usr/lib/libatk-1.0.so.0.23209.1
+7feb8c074000-7feb8c079000 r--p 00000000 fe:00 7004342                    /usr/lib/libpangocairo-1.0.so.0.4300.0
+7feb8c079000-7feb8c07f000 r-xp 00005000 fe:00 7004342                    /usr/lib/libpangocairo-1.0.so.0.4300.0
+7feb8c07f000-7feb8c081000 r--p 0000b000 fe:00 7004342                    /usr/lib/libpangocairo-1.0.so.0.4300.0
+7feb8c081000-7feb8c082000 ---p 0000d000 fe:00 7004342                    /usr/lib/libpangocairo-1.0.so.0.4300.0
+7feb8c082000-7feb8c083000 r--p 0000d000 fe:00 7004342                    /usr/lib/libpangocairo-1.0.so.0.4300.0
+7feb8c083000-7feb8c084000 rw-p 0000e000 fe:00 7004342                    /usr/lib/libpangocairo-1.0.so.0.4300.0
+7feb8c084000-7feb8c085000 r--p 00000000 fe:00 7212627                    /usr/lib/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-svg.so
+7feb8c085000-7feb8c086000 r-xp 00001000 fe:00 7212627                    /usr/lib/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-svg.so
+7feb8c086000-7feb8c087000 r--p 00002000 fe:00 7212627                    /usr/lib/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-svg.so
+7feb8c087000-7feb8c088000 r--p 00002000 fe:00 7212627                    /usr/lib/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-svg.so
+7feb8c088000-7feb8c089000 rw-p 00003000 fe:00 7212627                    /usr/lib/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-svg.so
+7feb8c089000-7feb8c08e000 r--p 00000000 fe:00 7226616                    /usr/share/icons/hicolor/icon-theme.cache
+7feb8c08e000-7feb8c092000 r--p 00000000 fe:00 6970037                    /usr/lib/libtdb.so.1.3.18
+7feb8c092000-7feb8c09f000 r-xp 00004000 fe:00 6970037                    /usr/lib/libtdb.so.1.3.18
+7feb8c09f000-7feb8c0a5000 r--p 00011000 fe:00 6970037                    /usr/lib/libtdb.so.1.3.18
+7feb8c0a5000-7feb8c0a6000 r--p 00016000 fe:00 6970037                    /usr/lib/libtdb.so.1.3.18
+7feb8c0a6000-7feb8c0a7000 rw-p 00017000 fe:00 6970037                    /usr/lib/libtdb.so.1.3.18
+7feb8c0a7000-7feb8c0aa000 r--p 00000000 fe:00 6970047                    /usr/lib/libcanberra.so.0.2.5
+7feb8c0aa000-7feb8c0b4000 r-xp 00003000 fe:00 6970047                    /usr/lib/libcanberra.so.0.2.5
+7feb8c0b4000-7feb8c0b8000 r--p 0000d000 fe:00 6970047                    /usr/lib/libcanberra.so.0.2.5
+7feb8c0b8000-7feb8c0b9000 ---p 00011000 fe:00 6970047                    /usr/lib/libcanberra.so.0.2.5
+7feb8c0b9000-7feb8c0ba000 r--p 00011000 fe:00 6970047                    /usr/lib/libcanberra.so.0.2.5
+7feb8c0ba000-7feb8c0bb000 rw-p 00012000 fe:00 6970047                    /usr/lib/libcanberra.so.0.2.5
+7feb8c0bb000-7feb8c0bd000 r--p 00000000 fe:00 6970040                    /usr/lib/libcanberra-gtk.so.0.1.9
+7feb8c0bd000-7feb8c0bf000 r-xp 00002000 fe:00 6970040                    /usr/lib/libcanberra-gtk.so.0.1.9
+7feb8c0bf000-7feb8c0c0000 r--p 00004000 fe:00 6970040                    /usr/lib/libcanberra-gtk.so.0.1.9
+7feb8c0c0000-7feb8c0c1000 r--p 00004000 fe:00 6970040                    /usr/lib/libcanberra-gtk.so.0.1.9
+7feb8c0c1000-7feb8c0c2000 rw-p 00005000 fe:00 6970040                    /usr/lib/libcanberra-gtk.so.0.1.9
+7feb8c0c2000-7feb8c0c4000 r--p 00000000 fe:00 7212959                    /usr/lib/gtk-2.0/modules/libcanberra-gtk-module.so
+7feb8c0c4000-7feb8c0c7000 r-xp 00002000 fe:00 7212959                    /usr/lib/gtk-2.0/modules/libcanberra-gtk-module.so
+7feb8c0c7000-7feb8c0c8000 r--p 00005000 fe:00 7212959                    /usr/lib/gtk-2.0/modules/libcanberra-gtk-module.so
+7feb8c0c8000-7feb8c0c9000 r--p 00005000 fe:00 7212959                    /usr/lib/gtk-2.0/modules/libcanberra-gtk-module.so
+7feb8c0c9000-7feb8c0ca000 rw-p 00006000 fe:00 7212959                    /usr/lib/gtk-2.0/modules/libcanberra-gtk-module.so
+7feb8c0ca000-7feb8c0d0000 r--p 00000000 fe:00 6994791                    /usr/lib/libnss_resolve.so.2
+7feb8c0d0000-7feb8c0fd000 r-xp 00006000 fe:00 6994791                    /usr/lib/libnss_resolve.so.2
+7feb8c0fd000-7feb8c10c000 r--p 00033000 fe:00 6994791                    /usr/lib/libnss_resolve.so.2
+7feb8c10c000-7feb8c10d000 ---p 00042000 fe:00 6994791                    /usr/lib/libnss_resolve.so.2
+7feb8c10d000-7feb8c110000 r--p 00042000 fe:00 6994791                    /usr/lib/libnss_resolve.so.2
+7feb8c110000-7feb8c111000 rw-p 00045000 fe:00 6994791                    /usr/lib/libnss_resolve.so.2
+7feb8c111000-7feb8c112000 rw-p 00000000 00:00 0 
+7feb8c115000-7feb8c123000 r--s 00000000 fe:00 6834416                    /var/cache/fontconfig/5d744cf7-5636-42b8-bd2d-0bfcb86e948c-le64.cache-7
+7feb8c123000-7feb8c133000 r--s 00000000 fe:00 6834415                    /var/cache/fontconfig/3bd09ca0-c8c0-4012-ba75-c67310328a6f-le64.cache-7
+7feb8c133000-7feb8c14b000 r--s 00000000 fe:00 6840524                    /var/cache/fontconfig/95941d49-eb0e-4c43-85da-c1f0f4c73a3a-le64.cache-7
+7feb8c14b000-7feb8c158000 r--s 00000000 fe:00 6825564                    /var/cache/fontconfig/23e40277-8fba-4b24-9450-5069477781c3-le64.cache-7
+7feb8c158000-7feb8c358000 rw-p 00000000 00:00 0 
+7feb8c358000-7feb8c557000 rw-p 00000000 00:00 0 
+7feb8c557000-7feb8c558000 ---p 00000000 00:00 0 
+7feb8c558000-7feb8c55b000 ---p 00000000 00:00 0 
+7feb8c55b000-7feb8c859000 rw-p 00000000 00:00 0 
+7feb8c859000-7feb8ca59000 rw-p 00000000 00:00 0 
+7feb8ca59000-7feb8cc59000 rw-p 00000000 00:00 0 
+7feb8cc59000-7feb8ce59000 rw-p 00000000 00:00 0 
+7feb8ce59000-7feb8ce5c000 ---p 00000000 00:00 0 
+7feb8ce5c000-7feb8cf5a000 rw-p 00000000 00:00 0 
+7feb8cf5a000-7feb8d15a000 rw-p 00000000 00:00 0 
+7feb8d15a000-7feb8d160000 r--p 00000000 fe:00 6994686                    /usr/lib/libnss_mymachines.so.2
+7feb8d160000-7feb8d18e000 r-xp 00006000 fe:00 6994686                    /usr/lib/libnss_mymachines.so.2
+7feb8d18e000-7feb8d19e000 r--p 00034000 fe:00 6994686                    /usr/lib/libnss_mymachines.so.2
+7feb8d19e000-7feb8d1a1000 r--p 00043000 fe:00 6994686                    /usr/lib/libnss_mymachines.so.2
+7feb8d1a1000-7feb8d1a2000 rw-p 00046000 fe:00 6994686                    /usr/lib/libnss_mymachines.so.2
+7feb8d1a2000-7feb8d1a3000 rw-p 00000000 00:00 0 
+7feb8d1a3000-7feb8d1b8000 r--s 00000000 fe:00 6822872                    /var/cache/fontconfig/e3106794-3826-43b2-9c4b-e9453d2c9688-le64.cache-7
+7feb8d1b8000-7feb8d1d4000 r--s 00393000 fe:00 7216487                    /usr/lib/jvm/java-8-openjdk/jre/lib/ext/cldrdata.jar
+7feb8d1d4000-7feb8d1db000 r--p 00000000 fe:00 7216394                    /usr/lib/jvm/java-8-openjdk/jre/lib/amd64/libnio.so
+7feb8d1db000-7feb8d1e3000 r-xp 00007000 fe:00 7216394                    /usr/lib/jvm/java-8-openjdk/jre/lib/amd64/libnio.so
+7feb8d1e3000-7feb8d1e6000 r--p 0000f000 fe:00 7216394                    /usr/lib/jvm/java-8-openjdk/jre/lib/amd64/libnio.so
+7feb8d1e6000-7feb8d1e7000 ---p 00012000 fe:00 7216394                    /usr/lib/jvm/java-8-openjdk/jre/lib/amd64/libnio.so
+7feb8d1e7000-7feb8d1e8000 r--p 00012000 fe:00 7216394                    /usr/lib/jvm/java-8-openjdk/jre/lib/amd64/libnio.so
+7feb8d1e8000-7feb8d1e9000 rw-p 00013000 fe:00 7216394                    /usr/lib/jvm/java-8-openjdk/jre/lib/amd64/libnio.so
+7feb8d1e9000-7feb8d3db000 rw-p 00000000 00:00 0 
+7feb8d3db000-7feb8d3e9000 ---p 00000000 00:00 0 
+7feb8d3e9000-7feb8d5db000 rw-p 00000000 00:00 0 
+7feb8d5db000-7feb8d5e9000 ---p 00000000 00:00 0 
+7feb8d5e9000-7feb8d5ec000 ---p 00000000 00:00 0 
+7feb8d5ec000-7feb8d6ea000 rw-p 00000000 00:00 0 
+7feb8d6ea000-7feb8d6ed000 ---p 00000000 00:00 0 
+7feb8d6ed000-7feb8d7eb000 rw-p 00000000 00:00 0 
+7feb8d7eb000-7feb8d7ee000 ---p 00000000 00:00 0 
+7feb8d7ee000-7feb8d8ec000 rw-p 00000000 00:00 0 
+7feb8d8ec000-7feb8d8ef000 ---p 00000000 00:00 0 
+7feb8d8ef000-7feb8dbdf000 rw-p 00000000 00:00 0 
+7feb8dbdf000-7feb8dbed000 ---p 00000000 00:00 0 
+7feb8dbed000-7feb8dbf0000 ---p 00000000 00:00 0 
+7feb8dbf0000-7feb8dcee000 rw-p 00000000 00:00 0 
+7feb8dcee000-7feb8dcf0000 r--p 00000000 fe:00 6959581                    /usr/lib/libpcre.so.1.2.11
+7feb8dcf0000-7feb8dd41000 r-xp 00002000 fe:00 6959581                    /usr/lib/libpcre.so.1.2.11
+7feb8dd41000-7feb8dd5f000 r--p 00053000 fe:00 6959581                    /usr/lib/libpcre.so.1.2.11
+7feb8dd5f000-7feb8dd60000 r--p 00070000 fe:00 6959581                    /usr/lib/libpcre.so.1.2.11
+7feb8dd60000-7feb8dd61000 rw-p 00071000 fe:00 6959581                    /usr/lib/libpcre.so.1.2.11
+7feb8dd61000-7feb8dd64000 r--p 00000000 fe:00 6996678                    /usr/lib/libgraphite2.so.3.2.1
+7feb8dd64000-7feb8dd7e000 r-xp 00003000 fe:00 6996678                    /usr/lib/libgraphite2.so.3.2.1
+7feb8dd7e000-7feb8dd83000 r--p 0001d000 fe:00 6996678                    /usr/lib/libgraphite2.so.3.2.1
+7feb8dd83000-7feb8dd85000 r--p 00021000 fe:00 6996678                    /usr/lib/libgraphite2.so.3.2.1
+7feb8dd85000-7feb8dd86000 rw-p 00023000 fe:00 6996678                    /usr/lib/libgraphite2.so.3.2.1
+7feb8dd86000-7feb8dda1000 r--p 00000000 fe:00 6959768                    /usr/lib/libglib-2.0.so.0.6000.1
+7feb8dda1000-7feb8de26000 r-xp 0001b000 fe:00 6959768                    /usr/lib/libglib-2.0.so.0.6000.1
+7feb8de26000-7feb8dea8000 r--p 000a0000 fe:00 6959768                    /usr/lib/libglib-2.0.so.0.6000.1
+7feb8dea8000-7feb8dea9000 ---p 00122000 fe:00 6959768                    /usr/lib/libglib-2.0.so.0.6000.1
+7feb8dea9000-7feb8deaa000 r--p 00122000 fe:00 6959768                    /usr/lib/libglib-2.0.so.0.6000.1
+7feb8deaa000-7feb8deab000 rw-p 00123000 fe:00 6959768                    /usr/lib/libglib-2.0.so.0.6000.1
+7feb8deab000-7feb8deac000 rw-p 00000000 00:00 0 
+7feb8deac000-7feb8deb6000 r--p 00000000 fe:00 6974726                    /usr/lib/libharfbuzz.so.0.20400.0
+7feb8deb6000-7feb8df5f000 r-xp 0000a000 fe:00 6974726                    /usr/lib/libharfbuzz.so.0.20400.0
+7feb8df5f000-7feb8dfa3000 r--p 000b3000 fe:00 6974726                    /usr/lib/libharfbuzz.so.0.20400.0
+7feb8dfa3000-7feb8dfa4000 ---p 000f7000 fe:00 6974726                    /usr/lib/libharfbuzz.so.0.20400.0
+7feb8dfa4000-7feb8dfa5000 r--p 000f7000 fe:00 6974726                    /usr/lib/libharfbuzz.so.0.20400.0
+7feb8dfa5000-7feb8dfa6000 rw-p 000f8000 fe:00 6974726                    /usr/lib/libharfbuzz.so.0.20400.0
+7feb8dfa6000-7feb8dfa8000 rw-p 00000000 00:00 0 
+7feb8dfa8000-7feb8dfae000 r--p 00000000 fe:00 6964540                    /usr/lib/libpng16.so.16.37.0
+7feb8dfae000-7feb8dfd2000 r-xp 00006000 fe:00 6964540                    /usr/lib/libpng16.so.16.37.0
+7feb8dfd2000-7feb8dfde000 r--p 0002a000 fe:00 6964540                    /usr/lib/libpng16.so.16.37.0
+7feb8dfde000-7feb8dfdf000 r--p 00035000 fe:00 6964540                    /usr/lib/libpng16.so.16.37.0
+7feb8dfdf000-7feb8dfe0000 rw-p 00036000 fe:00 6964540                    /usr/lib/libpng16.so.16.37.0
+7feb8dfe0000-7feb8dfe2000 r--p 00000000 fe:00 6957873                    /usr/lib/libbz2.so.1.0.6
+7feb8dfe2000-7feb8dfef000 r-xp 00002000 fe:00 6957873                    /usr/lib/libbz2.so.1.0.6
+7feb8dfef000-7feb8dff1000 r--p 0000f000 fe:00 6957873                    /usr/lib/libbz2.so.1.0.6
+7feb8dff1000-7feb8dff2000 r--p 00010000 fe:00 6957873                    /usr/lib/libbz2.so.1.0.6
+7feb8dff2000-7feb8dff3000 rw-p 00011000 fe:00 6957873                    /usr/lib/libbz2.so.1.0.6
+7feb8dff3000-7feb8dff6000 r--p 00000000 fe:00 6950497                    /usr/lib/libgcc_s.so.1
+7feb8dff6000-7feb8e007000 r-xp 00003000 fe:00 6950497                    /usr/lib/libgcc_s.so.1
+7feb8e007000-7feb8e00a000 r--p 00014000 fe:00 6950497                    /usr/lib/libgcc_s.so.1
+7feb8e00a000-7feb8e00b000 ---p 00017000 fe:00 6950497                    /usr/lib/libgcc_s.so.1
+7feb8e00b000-7feb8e00c000 r--p 00017000 fe:00 6950497                    /usr/lib/libgcc_s.so.1
+7feb8e00c000-7feb8e00d000 rw-p 00018000 fe:00 6950497                    /usr/lib/libgcc_s.so.1
+7feb8e00d000-7feb8e01a000 r--p 00000000 fe:00 6986524                    /usr/lib/libfreetype.so.6.17.0
+7feb8e01a000-7feb8e09c000 r-xp 0000d000 fe:00 6986524                    /usr/lib/libfreetype.so.6.17.0
+7feb8e09c000-7feb8e0d3000 r--p 0008f000 fe:00 6986524                    /usr/lib/libfreetype.so.6.17.0
+7feb8e0d3000-7feb8e0d4000 ---p 000c6000 fe:00 6986524                    /usr/lib/libfreetype.so.6.17.0
+7feb8e0d4000-7feb8e0db000 r--p 000c6000 fe:00 6986524                    /usr/lib/libfreetype.so.6.17.0
+7feb8e0db000-7feb8e0dc000 rw-p 000cd000 fe:00 6986524                    /usr/lib/libfreetype.so.6.17.0
+7feb8e0dc000-7feb8e0e5000 r--p 00000000 fe:00 7214898                    /usr/lib/jvm/java-8-openjdk/jre/lib/amd64/libfontmanager.so
+7feb8e0e5000-7feb8e121000 r-xp 00009000 fe:00 7214898                    /usr/lib/jvm/java-8-openjdk/jre/lib/amd64/libfontmanager.so
+7feb8e121000-7feb8e140000 r--p 00045000 fe:00 7214898                    /usr/lib/jvm/java-8-openjdk/jre/lib/amd64/libfontmanager.so
+7feb8e140000-7feb8e144000 r--p 00063000 fe:00 7214898                    /usr/lib/jvm/java-8-openjdk/jre/lib/amd64/libfontmanager.so
+7feb8e144000-7feb8e145000 rw-p 00067000 fe:00 7214898                    /usr/lib/jvm/java-8-openjdk/jre/lib/amd64/libfontmanager.so
+7feb8e145000-7feb8e148000 r--p 00000000 fe:00 6964009                    /usr/lib/libXi.so.6.1.0
+7feb8e148000-7feb8e153000 r-xp 00003000 fe:00 6964009                    /usr/lib/libXi.so.6.1.0
+7feb8e153000-7feb8e156000 r--p 0000e000 fe:00 6964009                    /usr/lib/libXi.so.6.1.0
+7feb8e156000-7feb8e157000 r--p 00010000 fe:00 6964009                    /usr/lib/libXi.so.6.1.0
+7feb8e157000-7feb8e158000 rw-p 00011000 fe:00 6964009                    /usr/lib/libXi.so.6.1.0
+7feb8e158000-7feb8e168000 r--p 00000000 fe:00 7214888                    /usr/lib/jvm/java-8-openjdk/jre/lib/amd64/libawt_xawt.so
+7feb8e168000-7feb8e1a1000 r-xp 00010000 fe:00 7214888                    /usr/lib/jvm/java-8-openjdk/jre/lib/amd64/libawt_xawt.so
+7feb8e1a1000-7feb8e1b2000 r--p 00049000 fe:00 7214888                    /usr/lib/jvm/java-8-openjdk/jre/lib/amd64/libawt_xawt.so
+7feb8e1b2000-7feb8e1b3000 ---p 0005a000 fe:00 7214888                    /usr/lib/jvm/java-8-openjdk/jre/lib/amd64/libawt_xawt.so
+7feb8e1b3000-7feb8e1b4000 r--p 0005a000 fe:00 7214888                    /usr/lib/jvm/java-8-openjdk/jre/lib/amd64/libawt_xawt.so
+7feb8e1b4000-7feb8e1b6000 rw-p 0005b000 fe:00 7214888                    /usr/lib/jvm/java-8-openjdk/jre/lib/amd64/libawt_xawt.so
+7feb8e1b6000-7feb8e1b8000 rw-p 00000000 00:00 0 
+7feb8e1b8000-7feb8e1e5000 r--p 00000000 fe:00 7214886                    /usr/lib/jvm/java-8-openjdk/jre/lib/amd64/libawt.so
+7feb8e1e5000-7feb8e24b000 r-xp 0002d000 fe:00 7214886                    /usr/lib/jvm/java-8-openjdk/jre/lib/amd64/libawt.so
+7feb8e24b000-7feb8e257000 r--p 00093000 fe:00 7214886                    /usr/lib/jvm/java-8-openjdk/jre/lib/amd64/libawt.so
+7feb8e257000-7feb8e258000 ---p 0009f000 fe:00 7214886                    /usr/lib/jvm/java-8-openjdk/jre/lib/amd64/libawt.so
+7feb8e258000-7feb8e259000 r--p 0009f000 fe:00 7214886                    /usr/lib/jvm/java-8-openjdk/jre/lib/amd64/libawt.so
+7feb8e259000-7feb8e264000 rw-p 000a0000 fe:00 7214886                    /usr/lib/jvm/java-8-openjdk/jre/lib/amd64/libawt.so
+7feb8e264000-7feb8e47b000 rw-p 00000000 00:00 0 
+7feb8e47b000-7feb8e489000 ---p 00000000 00:00 0 
+7feb8e489000-7feb8e67b000 rw-p 00000000 00:00 0 
+7feb8e67b000-7feb8e689000 ---p 00000000 00:00 0 
+7feb8e689000-7feb8e87b000 rw-p 00000000 00:00 0 
+7feb8e87b000-7feb8e889000 ---p 00000000 00:00 0 
+7feb8e88c000-7feb8e896000 r--s 00116000 fe:00 7216495                    /usr/lib/jvm/java-8-openjdk/jre/lib/ext/localedata.jar
+7feb8e896000-7feb8e898000 r--p 00000000 fe:00 6964419                    /usr/lib/libXtst.so.6.1.0
+7feb8e898000-7feb8e89b000 r-xp 00002000 fe:00 6964419                    /usr/lib/libXtst.so.6.1.0
+7feb8e89b000-7feb8e89c000 r--p 00005000 fe:00 6964419                    /usr/lib/libXtst.so.6.1.0
+7feb8e89c000-7feb8e89d000 ---p 00006000 fe:00 6964419                    /usr/lib/libXtst.so.6.1.0
+7feb8e89d000-7feb8e89e000 r--p 00006000 fe:00 6964419                    /usr/lib/libXtst.so.6.1.0
+7feb8e89e000-7feb8e89f000 rw-p 00007000 fe:00 6964419                    /usr/lib/libXtst.so.6.1.0
+7feb8e89f000-7feb8ea91000 rw-p 00000000 00:00 0 
+7feb8ea91000-7feb8ea9f000 ---p 00000000 00:00 0 
+7feb8ea9f000-7feb8ec91000 rw-p 00000000 00:00 0 
+7feb8ec91000-7feb8ec9f000 ---p 00000000 00:00 0 
+7feb8ec9f000-7feb8ee96000 rw-p 00000000 00:00 0 
+7feb8ee96000-7feb8ee9f000 ---p 00000000 00:00 0 
+7feb8ee9f000-7feb8f09f000 rw-p 00000000 00:00 0 
+7feb8f09f000-7feb8f29f000 rw-p 00000000 00:00 0 
+7feb8f29f000-7feb8f2a2000 ---p 00000000 00:00 0 
+7feb8f2a2000-7feb8f3a0000 rw-p 00000000 00:00 0 
+7feb8f3a0000-7feb8f5a0000 rw-p 00000000 00:00 0 
+7feb8f5a0000-7feb8f5a3000 ---p 00000000 00:00 0 
+7feb8f5a3000-7feb8f8a1000 rw-p 00000000 00:00 0 
+7feb8f8a1000-7feb8faa1000 rw-p 00000000 00:00 0 
+7feb8faa1000-7feb8fca1000 rw-p 00000000 00:00 0 
+7feb8fca1000-7feb8fea1000 rw-p 00000000 00:00 0 
+7feb8fea1000-7feb8fea2000 r--s 00002000 fe:00 6846989                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/Skeletonize3D_-2.1.1.jar
+7feb8fea2000-7feb8fea6000 r--s 00055000 fe:00 6846987                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/Simple_Neurite_Tracer-3.1.6.jar
+7feb8fea6000-7feb8fea8000 r--s 0001e000 fe:00 6846963                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/Image_5D-2.0.2.jar
+7feb8fea8000-7feb8fead000 r--s 0004e000 fe:00 6846970                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/LSM_Toolbox-4.1.2.jar
+7feb8fead000-7feb8feaf000 r--s 00002000 fe:00 6846980                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/RATS_-2.0.2.jar
+7feb8feaf000-7feb8feb1000 r--s 0000b000 fe:00 6846928                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/AnalyzeSkeleton_-3.3.0.jar
+7feb8feb1000-7feb8feb2000 r--s 00002000 fe:00 6847022                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/trakem2_tps-1.1.4.jar
+7feb8feb2000-7feb8feb3000 r--s 00005000 fe:00 6846953                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/Fiji_Package_Maker-2.1.1.jar
+7feb8feb3000-7feb8feb4000 r--s 00001000 fe:00 6847006                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/Vaa3d_Writer-1.0.2.jar
+7feb8feb4000-7feb8feb7000 r--s 00023000 fe:00 6846939                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/Colocalisation_Analysis-3.0.5.jar
+7feb8feba000-7feb8febd000 r--p 00000000 fe:00 6994012                    /usr/lib/libnss_myhostname.so.2
+7feb8febd000-7feb8fec6000 r-xp 00003000 fe:00 6994012                    /usr/lib/libnss_myhostname.so.2
+7feb8fec6000-7feb8fecb000 r--p 0000c000 fe:00 6994012                    /usr/lib/libnss_myhostname.so.2
+7feb8fecb000-7feb8fecc000 ---p 00011000 fe:00 6994012                    /usr/lib/libnss_myhostname.so.2
+7feb8fecc000-7feb8fecf000 r--p 00011000 fe:00 6994012                    /usr/lib/libnss_myhostname.so.2
+7feb8fecf000-7feb8fed0000 rw-p 00014000 fe:00 6994012                    /usr/lib/libnss_myhostname.so.2
+7feb8fed0000-7feb8fed5000 r--p 00000000 fe:00 7216341                    /usr/lib/jvm/java-8-openjdk/jre/lib/amd64/libnet.so
+7feb8fed5000-7feb8fee4000 r-xp 00005000 fe:00 7216341                    /usr/lib/jvm/java-8-openjdk/jre/lib/amd64/libnet.so
+7feb8fee4000-7feb8fee8000 r--p 00014000 fe:00 7216341                    /usr/lib/jvm/java-8-openjdk/jre/lib/amd64/libnet.so
+7feb8fee8000-7feb8fee9000 r--p 00017000 fe:00 7216341                    /usr/lib/jvm/java-8-openjdk/jre/lib/amd64/libnet.so
+7feb8fee9000-7feb8feea000 rw-p 00018000 fe:00 7216341                    /usr/lib/jvm/java-8-openjdk/jre/lib/amd64/libnet.so
+7feb8feea000-7feb8ff05000 r--s 001d6000 fe:00 7216530                    /usr/lib/jvm/java-8-openjdk/jre/lib/ext/nashorn.jar
+7feb8ff05000-7feb8ff18000 r--s 00346000 fe:00 7086720                    /usr/lib/jvm/java-8-openjdk/jre/lib/resources.jar
+7feb8ff18000-7feb8ff1a000 r--s 0000a000 fe:00 6846959                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/HDF5_Vibez-1.0.2.jar
+7feb8ff1a000-7feb8ff1b000 r--s 00005000 fe:00 6846935                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/Bug_Submitter-2.1.1.jar
+7feb8ff1b000-7feb8ff22000 r--s 00075000 fe:00 6870821                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/Trainable_Segmentation-3.2.33.jar
+7feb8ff22000-7feb8ff23000 r--s 00005000 fe:00 6846940                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/Color_Histogram-2.0.7.jar
+7feb8ff23000-7feb8ff24000 r--s 00007000 fe:00 6847021                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/registration_3d-2.0.1.jar
+7feb8ff24000-7feb8ff25000 r--s 00002000 fe:00 6846999                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/TopoJ_-2.0.1.jar
+7feb8ff25000-7feb8ff27000 r--s 0001c000 fe:00 6847010                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/Volume_Viewer-2.01.2.jar
+7feb8ff27000-7feb8ff29000 r--s 00012000 fe:00 6846996                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/Time_Lapse-2.1.0.jar
+7feb8ff29000-7feb8ff2b000 r--s 00005000 fe:00 6846947                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/Directionality_-2.3.0.jar
+7feb8ff2b000-7feb8ff2d000 r--s 0000f000 fe:00 6846981                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/Reconstruct_Reader-2.0.4.jar
+7feb8ff2d000-7feb8ff2f000 r--s 00009000 fe:00 6847020                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/register_virtual_stack_slices-3.0.5.jar
+7feb8ff2f000-7feb8ff30000 r--s 00007000 fe:00 6847018                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/panorama_-3.0.2.jar
+7feb8ff30000-7feb8ff32000 r--s 00062000 fe:00 6846941                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/Color_Inspector_3D-2.3.2.jar
+7feb8ff32000-7feb8ff4a000 r--s 0022f000 fe:00 6847002                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/TrakEM2_-1.3.2.jar
+7feb8ff4a000-7feb8ff4b000 r--s 00001000 fe:00 6846992                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/Statistical_Region_Merging-2.0.1.jar
+7feb8ff4b000-7feb8ff4d000 r--s 0000d000 fe:00 6846979                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/QuickPALM_-1.1.2.jar
+7feb8ff4d000-7feb8ff4e000 r--s 00003000 fe:00 6846975                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/M_I_P-2.0.1.jar
+7feb8ff4e000-7feb8ff63000 r--s 00141000 fe:00 6847000                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/TrackMate_-4.0.0.jar
+7feb8ff63000-7feb8ff65000 r--s 00016000 fe:00 6846965                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/Interactive_3D_Surface_Plot-3.0.0.jar
+7feb8ff65000-7feb8ff66000 r--s 00004000 fe:00 6847015                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/blockmatching_-2.1.3.jar
+7feb8ff66000-7feb8ff68000 r--s 00004000 fe:00 6847003                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/TrakEM2_Archipelago-2.0.3.jar
+7feb8ff68000-7feb8ff69000 r--s 00004000 fe:00 6846968                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/KymographBuilder-2.1.1.jar
+7feb8ff69000-7feb8ff6a000 r--s 00006000 fe:00 6846930                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/Archipelago_Plugins-0.5.4.jar
+7feb8ff6a000-7feb8ff6c000 r--s 00006000 fe:00 6847007                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/Video_Editing-2.0.1.jar
+7feb8ff6c000-7feb8ff6e000 r--s 00012000 fe:00 6846945                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/Descriptor_based_registration-2.1.2.jar
+7feb8ff6e000-7feb8ff70000 r--s 00005000 fe:00 6846998                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/ToAST_-25.0.2.jar
+7feb8ff70000-7feb8ff71000 r--s 00003000 fe:00 6846942                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/Colour_Deconvolution-3.0.2.jar
+7feb8ff71000-7feb8ff72000 r--s 00001000 fe:00 6846936                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/CPU_Meter-2.0.1.jar
+7feb8ff72000-7feb8ff74000 r--s 00000000 fe:00 6846966                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/IsoData_Classifier-2.0.1.jar
+7feb8ff74000-7feb8ff75000 r--s 00003000 fe:00 6846977                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/Multi_Kymograph-3.0.1.jar
+7feb8ff75000-7feb8ff76000 r--s 00004000 fe:00 6846933                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/Auto_Threshold-1.17.1.jar
+7feb8ff76000-7feb8ff79000 r--s 0003c000 fe:00 6848516                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/bio-formats_plugins-6.1.0.jar
+7feb8ff79000-7feb8ff7c000 r--s 0001e000 fe:00 6847023                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/z_spacing-1.1.1.jar
+7feb8ff7c000-7feb8ff7e000 r--s 0001a000 fe:00 6846988                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/Siox_Segmentation-1.0.5.jar
+7feb8ff7e000-7feb8ff7f000 r--s 00002000 fe:00 6846929                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/Anisotropic_Diffusion_2D-2.0.1.jar
+7feb8ff7f000-7feb8ff80000 r--s 00002000 fe:00 6846944                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/Correct_3D_Drift-1.0.3.jar
+7feb8ff80000-7feb8ff85000 r--s 00059000 fe:00 6846948                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/_nTracer-1.1.2.jar
+7feb8ff85000-7feb8ff86000 r--s 0002f000 fe:00 6847011                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/bUnwarpJ_-2.6.10.jar
+7feb8ff86000-7feb8ff88000 r--s 00004000 fe:00 6847005                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/Vaa3d_Reader-2.0.2.jar
+7feb8ff88000-7feb8ff89000 r--s 00007000 fe:00 6846938                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/Cell_Counter-2.2.2.jar
+7feb8ff89000-7feb8ff8b000 r--s 00005000 fe:00 6846971                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/Lasso_and_Blow_Tool-2.0.2.jar
+7feb8ff8b000-7feb8ff8e000 r--s 00020000 fe:00 6847017                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/mpicbg_-1.2.0.jar
+7feb8ff8e000-7feb8ff8f000 r--s 00005000 fe:00 6846949                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/FS_Align_TrakEM2-2.0.3.jar
+7feb8ff8f000-7feb8ff91000 r--s 00007000 fe:00 6846957                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/Gray_Morphology-2.3.4.jar
+7feb8ff91000-7feb8ff92000 r--s 00005000 fe:00 6846978                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/PIV_analyser-1.1.2.jar
+7feb8ff92000-7feb8ff94000 r--s 00028000 fe:00 6847008                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/View5D_-1.3.2.jar
+7feb8ff94000-7feb8ff96000 r--s 00002000 fe:00 6846925                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/3D_Blob_Segmentation-3.0.1.jar
+7feb8ff96000-7feb8ff97000 r--s 00001000 fe:00 6846961                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/IJ_Robot-2.0.1.jar
+7feb8ff97000-7feb8ff98000 r--s 00008000 fe:00 6846958                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/H5J_Loader_Plugin-1.0.7.jar
+7feb8ff98000-7feb8ff9a000 r--s 00005000 fe:00 6846976                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/Manual_Tracking-2.1.1.jar
+7feb8ff9a000-7feb8ff9b000 r--s 00000000 fe:00 6846984                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/Samples_-2.0.2.jar
+7feb8ff9b000-7feb8ff9d000 r--s 00008000 fe:00 6846991                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/Stack_Manipulation-2.1.1.jar
+7feb8ff9d000-7feb8ff9e000 r--s 00001000 fe:00 6846972                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/Linear_Kuwahara-2.0.1.jar
+7feb8ff9e000-7feb8ffa3000 r--s 00047000 fe:00 6847013                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/bigwarp_fiji-3.1.2.jar
+7feb8ffa3000-7feb8ffa5000 r--s 0000a000 fe:00 6846994                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/Sync_Win-1.7-fiji4.jar
+7feb8ffa5000-7feb8ffa7000 r--s 00006000 fe:00 6846931                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/Arrow_-2.0.2.jar
+7feb8ffa7000-7feb8ffa8000 r--s 00001000 fe:00 6846967                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/Kuwahara_Filter-2.0.1.jar
+7feb8ffa8000-7feb8ffa9000 r--s 00004000 fe:00 6846969                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/LSM_Reader-4.1.2.jar
+7feb8ffa9000-7feb8ffac000 r--s 00049000 fe:00 6846955                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/FlowJ_-1.29.3.jar
+7feb8ffac000-7feb8ffae000 r--s 00006000 fe:00 6846973                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/LocalThickness_-4.0.2.jar
+7feb8ffae000-7feb8ffc0000 r--s 0017b000 fe:00 6846983                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/SPIM_Registration-5.0.19.jar
+7feb8ffc0000-7feb8ffc3000 r--s 00028000 fe:00 6847012                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/bigdataviewer_fiji-5.0.0.jar
+7feb8ffc3000-7feb8ffc5000 r--s 00003000 fe:00 6846943                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/CorrectBleach_-2.0.2.jar
+7feb8ffc5000-7feb8ffc6000 r--s 0000a000 fe:00 6846990                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/SplineDeformationGenerator_-2.0.2.jar
+7feb8ffc6000-7feb8ffc8000 r--s 00013000 fe:00 6847016                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/level_sets-1.0.2.jar
+7feb8ffc8000-7feb8ffc9000 r--s 00001000 fe:00 6846937                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/Calculator_Plus-2.0.1.jar
+7feb8ffc9000-7feb8ffcc000 r--s 00012000 fe:00 6846964                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/Image_Expression_Parser-3.0.1.jar
+7feb8ffcc000-7feb8ffcd000 r--s 00004000 fe:00 6846950                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/Feature_Detection-2.0.2.jar
+7feb8ffcd000-7feb8ffd0000 r--s 00033000 fe:00 6846986                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/Sholl_Analysis-4.0.0.jar
+7feb8ffd0000-7feb8ffd1000 r--s 00009000 fe:00 6846956                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/Graph_Cut-1.0.2.jar
+7feb8ffd1000-7feb8ffd2000 r--s 00008000 fe:00 6846985                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/Series_Labeler-2.0.1.jar
+7feb8ffd2000-7feb8ffd4000 r--s 00004000 fe:00 6846946                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/Dichromacy_-2.1.1.jar
+7feb8ffd4000-7feb8ffda000 r--s 00069000 fe:00 6847004                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/VIB_-3.0.2.jar
+7feb8ffda000-7feb8ffe4000 r--s 000cc000 fe:00 6868022                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/jars/3Dviewer.jar
+7feb8ffe4000-7feb8fff1000 r--s 0009d000 fe:00 6868025                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/jars/imagingbook.jar
+7feb8fff1000-7feb90000000 r--s 0014f000 fe:00 6868028                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/jars/ssj-2.5.jar
+7feb90000000-7feb90343000 rw-p 00000000 00:00 0 
+7feb90343000-7feb94000000 ---p 00000000 00:00 0 
+7feb94000000-7feb94021000 rw-p 00000000 00:00 0 
+7feb94021000-7feb98000000 ---p 00000000 00:00 0 
+7feb98000000-7feb98522000 rw-p 00000000 00:00 0 
+7feb98522000-7feb9c000000 ---p 00000000 00:00 0 
+7feb9c000000-7feb9c4b8000 rw-p 00000000 00:00 0 
+7feb9c4b8000-7feba0000000 ---p 00000000 00:00 0 
+7feba0000000-7feba1329000 rw-p 00000000 00:00 0 
+7feba1329000-7feba4000000 ---p 00000000 00:00 0 
+7feba4000000-7feba4565000 rw-p 00000000 00:00 0 
+7feba4565000-7feba8000000 ---p 00000000 00:00 0 
+7feba8000000-7feba9291000 rw-p 00000000 00:00 0 
+7feba9291000-7febac000000 ---p 00000000 00:00 0 
+7febac000000-7febad661000 rw-p 00000000 00:00 0 
+7febad661000-7febb0000000 ---p 00000000 00:00 0 
+7febb0000000-7febb138e000 rw-p 00000000 00:00 0 
+7febb138e000-7febb4000000 ---p 00000000 00:00 0 
+7febb4000000-7febb50bf000 rw-p 00000000 00:00 0 
+7febb50bf000-7febb8000000 ---p 00000000 00:00 0 
+7febb8000000-7febb92f4000 rw-p 00000000 00:00 0 
+7febb92f4000-7febbc000000 ---p 00000000 00:00 0 
+7febbc000000-7febbd1bc000 rw-p 00000000 00:00 0 
+7febbd1bc000-7febc0000000 ---p 00000000 00:00 0 
+7febc0000000-7febc0021000 rw-p 00000000 00:00 0 
+7febc0021000-7febc4000000 ---p 00000000 00:00 0 
+7febc4000000-7febc557b000 rw-p 00000000 00:00 0 
+7febc557b000-7febc8000000 ---p 00000000 00:00 0 
+7febc8000000-7febc8021000 rw-p 00000000 00:00 0 
+7febc8021000-7febcc000000 ---p 00000000 00:00 0 
+7febcc000000-7febcc021000 rw-p 00000000 00:00 0 
+7febcc021000-7febd0000000 ---p 00000000 00:00 0 
+7febd0000000-7febd0164000 rw-p 00000000 00:00 0 
+7febd0164000-7febd4000000 ---p 00000000 00:00 0 
+7febd4000000-7febd4021000 rw-p 00000000 00:00 0 
+7febd4021000-7febd8000000 ---p 00000000 00:00 0 
+7febd8000000-7febd8021000 rw-p 00000000 00:00 0 
+7febd8021000-7febdc000000 ---p 00000000 00:00 0 
+7febdc000000-7febdc001000 r--s 00002000 fe:00 6846974                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/MTrack2_-2.0.1.jar
+7febdc001000-7febdc002000 r--s 00009000 fe:00 6846982                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/SPIM_Opener-2.0.2.jar
+7febdc002000-7febdc010000 r--s 00192000 fe:00 6868027                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/jars/j3dutils.jar
+7febdc010000-7febdc01c000 r--s 002c7000 fe:00 6868026                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/jars/j3dcore.jar
+7febdc01c000-7febdc01d000 r--s 00036000 fe:00 6867621                    /home/loganaw/Documents/nTracer1/ImageJ/jars/linux64/jogl-all-2.3.2-natives-linux-amd64.jar
+7febdc01d000-7febdc020000 r--s 00057000 fe:00 6846993                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/Stitching_-3.1.6.jar
+7febdc020000-7febdc022000 r--s 0004e000 fe:00 6868029                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/jars/vecmath.jar
+7febdc022000-7febdc024000 r--s 00037000 fe:00 6868024                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/jars/imagescience-2.4.1.jar
+7febdc024000-7febdc026000 r--s 00007000 fe:00 6868023                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/jars/Jama-1.0.2.jar
+7febdc026000-7febdc029000 r--s 00031000 fe:00 6870773                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/jars/sis-base-18.09.0.jar
+7febdc029000-7febdc02d000 r--s 00022000 fe:00 6870770                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/jars/args4j-2.33.jar
+7febdc02d000-7febdc031000 r--s 00031000 fe:00 6870771                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/jars/commons-io-2.6.jar
+7febdc031000-7febdc039000 r--s 00072000 fe:00 6870772                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/jars/commons-lang3-3.7.jar
+7febdc039000-7febdc054000 r--s 006de000 fe:00 6870774                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/jars/sis-jhdf5-19.04.0.jar
+7febdc054000-7febdc055000 r--s 00003000 fe:00 6870775                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/jars/sis-jhdf5-h5ar-cli-19.04.0.jar
+7febdc055000-7febdc056000 r--s 00002000 fe:00 6846960                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/Helmholtz_Analysis-2.0.2.jar
+7febdc056000-7febdc058000 r--s 00000000 fe:00 6846995                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/Thread_Killer-2.0.1.jar
+7febdc058000-7febdc05a000 r--s 00016000 fe:00 6846954                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/Fiji_Plugins-3.1.1.jar
+7febdc05a000-7febdc061000 r--s 00084000 fe:00 6846927                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/3D_Viewer-4.0.2.jar
+7febdc061000-7febdc063000 r--s 0000a000 fe:00 6846952                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/Fiji_Developer-2.0.7.jar
+7febdc063000-7febdc066000 r--s 00027000 fe:00 6846962                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/IO_-3.0.4.jar
+7febdc066000-7febdc06b000 r--s 00029000 fe:00 6846951                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/Fiji_Archipelago-2.0.1.jar
+7febdc06b000-7febdc06c000 r--s 00005000 fe:00 6846926                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/3D_Objects_Counter-2.0.1.jar
+7febdc06c000-7febdc06d000 r--s 00001000 fe:00 6846997                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/Time_Stamper-2.1.0.jar
+7febdc06d000-7febdc06f000 r--s 00002000 fe:00 6846932                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/Auto_Local_Threshold-1.10.0.jar
+7febdc06f000-7febdc070000 r--s 00007000 fe:00 6847009                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/Volume_Calculator-2.0.2.jar
+7febdc070000-7febdc071000 r--s 00010000 fe:00 6846934                    /home/loganaw/Documents/nTracer1/ImageJ/plugins/BalloonSegmentation_-3.0.1.jar
+7febdc071000-7febdc072000 r--s 0002e000 fe:00 6867619                    /home/loganaw/Documents/nTracer1/ImageJ/jars/linux64/joal-2.3.2-natives-linux-amd64.jar
+7febdc072000-7febdc074000 r--s 00000000 fe:00 6867618                    /home/loganaw/Documents/nTracer1/ImageJ/jars/linux64/gluegen-rt-2.3.2-natives-linux-amd64.jar
+7febdc074000-7febdc076000 r--s 008b4000 fe:00 6867617                    /home/loganaw/Documents/nTracer1/ImageJ/jars/linux64/ffmpeg-2.6.1-0.11-linux-x86_64.jar
+7febdc076000-7febdc077000 r--s 00002000 fe:00 6867620                    /home/loganaw/Documents/nTracer1/ImageJ/jars/linux64/jocl-2.3.2-natives-linux-amd64.jar
+7febdc077000-7febdc07f000 r--s 00069000 fe:00 6867423                    /home/loganaw/Documents/nTracer1/ImageJ/jars/imagej-legacy-0.35.2.jar
+7febdc07f000-7febdc081000 r--s 0001c000 fe:00 6867400                    /home/loganaw/Documents/nTracer1/ImageJ/jars/fiji-compat-2.0.3.jar
+7febdc081000-7febdc085000 r--s 00031000 fe:00 6867413                    /home/loganaw/Documents/nTracer1/ImageJ/jars/groovy-xml-2.4.8.jar
+7febdc085000-7febdc086000 r--s 00003000 fe:00 6867425                    /home/loganaw/Documents/nTracer1/ImageJ/jars/imagej-mesh-io-0.1.2.jar
+7febdc086000-7febdc087000 r--s 0007a000 fe:00 6867607                    /home/loganaw/Documents/nTracer1/ImageJ/jars/bio-formats/jxrlib-all-0.2.1.jar
+7febdc087000-7febdc094000 r--s 000dc000 fe:00 6867613                    /home/loganaw/Documents/nTracer1/ImageJ/jars/bio-formats/ome-poi-5.3.3.jar
+7febdc094000-7febdc095000 r--s 00003000 fe:00 6867608                    /home/loganaw/Documents/nTracer1/ImageJ/jars/bio-formats/metakit-5.3.2.jar
+7febdc095000-7febdc098000 r--s 00014000 fe:00 6867612                    /home/loganaw/Documents/nTracer1/ImageJ/jars/bio-formats/ome-mdbtools-5.3.2.jar
+7febdc098000-7febdc09a000 r--s 0013b000 fe:00 6848514                    /home/loganaw/Documents/nTracer1/ImageJ/jars/bio-formats/turbojpeg-6.1.0.jar
+7febdc09a000-7febdc09c000 r--s 00015000 fe:00 6867609                    /home/loganaw/Documents/nTracer1/ImageJ/jars/bio-formats/ome-codecs-0.2.3.jar
+7febdc09c000-7febdc09f000 r--s 00020000 fe:00 6848490                    /home/loganaw/Documents/nTracer1/ImageJ/jars/bio-formats/formats-api-6.1.0.jar
+7febdc09f000-7febdc0a5000 r--s 000a1000 fe:00 6848491                    /home/loganaw/Documents/nTracer1/ImageJ/jars/bio-formats/formats-bsd-6.1.0.jar
+7febdc0a5000-7febdc0a7000 r--s 00021000 fe:00 6848517                    /home/loganaw/Documents/nTracer1/ImageJ/jars/bio-formats/ome-common-6.0.3.jar
+7febdc0a7000-7febdc0af000 r--s 00150000 fe:00 6848493                    /home/loganaw/Documents/nTracer1/ImageJ/jars/bio-formats/formats-gpl-6.1.0.jar
+7febdc0af000-7febdc0b5000 r--s 000a0000 fe:00 6848494                    /home/loganaw/Documents/nTracer1/ImageJ/jars/bio-formats/ome-xml-6.0.1.jar
+7febdc0b5000-7febdc0c5000 r--s 000f1000 fe:00 6867611                    /home/loganaw/Documents/nTracer1/ImageJ/jars/bio-formats/ome-jai-0.1.0.jar
+7febdc0c5000-7febdc0d5000 r--s 000ed000 fe:00 6867606                    /home/loganaw/Documents/nTracer1/ImageJ/jars/bio-formats/jai_imageio-5.1.10.jar
+7febdc0d5000-7febdc0da000 r--s 00095000 fe:00 6848513                    /home/loganaw/Documents/nTracer1/ImageJ/jars/bio-formats/specification-6.0.1.jar
+7febdc0da000-7febdc0de000 r--s 0002e000 fe:00 6867570                    /home/loganaw/Documents/nTracer1/ImageJ/jars/script-editor-0.5.1.jar
+7febdc0de000-7febdc0df000 r--s 00000000 fe:00 6867467                    /home/loganaw/Documents/nTracer1/ImageJ/jars/jgrapht-0.0.0-STUB.jar
+7febdc0df000-7febdc0e9000 r--s 00066000 fe:00 6848475                    /home/loganaw/Documents/nTracer1/ImageJ/jars/imagej-common-0.28.2.jar
+7febdc0e9000-7febdc0ef000 r--s 0004b000 fe:00 6867458                    /home/loganaw/Documents/nTracer1/ImageJ/jars/jcommon-1.0.24.jar
+7febdc0ef000-7febdc0f2000 r--s 0001d000 fe:00 6867411                    /home/loganaw/Documents/nTracer1/ImageJ/jars/groovy-json-2.4.8.jar
+7febdc0f2000-7febdc0f4000 r--s 0001f000 fe:00 6867471                    /home/loganaw/Documents/nTracer1/ImageJ/jars/jheaps-0.9.jar
+7febdc0f4000-7febdc0f6000 r--s 00016000 fe:00 6867412                    /home/loganaw/Documents/nTracer1/ImageJ/jars/groovy-templates-2.4.8.jar
+7febdc0f6000-7febdc0fb000 r--s 00060000 fe:00 6867511                    /home/loganaw/Documents/nTracer1/ImageJ/jars/mapdb-1.0.3.jar
+7febdc0fb000-7febdc0fc000 r--s 00000000 fe:00 6867488                    /home/loganaw/Documents/nTracer1/ImageJ/jars/jogl-all-main-2.3.2.jar
+7febdc0fc000-7febdc101000 r--s 00031000 fe:00 6867484                    /home/loganaw/Documents/nTracer1/ImageJ/jars/jocl-2.3.2.jar
+7febdc101000-7febdc102000 r--s 00000000 fe:00 6867485                    /home/loganaw/Documents/nTracer1/ImageJ/jars/jocl-main-2.3.2.jar
+7febdc102000-7febdc104000 r--s 0000f000 fe:00 6867482                    /home/loganaw/Documents/nTracer1/ImageJ/jars/joal-2.3.2.jar
+7febdc104000-7febdc105000 r--s 00000000 fe:00 6867483                    /home/loganaw/Documents/nTracer1/ImageJ/jars/joal-main-2.3.2.jar
+7febdc105000-7febdc106000 r--s 00001000 fe:00 6867561                    /home/loganaw/Documents/nTracer1/ImageJ/jars/scijava-config-2.0.2.jar
+7febdc106000-7febdc108000 r--s 00008000 fe:00 6867555                    /home/loganaw/Documents/nTracer1/ImageJ/jars/scifio-cli-0.5.0.jar
+7febdc108000-7febdc109000 r--s 00004000 fe:00 6867558                    /home/loganaw/Documents/nTracer1/ImageJ/jars/scifio-lifesci-0.8.0.jar
+7febdc109000-7febdc10b000 r--s 00006000 fe:00 6867556                    /home/loganaw/Documents/nTracer1/ImageJ/jars/scifio-hdf5-0.1.3.jar
+7febdc10b000-7febdc10d000 r--s 00004000 fe:00 6867554                    /home/loganaw/Documents/nTracer1/ImageJ/jars/scifio-bf-compat-3.0.0.jar
+7febdc10d000-7febdc10f000 r--s 0000d000 fe:00 6867587                    /home/loganaw/Documents/nTracer1/ImageJ/jars/trakem2-transform-1.0.1.jar
+7febdc10f000-7febdc110000 r--s 0000b000 fe:00 6847088                    /home/loganaw/Documents/nTracer1/ImageJ/jars/VectorString-2.0.2.jar
+7febdc110000-7febdc116000 r--s 00081000 fe:00 6867540                    /home/loganaw/Documents/nTracer1/ImageJ/jars/postgresql-9.1-901-1.jdbc4.jar
+7febdc116000-7febdc117000 r--s 00001000 fe:00 6847086                    /home/loganaw/Documents/nTracer1/ImageJ/jars/T2-TreelineGraph-1.1.2.jar
+7febdc117000-7febdc12b000 r--s 001bd000 fe:00 6867452                    /home/loganaw/Documents/nTracer1/ImageJ/jars/jai-core-1.1.3.jar
+7febdc12b000-7febdc12f000 r--s 0003c000 fe:00 6867451                    /home/loganaw/Documents/nTracer1/ImageJ/jars/jai-codec-1.1.3.jar
+7febdc12f000-7febdc131000 r--s 00149000 fe:00 6847085                    /home/loganaw/Documents/nTracer1/ImageJ/jars/T2-NIT-1.1.2.jar
+7febdc131000-7febdc134000 r--s 00018000 fe:00 6867582                    /home/loganaw/Documents/nTracer1/ImageJ/jars/spim_data-2.2.2.jar
+7febdc134000-7febdc136000 r--s 00014000 fe:00 6848550                    /home/loganaw/Documents/nTracer1/ImageJ/jars/bigdataviewer-vistools-1.0.0-beta-11.jar
+7febdc136000-7febdc13d000 r--s 00043000 fe:00 6867581                    /home/loganaw/Documents/nTracer1/ImageJ/jars/snakeyaml-1.23.jar
+7febdc13d000-7febdc140000 r--s 0001b000 fe:00 6867590                    /home/loganaw/Documents/nTracer1/ImageJ/jars/ui-behaviour-1.7.4.jar
+7febdc140000-7febdc145000 r--s 00036000 fe:00 6867414                    /home/loganaw/Documents/nTracer1/ImageJ/jars/gson-2.8.5.jar
+7febdc145000-7febdc14e000 r--s 00071000 fe:00 6848548                    /home/loganaw/Documents/nTracer1/ImageJ/jars/bigdataviewer-core-5.1.0.jar
+7febdc14e000-7febdc155000 r--s 0004b000 fe:00 6848727                    /home/loganaw/Documents/nTracer1/ImageJ/jars/commons-codec-1.11.jar
+7febdc155000-7febdc157000 r--s 0000e000 fe:00 6867457                    /home/loganaw/Documents/nTracer1/ImageJ/jars/jcommander-1.48.jar
+7febdc157000-7febdc164000 r--s 00083000 fe:00 6848755                    /home/loganaw/Documents/nTracer1/ImageJ/jars/commons-collections-3.2.2.jar
+7febdc164000-7febdc169000 r--s 00038000 fe:00 6848720                    /home/loganaw/Documents/nTracer1/ImageJ/jars/commons-beanutils-1.9.3.jar
+7febdc169000-7febdc16b000 r--s 00012000 fe:00 6867534                    /home/loganaw/Documents/nTracer1/ImageJ/jars/opencsv-3.9.jar
+7febdc16b000-7febdc16d000 r--s 0000e000 fe:00 6867445                    /home/loganaw/Documents/nTracer1/ImageJ/jars/imglib2-ui-2.0.0.jar
+7febdc16d000-7febdc16e000 r--s 00003000 fe:00 6867594                    /home/loganaw/Documents/nTracer1/ImageJ/jars/weave_jy2java-2.1.1.jar
+7febdc16e000-7febdc170000 r--s 00007000 fe:00 6867465                    /home/loganaw/Documents/nTracer1/ImageJ/jars/jgoodies-common-1.7.0.jar
+7febdc170000-7febdc172000 r--s 0001b000 fe:00 6867466                    /home/loganaw/Documents/nTracer1/ImageJ/jars/jgoodies-forms-1.7.2.jar
+7febdc172000-7febdc183000 r--s 000c5000 fe:00 6867507                    /home/loganaw/Documents/nTracer1/ImageJ/jars/legacy-imglib1-1.1.9.jar
+7febdc183000-7febdc187000 r--s 00036000 fe:00 6867454                    /home/loganaw/Documents/nTracer1/ImageJ/jars/javacpp-0.11.jar
+7febdc187000-7febdc18d000 r--s 00031000 fe:00 6867398                    /home/loganaw/Documents/nTracer1/ImageJ/jars/ffmpeg-2.6.1-0.11.jar
+7febdc18d000-7febdc1a8000 r--s 008d1000 fe:00 6867470                    /home/loganaw/Documents/nTracer1/ImageJ/jars/jhdf5-14.12.6.jar
+7febdc1a8000-7febdc1aa000 r--s 00015000 fe:00 6867401                    /home/loganaw/Documents/nTracer1/ImageJ/jars/fiji-lib-2.1.2.jar
+7febdc1aa000-7febdc1ab000 r--s 0000a000 fe:00 6867536                    /home/loganaw/Documents/nTracer1/ImageJ/jars/pal-optimization-2.0.1.jar
+7febdc1ab000-7febdc1b2000 r--s 00095000 fe:00 6847087                    /home/loganaw/Documents/nTracer1/ImageJ/jars/VIB-lib-2.2.0.jar
+7febdc1b2000-7febdc1bd000 r--s 000b6000 fe:00 6867469                    /home/loganaw/Documents/nTracer1/ImageJ/jars/jgraphx-3.4.1.3.jar
+7febdc1bd000-7febdc1c2000 r--s 00032000 fe:00 6848542                    /home/loganaw/Documents/nTracer1/ImageJ/jars/batik-svggen-1.10.jar
+7febdc1c2000-7febdc1c4000 r--s 00002000 fe:00 6847530                    /home/loganaw/Documents/nTracer1/ImageJ/jars/batik-ext-1.10.jar
+7febdc1c4000-7febdc1c8000 r--s 00029000 fe:00 6847349                    /home/loganaw/Documents/nTracer1/ImageJ/jars/batik-dom-1.10.jar
+7febdc1c8000-7febdc1ce000 r--s 00045000 fe:00 6867460                    /home/loganaw/Documents/nTracer1/ImageJ/jars/jdom2-2.0.6.jar
+7febdc1ce000-7febdc1d0000 r--s 0000a000 fe:00 6867496                    /home/loganaw/Documents/nTracer1/ImageJ/jars/json-20090211.jar
+7febdc1d0000-7febdc1d5000 r--s 00018000 fe:00 6847083                    /home/loganaw/Documents/nTracer1/ImageJ/jars/JWlz-1.4.0.jar
+7febdc1d5000-7febdc207000 r--s 0042f000 fe:00 6867528                    /home/loganaw/Documents/nTracer1/ImageJ/jars/netcdf-4.3.22.jar
+7febdc207000-7febdc21e000 r--s 00112000 fe:00 6867597                    /home/loganaw/Documents/nTracer1/ImageJ/jars/xercesImpl-2.8.1.jar
+7febdc21e000-7febdc220000 r--s 0001b000 fe:00 6867600                    /home/loganaw/Documents/nTracer1/ImageJ/jars/xmpcore-5.1.2.jar
+7febdc220000-7febdc224000 r--s 00030000 fe:00 6867516                    /home/loganaw/Documents/nTracer1/ImageJ/jars/metadata-extractor-2.6.2.jar
+7febdc224000-7febdc227000 r--s 00018000 fe:00 6867538                    /home/loganaw/Documents/nTracer1/ImageJ/jars/perf4j-0.9.13.jar
+7febdc227000-7febdc228000 r--s 00004000 fe:00 6867527                    /home/loganaw/Documents/nTracer1/ImageJ/jars/native-lib-loader-2.3.2.jar
+7febdc228000-7febdc22e000 r--s 00041000 fe:00 6867509                    /home/loganaw/Documents/nTracer1/ImageJ/jars/logback-classic-1.2.3.jar
+7febdc22e000-7febdc230000 r--s 0000c000 fe:00 6867492                    /home/loganaw/Documents/nTracer1/ImageJ/jars/jply-0.2.0.jar
+7febdc230000-7febdc232000 r--s 00004000 fe:00 6847084                    /home/loganaw/Documents/nTracer1/ImageJ/jars/OMEVisual-1.1.2.jar
+7febdc232000-7febdc23b000 r--s 0007f000 fe:00 6867461                    /home/loganaw/Documents/nTracer1/ImageJ/jars/jep-2.4.2.jar
+7febdc23b000-7febdc23f000 r--s 00023000 fe:00 6867440                    /home/loganaw/Documents/nTracer1/ImageJ/jars/imglib2-algorithm-gpl-0.2.3.jar
+7febdc23f000-7febdc241000 r--s 00016000 fe:00 7086700                    /usr/lib/jvm/java-8-openjdk/jre/lib/jce.jar
+7febdc241000-7febdc245000 r--s 000a1000 fe:00 7086708                    /usr/lib/jvm/java-8-openjdk/jre/lib/jsse.jar
+7febdc245000-7febdc250000 r--s 0015c000 fe:00 6867491                    /home/loganaw/Documents/nTracer1/ImageJ/jars/jpedalSTD-2.80b11.jar
+7febdc250000-7febdc251000 r--s 00007000 fe:00 6867418                    /home/loganaw/Documents/nTracer1/ImageJ/jars/image4j-0.7.jar
+7febdc251000-7febdc254000 r--s 0002c000 fe:00 6848276                    /home/loganaw/Documents/nTracer1/ImageJ/jars/batik-gvt-1.10.jar
+7febdc254000-7febdc259000 r--s 00010000 fe:00 6867598                    /home/loganaw/Documents/nTracer1/ImageJ/jars/xml-apis-ext-1.3.04.jar
+7febdc259000-7febdc264000 r--s 00099000 fe:00 6867599                    /home/loganaw/Documents/nTracer1/ImageJ/jars/xmlgraphics-commons-2.3.jar
+7febdc264000-7febdc266000 r--s 00007000 fe:00 6848546                    /home/loganaw/Documents/nTracer1/ImageJ/jars/batik-xml-1.10.jar
+7febdc266000-7febdc267000 r--s 00002000 fe:00 6848527                    /home/loganaw/Documents/nTracer1/ImageJ/jars/batik-i18n-1.10.jar
+7febdc267000-7febdc269000 r--s 00001000 fe:00 6847102                    /home/loganaw/Documents/nTracer1/ImageJ/jars/batik-constants-1.10.jar
+7febdc269000-7febdc26c000 r--s 0001d000 fe:00 6848544                    /home/loganaw/Documents/nTracer1/ImageJ/jars/batik-util-1.10.jar
+7febdc26c000-7febdc270000 r--s 00035000 fe:00 6848541                    /home/loganaw/Documents/nTracer1/ImageJ/jars/batik-svg-dom-1.10.jar
+7febdc270000-7febdc272000 r--s 00005000 fe:00 6848536                    /home/loganaw/Documents/nTracer1/ImageJ/jars/batik-script-1.10.jar
+7febdc272000-7febdc274000 r--s 00011000 fe:00 6848530                    /home/loganaw/Documents/nTracer1/ImageJ/jars/batik-parser-1.10.jar
+7febdc274000-7febdc27c000 r--s 00048000 fe:00 6847337                    /home/loganaw/Documents/nTracer1/ImageJ/jars/batik-css-1.10.jar
+7febdc27c000-7febdc284000 r--s 00060000 fe:00 6847100                    /home/loganaw/Documents/nTracer1/ImageJ/jars/batik-awt-util-1.10.jar
+7febdc284000-7febdc290000 r--s 0006a000 fe:00 6847099                    /home/loganaw/Documents/nTracer1/ImageJ/jars/batik-anim-1.10.jar
+7febdc290000-7febdc29c000 r--s 0009f000 fe:00 6847101                    /home/loganaw/Documents/nTracer1/ImageJ/jars/batik-bridge-1.10.jar
+7febdc29c000-7febdc2a1000 r--s 00052000 fe:00 6867523                    /home/loganaw/Documents/nTracer1/ImageJ/jars/mpicbg-1.2.0.jar
+7febdc2a1000-7febdc2b9000 r--s 0021f000 fe:00 6867447                    /home/loganaw/Documents/nTracer1/ImageJ/jars/itextpdf-5.5.13.jar
+7febdc2b9000-7febdc2bd000 r--s 00167000 fe:00 6867474                    /home/loganaw/Documents/nTracer1/ImageJ/jars/jna-4.5.2.jar
+7febdc2bd000-7febdc2c2000 r--s 0003d000 fe:00 6867524                    /home/loganaw/Documents/nTracer1/ImageJ/jars/mtj-1.0.4.jar
+7febdc2c2000-7febdc2c6000 r--s 0002f000 fe:00 6848553                    /home/loganaw/Documents/nTracer1/ImageJ/jars/bounce-0.18.jar
+7febdc2c6000-7febdc327000 r--s 00873000 fe:00 6867595                    /home/loganaw/Documents/nTracer1/ImageJ/jars/weka-dev-3.9.3.jar
+7febdc327000-7febdc336000 r--s 000f1000 fe:00 6867450                    /home/loganaw/Documents/nTracer1/ImageJ/jars/j3dutils-1.6.0-scijava-2.jar
+7febdc336000-7febdc35a000 r--s 0031e000 fe:00 6867487                    /home/loganaw/Documents/nTracer1/ImageJ/jars/jogl-all-2.3.2.jar
+7febdc35a000-7febdc360000 r--s 0004f000 fe:00 6867405                    /home/loganaw/Documents/nTracer1/ImageJ/jars/gluegen-rt-2.3.2.jar
+7febdc360000-7febdc36d000 r--s 001ce000 fe:00 6867449                    /home/loganaw/Documents/nTracer1/ImageJ/jars/j3dcore-1.6.0-scijava-2.jar
+7febdc36d000-7febdc370000 r--s 00026000 fe:00 6867593                    /home/loganaw/Documents/nTracer1/ImageJ/jars/vecmath-1.6.0-scijava-2.jar
+7febdc370000-7febdc376000 r--s 00042000 fe:00 6867497                    /home/loganaw/Documents/nTracer1/ImageJ/jars/jsoup-1.7.2.jar
+7febdc376000-7febdc378000 r--s 00004000 fe:00 6847089                    /home/loganaw/Documents/nTracer1/ImageJ/jars/ahocorasick-0.2.4.jar
+7febdc378000-7febdc37a000 r--s 00002000 fe:00 6867585                    /home/loganaw/Documents/nTracer1/ImageJ/jars/swing-worker-1.1.jar
+7febdc37a000-7febdc381000 r--s 0004d000 fe:00 6867402                    /home/loganaw/Documents/nTracer1/ImageJ/jars/filters-2.0.235.jar
+7febdc381000-7febdc39c000 r--s 00139000 fe:00 6867586                    /home/loganaw/Documents/nTracer1/ImageJ/jars/swingx-1.6.1.jar
+7febdc39c000-7febdc39e000 r--s 0000c000 fe:00 6867533                    /home/loganaw/Documents/nTracer1/ImageJ/jars/op-finder-0.1.3.jar
+7febdc39e000-7febdc3a2000 r--s 00021000 fe:00 6847096                    /home/loganaw/Documents/nTracer1/ImageJ/jars/autocomplete-2.6.1.jar
+7febdc3a2000-7febdc3af000 r--s 00116000 fe:00 6867547                    /home/loganaw/Documents/nTracer1/ImageJ/jars/rhino-1.7.6.jar
+7febdc3af000-7febdc3bf000 r--s 00104000 fe:00 6867505                    /home/loganaw/Documents/nTracer1/ImageJ/jars/languagesupport-2.6.0.jar
+7febdc3bf000-7febdc3cb000 r--s 0010f000 fe:00 6867548                    /home/loganaw/Documents/nTracer1/ImageJ/jars/rsyntaxtextarea-2.6.1.jar
+7febdc3cb000-7febdc3d3000 r--s 00073000 fe:00 6859769                    /home/loganaw/Documents/nTracer1/ImageJ/jars/commons-lang3-3.8.1.jar
+7febdc3d3000-7febdc3d5000 r--s 00000000 fe:00 6867565                    /home/loganaw/Documents/nTracer1/ImageJ/jars/scijava-plugins-text-plain-0.1.3.jar
+7febdc3d5000-7febdc3d7000 r--s 00009000 fe:00 6867512                    /home/loganaw/Documents/nTracer1/ImageJ/jars/markdownj-0.3.0-1.0.2b4.jar
+7febdc3d7000-7febdc3d9000 r--s 00000000 fe:00 6867564                    /home/loganaw/Documents/nTracer1/ImageJ/jars/scijava-plugins-text-markdown-0.1.3.jar
+7febdc3d9000-7febdc3db000 r--s 00001000 fe:00 6867563                    /home/loganaw/Documents/nTracer1/ImageJ/jars/scijava-plugins-platforms-0.3.1.jar
+7febdc3db000-7febdc3dc000 r--s 00005000 fe:00 6867562                    /home/loganaw/Documents/nTracer1/ImageJ/jars/scijava-plugins-commands-0.2.3.jar
+7febdc3dc000-7febdc3dd000 r--s 00002000 fe:00 6867434                    /home/loganaw/Documents/nTracer1/ImageJ/jars/imagej-ui-awt-0.3.1.jar
+7febdc3dd000-7febdc3fe000 r--s 001e0000 fe:00 6867472                    /home/loganaw/Documents/nTracer1/ImageJ/jars/jhotdraw-7.6.0.jar
+7febdc3fe000-7febdc40f000 r--s 0016c000 fe:00 6867464                    /home/loganaw/Documents/nTracer1/ImageJ/jars/jfreechart-1.5.0.jar
+7febdc40f000-7febdc415000 r--s 0003a000 fe:00 6867435                    /home/loganaw/Documents/nTracer1/ImageJ/jars/imagej-ui-swing-0.22.0.jar
+7febdc415000-7febdc442000 r--s 0084f000 fe:00 6867494                    /home/loganaw/Documents/nTracer1/ImageJ/jars/jruby-stdlib-9.1.17.0.jar
+7febdc442000-7febdc444000 r--s 00000000 fe:00 6867522                    /home/loganaw/Documents/nTracer1/ImageJ/jars/modulator-1.0.jar
+7febdc444000-7febdc445000 r--s 00000000 fe:00 6867591                    /home/loganaw/Documents/nTracer1/ImageJ/jars/unsafe-fences-1.0.jar
+7febdc445000-7febdc446000 r--s 00003000 fe:00 6867535                    /home/loganaw/Documents/nTracer1/ImageJ/jars/options-1.4.jar
+7febdc446000-7febdc447000 r--s 0000a000 fe:00 6867446                    /home/loganaw/Documents/nTracer1/ImageJ/jars/invokebinder-1.10.jar
+7febdc447000-7febdc449000 r--s 00003000 fe:00 6867394                    /home/loganaw/Documents/nTracer1/ImageJ/jars/dirgra-0.3.jar
+7febdc449000-7febdc459000 r--s 00182000 fe:00 6867456                    /home/loganaw/Documents/nTracer1/ImageJ/jars/jcodings-1.0.27.jar
+7febdc459000-7febdc45a000 r--s 00002000 fe:00 6848555                    /home/loganaw/Documents/nTracer1/ImageJ/jars/bytelist-1.0.15.jar
+7febdc45a000-7febdc45d000 r--s 0002f000 fe:00 6867490                    /home/loganaw/Documents/nTracer1/ImageJ/jars/joni-2.1.15.jar
+7febdc45d000-7febdc45f000 r--s 000a1000 fe:00 6867462                    /home/loganaw/Documents/nTracer1/ImageJ/jars/jffi-1.2.16-native.jar
+7febdc45f000-7febdc462000 r--s 00022000 fe:00 6867463                    /home/loganaw/Documents/nTracer1/ImageJ/jars/jffi-1.2.16.jar
+7febdc462000-7febdc468000 r--s 00052000 fe:00 6867475                    /home/loganaw/Documents/nTracer1/ImageJ/jars/jnr-constants-0.9.9.jar
+7febdc468000-7febdc46d000 r--s 00036000 fe:00 6867479                    /home/loganaw/Documents/nTracer1/ImageJ/jars/jnr-posix-3.0.44.jar
+7febdc46d000-7febdc46e000 r--s 0000a000 fe:00 6867480                    /home/loganaw/Documents/nTracer1/ImageJ/jars/jnr-unixsocket-0.17.jar
+7febdc46e000-7febdc46f000 r--s 00006000 fe:00 6867476                    /home/loganaw/Documents/nTracer1/ImageJ/jars/jnr-enxio-0.16.jar
+7febdc46f000-7febdc472000 r--s 0000d000 fe:00 6867478                    /home/loganaw/Documents/nTracer1/ImageJ/jars/jnr-netdb-1.1.6.jar
+7febdc472000-7febdc526000 r--s 00864000 fe:00 6867493                    /home/loganaw/Documents/nTracer1/ImageJ/jars/jruby-core-9.1.17.0.jar
+7febdc526000-7febdc528000 r--s 00001000 fe:00 6867576                    /home/loganaw/Documents/nTracer1/ImageJ/jars/scripting-jruby-0.3.0.jar
+7febdc528000-7febdc52e000 r--s 00080000 fe:00 6867552                    /home/loganaw/Documents/nTracer1/ImageJ/jars/scala-xml_2.12-1.0.6.jar
+7febdc52e000-7febdc550000 r--s 0033e000 fe:00 6867551                    /home/loganaw/Documents/nTracer1/ImageJ/jars/scala-reflect-2.12.1.jar
+7febdc550000-7febdc588000 r--s 004d0000 fe:00 6867550                    /home/loganaw/Documents/nTracer1/ImageJ/jars/scala-library-2.12.1.jar
+7febdc588000-7febdc5d3000 r--s 00910000 fe:00 6867549                    /home/loganaw/Documents/nTracer1/ImageJ/jars/scala-compiler-2.12.1.jar
+7febdc5d3000-7febdc5d4000 r--s 00001000 fe:00 6867579                    /home/loganaw/Documents/nTracer1/ImageJ/jars/scripting-scala-0.2.1.jar
+7febdc5d4000-7febdc5d6000 r--s 0000e000 fe:00 6864489                    /home/loganaw/Documents/nTracer1/ImageJ/jars/commons-logging-1.2.jar
+7febdc5d6000-7febdc5d9000 r--s 0001e000 fe:00 6867409                    /home/loganaw/Documents/nTracer1/ImageJ/jars/graphics-0.8.1906.jar
+7febdc5d9000-7febdc5dc000 r--s 00014000 fe:00 6867408                    /home/loganaw/Documents/nTracer1/ImageJ/jars/grDevices-0.8.1906.jar
+7febdc5dc000-7febdc5e3000 r--s 0005a000 fe:00 6867592                    /home/loganaw/Documents/nTracer1/ImageJ/jars/utils-0.8.1906.jar
+7febdc5e3000-7febdc5e6000 r--s 00026000 fe:00 6867393                    /home/loganaw/Documents/nTracer1/ImageJ/jars/datasets-0.8.1906.jar
+7febdc5e6000-7febdc5f2000 r--s 0013b000 fe:00 6867517                    /home/loganaw/Documents/nTracer1/ImageJ/jars/methods-0.8.1906.jar
+7febdc5f2000-7febdc5f4000 r--s 00013000 fe:00 6867545                    /home/loganaw/Documents/nTracer1/ImageJ/jars/renjin-gnur-runtime-0.8.1906.jar
+7febdc5f4000-7febdc5f5000 r--s 00005000 fe:00 6867543                    /home/loganaw/Documents/nTracer1/ImageJ/jars/renjin-appl-0.8.1906.jar
+7febdc5f5000-7febdc601000 r--s 000ae000 fe:00 6867583                    /home/loganaw/Documents/nTracer1/ImageJ/jars/stats-0.8.1906.jar
+7febdc601000-7febdc605000 r--s 00022000 fe:00 6848558                    /home/loganaw/Documents/nTracer1/ImageJ/jars/codemodel-2.6.jar
+7febdc605000-7febdc607000 r--s 00009000 fe:00 6847093                    /home/loganaw/Documents/nTracer1/ImageJ/jars/asm-commons-5.0.4.jar
+7febdc607000-7febdc609000 r--s 00006000 fe:00 6847094                    /home/loganaw/Documents/nTracer1/ImageJ/jars/asm-tree-5.0.4.jar
+7febdc609000-7febdc60a000 r--s 0000a000 fe:00 6847095                    /home/loganaw/Documents/nTracer1/ImageJ/jars/asm-util-5.0.4.jar
+7febdc60a000-7febdc60c000 r--s 0000c000 fe:00 6847091                    /home/loganaw/Documents/nTracer1/ImageJ/jars/asm-5.0.4.jar
+7febdc60c000-7febdc60e000 r--s 0000e000 fe:00 6867501                    /home/loganaw/Documents/nTracer1/ImageJ/jars/jung-graph-impl-2.0.1.jar
+7febdc60e000-7febdc61a000 r--s 00076000 fe:00 6848559                    /home/loganaw/Documents/nTracer1/ImageJ/jars/collections-generic-4.01.jar
+7febdc61a000-7febdc61d000 r--s 00008000 fe:00 6867500                    /home/loganaw/Documents/nTracer1/ImageJ/jars/jung-api-2.0.1.jar
+7febdc61d000-7febdc628000 r--s 0006f000 fe:00 6867499                    /home/loganaw/Documents/nTracer1/ImageJ/jars/jtransforms-2.4.jar
+7febdc628000-7febdc62c000 r--s 00014000 fe:00 6867601                    /home/loganaw/Documents/nTracer1/ImageJ/jars/xz-1.0.jar
+7febdc62c000-7febdc62e000 r--s 00005000 fe:00 6867542                    /home/loganaw/Documents/nTracer1/ImageJ/jars/regexp-1.3.jar
+7febdc62e000-7febdc630000 r--s 00008000 fe:00 6867514                    /home/loganaw/Documents/nTracer1/ImageJ/jars/maven-scm-provider-svn-commons-1.4.jar
+7febdc630000-7febdc633000 r--s 0000f000 fe:00 6867515                    /home/loganaw/Documents/nTracer1/ImageJ/jars/maven-scm-provider-svnexe-1.4.jar
+7febdc633000-7febdc638000 r--s 00039000 fe:00 6867539                    /home/loganaw/Documents/nTracer1/ImageJ/jars/plexus-utils-1.5.6.jar
+7febdc638000-7febdc63c000 r--s 00014000 fe:00 6867513                    /home/loganaw/Documents/nTracer1/ImageJ/jars/maven-scm-api-1.4.jar
+7febdc63c000-7febdc645000 r--s 0005d000 fe:00 6859929                    /home/loganaw/Documents/nTracer1/ImageJ/jars/commons-vfs2-2.0.jar
+7febdc645000-7febdc647000 r--s 0000d000 fe:00 6848552                    /home/loganaw/Documents/nTracer1/ImageJ/jars/blas-0.8.jar
+7febdc647000-7febdc648000 r--s 00000000 fe:00 6867596                    /home/loganaw/Documents/nTracer1/ImageJ/jars/xerbla-0.8.jar
+7febdc648000-7febdc64a000 r--s 0000f000 fe:00 6867397                    /home/loganaw/Documents/nTracer1/ImageJ/jars/f2jutil-0.8.jar
+7febdc64a000-7febdc658000 r--s 000dd000 fe:00 6867506                    /home/loganaw/Documents/nTracer1/ImageJ/jars/lapack-0.8.jar
+7febdc658000-7febdc659000 r--s 00093000 fe:00 6867529                    /home/loganaw/Documents/nTracer1/ImageJ/jars/netlib-java-0.9.3-renjin-patched-2.jar
+7febdc659000-7febdc65b000 r--s 00004000 fe:00 6867403                    /home/loganaw/Documents/nTracer1/ImageJ/jars/gcc-runtime-0.8.1906.jar
+7febdc65b000-7febdc66e000 r--s 000df000 fe:00 6864506                    /home/loganaw/Documents/nTracer1/ImageJ/jars/commons-math-2.2.jar
+7febdc66e000-7febdc69d000 r--s 002e2000 fe:00 6867544                    /home/loganaw/Documents/nTracer1/ImageJ/jars/renjin-core-0.8.1906.jar
+7febdc69d000-7febdc69f000 r--s 00003000 fe:00 6867546                    /home/loganaw/Documents/nTracer1/ImageJ/jars/renjin-script-engine-0.8.1906.jar
+7febdc69f000-7febdc6a0000 r--s 00001000 fe:00 6867578                    /home/loganaw/Documents/nTracer1/ImageJ/jars/scripting-renjin-0.2.2.jar
+7febdc6a0000-7febdc6f0000 rw-p 00000000 00:00 0 
+7febdc6f0000-7febdc8e3000 r--s 025ab000 fe:00 6867502                    /home/loganaw/Documents/nTracer1/ImageJ/jars/jython-shaded-2.7.1.jar
+7febdc8e3000-7febdc8e4000 r--s 00001000 fe:00 6867577                    /home/loganaw/Documents/nTracer1/ImageJ/jars/scripting-jython-0.4.2.jar
+7febdc8e4000-7febdc8e7000 r--s 0002c000 fe:00 6867602                    /home/loganaw/Documents/nTracer1/ImageJ/jars/yecht-1.0.jar
+7febdc8e7000-7febdc8e9000 r--s 00007000 fe:00 6867526                    /home/loganaw/Documents/nTracer1/ImageJ/jars/nailgun-server-0.9.1.jar
+7febdc8e9000-7febdc8f9000 r--s 0008e000 fe:00 6867477                    /home/loganaw/Documents/nTracer1/ImageJ/jars/jnr-ffi-1.0.7.jar
+7febdc8f9000-7febdc8fc000 r--s 00033000 fe:00 6867481                    /home/loganaw/Documents/nTracer1/ImageJ/jars/jnr-x86asm-1.0.2.jar
+7febdc8fc000-7febdc8fd000 r--s 00004000 fe:00 6847092                    /home/loganaw/Documents/nTracer1/ImageJ/jars/asm-analysis-4.0.jar
+7febdc8fd000-7febdc8fe000 r--s 0000e000 fe:00 6867520                    /home/loganaw/Documents/nTracer1/ImageJ/jars/minimaven-2.2.1.jar
+7febdc8fe000-7febdc8ff000 r--s 00004000 fe:00 6867574                    /home/loganaw/Documents/nTracer1/ImageJ/jars/scripting-java-0.4.1.jar
+7febdc8ff000-7febdc900000 r--s 0000e000 fe:00 6867498                    /home/loganaw/Documents/nTracer1/ImageJ/jars/jsr166y-1.7.0.jar
+7febdc900000-7febdc906000 r--s 00037000 fe:00 6867525                    /home/loganaw/Documents/nTracer1/ImageJ/jars/multiverse-core-0.7.0.jar
+7febdc906000-7febdc922000 r--s 00136000 fe:00 6867407                    /home/loganaw/Documents/nTracer1/ImageJ/jars/gpars-1.2.1.jar
+7febdc922000-7febdc938000 r--s 00124000 fe:00 6867448                    /home/loganaw/Documents/nTracer1/ImageJ/jars/ivy-2.4.0.jar
+7febdc938000-7febdc984000 r--s 0040c000 fe:00 6867410                    /home/loganaw/Documents/nTracer1/ImageJ/jars/groovy-2.4.8.jar
+7febdc984000-7febdc985000 r--s 00003000 fe:00 6867573                    /home/loganaw/Documents/nTracer1/ImageJ/jars/scripting-groovy-0.2.7.jar
+7febdc985000-7febdc9c8000 r--s 00332000 fe:00 6848557                    /home/loganaw/Documents/nTracer1/ImageJ/jars/clojure-1.8.0.jar
+7febdc9c8000-7febdc9ca000 r--s 00001000 fe:00 6867572                    /home/loganaw/Documents/nTracer1/ImageJ/jars/scripting-clojure-0.1.6.jar
+7febdc9ca000-7febdc9cf000 r--s 0005a000 fe:00 6848554                    /home/loganaw/Documents/nTracer1/ImageJ/jars/bsh-2.0b6.jar
+7febdc9cf000-7febdc9d0000 r--s 00002000 fe:00 6867571                    /home/loganaw/Documents/nTracer1/ImageJ/jars/scripting-beanshell-0.3.3.jar
+7febdc9d0000-7febdc9d3000 r--s 00014000 fe:00 6867442                    /home/loganaw/Documents/nTracer1/ImageJ/jars/imglib2-ij-2.0.0-beta-44.jar
+7febdc9d3000-7febdc9d5000 r--s 00007000 fe:00 6867433                    /home/loganaw/Documents/nTracer1/ImageJ/jars/imagej-scripting-0.8.2.jar
+7febdc9d5000-7febdc9d7000 r--s 00003000 fe:00 6867432                    /home/loganaw/Documents/nTracer1/ImageJ/jars/imagej-plugins-uploader-webdav-0.2.2.jar
+7febdc9d7000-7febdc9db000 r--s 00041000 fe:00 6867495                    /home/loganaw/Documents/nTracer1/ImageJ/jars/jsch-0.1.55.jar
+7febdc9db000-7febdc9dd000 r--s 00004000 fe:00 6867431                    /home/loganaw/Documents/nTracer1/ImageJ/jars/imagej-plugins-uploader-ssh-0.3.2.jar
+7febdc9dd000-7febdc9df000 r--s 0000b000 fe:00 6867430                    /home/loganaw/Documents/nTracer1/ImageJ/jars/imagej-plugins-tools-0.3.1.jar
+7febdc9df000-7febdc9e1000 r--s 00003000 fe:00 6847097                    /home/loganaw/Documents/nTracer1/ImageJ/jars/base64-2.3.8.jar
+7febdc9e1000-7febdc9e7000 r--s 00051000 fe:00 6867429                    /home/loganaw/Documents/nTracer1/ImageJ/jars/imagej-plugins-commands-0.8.1.jar
+7febdc9e7000-7febdc9f9000 r--s 0009c000 fe:00 6867421                    /home/loganaw/Documents/nTracer1/ImageJ/jars/imagej-deprecated-0.1.2.jar
+7febdc9f9000-7febdc9fd000 r--s 00031000 fe:00 6848783                    /home/loganaw/Documents/nTracer1/ImageJ/jars/commons-io-2.6.jar
+7febdc9fd000-7febdc9ff000 r--s 00004000 fe:00 6847098                    /home/loganaw/Documents/nTracer1/ImageJ/jars/batch-processor-0.3.0.jar
+7febdc9ff000-7febdca00000 r--s 00001000 fe:00 6867428                    /home/loganaw/Documents/nTracer1/ImageJ/jars/imagej-plugins-batch-0.1.1.jar
+7febdca00000-7febdca0a000 r--s 000b4000 fe:00 6867455                    /home/loganaw/Documents/nTracer1/ImageJ/jars/javassist-3.24.0-GA.jar
+7febdca0a000-7febdca0c000 r--s 00007000 fe:00 6867459                    /home/loganaw/Documents/nTracer1/ImageJ/jars/jdatepicker-1.3.2.jar
+7febdca0c000-7febdca0e000 r--s 00005000 fe:00 6867530                    /home/loganaw/Documents/nTracer1/ImageJ/jars/object-inspector-0.1.jar
+7febdca0e000-7febdca10000 r--s 00001000 fe:00 6867584                    /home/loganaw/Documents/nTracer1/ImageJ/jars/swing-checkbox-tree-1.0.2.jar
+7febdca10000-7febdca14000 r--s 0002a000 fe:00 6867569                    /home/loganaw/Documents/nTracer1/ImageJ/jars/scijava-ui-swing-0.12.0.jar
+7febdca14000-7febdca16000 r--s 0000a000 fe:00 6867568                    /home/loganaw/Documents/nTracer1/ImageJ/jars/scijava-ui-awt-0.1.6.jar
+7febdca16000-7febdca28000 r--s 000c9000 fe:00 6867560                    /home/loganaw/Documents/nTracer1/ImageJ/jars/scijava-common-2.76.1.jar
+7febdca28000-7febdca2d000 r--s 00025000 fe:00 6867441                    /home/loganaw/Documents/nTracer1/ImageJ/jars/imglib2-cache-1.0.0-beta-11.jar
+7febdca2d000-7febdca38000 r--s 000f2000 fe:00 6867553                    /home/loganaw/Documents/nTracer1/ImageJ/jars/scifio-0.37.3.jar
+7febdca38000-7febdca3c000 r--s 00038000 fe:00 6867436                    /home/loganaw/Documents/nTracer1/ImageJ/jars/imagej-updater-0.9.3.jar
+7febdca3c000-7febdca3f000 r--s 00099000 fe:00 6867489                    /home/loganaw/Documents/nTracer1/ImageJ/jars/joml-1.9.12.jar
+7febdca3f000-7febdca40000 r--s 0000a000 fe:00 6867537                    /home/loganaw/Documents/nTracer1/ImageJ/jars/parsington-1.0.4.jar
+7febdca40000-7febdca43000 r--s 0001a000 fe:00 6867443                    /home/loganaw/Documents/nTracer1/ImageJ/jars/imglib2-realtransform-2.1.0.jar
+7febdca43000-7febdca4f000 r--s 00087000 fe:00 6867438                    /home/loganaw/Documents/nTracer1/ImageJ/jars/imglib2-algorithm-0.11.1.jar
+7febdca4f000-7febdca7e000 r--s 001a5000 fe:00 6867427                    /home/loganaw/Documents/nTracer1/ImageJ/jars/imagej-ops-0.43.1.jar
+7febdca7e000-7febdcaa5000 r--s 001f6000 fe:00 6867391                    /home/loganaw/Documents/nTracer1/ImageJ/jars/commons-math3-3.6.1.jar
+7febdcaa5000-7febdcaa6000 r--s 00001000 fe:00 6867575                    /home/loganaw/Documents/nTracer1/ImageJ/jars/scripting-javascript-0.4.4.jar
+7febdcaa6000-7febdcaa9000 r--s 0001a000 fe:00 6867541                    /home/loganaw/Documents/nTracer1/ImageJ/jars/prettytime-4.0.1.Final.jar
+7febdcaa9000-7febdcaab000 r--s 00011000 fe:00 6867518                    /home/loganaw/Documents/nTracer1/ImageJ/jars/miglayout-3.7.4-swing.jar
+7febdcaab000-7febdcaad000 r--s 0000e000 fe:00 6867566                    /home/loganaw/Documents/nTracer1/ImageJ/jars/scijava-search-0.5.0.jar
+7febdcaad000-7febdcac2000 r--s 001d7000 fe:00 6867519                    /home/loganaw/Documents/nTracer1/ImageJ/jars/mines-jtk-20151125.jar
+7febdcac2000-7febdcac4000 r--s 00004000 fe:00 6867439                    /home/loganaw/Documents/nTracer1/ImageJ/jars/imglib2-algorithm-fft-0.2.0.jar
+7febdcac4000-7febdcae5000 r--s 0018e000 fe:00 6867532                    /home/loganaw/Documents/nTracer1/ImageJ/jars/ojalgo-45.1.1.jar
+7febdcae5000-7febdcae6000 r--s 00003000 fe:00 6867426                    /home/loganaw/Documents/nTracer1/ImageJ/jars/imagej-notebook-0.3.0.jar
+7febdcae6000-7febdcae8000 r--s 00008000 fe:00 6867567                    /home/loganaw/Documents/nTracer1/ImageJ/jars/scijava-table-0.2.0.jar
+7febdcae8000-7febdcaef000 r--s 0003a000 fe:00 6867444                    /home/loganaw/Documents/nTracer1/ImageJ/jars/imglib2-roi-0.7.0.jar
+7febdcaef000-7febdcb00000 r--s 000aa000 fe:00 6867437                    /home/loganaw/Documents/nTracer1/ImageJ/jars/imglib2-5.6.3.jar
+7febdcb00000-7febdcb02000 r--s 0000b000 fe:00 6867399                    /home/loganaw/Documents/nTracer1/ImageJ/jars/fiji-2.0.0-pre-8.jar
+7febdcb02000-7febdcb10000 r--s 000c3000 fe:00 6867468                    /home/loganaw/Documents/nTracer1/ImageJ/jars/jgrapht-core-1.3.0.jar
+7febdcb10000-7febdcb21000 r--s 0008c000 fe:00 6867486                    /home/loganaw/Documents/nTracer1/ImageJ/jars/joda-time-2.10.1.jar
+7febdcb21000-7febdcb22000 ---p 00000000 00:00 0 
+7febdcb22000-7febdcc22000 rw-p 00000000 00:00 0 
+7febdcc22000-7febdcc25000 ---p 00000000 00:00 0 
+7febdcc25000-7febdcd23000 rw-p 00000000 00:00 0 
+7febdcd23000-7febdcd24000 ---p 00000000 00:00 0 
+7febdcd24000-7febdcd27000 ---p 00000000 00:00 0 
+7febdcd27000-7febdce24000 rw-p 00000000 00:00 0 
+7febdce24000-7febdce25000 ---p 00000000 00:00 0 
+7febdce25000-7febdce28000 ---p 00000000 00:00 0 
+7febdce28000-7febdcf25000 rw-p 00000000 00:00 0 
+7febdcf25000-7febdcf26000 ---p 00000000 00:00 0 
+7febdcf26000-7febdcf29000 ---p 00000000 00:00 0 
+7febdcf29000-7febdd026000 rw-p 00000000 00:00 0 
+7febdd026000-7febdd027000 ---p 00000000 00:00 0 
+7febdd027000-7febdd02a000 ---p 00000000 00:00 0 
+7febdd02a000-7febdd127000 rw-p 00000000 00:00 0 
+7febdd127000-7febdd128000 ---p 00000000 00:00 0 
+7febdd128000-7febdd12b000 ---p 00000000 00:00 0 
+7febdd12b000-7febdd228000 rw-p 00000000 00:00 0 
+7febdd228000-7febdd229000 ---p 00000000 00:00 0 
+7febdd229000-7febdd22c000 ---p 00000000 00:00 0 
+7febdd22c000-7febdd329000 rw-p 00000000 00:00 0 
+7febdd329000-7febdd32a000 ---p 00000000 00:00 0 
+7febdd32a000-7febdd32d000 ---p 00000000 00:00 0 
+7febdd32d000-7febdd42a000 rw-p 00000000 00:00 0 
+7febdd42a000-7febdd42b000 ---p 00000000 00:00 0 
+7febdd42b000-7febdd42e000 ---p 00000000 00:00 0 
+7febdd42e000-7febdd52b000 rw-p 00000000 00:00 0 
+7febdd52b000-7febdd52c000 ---p 00000000 00:00 0 
+7febdd52c000-7febdd52f000 ---p 00000000 00:00 0 
+7febdd52f000-7febdd62c000 rw-p 00000000 00:00 0 
+7febdd62c000-7febdd62d000 ---p 00000000 00:00 0 
+7febdd62d000-7febdd630000 ---p 00000000 00:00 0 
+7febdd630000-7febdd72d000 rw-p 00000000 00:00 0 
+7febdd72d000-7febdd72e000 ---p 00000000 00:00 0 
+7febdd72e000-7febdd731000 ---p 00000000 00:00 0 
+7febdd731000-7febdd82e000 rw-p 00000000 00:00 0 
+7febdd82e000-7febdd82f000 ---p 00000000 00:00 0 
+7febdd82f000-7febdd832000 ---p 00000000 00:00 0 
+7febdd832000-7febdd92f000 rw-p 00000000 00:00 0 
+7febdd92f000-7febdd932000 ---p 00000000 00:00 0 
+7febdd932000-7febdda30000 rw-p 00000000 00:00 0 
+7febdda30000-7febdda33000 ---p 00000000 00:00 0 
+7febdda33000-7febddb31000 rw-p 00000000 00:00 0 
+7febddb31000-7febddb34000 ---p 00000000 00:00 0 
+7febddb34000-7febddc32000 rw-p 00000000 00:00 0 
+7febddc32000-7febddc35000 ---p 00000000 00:00 0 
+7febddc35000-7febddd33000 rw-p 00000000 00:00 0 
+7febddd33000-7febddd34000 ---p 00000000 00:00 0 
+7febddd34000-7febdde34000 rw-p 00000000 00:00 0 
+7febdde34000-7febde004000 r--s 03c3a000 fe:00 7086721                    /usr/lib/jvm/java-8-openjdk/jre/lib/rt.jar
+7febde004000-7febde87a000 rw-p 00000000 00:00 0 
+7febde87a000-7febdf2f3000 rw-p 00000000 00:00 0 
+7febdf2f3000-7febdf2f4000 ---p 00000000 00:00 0 
+7febdf2f4000-7febe0000000 rw-p 00000000 00:00 0 
+7febe0000000-7febe0021000 rw-p 00000000 00:00 0 
+7febe0021000-7febe4000000 ---p 00000000 00:00 0 
+7febe4000000-7febe4021000 rw-p 00000000 00:00 0 
+7febe4021000-7febe8000000 ---p 00000000 00:00 0 
+7febe8000000-7febe8021000 rw-p 00000000 00:00 0 
+7febe8021000-7febec000000 ---p 00000000 00:00 0 
+7febec000000-7febec021000 rw-p 00000000 00:00 0 
+7febec021000-7febf0000000 ---p 00000000 00:00 0 
+7febf0000000-7febf0021000 rw-p 00000000 00:00 0 
+7febf0021000-7febf4000000 ---p 00000000 00:00 0 
+7febf4000000-7febf4001000 r--s 00002000 fe:00 6867419                    /home/loganaw/Documents/nTracer1/ImageJ/jars/imagej-2.0.0-rc-69.jar
+7febf4001000-7febf4006000 r--s 00041000 fe:00 6848825                    /home/loganaw/Documents/nTracer1/ImageJ/jars/commons-lang-2.6.jar
+7febf4006000-7febf400f000 r--s 00229000 fe:00 6867416                    /home/loganaw/Documents/nTracer1/ImageJ/jars/ij-1.52n.jar
+7febf400f000-7fec27edf000 rw-p 00000000 00:00 0 
+7fec27edf000-7fec2c000000 ---p 00000000 00:00 0 
+7fec2c000000-7fec2c0bb000 rw-p 00000000 00:00 0 
+7fec2c0bb000-7fec30000000 ---p 00000000 00:00 0 
+7fec30000000-7fec30002000 r--s 00003000 fe:00 6867404                    /home/loganaw/Documents/nTracer1/ImageJ/jars/gentyref-1.1.0.jar
+7fec30002000-7fec30031000 r--s 00239000 fe:00 6867415                    /home/loganaw/Documents/nTracer1/ImageJ/jars/guava-21.0.jar
+7fec30031000-7fec301c7000 rw-p 00000000 00:00 0 
+7fec301c7000-7fec301c8000 ---p 00000000 00:00 0 
+7fec301c8000-7fec302c8000 rw-p 00000000 00:00 0 
+7fec302c8000-7fec302c9000 ---p 00000000 00:00 0 
+7fec302c9000-7fec303c9000 rw-p 00000000 00:00 0 
+7fec303c9000-7fec303ca000 ---p 00000000 00:00 0 
+7fec303ca000-7fec304ca000 rw-p 00000000 00:00 0 
+7fec304ca000-7fec304cb000 ---p 00000000 00:00 0 
+7fec304cb000-7fec305cb000 rw-p 00000000 00:00 0 
+7fec305cb000-7fec305cc000 ---p 00000000 00:00 0 
+7fec305cc000-7fec31aa8000 rw-p 00000000 00:00 0 
+7fec31aa8000-7fec338df000 rw-p 00000000 00:00 0 
+7fec338df000-7fec379ff000 ---p 00000000 00:00 0 
+7fec379ff000-7fec95390000 rw-p 00000000 00:00 0 
+7fec95390000-7ff05bf7c000 rw-p 00000000 00:00 0 
+7ff1bf2ee000-7ff880000000 ---p 00000000 00:00 0 
+7ff880000000-7ff8800aa000 rw-p 00000000 00:00 0 
+7ff8800aa000-7ff884000000 ---p 00000000 00:00 0 
+7ff884000000-7ff8840ca000 rw-p 00000000 00:00 0 
+7ff8840ca000-7ff888000000 ---p 00000000 00:00 0 
+7ff888000000-7ff8880a1000 rw-p 00000000 00:00 0 
+7ff8880a1000-7ff88c000000 ---p 00000000 00:00 0 
+7ff88c000000-7ff88c099000 rw-p 00000000 00:00 0 
+7ff88c099000-7ff890000000 ---p 00000000 00:00 0 
+7ff890000000-7ff8900a8000 rw-p 00000000 00:00 0 
+7ff8900a8000-7ff894000000 ---p 00000000 00:00 0 
+7ff894000000-7ff89416b000 rw-p 00000000 00:00 0 
+7ff89416b000-7ff898000000 ---p 00000000 00:00 0 
+7ff898000000-7ff8980a1000 rw-p 00000000 00:00 0 
+7ff8980a1000-7ff89c000000 ---p 00000000 00:00 0 
+7ff89c000000-7ff89c09a000 rw-p 00000000 00:00 0 
+7ff89c09a000-7ff8a0000000 ---p 00000000 00:00 0 
+7ff8a0000000-7ff8a00a9000 rw-p 00000000 00:00 0 
+7ff8a00a9000-7ff8a4000000 ---p 00000000 00:00 0 
+7ff8a4000000-7ff8a40b9000 rw-p 00000000 00:00 0 
+7ff8a40b9000-7ff8a8000000 ---p 00000000 00:00 0 
+7ff8a8000000-7ff8a80b0000 rw-p 00000000 00:00 0 
+7ff8a80b0000-7ff8ac000000 ---p 00000000 00:00 0 
+7ff8ac000000-7ff8ac0ac000 rw-p 00000000 00:00 0 
+7ff8ac0ac000-7ff8b0000000 ---p 00000000 00:00 0 
+7ff8b0000000-7ff8b013e000 rw-p 00000000 00:00 0 
+7ff8b013e000-7ff8b4000000 ---p 00000000 00:00 0 
+7ff8b4000000-7ff8b40a7000 rw-p 00000000 00:00 0 
+7ff8b40a7000-7ff8b8000000 ---p 00000000 00:00 0 
+7ff8b8000000-7ff8b8098000 rw-p 00000000 00:00 0 
+7ff8b8098000-7ff8bc000000 ---p 00000000 00:00 0 
+7ff8bc000000-7ff8bc0a3000 rw-p 00000000 00:00 0 
+7ff8bc0a3000-7ff8c0000000 ---p 00000000 00:00 0 
+7ff8c0000000-7ff8c00cb000 rw-p 00000000 00:00 0 
+7ff8c00cb000-7ff8c4000000 ---p 00000000 00:00 0 
+7ff8c4000000-7ff8c4005000 r--s 00036000 fe:00 6848773                    /home/loganaw/Documents/nTracer1/ImageJ/jars/commons-compress-1.4.1.jar
+7ff8c4005000-7ff8c4008000 r--s 00024000 fe:00 6867417                    /home/loganaw/Documents/nTracer1/ImageJ/jars/ij1-patcher-0.12.9.jar
+7ff8c4008000-7ff8c400a000 r--s 00010000 fe:00 6867503                    /home/loganaw/Documents/nTracer1/ImageJ/jars/jzlib-1.1.3.jar
+7ff8c400a000-7ff8c400d000 r--s 00010000 fe:00 6847090                    /home/loganaw/Documents/nTracer1/ImageJ/jars/args4j-2.0.25.jar
+7ff8c400d000-7ff8c4018000 r--s 00069000 fe:00 6867510                    /home/loganaw/Documents/nTracer1/ImageJ/jars/logback-core-1.2.3.jar
+7ff8c4018000-7ff8c401a000 r--s 00009000 fe:00 6867531                    /home/loganaw/Documents/nTracer1/ImageJ/jars/objenesis-2.1.jar
+7ff8c401a000-7ff8c4020000 r--s 0004d000 fe:00 6867504                    /home/loganaw/Documents/nTracer1/ImageJ/jars/kryo-2.24.0.jar
+7ff8c4020000-7ff8c4048000 r--s 00241000 fe:00 6867588                    /home/loganaw/Documents/nTracer1/ImageJ/jars/trove4j-3.0.3.jar
+7ff8c4048000-7ff8c4dfe000 rw-p 00000000 00:00 0 
+7ff8c4dfe000-7ff8c4dff000 ---p 00000000 00:00 0 
+7ff8c4dff000-7ff8c4eff000 rw-p 00000000 00:00 0 
+7ff8c4eff000-7ff8c4f00000 ---p 00000000 00:00 0 
+7ff8c4f00000-7ff8c5000000 rw-p 00000000 00:00 0 
+7ff8c5000000-7ff8c7220000 rwxp 00000000 00:00 0 
+7ff8c7220000-7ff8d4000000 ---p 00000000 00:00 0 
+7ff8d4000000-7ff8d4156000 rw-p 00000000 00:00 0 
+7ff8d4156000-7ff8d8000000 ---p 00000000 00:00 0 
+7ff8d8000000-7ff8d8002000 r--s 00000000 fe:00 6867521                    /home/loganaw/Documents/nTracer1/ImageJ/jars/minlog-1.2.jar
+7ff8d8002000-7ff8d8004000 r--s 00009000 fe:00 6867580                    /home/loganaw/Documents/nTracer1/ImageJ/jars/slf4j-api-1.7.25.jar
+7ff8d8004000-7ff8d8007000 r--s 00012000 fe:00 6867396                    /home/loganaw/Documents/nTracer1/ImageJ/jars/eventbus-1.4.jar
+7ff8d8007000-7ff8d8010000 r--s 0006f000 fe:00 6867508                    /home/loganaw/Documents/nTracer1/ImageJ/jars/log4j-1.2.17.jar
+7ff8d8010000-7ff8d806b000 rw-p 00000000 00:00 0 
+7ff8d806b000-7ff8d806c000 ---p 00000000 00:00 0 
+7ff8d806c000-7ff8d816c000 rw-p 00000000 00:00 0 
+7ff8d816c000-7ff8d816d000 ---p 00000000 00:00 0 
+7ff8d816d000-7ff8d826d000 rw-p 00000000 00:00 0 
+7ff8d826d000-7ff8d826e000 ---p 00000000 00:00 0 
+7ff8d826e000-7ff8d836e000 rw-p 00000000 00:00 0 
+7ff8d836e000-7ff8d836f000 ---p 00000000 00:00 0 
+7ff8d836f000-7ff8d846f000 rw-p 00000000 00:00 0 
+7ff8d846f000-7ff8d8470000 ---p 00000000 00:00 0 
+7ff8d8470000-7ff8d8570000 rw-p 00000000 00:00 0 
+7ff8d8570000-7ff8d8571000 ---p 00000000 00:00 0 
+7ff8d8571000-7ff8d8671000 rw-p 00000000 00:00 0 
+7ff8d8671000-7ff8d8672000 ---p 00000000 00:00 0 
+7ff8d8672000-7ff8d8772000 rw-p 00000000 00:00 0 
+7ff8d8772000-7ff8d8773000 ---p 00000000 00:00 0 
+7ff8d8773000-7ff8d8873000 rw-p 00000000 00:00 0 
+7ff8d8873000-7ff8d8874000 ---p 00000000 00:00 0 
+7ff8d8874000-7ff8d8974000 rw-p 00000000 00:00 0 
+7ff8d8974000-7ff8d8975000 ---p 00000000 00:00 0 
+7ff8d8975000-7ff8d8a75000 rw-p 00000000 00:00 0 
+7ff8d8a75000-7ff8d8a76000 ---p 00000000 00:00 0 
+7ff8d8a76000-7ff8d8b76000 rw-p 00000000 00:00 0 
+7ff8d8b76000-7ff8d8b77000 ---p 00000000 00:00 0 
+7ff8d8b77000-7ff8d8c77000 rw-p 00000000 00:00 0 
+7ff8d8c77000-7ff8d8c78000 ---p 00000000 00:00 0 
+7ff8d8c78000-7ff8d8d78000 rw-p 00000000 00:00 0 
+7ff8d8d78000-7ff8d8d79000 ---p 00000000 00:00 0 
+7ff8d8d79000-7ff8d8e79000 rw-p 00000000 00:00 0 
+7ff8d8e79000-7ff8d8e7a000 ---p 00000000 00:00 0 
+7ff8d8e7a000-7ff8d8f7a000 rw-p 00000000 00:00 0 
+7ff8d8f7a000-7ff8d8f7b000 ---p 00000000 00:00 0 
+7ff8d8f7b000-7ff8d9104000 rw-p 00000000 00:00 0 
+7ff8d9104000-7ff8d943b000 ---p 00000000 00:00 0 
+7ff8d943b000-7ff8d943e000 r--p 00000000 fe:00 6949904                    /usr/lib/libnss_files-2.29.so
+7ff8d943e000-7ff8d9445000 r-xp 00003000 fe:00 6949904                    /usr/lib/libnss_files-2.29.so
+7ff8d9445000-7ff8d9448000 r--p 0000a000 fe:00 6949904                    /usr/lib/libnss_files-2.29.so
+7ff8d9448000-7ff8d9449000 r--p 0000c000 fe:00 6949904                    /usr/lib/libnss_files-2.29.so
+7ff8d9449000-7ff8d944a000 rw-p 0000d000 fe:00 6949904                    /usr/lib/libnss_files-2.29.so
+7ff8d944a000-7ff8d9450000 rw-p 00000000 00:00 0 
+7ff8d9450000-7ff8d9451000 r--s 00006000 fe:00 6867424                    /home/loganaw/Documents/nTracer1/ImageJ/jars/imagej-mesh-0.7.1.jar
+7ff8d9451000-7ff8d9453000 r--s 0001d000 fe:00 6867589                    /home/loganaw/Documents/nTracer1/ImageJ/jars/udunits-4.3.18.jar
+7ff8d9453000-7ff8d9459000 r--s 0004f000 fe:00 6867395                    /home/loganaw/Documents/nTracer1/ImageJ/jars/ejml-0.24.jar
+7ff8d9459000-7ff8d945a000 r--s 00004000 fe:00 6867473                    /home/loganaw/Documents/nTracer1/ImageJ/jars/jitk-tps-3.0.0.jar
+7ff8d945a000-7ff8d945c000 r--s 00008000 fe:00 6867453                    /home/loganaw/Documents/nTracer1/ImageJ/jars/jama-1.0.3.jar
+7ff8d945c000-7ff8d9473000 r--s 000d7000 fe:00 6848556                    /home/loganaw/Documents/nTracer1/ImageJ/jars/caffeine-2.4.0.jar
+7ff8d9473000-7ff8d9483000 r--s 000e6000 fe:00 6867557                    /home/loganaw/Documents/nTracer1/ImageJ/jars/scifio-jai-imageio-1.1.1.jar
+7ff8d9483000-7ff8d9486000 r--p 00000000 fe:00 7216471                    /usr/lib/jvm/java-8-openjdk/jre/lib/amd64/libzip.so
+7ff8d9486000-7ff8d948a000 r-xp 00003000 fe:00 7216471                    /usr/lib/jvm/java-8-openjdk/jre/lib/amd64/libzip.so
+7ff8d948a000-7ff8d948c000 r--p 00007000 fe:00 7216471                    /usr/lib/jvm/java-8-openjdk/jre/lib/amd64/libzip.so
+7ff8d948c000-7ff8d948d000 r--p 00008000 fe:00 7216471                    /usr/lib/jvm/java-8-openjdk/jre/lib/amd64/libzip.so
+7ff8d948d000-7ff8d948e000 rw-p 00009000 fe:00 7216471                    /usr/lib/jvm/java-8-openjdk/jre/lib/amd64/libzip.so
+7ff8d948e000-7ff8d9496000 rw-s 00000000 00:2b 4839768                    /tmp/hsperfdata_loganaw/34179
+7ff8d9496000-7ff8d9498000 r--p 00000000 fe:00 6949919                    /usr/lib/librt-2.29.so
+7ff8d9498000-7ff8d949c000 r-xp 00002000 fe:00 6949919                    /usr/lib/librt-2.29.so
+7ff8d949c000-7ff8d949e000 r--p 00006000 fe:00 6949919                    /usr/lib/librt-2.29.so
+7ff8d949e000-7ff8d949f000 r--p 00007000 fe:00 6949919                    /usr/lib/librt-2.29.so
+7ff8d949f000-7ff8d94a0000 rw-p 00008000 fe:00 6949919                    /usr/lib/librt-2.29.so
+7ff8d94a0000-7ff8d9691000 r--p 00000000 fe:00 7216480                    /usr/lib/jvm/java-8-openjdk/jre/lib/amd64/server/libjvm.so
+7ff8d9691000-7ff8d9f04000 r-xp 001f1000 fe:00 7216480                    /usr/lib/jvm/java-8-openjdk/jre/lib/amd64/server/libjvm.so
+7ff8d9f04000-7ff8da0a4000 r--p 00a64000 fe:00 7216480                    /usr/lib/jvm/java-8-openjdk/jre/lib/amd64/server/libjvm.so
+7ff8da0a4000-7ff8da0a5000 ---p 00c04000 fe:00 7216480                    /usr/lib/jvm/java-8-openjdk/jre/lib/amd64/server/libjvm.so
+7ff8da0a5000-7ff8da13a000 r--p 00c04000 fe:00 7216480                    /usr/lib/jvm/java-8-openjdk/jre/lib/amd64/server/libjvm.so
+7ff8da13a000-7ff8da162000 rw-p 00c99000 fe:00 7216480                    /usr/lib/jvm/java-8-openjdk/jre/lib/amd64/server/libjvm.so
+7ff8da162000-7ff8da192000 rw-p 00000000 00:00 0 
+7ff8da192000-7ff8da197000 r-xp 00000000 fe:00 6957127                    /usr/lib/libXfixes.so.3.1.0
+7ff8da197000-7ff8da396000 ---p 00005000 fe:00 6957127                    /usr/lib/libXfixes.so.3.1.0
+7ff8da396000-7ff8da397000 r--p 00004000 fe:00 6957127                    /usr/lib/libXfixes.so.3.1.0
+7ff8da397000-7ff8da398000 rw-p 00005000 fe:00 6957127                    /usr/lib/libXfixes.so.3.1.0
+7ff8da398000-7ff8da39a000 r--p 00000000 fe:00 6963075                    /usr/lib/libXrender.so.1.3.0
+7ff8da39a000-7ff8da3a1000 r-xp 00002000 fe:00 6963075                    /usr/lib/libXrender.so.1.3.0
+7ff8da3a1000-7ff8da3a3000 r--p 00009000 fe:00 6963075                    /usr/lib/libXrender.so.1.3.0
+7ff8da3a3000-7ff8da3a4000 r--p 0000a000 fe:00 6963075                    /usr/lib/libXrender.so.1.3.0
+7ff8da3a4000-7ff8da3a5000 rw-p 0000b000 fe:00 6963075                    /usr/lib/libXrender.so.1.3.0
+7ff8da3a5000-7ff8da3a8000 r--p 00000000 fe:00 6963942                    /usr/lib/libXcursor.so.1.0.2
+7ff8da3a8000-7ff8da3ad000 r-xp 00003000 fe:00 6963942                    /usr/lib/libXcursor.so.1.0.2
+7ff8da3ad000-7ff8da3af000 r--p 00008000 fe:00 6963942                    /usr/lib/libXcursor.so.1.0.2
+7ff8da3af000-7ff8da3b0000 r--p 00009000 fe:00 6963942                    /usr/lib/libXcursor.so.1.0.2
+7ff8da3b0000-7ff8da3b1000 rw-p 0000a000 fe:00 6963942                    /usr/lib/libXcursor.so.1.0.2
+7ff8da3b1000-7ff8da696000 r--p 00000000 fe:00 7013080                    /usr/lib/locale/locale-archive
+7ff8da696000-7ff8da697000 ---p 00000000 00:00 0 
+7ff8da697000-7ff8dae97000 rw-p 00000000 00:00 0 
+7ff8dae98000-7ff8dae99000 r--p 00000000 fe:00 6964311                    /usr/lib/libXcomposite.so.1.0.0
+7ff8dae99000-7ff8dae9a000 r-xp 00001000 fe:00 6964311                    /usr/lib/libXcomposite.so.1.0.0
+7ff8dae9a000-7ff8dae9b000 r--p 00002000 fe:00 6964311                    /usr/lib/libXcomposite.so.1.0.0
+7ff8dae9b000-7ff8dae9c000 r--p 00002000 fe:00 6964311                    /usr/lib/libXcomposite.so.1.0.0
+7ff8dae9c000-7ff8dae9d000 rw-p 00003000 fe:00 6964311                    /usr/lib/libXcomposite.so.1.0.0
+7ff8dae9d000-7ff8daea0000 r--s 00000000 fe:00 6816627                    /var/cache/fontconfig/13e8db92-b19f-4a64-b799-d36ec46a359b-le64.cache-7
+7ff8daea0000-7ff8daea9000 r--s 00000000 fe:00 6833128                    /var/cache/fontconfig/ac39b7a8-f6fa-421b-b28c-08ef5e78b7fa-le64.cache-7
+7ff8daea9000-7ff8daeac000 r--s 00000000 fe:00 6816627                    /var/cache/fontconfig/13e8db92-b19f-4a64-b799-d36ec46a359b-le64.cache-7
+7ff8daeac000-7ff8daead000 r--p 00000000 fe:00 6959774                    /usr/lib/libgmodule-2.0.so.0.6000.1
+7ff8daead000-7ff8daeaf000 r-xp 00001000 fe:00 6959774                    /usr/lib/libgmodule-2.0.so.0.6000.1
+7ff8daeaf000-7ff8daeb0000 r--p 00003000 fe:00 6959774                    /usr/lib/libgmodule-2.0.so.0.6000.1
+7ff8daeb0000-7ff8daeb1000 r--p 00003000 fe:00 6959774                    /usr/lib/libgmodule-2.0.so.0.6000.1
+7ff8daeb1000-7ff8daeb2000 rw-p 00004000 fe:00 6959774                    /usr/lib/libgmodule-2.0.so.0.6000.1
+7ff8daeb2000-7ff8daeb7000 r--s 002f9000 fe:00 7086688                    /usr/lib/jvm/java-8-openjdk/jre/lib/charsets.jar
+7ff8daeb7000-7ff8daebb000 r--p 00000000 fe:00 6949915                    /usr/lib/libresolv-2.29.so
+7ff8daebb000-7ff8daec7000 r-xp 00004000 fe:00 6949915                    /usr/lib/libresolv-2.29.so
+7ff8daec7000-7ff8daecb000 r--p 00010000 fe:00 6949915                    /usr/lib/libresolv-2.29.so
+7ff8daecb000-7ff8daecc000 ---p 00014000 fe:00 6949915                    /usr/lib/libresolv-2.29.so
+7ff8daecc000-7ff8daecd000 r--p 00014000 fe:00 6949915                    /usr/lib/libresolv-2.29.so
+7ff8daecd000-7ff8daece000 rw-p 00015000 fe:00 6949915                    /usr/lib/libresolv-2.29.so
+7ff8daece000-7ff8daed0000 rw-p 00000000 00:00 0 
+7ff8daed0000-7ff8daed1000 r--p 00000000 fe:00 6949901                    /usr/lib/libnss_dns-2.29.so
+7ff8daed1000-7ff8daed5000 r-xp 00001000 fe:00 6949901                    /usr/lib/libnss_dns-2.29.so
+7ff8daed5000-7ff8daed6000 r--p 00005000 fe:00 6949901                    /usr/lib/libnss_dns-2.29.so
+7ff8daed6000-7ff8daed7000 r--p 00005000 fe:00 6949901                    /usr/lib/libnss_dns-2.29.so
+7ff8daed7000-7ff8daed8000 rw-p 00006000 fe:00 6949901                    /usr/lib/libnss_dns-2.29.so
+7ff8daed8000-7ff8daeda000 r--p 00000000 fe:00 6967183                    /usr/lib/libXdmcp.so.6.0.0
+7ff8daeda000-7ff8daedc000 r-xp 00002000 fe:00 6967183                    /usr/lib/libXdmcp.so.6.0.0
+7ff8daedc000-7ff8daede000 r--p 00004000 fe:00 6967183                    /usr/lib/libXdmcp.so.6.0.0
+7ff8daede000-7ff8daedf000 r--p 00005000 fe:00 6967183                    /usr/lib/libXdmcp.so.6.0.0
+7ff8daedf000-7ff8daee0000 rw-p 00006000 fe:00 6967183                    /usr/lib/libXdmcp.so.6.0.0
+7ff8daee0000-7ff8daee1000 r--p 00000000 fe:00 6949121                    /usr/lib/libXau.so.6.0.0
+7ff8daee1000-7ff8daee2000 r-xp 00001000 fe:00 6949121                    /usr/lib/libXau.so.6.0.0
+7ff8daee2000-7ff8daee3000 r--p 00002000 fe:00 6949121                    /usr/lib/libXau.so.6.0.0
+7ff8daee3000-7ff8daee4000 r--p 00002000 fe:00 6949121                    /usr/lib/libXau.so.6.0.0
+7ff8daee4000-7ff8daee5000 rw-p 00003000 fe:00 6949121                    /usr/lib/libXau.so.6.0.0
+7ff8daee5000-7ff8daef1000 r--p 00000000 fe:00 6959988                    /usr/lib/libxcb.so.1.1.0
+7ff8daef1000-7ff8daf04000 r-xp 0000c000 fe:00 6959988                    /usr/lib/libxcb.so.1.1.0
+7ff8daf04000-7ff8daf0d000 r--p 0001f000 fe:00 6959988                    /usr/lib/libxcb.so.1.1.0
+7ff8daf0d000-7ff8daf0e000 r--p 00027000 fe:00 6959988                    /usr/lib/libxcb.so.1.1.0
+7ff8daf0e000-7ff8daf0f000 rw-p 00028000 fe:00 6959988                    /usr/lib/libxcb.so.1.1.0
+7ff8daf0f000-7ff8daf25000 r-xp 00000000 fe:00 6969415                    /usr/lib/libz.so.1.2.11
+7ff8daf25000-7ff8db124000 ---p 00016000 fe:00 6969415                    /usr/lib/libz.so.1.2.11
+7ff8db124000-7ff8db125000 r--p 00015000 fe:00 6969415                    /usr/lib/libz.so.1.2.11
+7ff8db125000-7ff8db126000 rw-p 00016000 fe:00 6969415                    /usr/lib/libz.so.1.2.11
+7ff8db126000-7ff8db133000 r--p 00000000 fe:00 6949875                    /usr/lib/libm-2.29.so
+7ff8db133000-7ff8db1cf000 r-xp 0000d000 fe:00 6949875                    /usr/lib/libm-2.29.so
+7ff8db1cf000-7ff8db26a000 r--p 000a9000 fe:00 6949875                    /usr/lib/libm-2.29.so
+7ff8db26a000-7ff8db26b000 r--p 00143000 fe:00 6949875                    /usr/lib/libm-2.29.so
+7ff8db26b000-7ff8db26c000 rw-p 00144000 fe:00 6949875                    /usr/lib/libm-2.29.so
+7ff8db26c000-7ff8db270000 r--p 00000000 fe:00 6963080                    /usr/lib/libXext.so.6.4.0
+7ff8db270000-7ff8db27b000 r-xp 00004000 fe:00 6963080                    /usr/lib/libXext.so.6.4.0
+7ff8db27b000-7ff8db27f000 r--p 0000f000 fe:00 6963080                    /usr/lib/libXext.so.6.4.0
+7ff8db27f000-7ff8db280000 r--p 00012000 fe:00 6963080                    /usr/lib/libXext.so.6.4.0
+7ff8db280000-7ff8db281000 rw-p 00013000 fe:00 6963080                    /usr/lib/libXext.so.6.4.0
+7ff8db281000-7ff8db29d000 r--p 00000000 fe:00 6962251                    /usr/lib/libX11.so.6.3.0
+7ff8db29d000-7ff8db325000 r-xp 0001c000 fe:00 6962251                    /usr/lib/libX11.so.6.3.0
+7ff8db325000-7ff8db3b9000 r--p 000a4000 fe:00 6962251                    /usr/lib/libX11.so.6.3.0
+7ff8db3b9000-7ff8db3bc000 r--p 00137000 fe:00 6962251                    /usr/lib/libX11.so.6.3.0
+7ff8db3bc000-7ff8db3c0000 rw-p 0013a000 fe:00 6962251                    /usr/lib/libX11.so.6.3.0
+7ff8db3c0000-7ff8db3c4000 r--p 00000000 fe:00 7216629                    /usr/lib/jvm/java-8-openjdk/jre/lib/amd64/libsplashscreen.so
+7ff8db3c4000-7ff8db3ff000 r-xp 00004000 fe:00 7216629                    /usr/lib/jvm/java-8-openjdk/jre/lib/amd64/libsplashscreen.so
+7ff8db3ff000-7ff8db40e000 r--p 0003f000 fe:00 7216629                    /usr/lib/jvm/java-8-openjdk/jre/lib/amd64/libsplashscreen.so
+7ff8db40e000-7ff8db40f000 r--p 0004d000 fe:00 7216629                    /usr/lib/jvm/java-8-openjdk/jre/lib/amd64/libsplashscreen.so
+7ff8db40f000-7ff8db410000 rw-p 0004e000 fe:00 7216629                    /usr/lib/jvm/java-8-openjdk/jre/lib/amd64/libsplashscreen.so
+7ff8db410000-7ff8db415000 rw-p 00000000 00:00 0 
+7ff8db415000-7ff8db437000 r--p 00000000 fe:00 6949838                    /usr/lib/libc-2.29.so
+7ff8db437000-7ff8db583000 r-xp 00022000 fe:00 6949838                    /usr/lib/libc-2.29.so
+7ff8db583000-7ff8db5cf000 r--p 0016e000 fe:00 6949838                    /usr/lib/libc-2.29.so
+7ff8db5cf000-7ff8db5d0000 ---p 001ba000 fe:00 6949838                    /usr/lib/libc-2.29.so
+7ff8db5d0000-7ff8db5d4000 r--p 001ba000 fe:00 6949838                    /usr/lib/libc-2.29.so
+7ff8db5d4000-7ff8db5d6000 rw-p 001be000 fe:00 6949838                    /usr/lib/libc-2.29.so
+7ff8db5d6000-7ff8db5da000 rw-p 00000000 00:00 0 
+7ff8db5da000-7ff8db5e0000 r--p 00000000 fe:00 6949911                    /usr/lib/libpthread-2.29.so
+7ff8db5e0000-7ff8db5ef000 r-xp 00006000 fe:00 6949911                    /usr/lib/libpthread-2.29.so
+7ff8db5ef000-7ff8db5f5000 r--p 00015000 fe:00 6949911                    /usr/lib/libpthread-2.29.so
+7ff8db5f5000-7ff8db5f6000 r--p 0001a000 fe:00 6949911                    /usr/lib/libpthread-2.29.so
+7ff8db5f6000-7ff8db5f7000 rw-p 0001b000 fe:00 6949911                    /usr/lib/libpthread-2.29.so
+7ff8db5f7000-7ff8db5fb000 rw-p 00000000 00:00 0 
+7ff8db5fb000-7ff8db5fc000 r--p 00000000 fe:00 6949852                    /usr/lib/libdl-2.29.so
+7ff8db5fc000-7ff8db5fd000 r-xp 00001000 fe:00 6949852                    /usr/lib/libdl-2.29.so
+7ff8db5fd000-7ff8db5fe000 r--p 00002000 fe:00 6949852                    /usr/lib/libdl-2.29.so
+7ff8db5fe000-7ff8db5ff000 r--p 00002000 fe:00 6949852                    /usr/lib/libdl-2.29.so
+7ff8db5ff000-7ff8db600000 rw-p 00003000 fe:00 6949852                    /usr/lib/libdl-2.29.so
+7ff8db600000-7ff8db602000 rw-p 00000000 00:00 0 
+7ff8db602000-7ff8db604000 r--s 0001a000 fe:00 6867559                    /home/loganaw/Documents/nTracer1/ImageJ/jars/scifio-ome-xml-0.15.0.jar
+7ff8db604000-7ff8db605000 r--s 00000000 fe:00 6867406                    /home/loganaw/Documents/nTracer1/ImageJ/jars/gluegen-rt-main-2.3.2.jar
+7ff8db605000-7ff8db606000 r--s 00005000 fe:00 6867422                    /home/loganaw/Documents/nTracer1/ImageJ/jars/imagej-launcher-4.0.5.jar
+7ff8db606000-7ff8db607000 rw-p 00000000 00:00 0 
+7ff8db607000-7ff8db614000 r--p 00000000 fe:00 7216235                    /usr/lib/jvm/java-8-openjdk/jre/lib/amd64/libjava.so
+7ff8db614000-7ff8db62c000 r-xp 0000d000 fe:00 7216235                    /usr/lib/jvm/java-8-openjdk/jre/lib/amd64/libjava.so
+7ff8db62c000-7ff8db633000 r--p 00025000 fe:00 7216235                    /usr/lib/jvm/java-8-openjdk/jre/lib/amd64/libjava.so
+7ff8db633000-7ff8db634000 ---p 0002c000 fe:00 7216235                    /usr/lib/jvm/java-8-openjdk/jre/lib/amd64/libjava.so
+7ff8db634000-7ff8db635000 r--p 0002c000 fe:00 7216235                    /usr/lib/jvm/java-8-openjdk/jre/lib/amd64/libjava.so
+7ff8db635000-7ff8db636000 rw-p 0002d000 fe:00 7216235                    /usr/lib/jvm/java-8-openjdk/jre/lib/amd64/libjava.so
+7ff8db636000-7ff8db637000 rw-p 00000000 00:00 0 
+7ff8db637000-7ff8db63c000 r--p 00000000 fe:00 7216469                    /usr/lib/jvm/java-8-openjdk/jre/lib/amd64/libverify.so
+7ff8db63c000-7ff8db643000 r-xp 00005000 fe:00 7216469                    /usr/lib/jvm/java-8-openjdk/jre/lib/amd64/libverify.so
+7ff8db643000-7ff8db645000 r--p 0000c000 fe:00 7216469                    /usr/lib/jvm/java-8-openjdk/jre/lib/amd64/libverify.so
+7ff8db645000-7ff8db647000 r--p 0000d000 fe:00 7216469                    /usr/lib/jvm/java-8-openjdk/jre/lib/amd64/libverify.so
+7ff8db647000-7ff8db648000 rw-p 0000f000 fe:00 7216469                    /usr/lib/jvm/java-8-openjdk/jre/lib/amd64/libverify.so
+7ff8db648000-7ff8db64a000 r--p 00000000 fe:00 6949825                    /usr/lib/ld-2.29.so
+7ff8db64a000-7ff8db669000 r-xp 00002000 fe:00 6949825                    /usr/lib/ld-2.29.so
+7ff8db669000-7ff8db671000 r--p 00021000 fe:00 6949825                    /usr/lib/ld-2.29.so
+7ff8db671000-7ff8db672000 r--p 00000000 00:00 0 
+7ff8db672000-7ff8db673000 r--p 00029000 fe:00 6949825                    /usr/lib/ld-2.29.so
+7ff8db673000-7ff8db674000 rw-p 0002a000 fe:00 6949825                    /usr/lib/ld-2.29.so
+7ff8db674000-7ff8db675000 rw-p 00000000 00:00 0 
+7ffd45fef000-7ffd45ff2000 ---p 00000000 00:00 0 
+7ffd45ff2000-7ffd460ef000 rw-p 00000000 00:00 0                          [stack]
+7ffd4615a000-7ffd4615d000 r--p 00000000 00:00 0                          [vvar]
+7ffd4615d000-7ffd4615e000 r-xp 00000000 00:00 0                          [vdso]
+
+VM Arguments:
+jvm_args: -Xmx50310m -Dpython.cachedir.skip=true -Dplugins.dir=/home/loganaw/Documents/nTracer1/ImageJ -Xincgc -XX:PermSize=128m 
+java_command: <unknown>
+java_class_path (initial): /home/loganaw/Documents/nTracer1/ImageJ/jars/imagej-launcher-4.0.5.jar
+Launcher Type: generic
+
+Environment Variables:
+JAVA_HOME=/usr/lib/jvm/java-8-openjdk/jre
+PATH=/home/loganaw/anaconda3/bin:/home/loganaw/anaconda3/condabin:/home/loganaw/dev/bin:/home/loganaw/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/opt/cuda/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl
+LD_LIBRARY_PATH=/home/loganaw/Documents/nTracer1/ImageJ/lib/linux64:/home/loganaw/Documents/nTracer1/ImageJ/mm/linux64
+SHELL=/bin/bash
+DISPLAY=:0
+
+Signal Handlers:
+SIGSEGV: [libjvm.so+0xa32bd0], sa_mask[0]=11111111011111111101111111111110, sa_flags=SA_RESTART|SA_SIGINFO
+SIGBUS: [libjvm.so+0xa32bd0], sa_mask[0]=11111111011111111101111111111110, sa_flags=SA_RESTART|SA_SIGINFO
+SIGFPE: [libjvm.so+0x88ebd0], sa_mask[0]=11111111011111111101111111111110, sa_flags=SA_RESTART|SA_SIGINFO
+SIGPIPE: SIG_IGN, sa_mask[0]=00000000000010000000000000000000, sa_flags=SA_RESTART
+SIGXFSZ: [libjvm.so+0x88ebd0], sa_mask[0]=11111111011111111101111111111110, sa_flags=SA_RESTART|SA_SIGINFO
+SIGILL: [libjvm.so+0x88ebd0], sa_mask[0]=11111111011111111101111111111110, sa_flags=SA_RESTART|SA_SIGINFO
+SIGUSR1: SIG_DFL, sa_mask[0]=00000000000000000000000000000000, sa_flags=none
+SIGUSR2: [libjvm.so+0x88ea60], sa_mask[0]=00000000000000000000000000000000, sa_flags=SA_RESTART|SA_SIGINFO
+SIGHUP: [libjvm.so+0x88ee70], sa_mask[0]=11111111011111111101111111111110, sa_flags=SA_RESTART|SA_SIGINFO
+SIGINT: [libjvm.so+0x88ee70], sa_mask[0]=11111111011111111101111111111110, sa_flags=SA_RESTART|SA_SIGINFO
+SIGTERM: [libjvm.so+0x88ee70], sa_mask[0]=11111111011111111101111111111110, sa_flags=SA_RESTART|SA_SIGINFO
+SIGQUIT: [libjvm.so+0x88ee70], sa_mask[0]=11111111011111111101111111111110, sa_flags=SA_RESTART|SA_SIGINFO
+
+
+---------------  S Y S T E M  ---------------
+
+OS:NAME="Antergos Linux"
+VERSION="16.10-ISO-Rolling"
+ID="antergos"
+ID_LIKE="arch"
+PRETTY_NAME="Antergos Linux"
+CPE_NAME="cpe:/o:antergosproject:antergos:16.10"
+ANSI_COLOR="1;34;40"
+HOME_URL="https://antergos.com/"
+SUPPORT_URL="https://forum.antergos.com/"
+BUG_REPORT_URL="https://github.com/antergos"
+
+
+uname:Linux 5.0.13-arch1-1-ARCH #1 SMP PREEMPT Sun May 5 18:05:41 UTC 2019 x86_64
+libc:glibc 2.29 NPTL 2.29 
+rlimit: STACK 8192k, CORE infinity, NPROC 289815, NOFILE 524288, AS infinity
+load average:2.73 1.51 2.60
+
+/proc/meminfo:
+MemTotal:       74214236 kB
+MemFree:          508184 kB
+MemAvailable:     213576 kB
+Buffers:           31636 kB
+Cached:           636308 kB
+SwapCached:       118412 kB
+Active:         68023824 kB
+Inactive:        4628976 kB
+Active(anon):   67913804 kB
+Inactive(anon):  4456120 kB
+Active(file):     110020 kB
+Inactive(file):   172856 kB
+Unevictable:       17656 kB
+Mlocked:           17656 kB
+SwapTotal:       4194300 kB
+SwapFree:              0 kB
+Dirty:                40 kB
+Writeback:             0 kB
+AnonPages:      71886824 kB
+Mapped:           512756 kB
+Shmem:            380260 kB
+KReclaimable:     144168 kB
+Slab:             422584 kB
+SReclaimable:     144168 kB
+SUnreclaim:       278416 kB
+KernelStack:       25600 kB
+PageTables:       221396 kB
+NFS_Unstable:          0 kB
+Bounce:                0 kB
+WritebackTmp:          0 kB
+CommitLimit:    41301416 kB
+Committed_AS:   112546528 kB
+VmallocTotal:   34359738367 kB
+VmallocUsed:           0 kB
+VmallocChunk:          0 kB
+Percpu:            30208 kB
+HardwareCorrupted:     0 kB
+AnonHugePages:         0 kB
+ShmemHugePages:        0 kB
+ShmemPmdMapped:        0 kB
+HugePages_Total:       0
+HugePages_Free:        0
+HugePages_Rsvd:        0
+HugePages_Surp:        0
+Hugepagesize:       2048 kB
+Hugetlb:               0 kB
+DirectMap4k:    15423460 kB
+DirectMap2M:    60071936 kB
+DirectMap1G:           0 kB
+
+container (cgroup) information:
+container_type: cgroupv1
+cpu_cpuset_cpus: 0-23
+cpu_memory_nodes: 0
+active_processor_count: 24
+cpu_quota: -1
+cpu_period: 100000
+cpu_shares: -1
+memory_limit_in_bytes: -1
+memory_and_swap_limit_in_bytes: -1
+memory_soft_limit_in_bytes: -1
+memory_usage_in_bytes: 34825347072
+memory_max_usage_in_bytes: 34914791424
+
+
+CPU:total 24 (initial active 24) (6 cores per cpu, 2 threads per core) family 6 model 44 stepping 2, cmov, cx8, fxsr, mmx, sse, sse2, sse3, ssse3, sse4.1, sse4.2, popcnt, aes, clmul, ht, tsc, tscinvbit, tscinv
+
+/proc/cpuinfo:
+processor	: 0
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 44
+model name	: Intel(R) Xeon(R) CPU           X5675  @ 3.07GHz
+stepping	: 2
+microcode	: 0x10
+cpu MHz		: 2152.131
+cache size	: 12288 KB
+physical id	: 1
+siblings	: 12
+core id		: 0
+cpu cores	: 6
+apicid		: 32
+initial apicid	: 32
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 11
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 cx16 xtpr pdcm pcid dca sse4_1 sse4_2 popcnt aes lahf_lm epb pti tpr_shadow vnmi flexpriority ept vpid dtherm ida arat
+bugs		: cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass l1tf
+bogomips	: 6120.95
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 40 bits physical, 48 bits virtual
+power management:
+
+processor	: 1
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 44
+model name	: Intel(R) Xeon(R) CPU           X5675  @ 3.07GHz
+stepping	: 2
+microcode	: 0x10
+cpu MHz		: 2391.587
+cache size	: 12288 KB
+physical id	: 1
+siblings	: 12
+core id		: 1
+cpu cores	: 6
+apicid		: 34
+initial apicid	: 34
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 11
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 cx16 xtpr pdcm pcid dca sse4_1 sse4_2 popcnt aes lahf_lm epb pti tpr_shadow vnmi flexpriority ept vpid dtherm ida arat
+bugs		: cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass l1tf
+bogomips	: 6120.95
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 40 bits physical, 48 bits virtual
+power management:
+
+processor	: 2
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 44
+model name	: Intel(R) Xeon(R) CPU           X5675  @ 3.07GHz
+stepping	: 2
+microcode	: 0x10
+cpu MHz		: 2744.719
+cache size	: 12288 KB
+physical id	: 1
+siblings	: 12
+core id		: 2
+cpu cores	: 6
+apicid		: 36
+initial apicid	: 36
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 11
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 cx16 xtpr pdcm pcid dca sse4_1 sse4_2 popcnt aes lahf_lm epb pti tpr_shadow vnmi flexpriority ept vpid dtherm ida arat
+bugs		: cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass l1tf
+bogomips	: 6120.95
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 40 bits physical, 48 bits virtual
+power management:
+
+processor	: 3
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 44
+model name	: Intel(R) Xeon(R) CPU           X5675  @ 3.07GHz
+stepping	: 2
+microcode	: 0x10
+cpu MHz		: 2446.653
+cache size	: 12288 KB
+physical id	: 1
+siblings	: 12
+core id		: 8
+cpu cores	: 6
+apicid		: 48
+initial apicid	: 48
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 11
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 cx16 xtpr pdcm pcid dca sse4_1 sse4_2 popcnt aes lahf_lm epb pti tpr_shadow vnmi flexpriority ept vpid dtherm ida arat
+bugs		: cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass l1tf
+bogomips	: 6120.95
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 40 bits physical, 48 bits virtual
+power management:
+
+processor	: 4
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 44
+model name	: Intel(R) Xeon(R) CPU           X5675  @ 3.07GHz
+stepping	: 2
+microcode	: 0x10
+cpu MHz		: 2208.816
+cache size	: 12288 KB
+physical id	: 1
+siblings	: 12
+core id		: 9
+cpu cores	: 6
+apicid		: 50
+initial apicid	: 50
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 11
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 cx16 xtpr pdcm pcid dca sse4_1 sse4_2 popcnt aes lahf_lm epb pti tpr_shadow vnmi flexpriority ept vpid dtherm ida arat
+bugs		: cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass l1tf
+bogomips	: 6120.95
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 40 bits physical, 48 bits virtual
+power management:
+
+processor	: 5
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 44
+model name	: Intel(R) Xeon(R) CPU           X5675  @ 3.07GHz
+stepping	: 2
+microcode	: 0x10
+cpu MHz		: 1925.764
+cache size	: 12288 KB
+physical id	: 1
+siblings	: 12
+core id		: 10
+cpu cores	: 6
+apicid		: 52
+initial apicid	: 52
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 11
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 cx16 xtpr pdcm pcid dca sse4_1 sse4_2 popcnt aes lahf_lm epb pti tpr_shadow vnmi flexpriority ept vpid dtherm ida arat
+bugs		: cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass l1tf
+bogomips	: 6120.95
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 40 bits physical, 48 bits virtual
+power management:
+
+processor	: 6
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 44
+model name	: Intel(R) Xeon(R) CPU           X5675  @ 3.07GHz
+stepping	: 2
+microcode	: 0x10
+cpu MHz		: 2256.717
+cache size	: 12288 KB
+physical id	: 0
+siblings	: 12
+core id		: 0
+cpu cores	: 6
+apicid		: 0
+initial apicid	: 0
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 11
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 cx16 xtpr pdcm pcid dca sse4_1 sse4_2 popcnt aes lahf_lm epb pti tpr_shadow vnmi flexpriority ept vpid dtherm ida arat
+bugs		: cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass l1tf
+bogomips	: 6120.74
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 40 bits physical, 48 bits virtual
+power management:
+
+processor	: 7
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 44
+model name	: Intel(R) Xeon(R) CPU           X5675  @ 3.07GHz
+stepping	: 2
+microcode	: 0x10
+cpu MHz		: 2160.290
+cache size	: 12288 KB
+physical id	: 0
+siblings	: 12
+core id		: 1
+cpu cores	: 6
+apicid		: 2
+initial apicid	: 2
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 11
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 cx16 xtpr pdcm pcid dca sse4_1 sse4_2 popcnt aes lahf_lm epb pti tpr_shadow vnmi flexpriority ept vpid dtherm ida arat
+bugs		: cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass l1tf
+bogomips	: 6120.74
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 40 bits physical, 48 bits virtual
+power management:
+
+processor	: 8
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 44
+model name	: Intel(R) Xeon(R) CPU           X5675  @ 3.07GHz
+stepping	: 2
+microcode	: 0x10
+cpu MHz		: 2183.987
+cache size	: 12288 KB
+physical id	: 0
+siblings	: 12
+core id		: 2
+cpu cores	: 6
+apicid		: 4
+initial apicid	: 4
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 11
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 cx16 xtpr pdcm pcid dca sse4_1 sse4_2 popcnt aes lahf_lm epb pti tpr_shadow vnmi flexpriority ept vpid dtherm ida arat
+bugs		: cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass l1tf
+bogomips	: 6120.74
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 40 bits physical, 48 bits virtual
+power management:
+
+processor	: 9
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 44
+model name	: Intel(R) Xeon(R) CPU           X5675  @ 3.07GHz
+stepping	: 2
+microcode	: 0x10
+cpu MHz		: 1921.828
+cache size	: 12288 KB
+physical id	: 0
+siblings	: 12
+core id		: 8
+cpu cores	: 6
+apicid		: 16
+initial apicid	: 16
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 11
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 cx16 xtpr pdcm pcid dca sse4_1 sse4_2 popcnt aes lahf_lm epb pti tpr_shadow vnmi flexpriority ept vpid dtherm ida arat
+bugs		: cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass l1tf
+bogomips	: 6120.74
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 40 bits physical, 48 bits virtual
+power management:
+
+processor	: 10
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 44
+model name	: Intel(R) Xeon(R) CPU           X5675  @ 3.07GHz
+stepping	: 2
+microcode	: 0x10
+cpu MHz		: 1904.999
+cache size	: 12288 KB
+physical id	: 0
+siblings	: 12
+core id		: 9
+cpu cores	: 6
+apicid		: 18
+initial apicid	: 18
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 11
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 cx16 xtpr pdcm pcid dca sse4_1 sse4_2 popcnt aes lahf_lm epb pti tpr_shadow vnmi flexpriority ept vpid dtherm ida arat
+bugs		: cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass l1tf
+bogomips	: 6120.74
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 40 bits physical, 48 bits virtual
+power management:
+
+processor	: 11
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 44
+model name	: Intel(R) Xeon(R) CPU           X5675  @ 3.07GHz
+stepping	: 2
+microcode	: 0x10
+cpu MHz		: 1721.443
+cache size	: 12288 KB
+physical id	: 0
+siblings	: 12
+core id		: 10
+cpu cores	: 6
+apicid		: 20
+initial apicid	: 20
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 11
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 cx16 xtpr pdcm pcid dca sse4_1 sse4_2 popcnt aes lahf_lm epb pti tpr_shadow vnmi flexpriority ept vpid dtherm ida arat
+bugs		: cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass l1tf
+bogomips	: 6120.74
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 40 bits physical, 48 bits virtual
+power management:
+
+processor	: 12
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 44
+model name	: Intel(R) Xeon(R) CPU           X5675  @ 3.07GHz
+stepping	: 2
+microcode	: 0x10
+cpu MHz		: 1903.951
+cache size	: 12288 KB
+physical id	: 1
+siblings	: 12
+core id		: 0
+cpu cores	: 6
+apicid		: 33
+initial apicid	: 33
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 11
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 cx16 xtpr pdcm pcid dca sse4_1 sse4_2 popcnt aes lahf_lm epb pti tpr_shadow vnmi flexpriority ept vpid dtherm ida arat
+bugs		: cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass l1tf
+bogomips	: 6120.95
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 40 bits physical, 48 bits virtual
+power management:
+
+processor	: 13
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 44
+model name	: Intel(R) Xeon(R) CPU           X5675  @ 3.07GHz
+stepping	: 2
+microcode	: 0x10
+cpu MHz		: 1931.397
+cache size	: 12288 KB
+physical id	: 1
+siblings	: 12
+core id		: 1
+cpu cores	: 6
+apicid		: 35
+initial apicid	: 35
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 11
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 cx16 xtpr pdcm pcid dca sse4_1 sse4_2 popcnt aes lahf_lm epb pti tpr_shadow vnmi flexpriority ept vpid dtherm ida arat
+bugs		: cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass l1tf
+bogomips	: 6120.95
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 40 bits physical, 48 bits virtual
+power management:
+
+processor	: 14
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 44
+model name	: Intel(R) Xeon(R) CPU           X5675  @ 3.07GHz
+stepping	: 2
+microcode	: 0x10
+cpu MHz		: 1635.450
+cache size	: 12288 KB
+physical id	: 1
+siblings	: 12
+core id		: 2
+cpu cores	: 6
+apicid		: 37
+initial apicid	: 37
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 11
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 cx16 xtpr pdcm pcid dca sse4_1 sse4_2 popcnt aes lahf_lm epb pti tpr_shadow vnmi flexpriority ept vpid dtherm ida arat
+bugs		: cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass l1tf
+bogomips	: 6120.95
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 40 bits physical, 48 bits virtual
+power management:
+
+processor	: 15
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 44
+model name	: Intel(R) Xeon(R) CPU           X5675  @ 3.07GHz
+stepping	: 2
+microcode	: 0x10
+cpu MHz		: 2388.202
+cache size	: 12288 KB
+physical id	: 1
+siblings	: 12
+core id		: 8
+cpu cores	: 6
+apicid		: 49
+initial apicid	: 49
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 11
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 cx16 xtpr pdcm pcid dca sse4_1 sse4_2 popcnt aes lahf_lm epb pti tpr_shadow vnmi flexpriority ept vpid dtherm ida arat
+bugs		: cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass l1tf
+bogomips	: 6120.95
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 40 bits physical, 48 bits virtual
+power management:
+
+processor	: 16
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 44
+model name	: Intel(R) Xeon(R) CPU           X5675  @ 3.07GHz
+stepping	: 2
+microcode	: 0x10
+cpu MHz		: 1836.427
+cache size	: 12288 KB
+physical id	: 1
+siblings	: 12
+core id		: 9
+cpu cores	: 6
+apicid		: 51
+initial apicid	: 51
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 11
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 cx16 xtpr pdcm pcid dca sse4_1 sse4_2 popcnt aes lahf_lm epb pti tpr_shadow vnmi flexpriority ept vpid dtherm ida arat
+bugs		: cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass l1tf
+bogomips	: 6120.95
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 40 bits physical, 48 bits virtual
+power management:
+
+processor	: 17
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 44
+model name	: Intel(R) Xeon(R) CPU           X5675  @ 3.07GHz
+stepping	: 2
+microcode	: 0x10
+cpu MHz		: 1904.745
+cache size	: 12288 KB
+physical id	: 1
+siblings	: 12
+core id		: 10
+cpu cores	: 6
+apicid		: 53
+initial apicid	: 53
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 11
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 cx16 xtpr pdcm pcid dca sse4_1 sse4_2 popcnt aes lahf_lm epb pti tpr_shadow vnmi flexpriority ept vpid dtherm ida arat
+bugs		: cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass l1tf
+bogomips	: 6120.95
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 40 bits physical, 48 bits virtual
+power management:
+
+processor	: 18
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 44
+model name	: Intel(R) Xeon(R) CPU           X5675  @ 3.07GHz
+stepping	: 2
+microcode	: 0x10
+cpu MHz		: 2269.392
+cache size	: 12288 KB
+physical id	: 0
+siblings	: 12
+core id		: 0
+cpu cores	: 6
+apicid		: 1
+initial apicid	: 1
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 11
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 cx16 xtpr pdcm pcid dca sse4_1 sse4_2 popcnt aes lahf_lm epb pti tpr_shadow vnmi flexpriority ept vpid dtherm ida arat
+bugs		: cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass l1tf
+bogomips	: 6120.74
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 40 bits physical, 48 bits virtual
+power management:
+
+processor	: 19
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 44
+model name	: Intel(R) Xeon(R) CPU           X5675  @ 3.07GHz
+stepping	: 2
+microcode	: 0x10
+cpu MHz		: 2130.397
+cache size	: 12288 KB
+physical id	: 0
+siblings	: 12
+core id		: 1
+cpu cores	: 6
+apicid		: 3
+initial apicid	: 3
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 11
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 cx16 xtpr pdcm pcid dca sse4_1 sse4_2 popcnt aes lahf_lm epb pti tpr_shadow vnmi flexpriority ept vpid dtherm ida arat
+bugs		: cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass l1tf
+bogomips	: 6120.74
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 40 bits physical, 48 bits virtual
+power management:
+
+processor	: 20
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 44
+model name	: Intel(R) Xeon(R) CPU           X5675  @ 3.07GHz
+stepping	: 2
+microcode	: 0x10
+cpu MHz		: 2381.175
+cache size	: 12288 KB
+physical id	: 0
+siblings	: 12
+core id		: 2
+cpu cores	: 6
+apicid		: 5
+initial apicid	: 5
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 11
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 cx16 xtpr pdcm pcid dca sse4_1 sse4_2 popcnt aes lahf_lm epb pti tpr_shadow vnmi flexpriority ept vpid dtherm ida arat
+bugs		: cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass l1tf
+bogomips	: 6120.74
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 40 bits physical, 48 bits virtual
+power management:
+
+processor	: 21
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 44
+model name	: Intel(R) Xeon(R) CPU           X5675  @ 3.07GHz
+stepping	: 2
+microcode	: 0x10
+cpu MHz		: 2419.809
+cache size	: 12288 KB
+physical id	: 0
+siblings	: 12
+core id		: 8
+cpu cores	: 6
+apicid		: 17
+initial apicid	: 17
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 11
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 cx16 xtpr pdcm pcid dca sse4_1 sse4_2 popcnt aes lahf_lm epb pti tpr_shadow vnmi flexpriority ept vpid dtherm ida arat
+bugs		: cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass l1tf
+bogomips	: 6120.74
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 40 bits physical, 48 bits virtual
+power management:
+
+processor	: 22
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 44
+model name	: Intel(R) Xeon(R) CPU           X5675  @ 3.07GHz
+stepping	: 2
+microcode	: 0x10
+cpu MHz		: 2443.704
+cache size	: 12288 KB
+physical id	: 0
+siblings	: 12
+core id		: 9
+cpu cores	: 6
+apicid		: 19
+initial apicid	: 19
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 11
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 cx16 xtpr pdcm pcid dca sse4_1 sse4_2 popcnt aes lahf_lm epb pti tpr_shadow vnmi flexpriority ept vpid dtherm ida arat
+bugs		: cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass l1tf
+bogomips	: 6120.74
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 40 bits physical, 48 bits virtual
+power management:
+
+processor	: 23
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 44
+model name	: Intel(R) Xeon(R) CPU           X5675  @ 3.07GHz
+stepping	: 2
+microcode	: 0x10
+cpu MHz		: 2370.177
+cache size	: 12288 KB
+physical id	: 0
+siblings	: 12
+core id		: 10
+cpu cores	: 6
+apicid		: 21
+initial apicid	: 21
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 11
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 cx16 xtpr pdcm pcid dca sse4_1 sse4_2 popcnt aes lahf_lm epb pti tpr_shadow vnmi flexpriority ept vpid dtherm ida arat
+bugs		: cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass l1tf
+bogomips	: 6120.74
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 40 bits physical, 48 bits virtual
+power management:
+
+
+
+Memory: 4k page, physical 74214236k(502892k free), swap 4194300k(0k free)
+
+vm_info: OpenJDK 64-Bit Server VM (25.212-b01) for linux-amd64 JRE (1.8.0_212-b01), built on Mar 21 2019 23:20:35 by "builduser" with gcc 8.2.1 20181127
+
+time: Thu May 23 11:39:46 2019
+timezone: EDT
+elapsed time: 1892 seconds (0d 0h 31m 32s)
+

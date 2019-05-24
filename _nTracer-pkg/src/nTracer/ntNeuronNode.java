@@ -6,6 +6,7 @@
 package nTracer;
 
 import ij.IJ;
+import java.awt.Color;
 import java.util.ArrayList;
 import javax.swing.tree.DefaultMutableTreeNode;
 
@@ -16,16 +17,13 @@ import javax.swing.tree.DefaultMutableTreeNode;
 public class ntNeuronNode extends DefaultMutableTreeNode {
 
     private ArrayList<String[]> tracingResult;
+    private Color nodeColor = null;
 
     ntNeuronNode(String name, ArrayList<String[]> tracingResult) {
         super(name);
         this.tracingResult = tracingResult;
     }
-/*
-    public ntNeuronNode duplicate(){
-        return new ntNeuronNode(this.name, getTracingResult());
-    }
-    */
+
     public ArrayList<String[]> getTracingResult() {
         return tracingResult;
     }
@@ -54,7 +52,7 @@ public class ntNeuronNode extends DefaultMutableTreeNode {
         } 
     }
 
-    public void toogleComplete() {
+    public void toggleComplete() {
         if (!this.isTrunckNode()) {
             String label = this.getTracingResult().get(0)[0];
             if (label.endsWith("*")) {
@@ -185,9 +183,8 @@ public class ntNeuronNode extends DefaultMutableTreeNode {
         if (name.contains("-")) {
             String[] names = name.split("-");
             return names.length == 2;
-        } else {
-            return false;
         }
+        return false;
     }
     
     public boolean isTerminalBranchNode() {
@@ -244,5 +241,13 @@ public class ntNeuronNode extends DefaultMutableTreeNode {
         }
         return nextNumber;
     }    
+
+    Color getNeuronColor() {
+        return this.nodeColor;
+    }
+
+    void setNeuronColor(Color newcolor) {
+        this.nodeColor = newcolor;
+    }
 
 }
