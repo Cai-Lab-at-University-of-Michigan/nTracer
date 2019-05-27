@@ -125,10 +125,13 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.Color;
 import java.awt.geom.GeneralPath;
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -144,6 +147,8 @@ import javax.swing.tree.*;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  *
@@ -160,16 +165,17 @@ public class nTracer_
     
     private int last_current_z;
     private Instant last_z_update_time;
+    public Map<coord3D, Float> color_buffer;
+    public Lock color_lock; 
 
     public nTracer_() {
-        MemoryMonitor mm = new MemoryMonitor();
-        mm.run(" ");
-        
+        this.color_buffer = new HashMap<>();
         this.last_current_z = -1;
         this.last_z_update_time = Instant.now();
+        this.color_lock = new ReentrantLock();
         
         // set DataHandler to handle data
-        IO = new ntIO();
+        IO = new ntIO(this);
         analysis = new ntAnalysis();
         Functions = new ntTracing();
         DataHandeler = new ntDataHandler();
@@ -237,6 +243,8 @@ public class nTracer_
         IJ.run("Misc...", "divide=Infinity require");
         //IJ.run("Synchronize Windows", "");
         
+        MemoryMonitor mm = new MemoryMonitor();
+        mm.run(" ");
     }
 
     // <editor-fold defaultstate="collapsed" desc="methods for setting up GUI views and Table/Tree components">
@@ -3637,15 +3645,18 @@ public class nTracer_
             if (directory == null || dataFileName == null) {
                 return false;
             }
-            InputStream parameterAndNeuronIS, expansionAndSelectionIS;
+            
+            InputStream parameterAndNeuronIS, expansionAndSelectionIS, colorTableIS;
             try {
                 System.gc();
                 parameterAndNeuronIS = IO.loadPackagedParameterAndNeuron(selectedFile);
                 expansionAndSelectionIS = IO.loadPackagedExpansionAndSelection(selectedFile);
+                colorTableIS = IO.loadPackagedColorTable(selectedFile);
                 System.gc();
             } catch (IOException e) {
                 return false;
             }
+            
             if (parameterAndNeuronIS == null) {
                 IJ.error("No neurite tracing data file found !");
                 return false;
@@ -3653,6 +3664,33 @@ public class nTracer_
             if (expansionAndSelectionIS == null) {
                 IJ.error("No tree status file found !");
                 return false;
+            }
+            if (colorTableIS == null ) {
+                IJ.log("No saved color lookup table was found, will calculate from file...");
+            } else {
+                try {
+                    // I am going to load the color table here, instead of branching again                        
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(colorTableIS, "UTF-8"));
+                    Scanner loadScanner = new Scanner(bufferedReader);
+
+                    while(loadScanner.hasNext()) {
+                        String line = loadScanner.nextLine();
+                        line = line.replaceAll("\n", "");
+
+                        String[] line_split = line.split( "\t" );
+
+                        int[] coords = { 
+                            Integer.parseInt(line_split[0]),
+                            Integer.parseInt(line_split[1]),
+                            Integer.parseInt(line_split[2])
+                        };
+
+                        coord3D newPt = new coord3D( coords );
+                        float newFloat = Float.parseFloat(line_split[3]);
+                        
+                        this.color_buffer.put(newPt, newFloat);
+                    }
+                } catch( Exception e ) {} // we dont care, because the table can just be remade
             }
             returnValue = loadInputStreamData(parameterAndNeuronIS, expansionAndSelectionIS);
         }
@@ -9125,60 +9163,93 @@ public class nTracer_
 
     public static ArrayList<int[]> getAllPrimaryBranchPoints(ntNeuronNode node) {
         ArrayList<int[]> allPoints = new ArrayList<int[]>();
+        
         if(node==null){
             return allPoints;
         }
+        
         ntNeuronNode somaNode = getSomaNodeFromNeuronTreeByNeuronNumber(node.getNeuronNumber());
-        if (somaNode.getChildCount() > 0) {
-            for (int i = 0; i < somaNode.getChildCount(); i++) {
-                ntNeuronNode primaryBranchNode = (ntNeuronNode) somaNode.getChildAt(i);
-                ArrayList<String[]> tracing = primaryBranchNode.getTracingResult();
-                for (String[] point : tracing) {
-                    int[] intPt = {0, Integer.parseInt(point[1]), 
-                        Integer.parseInt(point[2]), Integer.parseInt(point[3]), 0, 0, 0};
-                    allPoints.add(intPt);
-                }
+        
+        for (int i = 0; i < somaNode.getChildCount(); i++) {
+            ntNeuronNode primaryBranchNode = (ntNeuronNode) somaNode.getChildAt(i);
+            ArrayList<String[]> tracing = primaryBranchNode.getTracingResult();
+            
+            for (String[] point : tracing) {
+                int[] intPt = {0, Integer.parseInt(point[1]), 
+                    Integer.parseInt(point[2]), Integer.parseInt(point[3]), 0, 0, 0};
+                allPoints.add(intPt);
             }
         }
+        
         return allPoints;
     }
     
+    private Map<ntNeuronNode, Color> neuronColorTable = new HashMap<>();
+    private Lock neuronColorTableLock = new ReentrantLock();
+    
     private Color getNeuronColorFromNode( ntNeuronNode node, float alpha ) {
-        Color toreturn = node.getNeuronColor();
+        if( node == null ) return Color.white; // um this is broken?
         
-        if( toreturn == null ) { // catch lift-over condition
-            toreturn = this.getNeuronColorFromNodeOriginal( node, alpha );
-            node.setNeuronColor( toreturn );
+        Color toreturn = null;
+        
+        neuronColorTableLock.lock();
+        if(neuronColorTable.containsKey(node)) {
+            toreturn = neuronColorTable.get(node);
+            neuronColorTableLock.unlock();
+            return toreturn;
         }
         
+        neuronColorTableLock.unlock();
+        
+        toreturn = getNeuronColorFromNodeOriginal(node);
+        if( toreturn == null ) toreturn = Color.white;
+        
+        neuronColorTableLock.lock();
+        neuronColorTable.put(node, toreturn);
+        neuronColorTableLock.unlock();
+                
         float[] cc = toreturn.getRGBComponents(null); // decompose to add alpha
         toreturn = new Color( cc[0], cc[1], cc[2], alpha );
         
         return toreturn;
     }
     
-    private Color getNeuronColorFromNodeOriginal(ntNeuronNode node, float alpha) {
-        IJ.log( "Running gNCFN!" );
-        
-        System.out.println( node );
-        
+    private Color getNeuronColorFromNodeOriginal(ntNeuronNode node) {
         ArrayList<int[]> neuronPoints = getAllPrimaryBranchPoints(node);
 
-        if (neuronPoints.isEmpty()) {
+        if ( neuronPoints.isEmpty() ) {
             return Color.white;
         }
         
+        System.out.println(node);
+        long start = System.currentTimeMillis();
+        
         float[] tempColor = new float[impNChannel];
+        this.color_lock.lock();
 
         for (int channel = 0; channel < impNChannel; channel++) {
             for (int[] neuronPt : neuronPoints) {
                 if (!analysisChannels[channel]) continue;
                 int index = imp.getStackIndex(channel + 1, neuronPt[3], imp.getFrame());
-                // retrive color[channel] and calculate total intensity
-                tempColor[channel] += stk.getProcessor(index).get(neuronPt[1], neuronPt[2]);
+                // // retrive color[channel] and calculate total intensity
+                 //tempColor[channel] += stk.getProcessor(index).get(neuronPt[1], neuronPt[2]);
+                 
+                coord3D pt = new coord3D( neuronPt[1], neuronPt[2], index );
+                
+                if( this.color_buffer.containsKey(pt) ) {
+                    tempColor[channel] += this.color_buffer.get( pt );
+                } else {                    
+                    float newColor = stk.getProcessor(index).get(neuronPt[1], neuronPt[2]);
+                    tempColor[channel] += newColor;
+                    
+                    this.color_buffer.put(pt, newColor);
+                }
+                
             }
         }
-
+        
+        this.color_lock.unlock();
+        
         float[][] allChRGBratios = Functions.getAllChRGBratios();
         float[] allChActiveFloat = Functions.getAllChActiveFloat();
         float[] allChAnalysisFloat = Functions.getAllChAnalysisFloat();
@@ -9194,8 +9265,12 @@ public class nTracer_
             max = rgbColor[color] > max ? rgbColor[color] : max;
         }
         //IJ.log("max = "+max);
+        
+        System.out.println( "Took " + (System.currentTimeMillis() - start) );
+        
+        for( int i = 0; i < rgbColor.length; i++ ) rgbColor[i] /= max;
 
-        return new Color(rgbColor[0] / max, rgbColor[1] / max, rgbColor[2] / max, alpha);
+        return new Color(rgbColor[0], rgbColor[1], rgbColor[2]);
     }
 
     private void getOneBranchTraceRoiExtPt(Overlay[] neuriteTraceOL, Overlay[] neuriteNameOL, Overlay neuriteSynapseOL, Overlay neuriteConnectedOL,
@@ -11674,7 +11749,7 @@ minCostPathPoints = Functions.getMinCostPath3D(
             Overlay[] neuronConnectedOLs = new Overlay[threadNum];
             Overlay[][] neuronSpineOLs = new Overlay[threadNum][impNSlice];
             Thread[] threads = new Thread[threadNum];
-            int increament = (int) Math.ceil((double) totalChild / (double) threadNum);
+            int increment = (int) Math.ceil((double) totalChild / (double) threadNum);
             //IJ.log("increament = "+increament);
             for (int i = 0; i < threadNum; i++) {
                 for (int j = 0; j < impNSlice; j++) {
@@ -11684,8 +11759,8 @@ minCostPathPoints = Functions.getMinCostPath3D(
                 }
                 neuronSynapseOLs[i] = new Overlay();
                 neuronConnectedOLs[i] = new Overlay();
-                int start = increament * i;
-                int end = increament * (i + 1) - 1;
+                int start = increment * i;
+                int end = increment * (i + 1) - 1;
                 if (end > totalChild - 1) {
                     end = totalChild - 1;
                 }
@@ -11695,21 +11770,21 @@ minCostPathPoints = Functions.getMinCostPath3D(
                                 neuronNameOLs[i], neuronSynapseOLs[i], neuronConnectedOLs[i], neuronSpineOLs[i], start, end, extendPoints);
                 threads[i] = new Thread(getAllNeuronAndNameOLextPt);
             }
-            for (int i = 0; i < threadNum; i++) {
-                threads[i].start();
+            
+            for(Thread t : threads)
+                t.start();
+            
+            for(Thread t : threads) {
+                try{
+                    t.join();
+                } catch(Exception e) {}
             }
-            for (int i = 0; i < threadNum; i++) {
-                try {
-                    threads[i].join();
-                } catch (Exception e) {
-                }
-            }
+            
             for (int i = 0; i < threadNum; i++) {
                 for (int j = 0; j < impNSlice; j++) {
                     if (neuronTraceOLs[i][j] != null) {
                         for (int n = 0; n < neuronTraceOLs[i][j].size(); n++) {
-                            Roi roi = neuronTraceOLs[i][j].get(n);
-                            neuronTraceOL[j].add(roi);
+                            neuronTraceOL[j].add( neuronTraceOLs[i][j].get(n) );
                         }
                     }
                     if (neuronNameOLs[i][j] != null) {
@@ -11723,11 +11798,13 @@ minCostPathPoints = Functions.getMinCostPath3D(
                         }
                     }
                 }
+                
                 if (neuronSynapseOLs[i] != null) {
                     for (int n = 0; n < neuronSynapseOLs[i].size(); n++) {
                         neuronSynapseOL.add(neuronSynapseOLs[i].get(n));
                     }
                 }
+                
                 if (neuronConnectedOLs[i] != null) {
                     for (int n = 0; n < neuronConnectedOLs[i].size(); n++) {
                         neuronConnectedOL.add(neuronConnectedOLs[i].get(n));
@@ -12968,4 +13045,5 @@ minCostPathPoints = Functions.getMinCostPath3D(
         }
     }
     // </editor-fold>
+    
 }

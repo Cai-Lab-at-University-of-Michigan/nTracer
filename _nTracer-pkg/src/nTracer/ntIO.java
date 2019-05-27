@@ -23,6 +23,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.Map.Entry;
 import java.util.Scanner;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -36,10 +37,18 @@ import javax.swing.tree.DefaultTreeModel;
  * @author Dawen
  */
 public class ntIO {
+    private nTracer_ parent;
 
+    public ntIO(nTracer_ parent) {
+        Functions = new ntTracing();
+        analysis = new ntAnalysis();
+        this.parent = parent;
+    }
+    
     public ntIO() {
         Functions = new ntTracing();
         analysis = new ntAnalysis();
+        this.parent = null;
     }
 
     public ImagePlus loadImage() {
@@ -775,6 +784,24 @@ public class ntIO {
         }
         if (entry == null) {
             IJ.error("No tree status file found !");
+            return null;
+        }
+        InputStream stream = zipFile.getInputStream(entry);
+        return stream;
+    }
+    
+    public InputStream loadPackagedColorTable(File selectedFile) throws IOException {
+        String zipFilePath = selectedFile.getAbsolutePath();
+        ZipFile zipFile = new ZipFile(zipFilePath);
+        Enumeration<? extends ZipEntry> entries = zipFile.entries();
+        ZipEntry entry = null;
+        while (entries.hasMoreElements()) {
+            entry = entries.nextElement();
+            if (entry.toString().endsWith("-colorTable.txt")) {
+                break;
+            }
+        }
+        if (entry == null) {
             return null;
         }
         InputStream stream = zipFile.getInputStream(entry);
@@ -1988,6 +2015,27 @@ public class ntIO {
             IJ.error("Expansion and selection save error: " + e);
         }
 
+        // write the color table out
+        try {
+            String label = fileName + "-colorTab.txt";
+            zos.putNextEntry(new ZipEntry(label));
+
+            if( this.parent.color_buffer != null ) {
+                for( Entry<coord3D, Float> e : this.parent.color_buffer.entrySet() ) {                
+                    for( int i : e.getKey().getCoords() ) {
+                        out.writeBytes( "" + i + "\t" );
+                    }
+
+                    out.writeBytes( "" + e.getValue() );
+                    out.writeBytes("\n");
+                }
+            }
+            
+            out.flush();
+        } catch (IOException e) {
+            IJ.error("Expansion and selection save error: " + e);
+        }
+        
         out.close();
     }
 
@@ -2231,6 +2279,27 @@ public class ntIO {
             out.writeBytes("END");
             out.writeBytes("\n");
 
+            out.flush();
+        } catch (IOException e) {
+            IJ.error("Expansion and selection save error: " + e);
+        }
+        
+        // write the color table out
+        try {
+            String label = fileName + "-colorTab.txt";
+            zos.putNextEntry(new ZipEntry(label));
+
+            if( this.parent.color_buffer != null ) {
+                for( Entry<coord3D, Float> e : this.parent.color_buffer.entrySet() ) {                
+                    for( int i : e.getKey().getCoords() ) {
+                        out.writeBytes( "" + i + "\t" );
+                    }
+
+                    out.writeBytes( "" + e.getValue() );
+                    out.writeBytes("\n");
+                }
+            }
+            
             out.flush();
         } catch (IOException e) {
             IJ.error("Expansion and selection save error: " + e);

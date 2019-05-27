@@ -232,7 +232,10 @@ public class BufferedVirtualStack extends VirtualStack implements PlugIn {
             processor_buffer.remove( to_remove );
             
             buffer_clean_count++;
-            if( buffer_clean_count % 10 == 0 ) System.gc();
+            if( buffer_clean_count % 10 == 0 ) {
+                System.gc();
+                buffer_clean_count = 0;
+            }
         }
         
         ImageProcessor to_return = null;

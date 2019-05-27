@@ -8,7 +8,9 @@ package nTracer;
 import ij.IJ;
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Map;
 import javax.swing.tree.DefaultMutableTreeNode;
+import static nTracer.nTracer_.getAllPrimaryBranchPoints;
 
 /**
  *
@@ -240,14 +242,5 @@ public class ntNeuronNode extends DefaultMutableTreeNode {
             isNextNumber = true;
         }
         return nextNumber;
-    }    
-
-    Color getNeuronColor() {
-        return this.nodeColor;
     }
-
-    void setNeuronColor(Color newcolor) {
-        this.nodeColor = newcolor;
-    }
-
 }
