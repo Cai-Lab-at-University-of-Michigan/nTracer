@@ -15,16 +15,32 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class BufferedVirtualStack extends VirtualStack implements PlugIn {
     protected List<FileInfo> info;
+    protected BufferVirtualStackGUI gui;
+    
+    public Map<Integer,ImageProcessor> processor_buffer; // 300 * ~20MB -> ~6GB? 100 * ~30MB -> ~2GB?
+    public int proc_buffer_MAX; 
+    public Queue<Integer> processor_fifo;
+    public int buffer_clean_count;
+    
+    public Lock test_lock;
 
     /* Default constructor. */
     public BufferedVirtualStack() {
+        this.test_lock = new ReentrantLock();
+        this.proc_buffer_MAX = 100;
+        this.buffer_clean_count = 0;
         this.processor_fifo = new LinkedList<>();
         this.processor_buffer = new HashMap<>();
         this.info = new ArrayList<>();
+        
+        this.gui = new BufferVirtualStackGUI( this );
     }
 
     /* Constructs a FileInfoVirtualStack from a FileInfo object. */
     public BufferedVirtualStack(FileInfo fi) {
+        this.test_lock = new ReentrantLock();
+        this.proc_buffer_MAX = 100;
+        this.buffer_clean_count = 0;
         this.processor_fifo = new LinkedList<>();
         this.processor_buffer = new HashMap<>();
         this.info = new ArrayList<>();
@@ -35,11 +51,16 @@ public class BufferedVirtualStack extends VirtualStack implements PlugIn {
         if (imp != null) {
             imp.show();
         }
+        
+        this.gui = new BufferVirtualStackGUI( this );
     }
 
     /* Constructs a FileInfoVirtualStack from a FileInfo 
 		object and displays it if 'show' is true. */
     public BufferedVirtualStack(FileInfo fi, boolean show) {
+        this.test_lock = new ReentrantLock();
+        this.proc_buffer_MAX = 100;
+        this.buffer_clean_count = 0;
         this.processor_fifo = new LinkedList<>();
         this.processor_buffer = new HashMap<>();
         this.info = new ArrayList<>();
@@ -50,6 +71,8 @@ public class BufferedVirtualStack extends VirtualStack implements PlugIn {
         if (imp != null && show) {
             imp.show();
         }
+        
+        this.gui = new BufferVirtualStackGUI( this );
     }
 
     /**
@@ -215,13 +238,6 @@ public class BufferedVirtualStack extends VirtualStack implements PlugIn {
      * Returns an ImageProcessor for the specified image, were 1<=n<=nImages.
      * Returns null if the stack is empty.
      */
-    protected Map<Integer,ImageProcessor> processor_buffer;
-    protected int proc_buffer_MAX = 300; // 300 * ~20MB -> ~6GB? 100 * ~30MB -> ~2GB?
-    protected Queue<Integer> processor_fifo;
-    protected int buffer_clean_count = 0;
-    
-    Lock test_lock = new ReentrantLock();
-    
     public ImageProcessor getProcessor(int n){
         //IJ.log("Current Cache Size: " + processor_fifo.size());
         
@@ -248,6 +264,7 @@ public class BufferedVirtualStack extends VirtualStack implements PlugIn {
             processor_buffer.put(n, to_return);
             processor_fifo.add(n);
         }
+        this.gui.updateStatus();
         test_lock.unlock();
         
         return to_return;
@@ -337,5 +354,6 @@ public class BufferedVirtualStack extends VirtualStack implements PlugIn {
     public synchronized void addImage(FileInfo fileInfo) {
         info.add( fileInfo );
     }
-
+    
+    //ImagePlus.close();
 }

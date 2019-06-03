@@ -40,9 +40,12 @@ public class coord3D {
         return new int[]{ x, y, z};
     }
 
+   
+    final int hash_scale = 7500;
+    
     @Override
     public int hashCode() {
-        return x^y^z;
+        return (x) + (y*hash_scale) + (z*hash_scale*hash_scale);
     }
 
     @Override

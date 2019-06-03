@@ -18,90 +18,8 @@ kalle.ha...@gmail.com		Owner
 ra4k...@gmail.com		Committer
 
  */
+
 package nTracer;
-
-/*
- * nTracer_.java
- * Ver 1.1.0
- * Created on June 03, 2018
- 
- * Ver 1.0.0 - new data format {Type, xOut, yIn, z, R, synapse, connection}
-             - data can be exported as extended SWC format that stores individual neuron traces
-             - freehand-tool can be used to draw soma outline
-             - Neuron/process tagging (annotation) and selection from commend line
-             - 'Alt' instead of 'Shift' key as keyboard shortcut modifier
-             - additional "update" button in "Overlay" panel tab for manually update tracing overlay
-             - Overlay line width for "All neurons" now can be changed to be thinner than the "selected neuron" overlay
-             - fixed many bugs, especially for forming connections
-
- * Ver 1.0.1 - mark and select processes as incompleted tracing.
-             - export SWC in standard or extended format
-
- * Ver 1.0.2 - Associate each image stack with one nTracer instance (automatically load image at start, quit when close image).
-             - fix memory leak by adding garbage collection
-
- * Ver 1.0.3 - fix "log connections" bugs
-             - remove connection/synapse when rename neuronal process type
-             - fix bug in selects process (and point) by mouse click, now selects the nearest neuron
-
- * Ver 1.0.4 - Add scale factor (xOut/y/z resolution) to result file and use it for SWC export
-             - Add synapse export for analysis
-             - Move batch process from nTracer inferface to an independent plugin
- 
- * Ver 1.0.5 - Allow tracing and tagging dendritic spine (added spineTree data structure and mark corresponding point in neurite tracing result as "Spine#n/tag")
-             - Allow adding label to selected tracing point (Type/tag*[first incomplete point]; or Type/tag (middle points) or Spine#n/tag [spine point])
-             - Fix bug for panel resolution in Mac OS (redraw GUI and rebuild using Mac Netbeans)
- 
- * Ver 1.0.6 - Extend "Select neuron from Tag": "=" for equal, "|" for OR, "&" for AND, "!" for NOT operators to select individual tags
-             - Bug fixed in "join branch" (add tracing type), "delete point, branch, neuron" (remove spine from data)
-             - Batch Process 1.0.6 added batch "log connection", "export skeleton 3D model)"
- 
- * Ver 1.0.7 - Bug fixed for not able to use 'Ctrl' hotkey in Mac; removed ImageJ's canvas KeyListener and change all Hotkey modifiers to 'Ctrl'
-             - Change "Spine" identifier in "Type" column from, eg. "Spine#3" to "Dendrite:Spine#3"; 
-                 and remove the constrain of not able to mark spine at the end point of a branch
-             - Removed "Trace" tooltip from toolbar; use "freeline" only.
-
- * Ver 1.0.8 - Allow RGB (convert to composite) or single channel (monochromatic, duplicate and make 2-channel composite) image to be traced.
-             - Fix bug in SWC export; SWC with spine export option
-             - Overlay function update: when single neuron is selected, "CONNCTION ONLY" option will assign connections to their connected neuron colors
-             - Fix bugs in opening and closing image, saving and loading data file.
- 
- * Ver 1.0.9 - Fix exception bugs. Works with ImageJ1.52b with imagescience.jar; Do not use Fiji!
-             - Fix coordinate bugs in Alignmaster
-
- * Ver 1.1.0 - Added a z-projection window to show a substack maximum projection of the current slice to aid tracing. 
-               The number of projection slices and the projection area can be adjusted under the "Tracing" parameter tab 
-               <Substack Z Projection> (e.g. Z +/- = 5; X/Y = 512 means project +/-5 slices of a 512x512 ROI centered in the middle of the tracing stack).
-             - Mouse cursors pointing to the same position are displayed in both images. Image size and magnification level are also synchronized.
-             - Hotkeys are added for better tracing experience: 
-               "q" = zoom out; "w" = zoom in;
-               "j" = select 'magnifier tool' (another way to use mouse left/right clicks to zoom in/out); 
-               "h" = select 'free-hand selection tool' (default tracing tool); 
-               "space" = select 'scrolling tool' (aka hand moving tool, allow using mouse left click-drag to move image display when zoomed larger than display window).
- * Ver 1.1.1 - Fixed the bug that causes not able to adjust B&C on the main image stack, by removing MouseListener from zProjection image.
-             - Hotkeys are added for better tracing experience:
-               "," = reduce substack Z projection interval to one previous value
-               "." = increase substack Z projection interval to one next value
-             - GUI JFrame becomes resizable to accommodate lower res monitors
-             - Add soma statistics to calculate soma surface area and volume
-
-  Todo:
- * Ver 1.1.2 - Change data structure for "Synapse" in point table, from "boolean" to "String" to record:
-               "0" - non synapse point; "1, 2, 3 ..." numbers as synapse number
-               Adapts "Spine" data structure to record all synapse: Type/ xOut/ yIn/ z/ r/ Locale (neurite or soma slice name)
-                    Type (Bouton, Post, Spine, ND - not determined)
-               Change "Connection" in point table to record the connected synapse #.
-
- * Ver 1.1.3 
- *          1) Automatic connection identification
- *          2) Volume filling and skeleton centering
- *          3) Integrate tracing results for the same image stack from multiple tracers
-
- * Future plan:
- *          1) Migration to ImageJ2 to take the advantage of handling large dataset?
- *          2) Merge tracing retuls from overlapping stacks (ImageJ2 native?)
- *          3) Crop/Save tracing image and result (get sub-tracing from selected neurons ?)
- */
 
 import ij.*;
 import ij.IJ;
@@ -163,11 +81,13 @@ public class nTracer_
         MouseWheelListener,
         KeyListener {
     
+    public static final String VERSION = "nTracer 1.2.0";
+    
     private int last_current_z;
     private Instant last_z_update_time;
     public Map<coord3D, Float> color_buffer;
-    public Lock color_lock; 
-
+    public Lock color_lock;
+    
     public nTracer_() {
         this.color_buffer = new HashMap<>();
         this.last_current_z = -1;
@@ -181,7 +101,6 @@ public class nTracer_
         DataHandeler = new ntDataHandler();
         
         if (!IJ.isJava18()) {
-            nTracerVersion = " ";
             IJ.error("Fiji/ImageJ-Java8 version is required !");
             return;
         }
@@ -219,6 +138,8 @@ public class nTracer_
         allSynapseRadius = (synapseRadius - lineWidthOffset / 2 > 0.5) ? synapseRadius - lineWidthOffset / 2 : 0.5;
         allSynapseSize = allSynapseRadius * 2;
         //IJ.log("displayDepth = +/- "+extendDisplayPoints);
+        
+        this.setTitle( nTracer_.VERSION );
 
         initHistory();
         initPointTable();
@@ -231,7 +152,7 @@ public class nTracer_
         cropData_jMenuItem.setVisible(false);
         debug_jMenu.setVisible(false);
         this.setVisible(true);
-        nTracerVersion = this.getTitle() + "  - pixel resolutions (x, y, z) um/pixel: ";
+        this.setTitle( this.getTitle() + " - pixel resolutions (x, y, z) um/pixel:" );
          
         if (!openImage()) {
             quit();
@@ -722,7 +643,7 @@ public class nTracer_
         debug_jMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-        setTitle("nTracer-1.1.2");
+        setTitle("nTracer");
         setBounds(new java.awt.Rectangle(0, 0, 0, 0));
 
         main_jTabbedPane.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
@@ -1614,7 +1535,7 @@ public class nTracer_
                 .addGroup(selected_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(branchLineWidth_jSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(overlaySelectedBranch_jCheckBox, javax.swing.GroupLayout.DEFAULT_SIZE, 14, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 6, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(selected_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(overlaySelectedSpine_jCheckBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(spineLineWidth_jSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -1624,7 +1545,7 @@ public class nTracer_
                         .addComponent(synapseRadius_jSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(overlaySelectedConnection_jCheckBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(overlaySelectedSynapse_jCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 8, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 6, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(selected_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(overlayPointBox_jCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(pointBoxLineWidth_jSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -2026,7 +1947,7 @@ public class nTracer_
                 .addGroup(tracing_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(toogleTracingCompleteness_jButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(zProjectionInterval_jPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(samplingTolerance_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 215, Short.MAX_VALUE)
+                    .addComponent(samplingTolerance_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 230, Short.MAX_VALUE)
                     .addComponent(colorSamplingRadius_jPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(tracing_jPanelLayout.createSequentialGroup()
                         .addComponent(tracingMethod_jPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -2066,7 +1987,6 @@ public class nTracer_
         neuronList_jTree.setMaximumSize(new java.awt.Dimension(30, 16));
         neuronList_jTree.setPreferredSize(new java.awt.Dimension(30, 16));
         neuronList_jTree.setRootVisible(false);
-        neuronList_jTree.setShowsRootHandles(true);
         neuronList_jScrollPane.setViewportView(neuronList_jTree);
 
         displaySomaList_jTree.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Soma Slices", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
@@ -2076,7 +1996,6 @@ public class nTracer_
         displaySomaList_jTree.setMaximumSize(new java.awt.Dimension(30, 16));
         displaySomaList_jTree.setPreferredSize(new java.awt.Dimension(30, 16));
         displaySomaList_jTree.setRootVisible(false);
-        displaySomaList_jTree.setShowsRootHandles(true);
         somaList_jScrollPane.setViewportView(displaySomaList_jTree);
 
         pointTable_jScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), "Traced points (Crtl-Home => top | Crtl-End => bottom)", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
@@ -2424,7 +2343,7 @@ public class nTracer_
                     .addComponent(toggleCh7_jCheckBox)
                     .addComponent(toggleCh6_jCheckBox)
                     .addComponent(toggleCh5_jCheckBox))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(channel_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(toggleColor_jLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(r_jRadioButton)
@@ -3138,7 +3057,7 @@ public class nTracer_
         xyzResolutions[0] = cal.pixelWidth;
         xyzResolutions[1] = cal.pixelHeight;
         xyzResolutions[2] = cal.pixelDepth;     
-        this.setTitle(nTracerVersion + "(" + xyzResolutions[0] + ", " + xyzResolutions[1] + ", " + xyzResolutions[2] + ")");
+        this.setTitle( this.VERSION + " - pixel resolutions (x, y, z) um/pixel: (" + xyzResolutions[0] + ", " + xyzResolutions[1] + ", " + xyzResolutions[2] + ")");
         int currentZ = imp.getZ();
         imp.setZ(1);
         imp.setZ(imp.getNSlices());
@@ -3759,7 +3678,7 @@ public class nTracer_
             boolean[] active = cmp.getActiveChannels();
             System.arraycopy(activeChannels, 0, active, 0, active.length);
             cmp.updateAndDraw();
-            this.setTitle(nTracerVersion + "(" + xyzResolutions[0] + ", " + xyzResolutions[1] + ", " + xyzResolutions[2] + "}");
+            this.setTitle( this.VERSION + " - pixel resolutions (x, y, z) um/pixel: (" + xyzResolutions[0] + ", " + xyzResolutions[1] + ", " + xyzResolutions[2] + ")");
         } catch (IOException e) {
             return false;
         }
@@ -11143,12 +11062,10 @@ minCostPathPoints = Functions.getMinCostPath3D(
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="data variables">
-    private final String nTracerVersion;
     public static double[] xyzResolutions = new double[3];
     private final ntToolbar ntToolTrace = new ntToolbar(1, "Trace"); //new ntToolbar(1, "Trace Neurite");
     //private final ntToolbar ntToolSoma = new ntToolbar(2, "Soma");   //new ntToolbar(2, "Soma");
     //public static int somaChannel = 0;     // image channel that contains soma stain
-    private final Color synapseColor = Color.yellow;
     private final Color connectionColor = Color.green;
     //private HashMap somaROIs = new HashMap();
     public static String toggleColor;

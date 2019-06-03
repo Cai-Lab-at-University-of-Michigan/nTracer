@@ -274,7 +274,7 @@
   </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="0"/>
-    <Property name="title" type="java.lang.String" value="nTracer-1.1.2"/>
+    <Property name="title" type="java.lang.String" value="nTracer"/>
     <Property name="bounds" type="java.awt.Rectangle" editor="org.netbeans.beaninfo.editors.RectangleEditor">
       <Rectangle value="[0, 0, 0, 0]"/>
     </Property>
@@ -1603,7 +1603,7 @@
                               <Component id="branchLineWidth_jSpinner" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="overlaySelectedBranch_jCheckBox" linkSize="26" pref="14" max="32767" attributes="0"/>
                           </Group>
-                          <EmptySpace pref="6" max="32767" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="overlaySelectedSpine_jCheckBox" alignment="3" max="32767" attributes="0"/>
                               <Component id="spineLineWidth_jSpinner" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -1616,7 +1616,7 @@
                               </Group>
                               <Component id="overlaySelectedSynapse_jCheckBox" linkSize="26" min="-2" pref="8" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace pref="6" max="32767" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="overlayPointBox_jCheckBox" alignment="3" min="-2" pref="20" max="-2" attributes="0"/>
                               <Component id="pointBoxLineWidth_jSpinner" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -1994,7 +1994,7 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="toogleTracingCompleteness_jButton" alignment="0" max="32767" attributes="0"/>
                           <Component id="zProjectionInterval_jPanel" alignment="0" max="32767" attributes="0"/>
-                          <Component id="samplingTolerance_jPanel" alignment="0" pref="215" max="32767" attributes="0"/>
+                          <Component id="samplingTolerance_jPanel" alignment="0" pref="230" max="32767" attributes="0"/>
                           <Component id="colorSamplingRadius_jPanel" alignment="0" max="32767" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="tracingMethod_jPanel" max="32767" attributes="0"/>
@@ -2710,7 +2710,6 @@
               <Dimension value="[30, 16]"/>
             </Property>
             <Property name="rootVisible" type="boolean" value="false"/>
-            <Property name="showsRootHandles" type="boolean" value="true"/>
           </Properties>
         </Component>
       </SubComponents>
@@ -2742,7 +2741,6 @@
               <Dimension value="[30, 16]"/>
             </Property>
             <Property name="rootVisible" type="boolean" value="false"/>
-            <Property name="showsRootHandles" type="boolean" value="true"/>
           </Properties>
         </Component>
       </SubComponents>
@@ -3034,7 +3032,7 @@
                       <Component id="toggleCh6_jCheckBox" alignment="2" min="-2" max="-2" attributes="0"/>
                       <Component id="toggleCh5_jCheckBox" alignment="2" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="19" max="32767" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="toggleColor_jLabel" alignment="3" max="32767" attributes="0"/>
                       <Component id="r_jRadioButton" alignment="3" min="-2" max="-2" attributes="0"/>
