@@ -11,7 +11,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * This plugin opens a multi-page TIFF file as a virtual stack. It implements
- * the File/Import/TIFF Virtual Stack command.
+ * the File/Import/TIFF Virtual Stack command. 
  */
 public class BufferedVirtualStack extends VirtualStack implements PlugIn {
     protected List<FileInfo> info;

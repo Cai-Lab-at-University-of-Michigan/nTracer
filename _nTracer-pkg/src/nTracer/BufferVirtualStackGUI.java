@@ -186,7 +186,11 @@ public class BufferVirtualStackGUI extends javax.swing.JFrame {
     }
     
     public void updateStatus() {
-        this.setStatus( this.parent.processor_buffer.size() );
+        int buffer_size = this.parent.processor_buffer.size();
+        if( buffer_size >= this.parent.proc_buffer_MAX ) {
+            buffer_size = this.parent.proc_buffer_MAX;
+        }
+        this.setStatus( buffer_size );
     }
     
     public void setStatus( int val ) {
