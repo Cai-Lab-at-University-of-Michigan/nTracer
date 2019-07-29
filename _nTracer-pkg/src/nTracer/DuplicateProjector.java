@@ -47,8 +47,8 @@ public class DuplicateProjector implements PlugIn, TextListener, ItemListener {
     private boolean titleChanged;
     private GenericDialog gd;
 
-    public ImagePlus duplicateAndProject(ImagePlus imp, int firstC, int lastC, int firstZ, int lastZ, int firstT, int lastT) {
-
+    public ImagePlus duplicateAndProject(ImagePlus imp, int firstC, int lastC, int firstZ, int lastZ) {
+        
         // !!!!
         //  Code from Duplicator.run(__) method:
         // !!!!
@@ -61,27 +61,35 @@ public class DuplicateProjector implements PlugIn, TextListener, ItemListener {
         }
 
         ImageStack stack = imp.getStack();
-        ImageStack stack2 = null;
-
-        for (int t = firstT; t <= lastT; t++) {
+        ImageStack stack2 = new ImageStack(rect.width, rect.height, null);
+        
+        for (int c = firstC; c <= lastC; c++) {
+            float[] projection = new float[ rect.width * rect.height ];
+            Arrays.fill( projection, Float.MIN_VALUE );
+                        
             for (int z = firstZ; z <= lastZ; z++) {
-                for (int c = firstC; c <= lastC; c++) {
-                    int n1 = imp.getStackIndex(c, z, t);
-                    ImageProcessor ip = stack.getProcessor(n1);
-                    String label = stack.getSliceLabel(n1);
-                    ip.setRoi(rect);
-                    ip = ip.crop();
-                    if (stack2 == null) {
-                        stack2 = new ImageStack(ip.getWidth(), ip.getHeight(), null);
+                int frame_n = imp.getStackIndex(c, z, 1);
+                ImageProcessor ip = stack.getProcessor(frame_n);
+                ip.setRoi(rect);
+                
+                float[][] frame_data = ip.crop().getFloatArray();
+                
+                for( int i = 0; i < frame_data.length; i++ ) { // loop over width
+                    for( int j = 0; j < frame_data[0].length; j++ ) {
+                        if( frame_data[i][j] > projection[i+j*rect.width] ) {
+                            projection[ i+j*rect.width ] = frame_data[i][j];
+                        }
                     }
-                    stack2.addSlice(label, ip);
                 }
             }
+            
+            FloatProcessor fp = new FloatProcessor( rect.width, rect.height, projection );
+            stack2.addSlice("", fp);
         }
 
         ImagePlus imp2 = imp.createImagePlus();
         imp2.setStack("DUP_" + imp.getTitle(), stack2);
-        imp2.setDimensions(lastC - firstC + 1, lastZ - firstZ + 1, lastT - firstT + 1);
+        imp2.setDimensions(lastC - firstC + 1, 1, 1);
         if (imp.isComposite()) {
             int mode = ((CompositeImage) imp).getMode();
             if (lastC > firstC) {
@@ -108,12 +116,8 @@ public class DuplicateProjector implements PlugIn, TextListener, ItemListener {
         Overlay overlay = imp.getOverlay();
         if (overlay != null && !imp.getHideOverlay()) {
             Overlay overlay2 = overlay.crop(roi2 != null ? roi2.getBounds() : null);
-            overlay2.crop(firstC, lastC, firstZ, lastZ, firstT, lastT);
+            overlay2.crop(firstC, lastC, 1, 1, 1, 1);
             imp2.setOverlay(overlay2);
-        }
-
-        if (Recorder.record) {
-            Recorder.recordCall("imp2 = new Duplicator().run(imp, " + firstC + ", " + lastC + ", " + firstZ + ", " + lastZ + ", " + firstT + ", " + lastT + ");");
         }
 
         return imp2;

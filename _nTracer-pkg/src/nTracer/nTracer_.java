@@ -8727,11 +8727,12 @@ public class nTracer_
         }
 
         imp.setRoi(roiXmin, roiYmin, roiXmax - roiXmin, roiYmax - roiYmin);
-        ImagePlus impCrop = (new Duplicator()).run(imp, 1, impNChannel, minZ, maxZ, 1, impNFrame);
-        impCrop.setOverlay(null);
+        ImagePlus temp = ( new DuplicateProjector() ).duplicateAndProject(imp, 1, impNChannel, minZ, maxZ);
+        //ImagePlus impCrop = (new Duplicator()).run(imp, 1, impNChannel, minZ, maxZ, 1, impNFrame);
+        //impCrop.setOverlay(null);
         imp.setRoi(impRoi);
         
-        ImagePlus temp = ZProjector.run(impCrop, "max", 1, impCrop.getNSlices());
+        //ImagePlus temp = ZProjector.run(impCrop, "max", 1, impCrop.getNSlices());
         impZproj.setImage(temp);
         impZproj.setOverlay(null);
         winZproj.setSize(win.getSize());
@@ -8739,7 +8740,7 @@ public class nTracer_
         impZproj.updateAndDraw();
         
         temp.close();
-        impCrop.close();
+        //impCrop.close();
 
         boolean[] chActive = cmp.getActiveChannels();
         String chActSetting = "";
