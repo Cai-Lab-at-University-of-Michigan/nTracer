@@ -186,6 +186,7 @@ public class BufferVirtualStackGUI extends javax.swing.JFrame {
     }
     
     public void updateStatus() {
+        // This code prevents the "n+1 overflow error"
         int buffer_size = this.parent.processor_buffer.size();
         if( buffer_size >= this.parent.proc_buffer_MAX ) {
             buffer_size = this.parent.proc_buffer_MAX;
