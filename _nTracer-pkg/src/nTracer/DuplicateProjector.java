@@ -46,6 +46,74 @@ public class DuplicateProjector implements PlugIn, TextListener, ItemListener {
 	private boolean legacyMacro;
 	private boolean titleChanged;
 	private GenericDialog gd;
+        
+        public ImagePlus duplicateAndProject(ImagePlus imp, int firstC, int lastC, int firstZ, int lastZ, int firstT, int lastT) {
+            
+            // !!!!
+            //  Code from Duplicator.run(__) method:
+            // !!!!
+            
+            Rectangle rect = null;
+            Roi roi = imp.getRoi();
+            Roi roi2 = cropRoi(imp, roi);
+            if (roi2 != null && roi2.isArea()) {
+                rect = roi2.getBounds();
+            }
+            ImageStack stack = imp.getStack();
+            ImageStack stack2 = null;
+            for (int t = firstT; t <= lastT; t++) {
+                for (int z = firstZ; z <= lastZ; z++) {
+                    for (int c = firstC; c <= lastC; c++) {
+                        int n1 = imp.getStackIndex(c, z, t);
+                        ImageProcessor ip = stack.getProcessor(n1);
+                        String label = stack.getSliceLabel(n1);
+                        ip.setRoi(rect);
+                        ip = ip.crop();
+                        if (stack2 == null) {
+                            stack2 = new ImageStack(ip.getWidth(), ip.getHeight(), null);
+                        }
+                        stack2.addSlice(label, ip);
+                    }
+                }
+            }
+
+            ImagePlus imp2 = imp.createImagePlus();
+            imp2.setStack("DUP_" + imp.getTitle(), stack2);
+            imp2.setDimensions(lastC - firstC + 1, lastZ - firstZ + 1, lastT - firstT + 1);
+            if (imp.isComposite()) {
+                int mode = ((CompositeImage) imp).getMode();
+                if (lastC > firstC) {
+                    imp2 = new CompositeImage(imp2, mode);
+                    int i2 = 1;
+                    for (int i = firstC; i <= lastC; i++) {
+                        LUT lut = ((CompositeImage) imp).getChannelLut(i);
+                        ((CompositeImage) imp2).setChannelLut(lut, i2++);
+                    }
+                } else if (firstC == lastC) {
+                    LUT lut = ((CompositeImage) imp).getChannelLut(firstC);
+                    imp2.getProcessor().setColorModel(lut);
+                    imp2.setDisplayRange(lut.min, lut.max);
+                }
+            }
+            imp2.setOpenAsHyperStack(true);
+            Calibration cal = imp2.getCalibration();
+            if (roi != null && (cal.xOrigin != 0.0 || cal.yOrigin != 0.0)) {
+                cal.xOrigin -= roi.getBounds().x;
+                cal.yOrigin -= roi.getBounds().y;
+            }
+            Overlay overlay = imp.getOverlay();
+            if (overlay != null && !imp.getHideOverlay()) {
+                Overlay overlay2 = overlay.crop(roi2 != null ? roi2.getBounds() : null);
+                overlay2.crop(firstC, lastC, firstZ, lastZ, firstT, lastT);
+                imp2.setOverlay(overlay2);
+            }
+            if (Recorder.record) {
+                Recorder.recordCall("imp2 = new Duplicator().run(imp, " + firstC + ", " + lastC + ", " + firstZ + ", " + lastZ + ", " + firstT + ", " + lastT + ");");
+            }
+            return imp2;
+            
+            //return null;
+        }
 
 	public void run(String arg) {
 		imp = IJ.getImage();
@@ -376,6 +444,7 @@ public class DuplicateProjector implements PlugIn, TextListener, ItemListener {
 				}
 			}
 		}
+                
 		ImagePlus imp2 = imp.createImagePlus();
 		imp2.setStack("DUP_"+imp.getTitle(), stack2);
 		imp2.setDimensions(lastC-firstC+1, lastZ-firstZ+1, lastT-firstT+1);
