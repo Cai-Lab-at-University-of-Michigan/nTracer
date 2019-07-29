@@ -8727,11 +8727,11 @@ public class nTracer_
         }
 
         imp.setRoi(roiXmin, roiYmin, roiXmax - roiXmin, roiYmax - roiYmin);
-        ImagePlus impCrop = new Duplicator().run(imp, 1, impNChannel, minZ, maxZ, 1, impNFrame);
+        ImagePlus impCrop = (new Duplicator()).run(imp, 1, impNChannel, minZ, maxZ, 1, impNFrame);
         impCrop.setOverlay(null);
         imp.setRoi(impRoi);
         
-        ImagePlus temp = new ZProjector().run(impCrop, "max", 1, impCrop.getNSlices());
+        ImagePlus temp = ZProjector.run(impCrop, "max", 1, impCrop.getNSlices());
         impZproj.setImage(temp);
         impZproj.setOverlay(null);
         winZproj.setSize(win.getSize());
@@ -8745,9 +8745,9 @@ public class nTracer_
         String chActSetting = "";
         for (int c = 0; c < chActive.length; c++) {
             if (chActive[c]) {
-                chActSetting = chActSetting + "1";
+                chActSetting += "1";
             } else {
-                chActSetting = chActSetting + "0";
+                chActSetting += "0";
             }
         }
         
