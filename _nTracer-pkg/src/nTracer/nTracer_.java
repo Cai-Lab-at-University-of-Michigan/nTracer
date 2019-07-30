@@ -2992,7 +2992,9 @@ public class nTracer_
         cns.addKeyListener(this);
         cns.disablePopupMenu(true);
     }
+    
     private void initImageZproj(){
+        //impZproj = DuplicateProjector.duplicateAndProject( imp, 1, 1, 1, 1 );
         impZproj = new ZProjector().run(imp, "max", 1, 1);
         impZproj.show();
         cnsZproj = impZproj.getCanvas();
@@ -8679,7 +8681,7 @@ public class nTracer_
     }
     
     private void updateZprojectionImp() {
-        if (!projectionUpdate_jCheckBox.isSelected()) {
+        if (!projectionUpdate_jCheckBox.isSelected() ) {
             return;
         }
         
@@ -8688,8 +8690,10 @@ public class nTracer_
             //System.out.println("Skipping Z-Projection...");
             return;
         }
+        
         last_z_update_time = Instant.now();
         
+        if( impZproj == null ) return;
         int impZprojC = impZproj.getC();
 
         int currentZ = imp.getZ();
@@ -8728,11 +8732,8 @@ public class nTracer_
 
         imp.setRoi(roiXmin, roiYmin, roiXmax - roiXmin, roiYmax - roiYmin);
         ImagePlus temp = ( new DuplicateProjector() ).duplicateAndProject(imp, 1, impNChannel, minZ, maxZ);
-        //ImagePlus impCrop = (new Duplicator()).run(imp, 1, impNChannel, minZ, maxZ, 1, impNFrame);
-        //impCrop.setOverlay(null);
         imp.setRoi(impRoi);
         
-        //ImagePlus temp = ZProjector.run(impCrop, "max", 1, impCrop.getNSlices());
         impZproj.setImage(temp);
         impZproj.setOverlay(null);
         winZproj.setSize(win.getSize());

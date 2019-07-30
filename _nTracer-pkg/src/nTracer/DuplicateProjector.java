@@ -10,8 +10,7 @@ package nTracer;
  * @author loganaw
  *
  * This combines two plugin implementations to reduce data copies when using
- * both in tandem:
- * - https://imagej.nih.gov/ij/source/ij/plugin/Duplicator.java
+ * both in tandem: - https://imagej.nih.gov/ij/source/ij/plugin/Duplicator.java
  * - https://github.com/imagej/imagej1/blob/master/ij/plugin/ZProjector.java
  *
  */
@@ -20,13 +19,14 @@ import ij.*;
 import ij.process.*;
 import ij.gui.*;
 import ij.measure.Calibration;
-import java.lang.*;
 import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
+
 
 public class DuplicateProjector {
-    
-    public ImagePlus duplicateAndProject(ImagePlus imp, int firstC, int lastC, int firstZ, int lastZ) {
-        
+
+    public static ImagePlus duplicateAndProject(ImagePlus imp, int firstC, int lastC, int firstZ, int lastZ) {
+
         // !!!!
         //  Code from Duplicator.run(__) method:
         // !!!!
@@ -36,32 +36,75 @@ public class DuplicateProjector {
 
         if (roi2 != null && roi2.isArea()) {
             rect = roi2.getBounds();
+        } else {
+            rect = new Rectangle( imp.getWidth(), imp.getHeight() );
         }
 
         ImageStack stack = imp.getStack();
-        ImageStack stack2 = new ImageStack(rect.width, rect.height, null);
+        ImageStack stack2 = new ImageStack(rect.width, rect.height);
         
         for (int c = firstC; c <= lastC; c++) {
-            float[] projection = new float[ rect.width * rect.height ];
-            Arrays.fill( projection, Float.MIN_VALUE );
-                        
+            float[] projection = new float[rect.width * rect.height];
+            Arrays.fill(projection, Float.MIN_VALUE);
+
             for (int z = firstZ; z <= lastZ; z++) {
                 int frame_n = imp.getStackIndex(c, z, 1);
+                
+                long startTime = System.nanoTime();
                 ImageProcessor ip = stack.getProcessor(frame_n);
                 ip.setRoi(rect);
                 
-                float[][] frame_data = ip.crop().getFloatArray();
+                long endTime = System.nanoTime();
+		long timeElapsed = endTime - startTime;
+		System.out.println("Load time in nanoseconds  : " + timeElapsed);
                 
-                for( int i = 0; i < frame_data.length; i++ ) { // loop over width
-                    for( int j = 0; j < frame_data[0].length; j++ ) {
-                        if( frame_data[i][j] > projection[i+j*rect.width] ) {
-                            projection[ i+j*rect.width ] = frame_data[i][j];
+                startTime = System.nanoTime();
+                ip = ip.crop();
+                
+                endTime = System.nanoTime();
+		timeElapsed = endTime - startTime;
+		System.out.println("Crop Execution time in nanoseconds  : " + timeElapsed);
+                             
+                startTime = System.nanoTime();
+                Object frame_object = ip.getPixels();
+                
+                endTime = System.nanoTime();
+		timeElapsed = endTime - startTime;
+		System.out.println("Execution time in nanoseconds  : " + timeElapsed);
+                
+                startTime = System.nanoTime();
+                
+                if (frame_object instanceof byte[]) {
+                    byte[] frame_data = (byte[]) frame_object;
+
+                    for (int j = 0; j < rect.height; j++) {
+                        for (int i = 0; i < rect.width; i++) { // loop over width
+                            final int frame_coord = j * rect.width + i;
+                            final int projection_coord = j * rect.width + i;
+                            
+                            if (frame_data[frame_coord] > projection[projection_coord]) {
+                                projection[projection_coord] = frame_data[frame_coord];
+                            }
                         }
                     }
                 }
+                
+                endTime = System.nanoTime();
+		timeElapsed = endTime - startTime;
+		System.out.println("Project Execution time in nanoseconds  : " + timeElapsed);
+        
+                /*
+                for (int j = 0; j < frame_data[0].length; j++) {
+                        for (int i = 0; i < frame_data.length; i++) { // loop over width
+                            if (frame_data[i][j] > projection[j * rect.width + i]) {
+                                projection[j * rect.width + i] = frame_data[i][j];
+                            }
+                        }
+                }*/
+
             }
-            
-            FloatProcessor fp = new FloatProcessor( rect.width, rect.height, projection );
+
+            FloatProcessor fp = new FloatProcessor(rect.width, rect.height, projection);
             stack2.addSlice("", fp);
         }
 
@@ -107,7 +150,7 @@ public class DuplicateProjector {
 	* Returns the part of 'roi' overlaping 'imp'
 	* Author Marcel Boeglin 2013.12.15
      */
-    Roi cropRoi(ImagePlus imp, Roi roi) {
+    public static Roi cropRoi(ImagePlus imp, Roi roi) {
         if (roi == null) {
             return null;
         }
@@ -122,9 +165,11 @@ public class DuplicateProjector {
             ShapeRoi shape2 = new ShapeRoi(new Roi(0, 0, w, h));
             roi = shape2.and(shape1);
         }
+
         if (roi.getBounds().width == 0 || roi.getBounds().height == 0) {
             throw new IllegalArgumentException("Selection is outside the image");
         }
+
         return roi;
     }
 
