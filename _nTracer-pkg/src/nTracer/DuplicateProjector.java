@@ -21,8 +21,6 @@ import ij.gui.*;
 import ij.measure.Calibration;
 import java.util.Arrays;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class DuplicateProjector {
 
@@ -42,10 +40,7 @@ public class DuplicateProjector {
         ImageStack stack = imp.getStack();
         ImageStack stack2 = new ImageStack(rect.width, rect.height);
         
-        //final int width = rect.width;
-        //final int height = rect.height;
-        
-        ArrayList<FloatProcessor> channel_frames = new ArrayList<>();
+        ArrayList<ByteProcessor> channel_frames = new ArrayList<>();
         for( int c = firstC; c <= lastC; c++ ) channel_frames.add( null );
         
         ArrayList<Thread> threads = new ArrayList<>();
@@ -100,9 +95,12 @@ public class DuplicateProjector {
         return imp2;
     }
     
-    public static void calcProjection(ArrayList<FloatProcessor> channel_frames, Rectangle rect, int c, int firstZ, int lastZ, ImagePlus imp, ImageStack stack, int firstC ){//, Rectangle rect) {
-        float[] projection = new float[rect.width * rect.height];
-        Arrays.fill(projection, Float.MIN_VALUE);
+    public static void calcProjection(ArrayList<ByteProcessor> channel_frames, Rectangle rect, int c, int firstZ, int lastZ, ImagePlus imp, ImageStack stack, int firstC ){//, Rectangle rect) {
+        byte[] projection = new byte[rect.width * rect.height];
+        //Arrays.fill( projection, new Integer(0) ); //Float.MIN_VALUE);
+        
+        for( int i = 0; i < projection.length; i++)
+            projection[i] = 0;
 
         for (int z = firstZ; z <= lastZ; z++) {
             int frame_n = imp.getStackIndex(c, z, 1);
@@ -126,10 +124,23 @@ public class DuplicateProjector {
                         }
                     }
                 }
+            } else if (frame_object instanceof short[]) {
+                short[] frame_data = (short[]) frame_object;
+
+                for (int j = 0; j < rect.height; j++) {
+                    for (int i = 0; i < rect.width; i++) { // loop over width
+                        final int frame_coord = j * rect.width + i;
+                        final int projection_coord = j * rect.width + i;
+
+                        if (frame_data[frame_coord] > projection[projection_coord] * 2) {
+                            projection[projection_coord] = (byte) (frame_data[frame_coord] * 2);
+                        }
+                    }
+                }
             }
         }
 
-        FloatProcessor fp = new FloatProcessor(rect.width, rect.height, projection);
+        ByteProcessor fp = new ByteProcessor(rect.width, rect.height, projection);
         channel_frames.set(c - firstC, fp);
     }
 
@@ -169,9 +180,9 @@ public class DuplicateProjector {
         private final int c, firstZ, lastZ, firstC;
         private final ImagePlus imp;
         private final ImageStack stack;
-        private final ArrayList<FloatProcessor> channel_frames;
+        private final ArrayList<ByteProcessor> channel_frames;
         
-        ProjectThread( ArrayList<FloatProcessor> channel_frames, Rectangle rect, int c, int firstZ, int lastZ, ImagePlus imp, ImageStack stack, int firstC ) {
+        ProjectThread( ArrayList<ByteProcessor> channel_frames, Rectangle rect, int c, int firstZ, int lastZ, ImagePlus imp, ImageStack stack, int firstC ) {
             this.channel_frames = channel_frames;
             this.imp = imp;
             this.rect = rect;
@@ -183,7 +194,7 @@ public class DuplicateProjector {
         }
 
         public void run() {
-            System.out.println("thread " + c + " is running...");
+            //System.err.println("thread " + c + " is running...");
             calcProjection(channel_frames, rect, c, firstZ, lastZ, imp, stack, firstC);
         }
 
