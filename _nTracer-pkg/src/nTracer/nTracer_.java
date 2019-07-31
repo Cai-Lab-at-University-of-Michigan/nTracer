@@ -8732,16 +8732,24 @@ public class nTracer_
 
         imp.setRoi(roiXmin, roiYmin, roiXmax - roiXmin, roiYmax - roiYmin);
         ImagePlus temp = ( new DuplicateProjector() ).duplicateAndProject(imp, 1, impNChannel, minZ, maxZ);
+        if( temp == null ) return;
+
+
         imp.setRoi(impRoi);
-        
         impZproj.setImage(temp);
+       
         impZproj.setOverlay(null);
         winZproj.setSize(win.getSize());
         cnsZproj.setMagnification(cns.getMagnification());
-        impZproj.updateAndDraw();
         
+        long startTime = System.nanoTime();
+        impZproj.updateAndDraw();
+        long endTime = System.nanoTime();
+        long timeElapsed = endTime - startTime;
+        System.out.println("Load time in nanoseconds  : " + timeElapsed);
+               
+
         temp.close();
-        //impCrop.close();
 
         boolean[] chActive = cmp.getActiveChannels();
         String chActSetting = "";
@@ -8753,8 +8761,12 @@ public class nTracer_
             }
         }
         
+        
         impZproj.setActiveChannels(chActSetting);
         impZproj.setC(impZprojC);
+
+        
+        
     }
     // </editor-fold>
 

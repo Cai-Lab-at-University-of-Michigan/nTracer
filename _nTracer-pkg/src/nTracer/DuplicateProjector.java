@@ -20,93 +20,49 @@ import ij.process.*;
 import ij.gui.*;
 import ij.measure.Calibration;
 import java.util.Arrays;
-import java.util.concurrent.TimeUnit;
-
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class DuplicateProjector {
 
     public static ImagePlus duplicateAndProject(ImagePlus imp, int firstC, int lastC, int firstZ, int lastZ) {
+        final Roi roi = imp.getRoi();
+        final Roi roi2 = cropRoi(imp, roi);
 
-        // !!!!
-        //  Code from Duplicator.run(__) method:
-        // !!!!
-        Rectangle rect = null;
-        Roi roi = imp.getRoi();
-        Roi roi2 = cropRoi(imp, roi);
-
+        Rectangle rect_build;
         if (roi2 != null && roi2.isArea()) {
-            rect = roi2.getBounds();
+            rect_build = roi2.getBounds();
         } else {
-            rect = new Rectangle( imp.getWidth(), imp.getHeight() );
+            rect_build = new Rectangle( imp.getWidth(), imp.getHeight() );
         }
+        
+        final Rectangle rect = rect_build;
 
         ImageStack stack = imp.getStack();
         ImageStack stack2 = new ImageStack(rect.width, rect.height);
         
-        for (int c = firstC; c <= lastC; c++) {
-            float[] projection = new float[rect.width * rect.height];
-            Arrays.fill(projection, Float.MIN_VALUE);
-
-            for (int z = firstZ; z <= lastZ; z++) {
-                int frame_n = imp.getStackIndex(c, z, 1);
-                
-                long startTime = System.nanoTime();
-                ImageProcessor ip = stack.getProcessor(frame_n);
-                ip.setRoi(rect);
-                
-                long endTime = System.nanoTime();
-		long timeElapsed = endTime - startTime;
-		System.out.println("Load time in nanoseconds  : " + timeElapsed);
-                
-                startTime = System.nanoTime();
-                ip = ip.crop();
-                
-                endTime = System.nanoTime();
-		timeElapsed = endTime - startTime;
-		System.out.println("Crop Execution time in nanoseconds  : " + timeElapsed);
-                             
-                startTime = System.nanoTime();
-                Object frame_object = ip.getPixels();
-                
-                endTime = System.nanoTime();
-		timeElapsed = endTime - startTime;
-		System.out.println("Execution time in nanoseconds  : " + timeElapsed);
-                
-                startTime = System.nanoTime();
-                
-                if (frame_object instanceof byte[]) {
-                    byte[] frame_data = (byte[]) frame_object;
-
-                    for (int j = 0; j < rect.height; j++) {
-                        for (int i = 0; i < rect.width; i++) { // loop over width
-                            final int frame_coord = j * rect.width + i;
-                            final int projection_coord = j * rect.width + i;
-                            
-                            if (frame_data[frame_coord] > projection[projection_coord]) {
-                                projection[projection_coord] = frame_data[frame_coord];
-                            }
-                        }
-                    }
-                }
-                
-                endTime = System.nanoTime();
-		timeElapsed = endTime - startTime;
-		System.out.println("Project Execution time in nanoseconds  : " + timeElapsed);
+        //final int width = rect.width;
+        //final int height = rect.height;
         
-                /*
-                for (int j = 0; j < frame_data[0].length; j++) {
-                        for (int i = 0; i < frame_data.length; i++) { // loop over width
-                            if (frame_data[i][j] > projection[j * rect.width + i]) {
-                                projection[j * rect.width + i] = frame_data[i][j];
-                            }
-                        }
-                }*/
-
-            }
-
-            FloatProcessor fp = new FloatProcessor(rect.width, rect.height, projection);
-            stack2.addSlice("", fp);
+        ArrayList<FloatProcessor> channel_frames = new ArrayList<>();
+        for( int c = firstC; c <= lastC; c++ ) channel_frames.add( null );
+        
+        ArrayList<Thread> threads = new ArrayList<>();
+        for (int c = firstC; c <= lastC; c++) {
+            ProjectThread t = new ProjectThread(channel_frames, rect, c, firstZ, lastZ, imp, stack, firstC);
+            Thread tt = new Thread(t);
+            threads.add( tt );
+            tt.start();
         }
+        
+        for( Thread t : threads ) try {
+            t.join();
+        } catch (InterruptedException ex) {
+            return null;
+        }
+        
+        channel_frames.stream().forEach( fp -> stack2.addSlice("", fp ));
 
         ImagePlus imp2 = imp.createImagePlus();
         imp2.setStack("DUP_" + imp.getTitle(), stack2);
@@ -142,8 +98,39 @@ public class DuplicateProjector {
         }
 
         return imp2;
+    }
+    
+    public static void calcProjection(ArrayList<FloatProcessor> channel_frames, Rectangle rect, int c, int firstZ, int lastZ, ImagePlus imp, ImageStack stack, int firstC ){//, Rectangle rect) {
+        float[] projection = new float[rect.width * rect.height];
+        Arrays.fill(projection, Float.MIN_VALUE);
 
-        //return null;
+        for (int z = firstZ; z <= lastZ; z++) {
+            int frame_n = imp.getStackIndex(c, z, 1);
+
+            ImageProcessor ip = stack.getProcessor(frame_n);
+            ip.setRoi(rect);
+
+            ip = ip.crop();
+            Object frame_object = ip.getPixels();
+
+            if (frame_object instanceof byte[]) {
+                byte[] frame_data = (byte[]) frame_object;
+
+                for (int j = 0; j < rect.height; j++) {
+                    for (int i = 0; i < rect.width; i++) { // loop over width
+                        final int frame_coord = j * rect.width + i;
+                        final int projection_coord = j * rect.width + i;
+
+                        if (frame_data[frame_coord] > projection[projection_coord]) {
+                            projection[projection_coord] = frame_data[frame_coord];
+                        }
+                    }
+                }
+            }
+        }
+
+        FloatProcessor fp = new FloatProcessor(rect.width, rect.height, projection);
+        channel_frames.set(c - firstC, fp);
     }
 
     /*
@@ -176,5 +163,35 @@ public class DuplicateProjector {
     public static Overlay cropOverlay(Overlay overlay, Rectangle bounds) {
         return overlay.crop(bounds);
     }
+
+    private static class ProjectThread implements Runnable {
+        private final Rectangle rect;
+        private final int c, firstZ, lastZ, firstC;
+        private final ImagePlus imp;
+        private final ImageStack stack;
+        private final ArrayList<FloatProcessor> channel_frames;
+        
+        ProjectThread( ArrayList<FloatProcessor> channel_frames, Rectangle rect, int c, int firstZ, int lastZ, ImagePlus imp, ImageStack stack, int firstC ) {
+            this.channel_frames = channel_frames;
+            this.imp = imp;
+            this.rect = rect;
+            this.firstZ = firstZ;
+            this.lastZ = lastZ;
+            this.firstC = firstC;
+            this.c = c;
+            this.stack = stack;
+        }
+
+        public void run() {
+            System.out.println("thread " + c + " is running...");
+            calcProjection(channel_frames, rect, c, firstZ, lastZ, imp, stack, firstC);
+        }
+
+        //public static void main(String args[]) {
+        //    Multi3 m1 = new Multi3();
+        //    Thread t1 = new Thread(m1);
+        //    t1.start();
+        //}
+}  
 
 }
