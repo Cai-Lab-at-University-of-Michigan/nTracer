@@ -8685,7 +8685,12 @@ public class nTracer_
             return;
         }
         
-        final long dT_limit = 150; // Time limit between z-projection update
+        long dT_limit = 150; // Time limit between z-projection update
+        if( imp.isHyperStack() ) {
+            //TODO COME BACK
+            dT_limit += 1500;
+        }
+        
         if( Duration.between(last_z_update_time, Instant.now() ).toMillis() < dT_limit ) {
             //System.out.println("Skipping Z-Projection...");
             return;
@@ -8715,16 +8720,22 @@ public class nTracer_
         }
 
         Roi impRoi = imp.getRoi();
+        
         roiXmin = cns.offScreenX(0);
         int roiXmax = cns.offScreenX(cns.getWidth()) - 1;
         int roiXmid = (roiXmin + roiXmax) / 2;
+        
         roiYmin = cns.offScreenY(0);
         int roiYmax = cns.offScreenY(cns.getHeight()) - 1;
         int roiYmid = (roiYmin + roiYmax) / 2;
+        
+        System.err.println( roiXmax + "," + roiXmid + " - " + roiYmax + "," + roiYmid );
+        
         if (roiXmax - roiXmin > zProjXY) {
             roiXmin = roiXmid - zProjXY / 2 + 1;
             roiXmax = roiXmid + zProjXY / 2 - 1;
         }
+        
         if (roiYmax - roiYmin > zProjXY) {
             roiYmin = roiYmid - zProjXY / 2 + 1;
             roiYmax = roiYmid + zProjXY / 2 - 1;
@@ -8740,9 +8751,7 @@ public class nTracer_
         impZproj.setOverlay(null);
         winZproj.setSize(win.getSize());
         cnsZproj.setMagnification(cns.getMagnification());
-        
-        //impZproj.updateAndDraw();
-        
+                
         temp.close();
 
         boolean[] chActive = cmp.getActiveChannels();

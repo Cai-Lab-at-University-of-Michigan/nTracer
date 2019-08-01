@@ -56,7 +56,7 @@ public class DuplicateProjector {
             return null;
         }
         
-        channel_frames.stream().forEach( fp -> stack2.addSlice("", fp ));
+        channel_frames.stream().forEach( fp -> stack2.addSlice("", fp ) );
 
         ImagePlus imp2 = imp.createImagePlus();
         imp2.setStack("DUP_" + imp.getTitle(), stack2);
