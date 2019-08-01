@@ -256,10 +256,10 @@ public class BufferedVirtualStack extends VirtualStack implements PlugIn {
         
         ImageProcessor to_return = null;
         if( processor_buffer.containsKey(n) ){
-            //IJ.log("Cache HIT (" + n + ") " + processor_buffer.size()) ;
+            IJ.log("Cache HIT (" + n + ") " + processor_buffer.size()) ;
             to_return = processor_buffer.get(n);
         } else {
-            //IJ.log( "Cache MISS (" + n + ")");
+            IJ.log( "Cache MISS (" + n + ")");
             to_return = getProcessor_internal(n);
             processor_buffer.put(n, to_return);
             processor_fifo.add(n);
@@ -271,7 +271,7 @@ public class BufferedVirtualStack extends VirtualStack implements PlugIn {
     }
     
     public ImageProcessor getProcessor_internal(int n) {
-        //IJ.log("Loading Processor " + n + "...");
+        IJ.log("Loading Processor " + n + "...");
         if ( isOutOfRange(n) ) {
             throw new IllegalArgumentException("Argument out of range: " + n);
         }
@@ -280,6 +280,7 @@ public class BufferedVirtualStack extends VirtualStack implements PlugIn {
         info.get(n-1).nImages = 1; // why is this needed?
         
         long t0 = System.currentTimeMillis(); // Used by debug, but doesn't hurt to not use
+        
         FileOpener fo = new FileOpener( info.get(n-1) );
         ImagePlus imp = fo.open(false);
 
