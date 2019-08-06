@@ -10,7 +10,8 @@ package nTracer;
  * @author loganaw
  *
  * This combines two plugin implementations to reduce data copies when using
- * both in tandem: - https://imagej.nih.gov/ij/source/ij/plugin/Duplicator.java
+ * both in tandem:
+ * - https://imagej.nih.gov/ij/source/ij/plugin/Duplicator.java
  * - https://github.com/imagej/imagej1/blob/master/ij/plugin/ZProjector.java
  *
  */
@@ -23,8 +24,7 @@ import java.util.ArrayList;
 
 public class DuplicateProjector {
 
-    public static ImagePlus duplicateAndProject(ImagePlus imp, int firstC, int lastC, int firstZ, int lastZ) {
-        final Roi roi = imp.getRoi();
+    public static ImagePlus duplicateAndProject(ImagePlus imp, int firstC, int lastC, int firstZ, int lastZ, Roi roi) {
         final Roi roi2 = cropRoi(imp, roi);
 
         Rectangle rect_build;

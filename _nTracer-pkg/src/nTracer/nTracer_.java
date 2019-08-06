@@ -8680,92 +8680,103 @@ public class nTracer_
         info_jLabel.setText(messega);
     }
     
+    Thread z_project_thread = null;
+
     private void updateZprojectionImp() {
-        if (!projectionUpdate_jCheckBox.isSelected() ) {
+        if (z_project_thread != null && z_project_thread.isAlive()) {
             return;
         }
-        
-        long dT_limit = 150; // Time limit between z-projection update
-        if( imp.isHyperStack() ) {
-            //TODO COME BACK
-            dT_limit += 1500;
-        }
-        
-        if( Duration.between(last_z_update_time, Instant.now() ).toMillis() < dT_limit ) {
-            //System.out.println("Skipping Z-Projection...");
-            return;
-        }
-        
-        last_z_update_time = Instant.now();
-        
-        if( impZproj == null ) return;
-        int impZprojC = impZproj.getC();
 
-        int currentZ = imp.getZ();
-        int minZ = currentZ - zProjInterval;
-        int maxZ = currentZ + zProjInterval;
+        z_project_thread = new Thread(new ZProjectionInternal());
+        z_project_thread.start();
+    }
 
-        //System.out.println( String.valueOf(currentZ) + ' ' + String.valueOf(minZ) + ' ' + String.valueOf(maxZ) + ' ' + String.valueOf(last_current_z) );
+    private class ZProjectionInternal implements Runnable {
 
-        if( currentZ == last_current_z ) {
-            return;
-        } else {
-            last_current_z = currentZ;
+        private ZProjectionInternal() {
+
         }
 
-        if (minZ < 1) {
-            minZ = 1;
-        } else if (maxZ > impNSlice) {
-            maxZ = impNSlice;
+        public void run() {
+            updateZprojectionImp_internal();
         }
 
-        Roi impRoi = imp.getRoi();
-        
-        roiXmin = cns.offScreenX(0);
-        int roiXmax = cns.offScreenX(cns.getWidth()) - 1;
-        int roiXmid = (roiXmin + roiXmax) / 2;
-        
-        roiYmin = cns.offScreenY(0);
-        int roiYmax = cns.offScreenY(cns.getHeight()) - 1;
-        int roiYmid = (roiYmin + roiYmax) / 2;
-        
-        System.err.println( roiXmax + "," + roiXmid + " - " + roiYmax + "," + roiYmid );
-        
-        if (roiXmax - roiXmin > zProjXY) {
-            roiXmin = roiXmid - zProjXY / 2 + 1;
-            roiXmax = roiXmid + zProjXY / 2 - 1;
-        }
-        
-        if (roiYmax - roiYmin > zProjXY) {
-            roiYmin = roiYmid - zProjXY / 2 + 1;
-            roiYmax = roiYmid + zProjXY / 2 - 1;
-        }
-
-        imp.setRoi(roiXmin, roiYmin, roiXmax - roiXmin, roiYmax - roiYmin);
-        ImagePlus temp = DuplicateProjector.duplicateAndProject(imp, 1, impNChannel, minZ, maxZ);
-        if( temp == null ) return;
-
-        imp.setRoi(impRoi);
-        impZproj.setImage(temp);
-       
-        impZproj.setOverlay(null);
-        winZproj.setSize(win.getSize());
-        cnsZproj.setMagnification(cns.getMagnification());
-                
-        temp.close();
-
-        boolean[] chActive = cmp.getActiveChannels();
-        String chActSetting = "";
-        for (int c = 0; c < chActive.length; c++) {
-            if (chActive[c]) {
-                chActSetting += "1";
-            } else {
-                chActSetting += "0";
+        private void updateZprojectionImp_internal() {
+            if (!projectionUpdate_jCheckBox.isSelected() || impZproj == null) {
+                return;
             }
+
+            int impZprojC = impZproj.getC();
+
+            int currentZ = imp.getZ();
+            int minZ = currentZ - zProjInterval;
+            int maxZ = currentZ + zProjInterval;
+
+            if (currentZ == last_current_z) {
+                return;
+            } else {
+                last_current_z = currentZ;
+            }
+
+            if (minZ < 1) {
+                minZ = 1;
+            } else if (maxZ > impNSlice) {
+                maxZ = impNSlice;
+            }
+
+            Roi impRoi = imp.getRoi();
+
+            roiXmin = cns.offScreenX(0);
+            int roiXmax = cns.offScreenX(cns.getWidth()) - 1;
+            int roiXmid = (roiXmin + roiXmax) / 2;
+
+            roiYmin = cns.offScreenY(0);
+            int roiYmax = cns.offScreenY(cns.getHeight()) - 1;
+            int roiYmid = (roiYmin + roiYmax) / 2;
+
+            System.err.println(roiXmax + "," + roiXmid + " - " + roiYmax + "," + roiYmid);
+
+            if (roiXmax - roiXmin > zProjXY) {
+                roiXmin = roiXmid - zProjXY / 2 + 1;
+                roiXmax = roiXmid + zProjXY / 2 - 1;
+            }
+
+            if (roiYmax - roiYmin > zProjXY) {
+                roiYmin = roiYmid - zProjXY / 2 + 1;
+                roiYmax = roiYmid + zProjXY / 2 - 1;
+            }
+
+            imp.setRoi(roiXmin, roiYmin, roiXmax - roiXmin, roiYmax - roiYmin);
+            final Roi targetRoi = imp.getRoi();
+            imp.setRoi(impRoi);
+
+            ImagePlus temp = DuplicateProjector.duplicateAndProject(imp, 1, impNChannel, minZ, maxZ, targetRoi);
+            if (temp == null) {
+                return;
+            }
+
+            impZproj.setImage(temp);
+
+            impZproj.setOverlay(null);
+            winZproj.setSize(win.getSize());
+            cnsZproj.setMagnification(cns.getMagnification());
+
+            temp.close();
+
+            boolean[] chActive = cmp.getActiveChannels();
+            String chActSetting = "";
+            for (int c = 0; c < chActive.length; c++) {
+                if (chActive[c]) {
+                    chActSetting += "1";
+                } else {
+                    chActSetting += "0";
+                }
+            }
+
+            impZproj.setActiveChannels(chActSetting);
+            impZproj.setC(impZprojC);
         }
-        
-        impZproj.setActiveChannels(chActSetting);
-        impZproj.setC(impZprojC);
+
     }
     // </editor-fold>
 

@@ -235,7 +235,6 @@ ij.gui.YesNoCancelDialog
 java.lang.Runtime
 nTracer.ntAnalysis
 java.util.Date
-[Z
 java.io.InputStream
 [[I
 java.lang.IllegalAccessException
@@ -368,7 +367,6 @@ javax.swing.table.DefaultTableModel
 nTracer.nTracer_$GetSelectedNeuronAndNameOLthread
 java.lang.Throwable
 nTracer.ntIO
-nTracer.DuplicateProjector
 java.lang.StringBuilder
 java.awt.event.InputEvent
 nTracer.nTracer_$GetSelectedBranchAndNameOLextPtthread
@@ -425,6 +423,7 @@ javax.swing.SpinnerNumberModel
 java.text.SimpleDateFormat
 nTracer.nTracer_$GetAllSomaAndNameOLthread
 java.awt.Rectangle
+nTracer.nTracer_$ZProjectionInternal
 java.lang.Exception
 java.awt.event.WindowListener
 javax.swing.ListSelectionModel
@@ -456,7 +455,6 @@ javax.swing.JFrame
 java.awt.Point
 java.awt.Dimension
 ij.gui.OvalRoi
-java.time.Duration
 ij.IJ
 java.awt.event.MouseWheelListener
 nTracer.nTracer_$ntSomaTreeSelectionListener
@@ -1177,6 +1175,24 @@ java.awt.event.ActionListener
 ||:nTracer.Pathfinding.core.astar.Astar
 java.lang.Object
 nTracer.Pathfinding.core.astar.Astar
+||:nTracer.nTracer_$ZProjectionInternal
+ij.gui.ImageCanvas
+java.lang.Runnable
+java.lang.StringBuilder
+nTracer.nTracer_
+ij.ImagePlus
+ij.CompositeImage
+[Z
+nTracer.nTracer_$1
+nTracer.DuplicateProjector
+java.lang.System
+java.io.PrintStream
+nTracer.nTracer_$ZProjectionInternal
+ij.gui.ImageWindow
+java.lang.Object
+javax.swing.JCheckBox
+java.lang.String
+ij.gui.Roi
 ||:nTracer.ntNeuronNode
 java.lang.StringBuilder
 nTracer.ntNeuronNode
