@@ -81,7 +81,7 @@ public class nTracer_
         MouseWheelListener,
         KeyListener {
     
-    public static final String VERSION = "nTracer 1.2.0";
+    public static final String VERSION = "nTracer 1.2.1";
     
     private int last_current_z;
     private Instant last_z_update_time;
@@ -8691,13 +8691,13 @@ public class nTracer_
         z_project_thread.start();
     }
     
-    private static Roi last_project_roi;
     private class ZProjectionInternal implements Runnable {
 
         private ZProjectionInternal() {
 
         }
 
+        @Override
         public void run() {
             updateZprojectionImp_internal();
         }
@@ -8778,15 +8778,6 @@ public class nTracer_
 
             impZproj.setActiveChannels(chActSetting);
             impZproj.setC(impZprojC);
-            
-            if (last_project_roi != null) {
-                if (!last_project_roi.equals(targetRoi)) {
-                    //impZproj.updateAndDraw();
-                    //impZproj.updateAndRepaintWindow();
-                }
-            }
-            
-            last_project_roi = targetRoi;
         }
 
     }
