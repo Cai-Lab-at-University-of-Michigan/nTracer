@@ -118,7 +118,7 @@ public class DuplicateProjector {
                         final int frame_coord = j * rect.width + i;
                         final int projection_coord = j * rect.width + i;
 
-                        if (frame_data[frame_coord] > projection[projection_coord]) {
+                        if ( (frame_data[frame_coord] & 0xff) > projection[projection_coord]) {
                             projection[projection_coord] = frame_data[frame_coord];
                         }
                     }
@@ -131,8 +131,8 @@ public class DuplicateProjector {
                         final int frame_coord = j * rect.width + i;
                         final int projection_coord = j * rect.width + i;
 
-                        if (frame_data[frame_coord] > projection[projection_coord] * 2) {
-                            projection[projection_coord] = (byte) (frame_data[frame_coord] * 2);
+                        if ( (frame_data[frame_coord] & 0xffff) > projection[projection_coord]) {
+                            projection[projection_coord] = frame_data[frame_coord]&0xffff;
                         }
                     }
                 }
@@ -145,7 +145,7 @@ public class DuplicateProjector {
                         final int projection_coord = j * rect.width + i;
 
                         if (frame_data[frame_coord] > projection[projection_coord] * 2) {
-                            projection[projection_coord] = (byte) (frame_data[frame_coord] * 2);
+                            projection[projection_coord] = (frame_data[frame_coord] * 2);
                         }
                     }
                 }
