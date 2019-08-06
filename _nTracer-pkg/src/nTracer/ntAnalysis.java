@@ -12,15 +12,9 @@ package nTracer;
 
 
 import ij.IJ;
-import ij.gui.FreehandRoi;
-import ij.gui.GenericDialog;
 import ij.gui.PolygonRoi;
 import ij.gui.Roi;
-import ij.gui.ShapeRoi;
 import ij.measure.Calibration;
-import ij.measure.Measurements;
-import ij.process.ImageProcessor;
-import ij.process.ImageStatistics;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import static nTracer.nTracer_.getAllPrimaryBranchPoints;

@@ -254,7 +254,7 @@ public class nTracer_
                     Class[] types = new Class[]{
                         java.lang.String.class, java.lang.Float.class,
                         java.lang.Float.class, java.lang.Float.class,
-                        java.lang.Float.class, java.lang.Boolean.class,
+                        java.lang.Float.class, java.lang.Integer.class,
                         java.lang.String.class
                     };
                     boolean[] canEdit = new boolean[]{
@@ -2009,7 +2009,7 @@ public class nTracer_
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Float.class, java.lang.Float.class, java.lang.Float.class, java.lang.Float.class, java.lang.Boolean.class, java.lang.String.class
+                java.lang.String.class, java.lang.Float.class, java.lang.Float.class, java.lang.Float.class, java.lang.Float.class, java.lang.Integer.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
                 false, false, false, false, false, false, false
@@ -5326,7 +5326,7 @@ public class nTracer_
             boolean found = false;
             for (int i = selectRow + 1; i < tablePoints.size(); i++) {
                 String[] point = tablePoints.get(i);
-                if (point[5].equals("1")) {
+                if (!point[5].equals("0")) {
                     found = true;
                     selectRow = i;
                     break;
@@ -5335,7 +5335,7 @@ public class nTracer_
             if (!found) {
                 for (int i = 0; i <= selectRow; i++) {
                     String[] point = tablePoints.get(i);
-                    if (point[5].equals("1")) {
+                    if (!point[5].equals("0")) {
                         found = true;
                         selectRow = i;
                         break;
@@ -5875,9 +5875,9 @@ public class nTracer_
             String selectedSynapseName = selectedConnectionNumber + "#" + targetNodeName + "#" + targetConnectionNumber;
             String targetSynapseName = targetConnectionNumber + "#" + selectedNodeName + "#" + selectedConnectionNumber;
 
-            selectedNode.setSynapse(insertPosition, true);
+            selectedNode.setSynapse(insertPosition, (int) 1);
             selectedNode.setConnectionTo(insertPosition, selectedSynapseName);
-            targetNode.setSynapse(connectPosition, true);
+            targetNode.setSynapse(connectPosition, (int) 1);
             targetNode.setConnectionTo(connectPosition, targetSynapseName);
 //IJ.log("ok5");
             imp.killRoi();
@@ -5925,7 +5925,7 @@ public class nTracer_
                 }
                 pointTableModel.setValueAt(newTag, selectedRow, 0);
             } else {
-                selectedNode.setSynapse(selectedRow, false);
+                selectedNode.setSynapse(selectedRow, (int) 0);
             }
             selectedNode.setConnectionTo(selectedRow, "0");
             
@@ -5937,7 +5937,7 @@ public class nTracer_
                         removeSpine(connectedSpineStatus);
                         connectedNode.setSpine(connectedPosition, "0");
                     } else {
-                        connectedNode.setSynapse(connectedPosition, false);
+                        connectedNode.setSynapse(connectedPosition, (int) 0);
                     }
                 }
                 connectedNode.setConnectionTo(connectedPosition, "0");
@@ -5970,16 +5970,17 @@ public class nTracer_
             selectedNode = getSomaSliceNodeFromAllSomaTreeBySomaSliceName(selectedNode.toString());
         }
         // set synapse
-        Object synapseStatus = pointTableModel.getValueAt(row, 5);
-        if (!synapseStatus.toString().equals("true")) {
-            selectedNode.setSynapse(row, true);
-            pointTableModel.setValueAt(true, row, 5);            
+        int synapseStatus = (Integer) pointTableModel.getValueAt(row, 5);
+        //if (!synapseStatus.toString().equals("true")) {
+        if( synapseStatus == 0 ) {
+            selectedNode.setSynapse(row, (int) 1);
+            pointTableModel.setValueAt((int) 1, row, 5);            
         } else { // remove synapse
             String synapseName = (String) pointTableModel.getValueAt(row, 6);
             //IJ.log(synapseName+"!");
             if (synapseName.equals("0")) { // no connection to break
-                selectedNode.setSynapse(row, false);
-                pointTableModel.setValueAt(false, row, 5);
+                selectedNode.setSynapse(row, (int) 0);
+                pointTableModel.setValueAt((int) 0, row, 5);
                 Object spineStatus = pointTableModel.getValueAt(row, 0);
                 String currentTag = spineStatus.toString();
                 if (currentTag.contains(":Spine#")) {
@@ -6156,13 +6157,17 @@ public class nTracer_
                 String connectedSynapseName = synapseNames[2] + "#" + primaryNode.toString() + "#" + synapseNames[0];
                 ntNeuronNode connectedNode = getTracingNodeByNodeName(connectedNodeName);
 
-        // remove connection from selectedNode and connectedNode,
+                // remove connection from selectedNode and connectedNode,
                 // and remove synapse if !keepSynapse
-                primaryNode.setSynapse(i, keepPrimaryNodeSynapse);
+                if (!keepPrimaryNodeSynapse) {
+                    primaryNode.setSynapse(i, (int) 0);
+                }
                 primaryNode.setConnectionTo(i, "0");
                 int connectedPosition = getPositionInTracingResultBySynapseName(connectedNode.getTracingResult(), connectedSynapseName);
                 if (connectedPosition >= 0) {
-                    connectedNode.setSynapse(connectedPosition, keepTargetNodeSynapse);
+                    if (!keepTargetNodeSynapse) {
+                        connectedNode.setSynapse(connectedPosition, (int) 0);
+                    }
                     connectedNode.setConnectionTo(connectedPosition, "0");
                 } else {
                     IJ.log(connectedSynapseName + " is NOT found in " + connectedNodeName);
@@ -8379,7 +8384,8 @@ public class nTracer_
     @Override
     public void keyReleased(KeyEvent keyevent) {
         if ((int) keyevent.getKeyChar() == 32){
-            Toolbar.getInstance().setTool("freehand");
+            IJ.setTool( "freehand" );
+            //Toolbar.getInstance().setTool("freehand");
             //Toolbar.getInstance().setTool(Toolbar.getInstance().getToolId(ntToolTrace.toolName));
         }
     }
@@ -9213,7 +9219,7 @@ public class nTracer_
         }
         //IJ.log("max = "+max);
         
-        System.out.println( "Took " + (System.currentTimeMillis() - start) );
+        //System.out.println( "Took " + (System.currentTimeMillis() - start) );
         
         for( int i = 0; i < rgbColor.length; i++ ) rgbColor[i] /= max;
 
@@ -10173,7 +10179,7 @@ minCostPathPoints = Functions.getMinCostPath3D(
                     String spineNumber = getNextSpineNumber();
                     selectedNode.setSpine(row, spineNumber);
                     pointTableModel.setValueAt(nodeType+":Spine#"+spineNumber, row, 0);
-                    pointTableModel.setValueAt(true, row, 5);                
+                    pointTableModel.setValueAt((int) 1, row, 5); //TODO FIX SYNAPSE
                     createSpine(spineNumber, points);
                 } else {// selected more than one point
                     IJ.error("Select single point on a dendritic branch to add a spine !");
@@ -10251,7 +10257,7 @@ minCostPathPoints = Functions.getMinCostPath3D(
             Class[] types = new Class[]{
                 java.lang.String.class, java.lang.Float.class,
                 java.lang.Float.class, java.lang.Float.class,
-                java.lang.Float.class, java.lang.Boolean.class,
+                java.lang.Float.class, java.lang.Integer.class,
                 java.lang.String.class
             };
             boolean[] canEdit = new boolean[]{
@@ -10265,7 +10271,7 @@ minCostPathPoints = Functions.getMinCostPath3D(
 
             @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit[columnIndex];
+                return false; //canEdit[columnIndex];
             }
         };
 //        pointTableModelListener = new ntPointTableModelListener();

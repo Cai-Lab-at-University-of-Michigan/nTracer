@@ -45,7 +45,7 @@ public class GridAstar implements Astar {
 
     @Override
     public GridPath getPath() {
-        System.out.print("Running GetPath");
+        //System.out.print("Running GetPath");
         long startTime = System.nanoTime();
         
         GridPath path = null;
@@ -90,9 +90,9 @@ public class GridAstar implements Astar {
         }
         //IJ.log("whole path length = "+path.getList().size());
         
-        double diff = System.nanoTime()-startTime;
-        diff /= 1000000000;
-        System.out.println( "Time Delta: " + diff );
+        //double diff = System.nanoTime()-startTime;
+        //diff /= 1000000000;
+        //System.out.println( "Time Delta: " + diff );
 
         return path;
     }

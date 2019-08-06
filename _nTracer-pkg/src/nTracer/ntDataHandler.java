@@ -16,7 +16,7 @@ public class ntDataHandler {
     public ntDataHandler() {
     }
 
-    public Object [][] getPointTableData (ArrayList<String[]> traceResult){
+    public Object [][] getPointTableData(ArrayList<String[]> traceResult){
         // because Java passes Object by reference not by value,
         // Object needs to be assigned and returned seperately in condition loops
         Object [][] pointTableData = new Object [][] {};
@@ -33,7 +33,7 @@ public class ntDataHandler {
                     //IJ.log("data "+tempPoint[s]);
                     pointTableData[r][s] = (Float)(Float.parseFloat(tempPoint[s]));
                 }
-                pointTableData[r][5] = tempPoint[5].equals("1");
+                pointTableData[r][5] = Integer.valueOf( tempPoint[5] );
                 pointTableData[r][6] = tempPoint[6];
             }            
         }
@@ -42,15 +42,15 @@ public class ntDataHandler {
     
     public ntNeuronNode replicateNodeAndChild(ntNeuronNode node){
         ntNeuronNode newNode = node.duplicate();
-        replicateWhoelChildTree(newNode, node);
+        replicateWholeChildTree(newNode, node);
         return newNode;
     }
-    public void replicateWhoelChildTree(ntNeuronNode newNode, ntNeuronNode node) {
+    public void replicateWholeChildTree(ntNeuronNode newNode, ntNeuronNode node) {
         for (int i = 0; i < node.getChildCount(); i++) {
             ntNeuronNode childNode = (ntNeuronNode) node.getChildAt(i);
             ntNeuronNode newChildNode = childNode.duplicate();
             newNode.add(newChildNode);
-            replicateWhoelChildTree(newChildNode, childNode);
+            replicateWholeChildTree(newChildNode, childNode);
         }
     }
       // variables

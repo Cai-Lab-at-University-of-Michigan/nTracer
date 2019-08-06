@@ -119,13 +119,9 @@ public class ntNeuronNode extends DefaultMutableTreeNode {
         return neuronName;
     }
 
-    public void setSynapse(int inTreePosition, boolean isSynapse) {
+    public void setSynapse(int inTreePosition, int isSynapse) {
         String[] tempPt = tracingResult.get(inTreePosition);
-        if (isSynapse) {
-            tempPt[5] = "1";
-        } else {
-            tempPt[5] = "0";
-        }
+        tempPt[5] = String.valueOf( isSynapse );
         tracingResult.set(inTreePosition, tempPt);
     }
     
