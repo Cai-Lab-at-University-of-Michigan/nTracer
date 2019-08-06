@@ -1185,8 +1185,6 @@ ij.CompositeImage
 [Z
 nTracer.nTracer_$1
 nTracer.DuplicateProjector
-java.lang.System
-java.io.PrintStream
 nTracer.nTracer_$ZProjectionInternal
 ij.gui.ImageWindow
 java.lang.Object

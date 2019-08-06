@@ -8690,7 +8690,8 @@ public class nTracer_
         z_project_thread = new Thread(new ZProjectionInternal());
         z_project_thread.start();
     }
-
+    
+    private static Roi last_project_roi;
     private class ZProjectionInternal implements Runnable {
 
         private ZProjectionInternal() {
@@ -8734,7 +8735,7 @@ public class nTracer_
             int roiYmax = cns.offScreenY(cns.getHeight()) - 1;
             int roiYmid = (roiYmin + roiYmax) / 2;
 
-            System.err.println(roiXmax + "," + roiXmid + " - " + roiYmax + "," + roiYmid);
+            //System.err.println(roiXmax + "," + roiXmid + " - " + roiYmax + "," + roiYmid);
 
             if (roiXmax - roiXmin > zProjXY) {
                 roiXmin = roiXmid - zProjXY / 2 + 1;
@@ -8755,7 +8756,9 @@ public class nTracer_
                 return;
             }
 
+            impZproj.resetStack();
             impZproj.setImage(temp);
+            impZproj.updateAndDraw();
 
             impZproj.setOverlay(null);
             winZproj.setSize(win.getSize());
@@ -8775,6 +8778,15 @@ public class nTracer_
 
             impZproj.setActiveChannels(chActSetting);
             impZproj.setC(impZprojC);
+            
+            if (last_project_roi != null) {
+                if (!last_project_roi.equals(targetRoi)) {
+                    //impZproj.updateAndDraw();
+                    //impZproj.updateAndRepaintWindow();
+                }
+            }
+            
+            last_project_roi = targetRoi;
         }
 
     }
