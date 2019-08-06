@@ -8379,7 +8379,8 @@ public class nTracer_
     @Override
     public void keyReleased(KeyEvent keyevent) {
         if ((int) keyevent.getKeyChar() == 32){
-            Toolbar.getInstance().setTool(Toolbar.getInstance().getToolId(ntToolTrace.toolName));
+            Toolbar.getInstance().setTool("freehand");
+            //Toolbar.getInstance().setTool(Toolbar.getInstance().getToolId(ntToolTrace.toolName));
         }
     }
 
