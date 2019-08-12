@@ -5956,54 +5956,9 @@ public class nTracer_
     }
 
     private void toggleSynapse_jButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toggleSynapse_jButtonActionPerformed
-        toggleSynapse();
+        //toggleSynapse();
+        //TODO Remap this code
     }//GEN-LAST:event_toggleSynapse_jButtonActionPerformed
-    private void toggleSynapse(){
-        if (pointTable_jTable.getSelectedRowCount() != 1){
-            IJ.error("Select only one point to add/erase synapse !");
-            return;
-        }
-        int row = pointTable_jTable.getSelectedRow();
-        ntNeuronNode selectedNode = (ntNeuronNode) neuronList_jTree.getLastSelectedPathComponent();
-        if (selectedNode.isBranchNode()) { // selected node is a branch node 
-            // do nothing             
-        } else { // selected node is a somaSlice node
-            selectedNode = (ntNeuronNode) displaySomaList_jTree.getLastSelectedPathComponent();
-            selectedNode = getSomaSliceNodeFromAllSomaTreeBySomaSliceName(selectedNode.toString());
-        }
-        // set synapse
-        int synapseStatus = (Integer) pointTableModel.getValueAt(row, 5);
-        //if (!synapseStatus.toString().equals("true")) {
-        if( synapseStatus == 0 ) {
-            selectedNode.setSynapse(row, (int) 1);
-            pointTableModel.setValueAt((int) 1, row, 5);            
-        } else { // remove synapse
-            String synapseName = (String) pointTableModel.getValueAt(row, 6);
-            //IJ.log(synapseName+"!");
-            if (synapseName.equals("0")) { // no connection to break
-                selectedNode.setSynapse(row, (int) 0);
-                pointTableModel.setValueAt((int) 0, row, 5);
-                Object spineStatus = pointTableModel.getValueAt(row, 0);
-                String currentTag = spineStatus.toString();
-                if (currentTag.contains(":Spine#")) {
-                    removeSpine(currentTag);
-                    selectedNode.setSpine(row, "0");
-                    String newTag = currentTag.split(":")[0];
-                    if (currentTag.contains("/")) {
-                        newTag = newTag + "/" + currentTag.split("/")[1];
-                    } else if (currentTag.endsWith("*")) {
-                        newTag = newTag + "*";
-                    }
-                    pointTableModel.setValueAt(newTag, row, 0);
-                }
-            } else {// ask for breaking connection
-                eraseConnectionFromPoint();
-            }
-        }
-        editTargetName_jLabel.setText((String) pointTableModel.getValueAt(row, 6));
-        saveHistory();
-        updateDisplay();
-    }
 
     private void autosaveSetup_jMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_autosaveSetup_jMenuItemActionPerformed
         autosaveSetup();
