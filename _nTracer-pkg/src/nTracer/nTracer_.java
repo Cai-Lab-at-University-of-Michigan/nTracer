@@ -5891,6 +5891,8 @@ public class nTracer_
             return false;
         }
     }
+    
+    //TODO Trace with new synapse methods
     private boolean eraseConnectionFromPoint() {
         int selectedRow = pointTable_jTable.getSelectedRow();
         String selectedSynapseName = (String) pointTableModel.getValueAt(selectedRow, 6);
@@ -8552,7 +8554,8 @@ public class nTracer_
                 traceSpine();
                 break;
             case 101: // 'e'
-                toggleSynapse();
+                decrease_synapse_number();
+                //toggleSynapse();
                 break;
             case 102: // 'f'
                 jumpToNextConnected();
@@ -8599,6 +8602,7 @@ public class nTracer_
                 updateZprojectionImp();
                 break;
             case 114: // 'r'
+                increase_synapse_number();
                 break;
             case 115: // 's'
                 traceSoma();
@@ -8697,7 +8701,85 @@ public class nTracer_
         z_project_thread = new Thread(new ZProjectionInternal());
         z_project_thread.start();
     }
-    
+
+    private void decrease_synapse_number() {
+        // This method will decrese the number of selected synapse
+        
+        if (pointTable_jTable.getSelectedRowCount() != 1){
+            IJ.error("Select only one point to add/erase synapse !");
+            return;
+        }
+        
+        int row = pointTable_jTable.getSelectedRow();
+        ntNeuronNode selectedNode = (ntNeuronNode) neuronList_jTree.getLastSelectedPathComponent();
+        if (!selectedNode.isBranchNode()) { // selected node is a somaSlice node
+            selectedNode = (ntNeuronNode) displaySomaList_jTree.getLastSelectedPathComponent();
+            selectedNode = getSomaSliceNodeFromAllSomaTreeBySomaSliceName(selectedNode.toString());
+        }
+        
+        // set synapse
+        int synapseStatus = (Integer) pointTableModel.getValueAt(row, 5);
+        if( synapseStatus == 0 ) return;
+        
+        synapseStatus--;
+        selectedNode.setSynapse( row, synapseStatus );
+        pointTableModel.setValueAt( synapseStatus, row, 5);
+        
+        if( synapseStatus == 0 ) {
+            String synapseName = (String) pointTableModel.getValueAt(row, 6);
+            
+            if (synapseName.equals("0")) { // no connection to break
+                Object spineStatus = pointTableModel.getValueAt(row, 0);
+                String currentTag = spineStatus.toString();
+                if (currentTag.contains(":Spine#")) {
+                    removeSpine(currentTag);
+                    selectedNode.setSpine(row, "0");
+                    String newTag = currentTag.split(":")[0];
+                    if (currentTag.contains("/")) {
+                        newTag = newTag + "/" + currentTag.split("/")[1];
+                    } else if (currentTag.endsWith("*")) {
+                        newTag = newTag + "*";
+                    }
+                    pointTableModel.setValueAt(newTag, row, 0);
+                }
+            } else {// ask for breaking connection
+                eraseConnectionFromPoint(); // MUST INVESTIGATE
+            }
+            
+        }
+        
+        editTargetName_jLabel.setText( (String) pointTableModel.getValueAt(row, 6) );
+        saveHistory();
+        updateDisplay();
+    }
+
+    private void increase_synapse_number() {
+        // This method will increase the number of selected synapse
+
+        if (pointTable_jTable.getSelectedRowCount() != 1) {
+            IJ.error("Select only one point to add/erase synapse !");
+            return;
+        }
+
+        int row = pointTable_jTable.getSelectedRow();
+        ntNeuronNode selectedNode = (ntNeuronNode) neuronList_jTree.getLastSelectedPathComponent();
+        if (!selectedNode.isBranchNode()) { // selected node is a somaSlice node
+            selectedNode = (ntNeuronNode) displaySomaList_jTree.getLastSelectedPathComponent();
+            selectedNode = getSomaSliceNodeFromAllSomaTreeBySomaSliceName(selectedNode.toString());
+        }
+
+        // set synapse
+        int synapseStatus = (Integer) pointTableModel.getValueAt(row, 5);
+
+        synapseStatus++;
+        selectedNode.setSynapse(row, synapseStatus);
+        pointTableModel.setValueAt(synapseStatus, row, 5);
+
+        editTargetName_jLabel.setText((String) pointTableModel.getValueAt(row, 6));
+        saveHistory();
+        updateDisplay();
+    }
+
     private class ZProjectionInternal implements Runnable {
 
         private ZProjectionInternal() {
