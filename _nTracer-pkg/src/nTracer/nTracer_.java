@@ -480,6 +480,7 @@ public class nTracer_
         jumpToNextSelected_jButton = new javax.swing.JButton();
         editSynapse_jPanel = new javax.swing.JPanel();
         toggleSynapse_jButton = new javax.swing.JButton();
+        toggleSynapse_jButton1 = new javax.swing.JButton();
         overlay_jPanel = new javax.swing.JPanel();
         all_jPanel = new javax.swing.JPanel();
         overlayAllNeuron_jCheckBox = new javax.swing.JCheckBox();
@@ -548,25 +549,6 @@ public class nTracer_
         xyProjectionArea_jLabel = new javax.swing.JLabel();
         xyProjectionArea_jSpinner = new javax.swing.JSpinner();
         projectionUpdate_jCheckBox = new javax.swing.JCheckBox();
-        neuronList_jScrollPane = new javax.swing.JScrollPane();
-        neuronList_jTree = new javax.swing.JTree();
-        somaList_jScrollPane = new javax.swing.JScrollPane();
-        displaySomaList_jTree = new javax.swing.JTree();
-        pointTable_jScrollPane = new javax.swing.JScrollPane();
-        pointTable_jTable = new javax.swing.JTable();
-        info_jLabel = new javax.swing.JLabel();
-        srtPtInt_jLabel = new javax.swing.JLabel();
-        endPtInt_jLabel = new javax.swing.JLabel();
-        startPosition_jLabel = new javax.swing.JLabel();
-        endPosition_jLabel = new javax.swing.JLabel();
-        startPt_jLabel = new javax.swing.JLabel();
-        endPt_jLabel = new javax.swing.JLabel();
-        startIntensity_jLabel = new javax.swing.JLabel();
-        endIntensity_jLabel = new javax.swing.JLabel();
-        srtPtCol_jLabel = new javax.swing.JLabel();
-        startColor_jLabel = new javax.swing.JLabel();
-        endPtCol_jLabel = new javax.swing.JLabel();
-        endColor_jLabel = new javax.swing.JLabel();
         channel_jPanel = new javax.swing.JPanel();
         toggleColor_jLabel = new javax.swing.JLabel();
         r_jRadioButton = new javax.swing.JRadioButton();
@@ -590,6 +572,25 @@ public class nTracer_
         toggleCh6_jCheckBox = new javax.swing.JCheckBox();
         toggleCh7_jCheckBox = new javax.swing.JCheckBox();
         toggleCh8_jCheckBox = new javax.swing.JCheckBox();
+        neuronList_jScrollPane = new javax.swing.JScrollPane();
+        neuronList_jTree = new javax.swing.JTree();
+        somaList_jScrollPane = new javax.swing.JScrollPane();
+        displaySomaList_jTree = new javax.swing.JTree();
+        pointTable_jScrollPane = new javax.swing.JScrollPane();
+        pointTable_jTable = new javax.swing.JTable();
+        info_jLabel = new javax.swing.JLabel();
+        srtPtInt_jLabel = new javax.swing.JLabel();
+        endPtInt_jLabel = new javax.swing.JLabel();
+        startPosition_jLabel = new javax.swing.JLabel();
+        endPosition_jLabel = new javax.swing.JLabel();
+        startPt_jLabel = new javax.swing.JLabel();
+        endPt_jLabel = new javax.swing.JLabel();
+        startIntensity_jLabel = new javax.swing.JLabel();
+        endIntensity_jLabel = new javax.swing.JLabel();
+        srtPtCol_jLabel = new javax.swing.JLabel();
+        startColor_jLabel = new javax.swing.JLabel();
+        endPtCol_jLabel = new javax.swing.JLabel();
+        endColor_jLabel = new javax.swing.JLabel();
         editTargetName_jLabel = new javax.swing.JLabel();
         connectedSynapse_jLabel = new javax.swing.JLabel();
         copyToEditTarget_jButton = new javax.swing.JButton();
@@ -986,7 +987,7 @@ public class nTracer_
 
         toggleSynapse_jButton.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         toggleSynapse_jButton.setForeground(new java.awt.Color(0, 102, 255));
-        toggleSynapse_jButton.setText("+ / -");
+        toggleSynapse_jButton.setText("Type +");
         toggleSynapse_jButton.setToolTipText("Form/Erase synapse at one point (HotKey ' e ')");
         toggleSynapse_jButton.setFocusable(false);
         toggleSynapse_jButton.addActionListener(new java.awt.event.ActionListener() {
@@ -995,15 +996,31 @@ public class nTracer_
             }
         });
 
+        toggleSynapse_jButton1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        toggleSynapse_jButton1.setForeground(new java.awt.Color(0, 102, 255));
+        toggleSynapse_jButton1.setText("Type -");
+        toggleSynapse_jButton1.setToolTipText("Form/Erase synapse at one point (HotKey ' e ')");
+        toggleSynapse_jButton1.setFocusable(false);
+        toggleSynapse_jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                toggleSynapse_jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout editSynapse_jPanelLayout = new javax.swing.GroupLayout(editSynapse_jPanel);
         editSynapse_jPanel.setLayout(editSynapse_jPanelLayout);
         editSynapse_jPanelLayout.setHorizontalGroup(
             editSynapse_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(toggleSynapse_jButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(toggleSynapse_jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         editSynapse_jPanelLayout.setVerticalGroup(
             editSynapse_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(toggleSynapse_jButton)
+            .addGroup(editSynapse_jPanelLayout.createSequentialGroup()
+                .addComponent(toggleSynapse_jButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(toggleSynapse_jButton1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout editDisplay_jPanelLayout = new javax.swing.GroupLayout(editDisplay_jPanel);
@@ -1028,23 +1045,24 @@ public class nTracer_
             editDisplay_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(editDisplay_jPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(editDisplay_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                .addGroup(editDisplay_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(editDisplay_jPanelLayout.createSequentialGroup()
                         .addComponent(editBranch_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(34, 34, 34)
-                        .addComponent(editNeuron_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(editNeuron_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jumpTo_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(editDisplay_jPanelLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(delete_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(49, 49, 49)
-                        .addComponent(editSoma_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(editDisplay_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(editDisplay_jPanelLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(editSoma_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(editSynapse_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(26, 26, 26)
-                        .addComponent(editConnection_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jumpTo_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(editConnection_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(219, 219, 219))))
         );
 
         main_jTabbedPane.addTab("Edit     ", null, editDisplay_jPanel, "");
@@ -1624,7 +1642,7 @@ public class nTracer_
                 .addComponent(linkRadius_jLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(linkRadius_jSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         tracingMethod_jPanelLayout.setVerticalGroup(
             tracingMethod_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1808,12 +1826,13 @@ public class nTracer_
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(traceSpine_jButton)
-                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(traceNeurite_jButton, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(traceSoma_jButton)))
-                .addGap(21, 21, 21))
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(traceNeurite_jButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(traceSoma_jButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(traceSpine_jButton)))
+                .addGap(19, 19, 19))
         );
 
         labeling_jPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 153, 153)), "Labeling", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11), new java.awt.Color(0, 153, 153))); // NOI18N
@@ -1937,147 +1956,6 @@ public class nTracer_
                 .addComponent(projectionUpdate_jCheckBox)
                 .addGap(0, 5, Short.MAX_VALUE))
         );
-
-        javax.swing.GroupLayout tracing_jPanelLayout = new javax.swing.GroupLayout(tracing_jPanel);
-        tracing_jPanel.setLayout(tracing_jPanelLayout);
-        tracing_jPanelLayout.setHorizontalGroup(
-            tracing_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(tracing_jPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(tracing_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(toogleTracingCompleteness_jButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(zProjectionInterval_jPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(samplingTolerance_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 230, Short.MAX_VALUE)
-                    .addComponent(colorSamplingRadius_jPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(tracing_jPanelLayout.createSequentialGroup()
-                        .addComponent(tracingMethod_jPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(labeling_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(clearPoints_jButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        tracing_jPanelLayout.setVerticalGroup(
-            tracing_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(tracing_jPanelLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(zProjectionInterval_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(tracing_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(labeling_jPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(tracingMethod_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(colorSamplingRadius_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(samplingTolerance_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(toogleTracingCompleteness_jButton, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(clearPoints_jButton, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
-
-        main_jTabbedPane.addTab("Tracing   ", tracing_jPanel);
-
-        javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("root");
-        neuronList_jTree.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
-        neuronList_jTree.setToolTipText("\"Double Click\" blank area to de-select all.");
-        neuronList_jTree.setMaximumSize(new java.awt.Dimension(30, 16));
-        neuronList_jTree.setPreferredSize(new java.awt.Dimension(30, 16));
-        neuronList_jTree.setRootVisible(false);
-        neuronList_jScrollPane.setViewportView(neuronList_jTree);
-
-        displaySomaList_jTree.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Soma Slices", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
-        treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("root");
-        displaySomaList_jTree.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
-        displaySomaList_jTree.setToolTipText("Soma tracing result");
-        displaySomaList_jTree.setMaximumSize(new java.awt.Dimension(30, 16));
-        displaySomaList_jTree.setPreferredSize(new java.awt.Dimension(30, 16));
-        displaySomaList_jTree.setRootVisible(false);
-        somaList_jScrollPane.setViewportView(displaySomaList_jTree);
-
-        pointTable_jScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), "Traced points (Crtl-Home => top | Crtl-End => bottom)", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
-
-        pointTable_jTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Type", "X", "Y", "Z", "Radius", "Synapse", "Connection"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Float.class, java.lang.Float.class, java.lang.Float.class, java.lang.Float.class, java.lang.Integer.class, java.lang.String.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        pointTable_jTable.setToolTipText("Scroll: \"Crtl-Home\" => top ; \"Ctrl-End\" => bottom");
-        pointTable_jScrollPane.setViewportView(pointTable_jTable);
-
-        info_jLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        info_jLabel.setText("Info");
-        info_jLabel.setToolTipText("");
-
-        srtPtInt_jLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        srtPtInt_jLabel.setForeground(new java.awt.Color(255, 0, 0));
-        srtPtInt_jLabel.setText("Intensity");
-
-        endPtInt_jLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        endPtInt_jLabel.setForeground(new java.awt.Color(0, 153, 153));
-        endPtInt_jLabel.setText("Intensity");
-
-        startPosition_jLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        startPosition_jLabel.setForeground(new java.awt.Color(255, 0, 0));
-        startPosition_jLabel.setText("     ");
-
-        endPosition_jLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        endPosition_jLabel.setForeground(new java.awt.Color(0, 153, 153));
-        endPosition_jLabel.setText("     ");
-
-        startPt_jLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        startPt_jLabel.setForeground(new java.awt.Color(255, 0, 0));
-        startPt_jLabel.setText("Start Point");
-        startPt_jLabel.setToolTipText("");
-
-        endPt_jLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        endPt_jLabel.setForeground(new java.awt.Color(0, 153, 153));
-        endPt_jLabel.setText("  End Point");
-
-        startIntensity_jLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        startIntensity_jLabel.setForeground(new java.awt.Color(255, 0, 0));
-        startIntensity_jLabel.setText("     ");
-
-        endIntensity_jLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        endIntensity_jLabel.setForeground(new java.awt.Color(0, 153, 153));
-        endIntensity_jLabel.setText("     ");
-
-        srtPtCol_jLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        srtPtCol_jLabel.setForeground(new java.awt.Color(255, 0, 0));
-        srtPtCol_jLabel.setText("Color");
-
-        startColor_jLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        startColor_jLabel.setForeground(new java.awt.Color(255, 0, 0));
-        startColor_jLabel.setText("     ");
-
-        endPtCol_jLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        endPtCol_jLabel.setForeground(new java.awt.Color(0, 153, 153));
-        endPtCol_jLabel.setText("Color");
-
-        endColor_jLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        endColor_jLabel.setForeground(new java.awt.Color(0, 153, 153));
-        endColor_jLabel.setText("     ");
 
         channel_jPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), "Channel", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
         channel_jPanel.setMaximumSize(new java.awt.Dimension(349, 149));
@@ -2311,7 +2189,7 @@ public class nTracer_
                         .addComponent(r_jRadioButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(g_jRadioButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(b_jRadioButton)))
                 .addGap(0, 0, Short.MAX_VALUE))
         );
@@ -2343,13 +2221,162 @@ public class nTracer_
                     .addComponent(toggleCh7_jCheckBox)
                     .addComponent(toggleCh6_jCheckBox)
                     .addComponent(toggleCh5_jCheckBox))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(channel_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(toggleColor_jLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(r_jRadioButton)
-                    .addComponent(g_jRadioButton, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
-                    .addComponent(b_jRadioButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(channel_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(channel_jPanelLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(toggleColor_jLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, channel_jPanelLayout.createSequentialGroup()
+                        .addGroup(channel_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(b_jRadioButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(g_jRadioButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(r_jRadioButton))
+                        .addContainerGap())))
         );
+
+        javax.swing.GroupLayout tracing_jPanelLayout = new javax.swing.GroupLayout(tracing_jPanel);
+        tracing_jPanel.setLayout(tracing_jPanelLayout);
+        tracing_jPanelLayout.setHorizontalGroup(
+            tracing_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(tracing_jPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(tracing_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(toogleTracingCompleteness_jButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(zProjectionInterval_jPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(samplingTolerance_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 232, Short.MAX_VALUE)
+                    .addComponent(colorSamplingRadius_jPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(clearPoints_jButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(tracing_jPanelLayout.createSequentialGroup()
+                        .addComponent(tracingMethod_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(labeling_jPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap())
+            .addComponent(channel_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 244, Short.MAX_VALUE)
+        );
+        tracing_jPanelLayout.setVerticalGroup(
+            tracing_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(tracing_jPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(zProjectionInterval_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(tracing_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(tracingMethod_jPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(labeling_jPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(colorSamplingRadius_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(samplingTolerance_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(toogleTracingCompleteness_jButton, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(clearPoints_jButton, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(channel_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        main_jTabbedPane.addTab("Tracing   ", tracing_jPanel);
+
+        javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("root");
+        neuronList_jTree.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
+        neuronList_jTree.setToolTipText("\"Double Click\" blank area to de-select all.");
+        neuronList_jTree.setMaximumSize(new java.awt.Dimension(30, 16));
+        neuronList_jTree.setPreferredSize(new java.awt.Dimension(30, 16));
+        neuronList_jTree.setRootVisible(false);
+        neuronList_jScrollPane.setViewportView(neuronList_jTree);
+
+        displaySomaList_jTree.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Soma Slices", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
+        treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("root");
+        displaySomaList_jTree.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
+        displaySomaList_jTree.setToolTipText("Soma tracing result");
+        displaySomaList_jTree.setMaximumSize(new java.awt.Dimension(30, 16));
+        displaySomaList_jTree.setPreferredSize(new java.awt.Dimension(30, 16));
+        displaySomaList_jTree.setRootVisible(false);
+        somaList_jScrollPane.setViewportView(displaySomaList_jTree);
+
+        pointTable_jScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), "Traced points (Crtl-Home => top | Crtl-End => bottom)", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
+
+        pointTable_jTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Type", "X", "Y", "Z", "Radius", "Synapse", "Connection"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Float.class, java.lang.Float.class, java.lang.Float.class, java.lang.Float.class, java.lang.Integer.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        pointTable_jTable.setToolTipText("Scroll: \"Crtl-Home\" => top ; \"Ctrl-End\" => bottom");
+        pointTable_jScrollPane.setViewportView(pointTable_jTable);
+
+        info_jLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        info_jLabel.setText("Info");
+        info_jLabel.setToolTipText("");
+
+        srtPtInt_jLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        srtPtInt_jLabel.setForeground(new java.awt.Color(255, 0, 0));
+        srtPtInt_jLabel.setText("Intensity");
+
+        endPtInt_jLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        endPtInt_jLabel.setForeground(new java.awt.Color(0, 153, 153));
+        endPtInt_jLabel.setText("Intensity");
+
+        startPosition_jLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        startPosition_jLabel.setForeground(new java.awt.Color(255, 0, 0));
+        startPosition_jLabel.setText("     ");
+
+        endPosition_jLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        endPosition_jLabel.setForeground(new java.awt.Color(0, 153, 153));
+        endPosition_jLabel.setText("     ");
+
+        startPt_jLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        startPt_jLabel.setForeground(new java.awt.Color(255, 0, 0));
+        startPt_jLabel.setText("Start Point");
+        startPt_jLabel.setToolTipText("");
+
+        endPt_jLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        endPt_jLabel.setForeground(new java.awt.Color(0, 153, 153));
+        endPt_jLabel.setText("  End Point");
+
+        startIntensity_jLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        startIntensity_jLabel.setForeground(new java.awt.Color(255, 0, 0));
+        startIntensity_jLabel.setText("     ");
+
+        endIntensity_jLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        endIntensity_jLabel.setForeground(new java.awt.Color(0, 153, 153));
+        endIntensity_jLabel.setText("     ");
+
+        srtPtCol_jLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        srtPtCol_jLabel.setForeground(new java.awt.Color(255, 0, 0));
+        srtPtCol_jLabel.setText("Color");
+
+        startColor_jLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        startColor_jLabel.setForeground(new java.awt.Color(255, 0, 0));
+        startColor_jLabel.setText("     ");
+
+        endPtCol_jLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        endPtCol_jLabel.setForeground(new java.awt.Color(0, 153, 153));
+        endPtCol_jLabel.setText("Color");
+
+        endColor_jLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        endColor_jLabel.setForeground(new java.awt.Color(0, 153, 153));
+        endColor_jLabel.setText("     ");
 
         editTargetName_jLabel.setBackground(new java.awt.Color(255, 255, 255));
         editTargetName_jLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
@@ -2813,10 +2840,9 @@ public class nTracer_
                                         .addComponent(endIntensity_jLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addContainerGap(40, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(channel_jPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 244, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(connectedSynapse_jLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(main_jTabbedPane, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 244, Short.MAX_VALUE))
+                                    .addComponent(main_jTabbedPane, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(0, 0, Short.MAX_VALUE))))))
         );
 
@@ -2828,8 +2854,6 @@ public class nTracer_
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(main_jTabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(channel_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(connectedSynapse_jLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
@@ -2855,7 +2879,7 @@ public class nTracer_
                             .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(selectNeurons_jButton))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(neuronList_jScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addComponent(neuronList_jScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 431, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(pointTable_jScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
@@ -4900,10 +4924,6 @@ public class nTracer_
         clearStartEndPts();
     }//GEN-LAST:event_clearPoints_jButtonActionPerformed
 
-    private void traceNeurite_jButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_traceNeurite_jButtonActionPerformed
-        traceNeurite();
-    }//GEN-LAST:event_traceNeurite_jButtonActionPerformed
-
     private void collapseAllNeuron_jButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_collapseAllNeuron_jButtonActionPerformed
         ArrayList<String> selectedNeuronNumbers = getSelectedNeuronNumberSortSmall2Large();
         //IJ.log("total selected neuron: "+selectedNeuronNumbers.size());
@@ -4936,10 +4956,6 @@ public class nTracer_
         }
         saveHistory();
     }//GEN-LAST:event_expanAllNeuron_jButtonActionPerformed
-
-    private void traceSoma_jButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_traceSoma_jButtonActionPerformed
-        traceSoma();
-    }//GEN-LAST:event_traceSoma_jButtonActionPerformed
     private void traceSoma() {
         if (membraneLabel_jRadioButton.isSelected()) {
             if (manualTracing_jRadioButton.isSelected()) {
@@ -5956,8 +5972,7 @@ public class nTracer_
     }
 
     private void toggleSynapse_jButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toggleSynapse_jButtonActionPerformed
-        //toggleSynapse();
-        //TODO Remap this code
+        increase_synapse_number();
     }//GEN-LAST:event_toggleSynapse_jButtonActionPerformed
 
     private void autosaveSetup_jMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_autosaveSetup_jMenuItemActionPerformed
@@ -6926,10 +6941,6 @@ public class nTracer_
         }
     }
 
-    private void traceSpine_jButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_traceSpine_jButtonActionPerformed
-        traceSpine();
-    }//GEN-LAST:event_traceSpine_jButtonActionPerformed
-
     private void undo_jMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undo_jMenuItemActionPerformed
         backwardHistory();
     }//GEN-LAST:event_undo_jMenuItemActionPerformed
@@ -6990,6 +7001,22 @@ public class nTracer_
                 analysis.logOneSomaStatistics(neuronSomaNode);
             }
         }    }//GEN-LAST:event_logSomaStatistics_jMenuItemActionPerformed
+
+    private void toggleSynapse_jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toggleSynapse_jButton1ActionPerformed
+        decrease_synapse_number();
+    }//GEN-LAST:event_toggleSynapse_jButton1ActionPerformed
+
+    private void traceSpine_jButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_traceSpine_jButtonActionPerformed
+        traceSpine();
+    }//GEN-LAST:event_traceSpine_jButtonActionPerformed
+
+    private void traceSoma_jButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_traceSoma_jButtonActionPerformed
+        traceSoma();
+    }//GEN-LAST:event_traceSoma_jButtonActionPerformed
+
+    private void traceNeurite_jButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_traceNeurite_jButtonActionPerformed
+        traceNeurite();
+    }//GEN-LAST:event_traceNeurite_jButtonActionPerformed
 
     private void combineSomaAndBranchesOfTwoNeuronTreeSomas(ntNeuronNode targetNeuronSomaNode, ntNeuronNode sourceNeuronSomaNode) {
         String targetSNeuronNumber = targetNeuronSomaNode.getNeuronNumber();
@@ -11109,6 +11136,7 @@ minCostPathPoints = Functions.getMinCostPath3D(
     private javax.swing.JLabel toggleColor_jLabel;
     private javax.swing.JButton toggleConnection_jButton;
     private javax.swing.JButton toggleSynapse_jButton;
+    private javax.swing.JButton toggleSynapse_jButton1;
     private javax.swing.JButton toogleTracingCompleteness_jButton;
     private javax.swing.JButton traceNeurite_jButton;
     private javax.swing.JButton traceSoma_jButton;
