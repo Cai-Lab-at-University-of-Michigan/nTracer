@@ -34,7 +34,6 @@ import ij.measure.Calibration;
 import ij.plugin.HyperStackConverter;
 import ij.plugin.RGBStackMerge;
 import ij.plugin.frame.MemoryMonitor;
-import ij.plugin.Duplicator;
 import ij.plugin.ZProjector;
 import ij.process.ByteProcessor;
 import ij.process.FloatPolygon;
@@ -44,7 +43,6 @@ import java.awt.event.*;
 import java.awt.Color;
 import java.awt.geom.GeneralPath;
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -63,7 +61,6 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.*;
 
-import java.time.Duration;
 import java.time.Instant;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -9344,7 +9341,8 @@ public class nTracer_
                                 yPoints[i] - synapseRadius, synapseSize, synapseSize);
                         synapseRoi.setPosition(0, Integer.parseInt(linkedPt[3]), frameNumber);
                         synapseRoi.setStrokeWidth(synapseRadius);
-                        synapseRoi.setStrokeColor(lineColor);
+                        //synapseRoi.setStrokeColor(lineColor);
+                        synapseRoi.setStrokeColor( mapSynapseColor( linkedPt[5] ) );
                         neuriteSynapseOL.add(synapseRoi);
                     }
                     if (!linkedPt[6].equals("0")) {
@@ -9441,6 +9439,7 @@ public class nTracer_
         }
         ArrayList<String[]> linkedPoints = neuriteNode.getTracingResult();
 //        IJ.log("RGB = "+lineColor.getRGB()+" ("+lineColor.getRed()+", "+lineColor.getGreen()+", "+lineColor.getBlue()+")");
+        
         if (lineColor.getRGB() == -16777216){ // Color.black
             String nodeType = neuriteNode.getType();
             if (nodeType.startsWith("Axon")) {
@@ -9453,6 +9452,7 @@ public class nTracer_
                 lineColor = Color.gray;
             }
         }
+        
         int totalRoiPoints = linkedPoints.size();
         int[] xPoints = new int[totalRoiPoints];
         int[] yPoints = new int[totalRoiPoints];
@@ -9489,9 +9489,11 @@ public class nTracer_
                             (double) yPoints[n] - synapseRadius, synapseSize, synapseSize);
                     synapseRoi.setPosition(0, 0, frameNumber);
                     synapseRoi.setStrokeWidth(synapseRadius);
-                    synapseRoi.setStrokeColor(lineColor);
+                    //synapseRoi.setStrokeColor(lineColor);
+                    synapseRoi.setStrokeColor( mapSynapseColor( linkedPt[5] ) );
                     neuriteSynapseOL.add(synapseRoi);
                 }
+                
                 if (!linkedPt[6].equals("0")) {
                     OvalRoi connectedRoi = new OvalRoi(
                             (double) xPoints[n] - synapseRadius,
@@ -9524,6 +9526,22 @@ public class nTracer_
         nameRoi.setStrokeColor(lineColor);
         nameRoi.setPosition(0, 0, frameNumber);
         neuriteNameOL.add(nameRoi);
+    }
+    
+    private static Color mapSynapseColor( String type ){
+        return mapSynapseColor( (int) Integer.valueOf( type ) );
+    }
+    
+    private static Color mapSynapseColor( int type ) {
+        switch( type ) {
+            case 0: return Color.black; // this shouldn't get called.
+            case 1: return Color.red;
+            case 2: return Color.green;
+            case 3: return Color.blue;
+            case 4: return Color.magenta;
+        }
+                
+        return Color.white;
     }
 
     private void getAllChildNodeRoiExtPt(Overlay[] neuriteTraceOL, Overlay[] neuriteNameOL, Overlay neuriteSynapseOL, Overlay neuriteConnectedOL,
