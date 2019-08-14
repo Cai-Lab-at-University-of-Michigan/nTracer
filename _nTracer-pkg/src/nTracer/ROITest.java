@@ -73,17 +73,29 @@ public class ROITest implements PlugIn {
 
         System.out.println(list.size());
 
-        Overlay over = new Overlay();
+        Overlay over = imp.getOverlay();
+        if (over == null) {
+            over = new Overlay();
+        }
 
+        Color nextcolor = Color.red;
+        if (over.size() > 0) {
+            nextcolor = Color.green;
+        }
+
+        int current_z = imp.getZ();
         for (SynapsePoint p : list) {
             float r = p.getR();
             Roi toadd = new OvalRoi(p.getY() - r, p.getX() - r, r * 2, r * 2);
-            toadd.setStrokeColor(Color.red);
+            toadd.setPosition( 1, p.getZ(), 1 );
+            toadd.setStrokeColor(nextcolor);
             over.add(toadd);
         }
 
         imp.setOverlay(over);
         imp.updateAndDraw();
+        
+        
     }
     
     private int parseIntClean( String x ) { 
