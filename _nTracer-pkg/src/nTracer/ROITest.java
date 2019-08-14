@@ -83,7 +83,6 @@ public class ROITest implements PlugIn {
             nextcolor = Color.green;
         }
 
-        int current_z = imp.getZ();
         for (SynapsePoint p : list) {
             float r = p.getR();
             Roi toadd = new OvalRoi(p.getY() - r, p.getX() - r, r * 2, r * 2);
@@ -103,39 +102,6 @@ public class ROITest implements PlugIn {
         temp = Math.round( temp );
         
         return (int) temp;
-    }
-
-    private class SynapsePoint {
-
-        int x, y, z;
-        float r;
-
-        public SynapsePoint(int x, int y, int z, float r) {
-            this.x = x;
-            this.y = y;
-            this.z = z;
-            this.r = r;
-        }
-
-        public int getX() {
-            return this.x;
-        }
-
-        public int getY() {
-            return this.y;
-        }
-
-        public int getZ() {
-            return this.z;
-        }
-
-        public float getR() {
-            return this.r;
-        }
-
-        public void rescaleZ(float factor) {
-            this.z /= factor;
-        }
     }
 
 }

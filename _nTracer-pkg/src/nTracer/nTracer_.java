@@ -30,6 +30,7 @@ import ij.gui.*;
 import ij.gui.PolygonRoi;
 import ij.gui.YesNoCancelDialog;
 import ij.io.DirectoryChooser;
+import ij.io.OpenDialog;
 import ij.measure.Calibration;
 import ij.plugin.HyperStackConverter;
 import ij.plugin.RGBStackMerge;
@@ -44,7 +45,9 @@ import java.awt.Color;
 import java.awt.geom.GeneralPath;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -514,6 +517,9 @@ public class nTracer_
         synapseRadius_jSpinner = new javax.swing.JSpinner();
         pointBoxRadiu_jSpinner = new javax.swing.JSpinner();
         updateDisplay_jButton = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
+        jComboBox1 = new javax.swing.JComboBox<>();
         tracing_jPanel = new javax.swing.JPanel();
         tracingMethod_jPanel = new javax.swing.JPanel();
         manualTracing_jRadioButton = new javax.swing.JRadioButton();
@@ -1486,7 +1492,7 @@ public class nTracer_
                             .addComponent(overlayPointBox_jCheckBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(overlaySelectedSynapse_jCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(overlaySelectedSpine_jCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
                         .addGroup(selected_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(pointBoxLineWidth_jSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(synapseRadius_jSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1495,7 +1501,7 @@ public class nTracer_
                             .addComponent(arborLineWidth_jSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(neuronLineWidth_jSpinner)
                             .addComponent(somaLineWidth_jSpinner))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
                         .addGroup(selected_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(pointBoxRadiu_jSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(overlaySelectedConnection_jCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -1569,15 +1575,57 @@ public class nTracer_
 
         selected_jPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {neuronLineWidth_jSpinner, overlayAllSelectedPoints_jCheckBox, overlaySelectedArbor_jCheckBox, overlaySelectedBranch_jCheckBox, overlaySelectedName_jCheckBox, overlaySelectedNeuron_jCheckBox, overlaySelectedSoma_jCheckBox, overlaySelectedSynapse_jCheckBox});
 
+        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel1.setName(""); // NOI18N
+
+        jButton1.setText("Choose File");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Red", "Green", "Blue" }));
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jComboBox1, 0, 94, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1)
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1))
+                .addGap(40, 40, 40))
+        );
+
         javax.swing.GroupLayout overlay_jPanelLayout = new javax.swing.GroupLayout(overlay_jPanel);
         overlay_jPanel.setLayout(overlay_jPanelLayout);
         overlay_jPanelLayout.setHorizontalGroup(
             overlay_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, overlay_jPanelLayout.createSequentialGroup()
-                .addGroup(overlay_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(all_jPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(selected_jPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(overlay_jPanelLayout.createSequentialGroup()
+                .addGroup(overlay_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(all_jPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(selected_jPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
+            .addGroup(overlay_jPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         overlay_jPanelLayout.setVerticalGroup(
             overlay_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1585,8 +1633,12 @@ public class nTracer_
                 .addComponent(all_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(selected_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(147, Short.MAX_VALUE))
         );
+
+        jPanel1.getAccessibleContext().setAccessibleName("");
 
         main_jTabbedPane.addTab("Overlay  ", overlay_jPanel);
 
@@ -2220,9 +2272,7 @@ public class nTracer_
                     .addComponent(toggleCh5_jCheckBox))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(channel_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(channel_jPanelLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(toggleColor_jLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(toggleColor_jLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, channel_jPanelLayout.createSequentialGroup()
                         .addGroup(channel_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(b_jRadioButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -7015,6 +7065,89 @@ public class nTracer_
         traceNeurite();
     }//GEN-LAST:event_traceNeurite_jButtonActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        loadRoiList();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void loadRoiList() {
+        String color_name = jComboBox1.getSelectedItem().toString();
+        Color color = null;
+        
+        switch( color_name ) {
+            case "Blue": color = Color.blue; break;
+            case "Red": color = Color.red; break;
+            case "Green": color = Color.green; break;
+        }
+        
+        if( color == null ) return;
+        
+        OpenDialog od = new OpenDialog("Select Points File", "");
+        String name = od.getFileName();
+        String dir = od.getDirectory();
+
+        if (name == null || name.length() == 0) {
+            return;
+        }
+        
+        java.util.List<SynapsePoint> list = new ArrayList<>();
+        File file = new File( dir + name );
+        System.out.println( "Loading points from: " + dir + name );
+        BufferedReader reader = null;
+
+        try {
+            reader = new BufferedReader(new FileReader(file));
+            String text;
+
+            while ((text = reader.readLine()) != null) {
+                //list.add(Integer.parseInt(text));
+                String[] parts = text.split("\t");
+                
+                int x = parseIntClean( parts[0] );
+                int y = parseIntClean( parts[1] );
+                int z = (int) Math.round( Float.valueOf( parts[2] ) );
+                float r = Float.valueOf( parts[3] );
+                
+                list.add( new SynapsePoint( x, y, z, r ) );
+            }
+        } catch (FileNotFoundException ex) {
+            //Logger.getLogger(ROITest.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            //Logger.getLogger(ROITest.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (reader != null) {
+                    reader.close();
+                }
+            } catch (IOException e) {
+            }
+        }
+        
+        if (auxOverlay == null) {
+            auxOverlay = new ArrayList<Roi>();
+        }
+        
+        for (SynapsePoint p : list) {
+            float r = p.getR();
+            Roi toadd = new OvalRoi(p.getY() - r, p.getX() - r, r * 2, r * 2);
+            toadd.setPosition( 1, p.getZ(), 1 );
+            toadd.setStrokeColor(color);
+            auxOverlay.add(toadd);
+        }
+        
+        updateOverlay();
+    }
+    
+    private int parseIntClean( String x ) {
+        double temp = Double.parseDouble( x );
+        temp = Math.round( temp );
+        
+        return (int) temp;
+    }
+    
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBox1ActionPerformed
+
     private void combineSomaAndBranchesOfTwoNeuronTreeSomas(ntNeuronNode targetNeuronSomaNode, ntNeuronNode sourceNeuronSomaNode) {
         String targetSNeuronNumber = targetNeuronSomaNode.getNeuronNumber();
         String sourceNeuronNumber = sourceNeuronSomaNode.getNeuronNumber();
@@ -11053,11 +11186,14 @@ minCostPathPoints = Functions.getMinCostPath3D(
     private javax.swing.JLabel info_jLabel;
     private javax.swing.JLabel intensityThreshold_jLabel;
     private javax.swing.JSpinner intensityThreshold_jSpinner;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JButton joinBranches_jButton;
     private javax.swing.JButton jumpToNextConnected_jButton;
@@ -11523,6 +11659,8 @@ minCostPathPoints = Functions.getMinCostPath3D(
             //IJ.log("total display update time = "+(endTime-startTime));
         }
     }
+    
+    public java.util.List<Roi> auxOverlay;
     private void updateOverlay(){
         displayOL.clear();
         
@@ -11661,6 +11799,12 @@ minCostPathPoints = Functions.getMinCostPath3D(
         // overlay points
         if (overlayPointBox_jCheckBox.isSelected()) {
             addPointBoxes(pointBoxRadius);
+        }
+        
+        if (this.auxOverlay != null) {
+            for (Roi i : auxOverlay) {
+                displayOL.add(i);
+            }
         }
         
         cns.setOverlay(displayOL);
