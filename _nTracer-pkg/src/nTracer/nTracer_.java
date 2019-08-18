@@ -168,6 +168,7 @@ public class nTracer_
         mm.run(" ");
         
         main_channel_window = new ChannelTool2( imp );
+        main_channel_window.run( " " );
     }
     
     private ChannelTool2 main_channel_window, mp_channel_window;
