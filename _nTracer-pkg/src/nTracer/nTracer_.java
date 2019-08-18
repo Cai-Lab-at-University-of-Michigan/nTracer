@@ -160,13 +160,17 @@ public class nTracer_
         }
         
         IJ.run("Brightness/Contrast...");
-        IJ.run("Channels Tool...", "");
+        //IJ.run("Channels Tool...", "");
         IJ.run("Misc...", "divide=Infinity require");
         //IJ.run("Synchronize Windows", "");
         
         MemoryMonitor mm = new MemoryMonitor();
         mm.run(" ");
+        
+        main_channel_window = new ChannelTool2( imp );
     }
+    
+    private ChannelTool2 main_channel_window, mp_channel_window;
 
     // <editor-fold defaultstate="collapsed" desc="methods for setting up GUI views and Table/Tree components">
     /**
