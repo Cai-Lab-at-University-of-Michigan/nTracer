@@ -521,6 +521,8 @@ public class nTracer_
         jPanel1 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jComboBox1 = new javax.swing.JComboBox<>();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
         tracing_jPanel = new javax.swing.JPanel();
         tracingMethod_jPanel = new javax.swing.JPanel();
         manualTracing_jRadioButton = new javax.swing.JRadioButton();
@@ -576,26 +578,6 @@ public class nTracer_
         toggleCh6_jCheckBox = new javax.swing.JCheckBox();
         toggleCh7_jCheckBox = new javax.swing.JCheckBox();
         toggleCh8_jCheckBox = new javax.swing.JCheckBox();
-        toggleChannel_jLabel1 = new javax.swing.JLabel();
-        jCheckBox_view1_1 = new javax.swing.JCheckBox();
-        jCheckBox_view1_2 = new javax.swing.JCheckBox();
-        jCheckBox_view1_3 = new javax.swing.JCheckBox();
-        jCheckBox_view1_4 = new javax.swing.JCheckBox();
-        jCheckBox_view1_5 = new javax.swing.JCheckBox();
-        jCheckBox_view1_aux = new javax.swing.JCheckBox();
-        jCheckBox_view1_6 = new javax.swing.JCheckBox();
-        jCheckBox_view1_7 = new javax.swing.JCheckBox();
-        jCheckBox_view1_8 = new javax.swing.JCheckBox();
-        jLabel6 = new javax.swing.JLabel();
-        jCheckBox_view2_1 = new javax.swing.JCheckBox();
-        jCheckBox_view2_2 = new javax.swing.JCheckBox();
-        jCheckBox_view2_3 = new javax.swing.JCheckBox();
-        jCheckBox_view2_4 = new javax.swing.JCheckBox();
-        jCheckBox_view2_aux = new javax.swing.JCheckBox();
-        jCheckBox_view2_5 = new javax.swing.JCheckBox();
-        jCheckBox_view2_6 = new javax.swing.JCheckBox();
-        jCheckBox_view2_7 = new javax.swing.JCheckBox();
-        jCheckBox_view2_8 = new javax.swing.JCheckBox();
         neuronList_jScrollPane = new javax.swing.JScrollPane();
         neuronList_jTree = new javax.swing.JTree();
         somaList_jScrollPane = new javax.swing.JScrollPane();
@@ -1615,24 +1597,38 @@ public class nTracer_
             }
         });
 
+        jLabel6.setText("ROI File:");
+
+        jLabel7.setText("ROI Color:");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(56, 56, 56)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jComboBox1, 0, 157, Short.MAX_VALUE))
+                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel7)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(jLabel6))
                 .addContainerGap(9, Short.MAX_VALUE))
         );
 
@@ -1643,12 +1639,12 @@ public class nTracer_
             .addGroup(overlay_jPanelLayout.createSequentialGroup()
                 .addGroup(overlay_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(all_jPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(selected_jPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(selected_jPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(overlay_jPanelLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addGroup(overlay_jPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         overlay_jPanelLayout.setVerticalGroup(
             overlay_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1658,7 +1654,7 @@ public class nTracer_
                 .addComponent(selected_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(238, Short.MAX_VALUE))
+                .addContainerGap(206, Short.MAX_VALUE))
         );
 
         jPanel1.getAccessibleContext().setAccessibleName("");
@@ -2220,58 +2216,6 @@ public class nTracer_
             }
         });
 
-        toggleChannel_jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        toggleChannel_jLabel1.setText("View 1");
-
-        jCheckBox_view1_1.setText("1");
-        jCheckBox_view1_1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox_view1_1ActionPerformed(evt);
-            }
-        });
-
-        jCheckBox_view1_2.setText("2");
-
-        jCheckBox_view1_3.setText("3");
-
-        jCheckBox_view1_4.setText("4");
-
-        jCheckBox_view1_5.setText("5");
-
-        jCheckBox_view1_aux.setText("Aux");
-        jCheckBox_view1_aux.setToolTipText("Display the overlay layer");
-        jCheckBox_view1_aux.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox_view1_auxActionPerformed(evt);
-            }
-        });
-
-        jCheckBox_view1_6.setText("6");
-
-        jCheckBox_view1_7.setText("7");
-
-        jCheckBox_view1_8.setText("8");
-
-        jLabel6.setText("View 2");
-
-        jCheckBox_view2_1.setText("1");
-
-        jCheckBox_view2_2.setText("2");
-
-        jCheckBox_view2_3.setText("3");
-
-        jCheckBox_view2_4.setText("4");
-
-        jCheckBox_view2_aux.setText("Aux");
-
-        jCheckBox_view2_5.setText("5");
-
-        jCheckBox_view2_6.setText("6");
-
-        jCheckBox_view2_7.setText("7");
-
-        jCheckBox_view2_8.setText("8");
-
         javax.swing.GroupLayout channel_jPanelLayout = new javax.swing.GroupLayout(channel_jPanel);
         channel_jPanel.setLayout(channel_jPanelLayout);
         channel_jPanelLayout.setHorizontalGroup(
@@ -2313,56 +2257,8 @@ public class nTracer_
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(g_jRadioButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(b_jRadioButton))
-                    .addGroup(channel_jPanelLayout.createSequentialGroup()
-                        .addGroup(channel_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jCheckBox_view1_aux)
-                            .addGroup(channel_jPanelLayout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(toggleChannel_jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(channel_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(channel_jPanelLayout.createSequentialGroup()
-                                .addComponent(jCheckBox_view1_1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jCheckBox_view1_2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jCheckBox_view1_3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jCheckBox_view1_4))
-                            .addGroup(channel_jPanelLayout.createSequentialGroup()
-                                .addComponent(jCheckBox_view1_5)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jCheckBox_view1_6)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jCheckBox_view1_7)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jCheckBox_view1_8)))))
+                        .addComponent(b_jRadioButton)))
                 .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(channel_jPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(channel_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(channel_jPanelLayout.createSequentialGroup()
-                        .addComponent(jLabel6)
-                        .addGap(18, 18, 18)
-                        .addComponent(jCheckBox_view2_1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jCheckBox_view2_2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jCheckBox_view2_3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jCheckBox_view2_4))
-                    .addGroup(channel_jPanelLayout.createSequentialGroup()
-                        .addComponent(jCheckBox_view2_aux)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jCheckBox_view2_5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jCheckBox_view2_6)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jCheckBox_view2_7)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jCheckBox_view2_8)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         channel_jPanelLayout.setVerticalGroup(
             channel_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2393,40 +2289,13 @@ public class nTracer_
                     .addComponent(toggleCh6_jCheckBox)
                     .addComponent(toggleCh5_jCheckBox))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(channel_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(toggleColor_jLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(channel_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(channel_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(b_jRadioButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(g_jRadioButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(r_jRadioButton)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(channel_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(toggleChannel_jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jCheckBox_view1_1)
-                    .addComponent(jCheckBox_view1_2)
-                    .addComponent(jCheckBox_view1_3)
-                    .addComponent(jCheckBox_view1_4))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(channel_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jCheckBox_view1_5)
-                    .addComponent(jCheckBox_view1_aux)
-                    .addComponent(jCheckBox_view1_6)
-                    .addComponent(jCheckBox_view1_7)
-                    .addComponent(jCheckBox_view1_8))
-                .addGap(18, 18, 18)
-                .addGroup(channel_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(jCheckBox_view2_1)
-                    .addComponent(jCheckBox_view2_2)
-                    .addComponent(jCheckBox_view2_3)
-                    .addComponent(jCheckBox_view2_4))
-                .addGap(1, 1, 1)
-                .addGroup(channel_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jCheckBox_view2_aux)
-                    .addComponent(jCheckBox_view2_5)
-                    .addComponent(jCheckBox_view2_6)
-                    .addComponent(jCheckBox_view2_7)
-                    .addComponent(jCheckBox_view2_8)))
+                        .addComponent(r_jRadioButton))
+                    .addComponent(toggleColor_jLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(128, 128, 128))
         );
 
         javax.swing.GroupLayout tracing_jPanelLayout = new javax.swing.GroupLayout(tracing_jPanel);
@@ -2469,8 +2338,8 @@ public class nTracer_
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(channel_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(channel_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(91, Short.MAX_VALUE))
         );
 
         main_jTabbedPane.addTab("Tracing   ", tracing_jPanel);
@@ -7296,14 +7165,6 @@ public class nTracer_
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
-    private void jCheckBox_view1_1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox_view1_1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jCheckBox_view1_1ActionPerformed
-
-    private void jCheckBox_view1_auxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox_view1_auxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jCheckBox_view1_auxActionPerformed
-
     private void combineSomaAndBranchesOfTwoNeuronTreeSomas(ntNeuronNode targetNeuronSomaNode, ntNeuronNode sourceNeuronSomaNode) {
         String targetSNeuronNumber = targetNeuronSomaNode.getNeuronNumber();
         String sourceNeuronNumber = sourceNeuronSomaNode.getNeuronNumber();
@@ -11344,24 +11205,6 @@ minCostPathPoints = Functions.getMinCostPath3D(
     private javax.swing.JSpinner intensityThreshold_jSpinner;
     private javax.swing.JButton jButton1;
     private javax.swing.JCheckBox jCheckBox9;
-    private javax.swing.JCheckBox jCheckBox_view1_1;
-    private javax.swing.JCheckBox jCheckBox_view1_2;
-    private javax.swing.JCheckBox jCheckBox_view1_3;
-    private javax.swing.JCheckBox jCheckBox_view1_4;
-    private javax.swing.JCheckBox jCheckBox_view1_5;
-    private javax.swing.JCheckBox jCheckBox_view1_6;
-    private javax.swing.JCheckBox jCheckBox_view1_7;
-    private javax.swing.JCheckBox jCheckBox_view1_8;
-    private javax.swing.JCheckBox jCheckBox_view1_aux;
-    private javax.swing.JCheckBox jCheckBox_view2_1;
-    private javax.swing.JCheckBox jCheckBox_view2_2;
-    private javax.swing.JCheckBox jCheckBox_view2_3;
-    private javax.swing.JCheckBox jCheckBox_view2_4;
-    private javax.swing.JCheckBox jCheckBox_view2_5;
-    private javax.swing.JCheckBox jCheckBox_view2_6;
-    private javax.swing.JCheckBox jCheckBox_view2_7;
-    private javax.swing.JCheckBox jCheckBox_view2_8;
-    private javax.swing.JCheckBox jCheckBox_view2_aux;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -11369,6 +11212,7 @@ minCostPathPoints = Functions.getMinCostPath3D(
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JButton joinBranches_jButton;
@@ -11463,7 +11307,6 @@ minCostPathPoints = Functions.getMinCostPath3D(
     private javax.swing.JCheckBox toggleCh7_jCheckBox;
     private javax.swing.JCheckBox toggleCh8_jCheckBox;
     private javax.swing.JLabel toggleChannel_jLabel;
-    private javax.swing.JLabel toggleChannel_jLabel1;
     private javax.swing.JLabel toggleColor_jLabel;
     private javax.swing.JButton toggleConnection_jButton;
     private javax.swing.JButton toggleSynapse_jButton;
