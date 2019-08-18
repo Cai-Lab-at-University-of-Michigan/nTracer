@@ -80,7 +80,7 @@ public class nTracer_
         MouseWheelListener,
         KeyListener {
 
-    public static final String VERSION = "nTracer 1.2.1";
+    public static final String VERSION = "nTracer 1.3.3";
 
     private int last_current_z;
     private Instant last_z_update_time;
@@ -166,10 +166,10 @@ public class nTracer_
         // Old way:
         // IJ.run("Channels Tool...", "");
         // New way:
-        main_channel_window = new ChannelTool2(imp, "Main Image Chanels");
+        main_channel_window = new ChannelTool2(imp, "Main Image");
         main_channel_window.run("");
 
-        mp_channel_window = new ChannelTool2(impZproj, "Maximum Projection Channels");
+        mp_channel_window = new ChannelTool2(impZproj, "Maximum Projection");
         mp_channel_window.run("");
         /* end load channel windows */
 
@@ -5056,6 +5056,7 @@ public class nTracer_
         }
         saveHistory();
     }//GEN-LAST:event_expanAllNeuron_jButtonActionPerformed
+    
     private void traceSoma() {
         if (membraneLabel_jRadioButton.isSelected()) {
             if (manualTracing_jRadioButton.isSelected()) {
@@ -8999,10 +9000,21 @@ public class nTracer_
             if (!projectionUpdate_jCheckBox.isSelected() || impZproj == null) {
                 return;
             }
+            
+            // Save the active channels for later use
+            boolean[] chActive = ((CompositeImage) impZproj).getActiveChannels();
+            String chActSetting = "";
+            for (int c = 0; c < chActive.length; c++) {
+                if (chActive[c]) {
+                    chActSetting += "1";
+                } else {
+                    chActSetting += "0";
+                }
+            }
 
             int impZprojC = impZproj.getC();
-
             int currentZ = imp.getZ();
+            
             int minZ = currentZ - zProjInterval;
             int maxZ = currentZ + zProjInterval;
 
@@ -9043,7 +9055,7 @@ public class nTracer_
             final Roi targetRoi = imp.getRoi();
             imp.setRoi(impRoi);
 
-            ImagePlus temp = DuplicateProjector.duplicateAndProject(imp, 1, impNChannel, minZ, maxZ, targetRoi);
+            ImagePlus temp = DuplicateProjector.duplicateAndProject(imp, impZproj, 1, impNChannel, minZ, maxZ, targetRoi);
             if (temp == null) {
                 return;
             }
@@ -9058,16 +9070,8 @@ public class nTracer_
 
             temp.close();
 
-            boolean[] chActive = cmp.getActiveChannels();
-            String chActSetting = "";
-            for (int c = 0; c < chActive.length; c++) {
-                if (chActive[c]) {
-                    chActSetting += "1";
-                } else {
-                    chActSetting += "0";
-                }
-            }
-
+            //boolean[] chActive = cmp.getActiveChannels();
+          
             impZproj.setActiveChannels(chActSetting);
             impZproj.setC(impZprojC);
         }

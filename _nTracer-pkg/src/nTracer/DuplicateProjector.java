@@ -24,7 +24,7 @@ import java.util.ArrayList;
 
 public class DuplicateProjector {
 
-    public static ImagePlus duplicateAndProject(ImagePlus imp, int firstC, int lastC, int firstZ, int lastZ, Roi roi) {
+    public static ImagePlus duplicateAndProject(ImagePlus imp, ImagePlus impZproj, int firstC, int lastC, int firstZ, int lastZ, Roi roi) {
         final Roi roi2 = cropRoi(imp, roi);
 
         Rectangle rect_build;
@@ -62,7 +62,7 @@ public class DuplicateProjector {
         imp2.setStack("DUP_" + imp.getTitle(), stack2);
         imp2.setDimensions(lastC - firstC + 1, 1, 1);
         if (imp.isComposite()) {
-            int mode = ((CompositeImage) imp).getMode();
+            int mode = ((CompositeImage) impZproj).getMode();
             if (lastC > firstC) {
                 imp2 = new CompositeImage(imp2, mode);
                 int i2 = 1;
@@ -71,7 +71,7 @@ public class DuplicateProjector {
                     ((CompositeImage) imp2).setChannelLut(lut, i2++);
                 }
             } else if (firstC == lastC) {
-                LUT lut = ((CompositeImage) imp).getChannelLut(firstC);
+                LUT lut = ((CompositeImage) impZproj).getChannelLut(firstC);
                 imp2.getProcessor().setColorModel(lut);
                 imp2.setDisplayRange(lut.min, lut.max);
             }
@@ -84,12 +84,13 @@ public class DuplicateProjector {
             cal.yOrigin -= roi.getBounds().y;
         }
 
-        Overlay overlay = imp.getOverlay();
-        if (overlay != null && !imp.getHideOverlay()) {
-            Overlay overlay2 = overlay.crop(roi2 != null ? roi2.getBounds() : null);
-            overlay2.crop(firstC, lastC, 1, 1, 1, 1);
-            imp2.setOverlay(overlay2);
-        }
+        // I think this section copies the old overlay over, which we don't want -LAW
+        //Overlay overlay = imp.getOverlay();
+        //if (overlay != null && !imp.getHideOverlay()) {
+        //    Overlay overlay2 = overlay.crop(roi2 != null ? roi2.getBounds() : null);
+        //    overlay2.crop(firstC, lastC, 1, 1, 1, 1);
+        //    imp2.setOverlay(overlay2);
+        //}
 
         return imp2;
     }
