@@ -18,7 +18,6 @@ kalle.ha...@gmail.com		Owner
 ra4k...@gmail.com		Committer
 
  */
-
 package nTracer;
 
 import ij.*;
@@ -80,31 +79,31 @@ public class nTracer_
         MouseMotionListener,
         MouseWheelListener,
         KeyListener {
-    
+
     public static final String VERSION = "nTracer 1.2.1";
-    
+
     private int last_current_z;
     private Instant last_z_update_time;
     public Map<coord3D, Float> color_buffer;
     public Lock color_lock;
-    
+
     public nTracer_() {
         this.color_buffer = new HashMap<>();
         this.last_current_z = -1;
         this.last_z_update_time = Instant.now();
         this.color_lock = new ReentrantLock();
-        
+
         // set DataHandler to handle data
         IO = new ntIO(this);
         analysis = new ntAnalysis();
         Functions = new ntTracing();
         DataHandeler = new ntDataHandler();
-        
+
         if (!IJ.isJava18()) {
             IJ.error("Fiji/ImageJ-Java8 version is required !");
             return;
         }
-        
+
         setupFeelsAndTools(); // needs to be done before set up GUI        
         // set up GUI
         initComponents();
@@ -138,8 +137,8 @@ public class nTracer_
         allSynapseRadius = (synapseRadius - lineWidthOffset / 2 > 0.5) ? synapseRadius - lineWidthOffset / 2 : 0.5;
         allSynapseSize = allSynapseRadius * 2;
         //IJ.log("displayDepth = +/- "+extendDisplayPoints);
-        
-        this.setTitle( nTracer_.VERSION );
+
+        this.setTitle(nTracer_.VERSION);
 
         initHistory();
         initPointTable();
@@ -152,25 +151,32 @@ public class nTracer_
         cropData_jMenuItem.setVisible(false);
         debug_jMenu.setVisible(false);
         this.setVisible(true);
-        this.setTitle( this.getTitle() + " - pixel resolutions (x, y, z) um/pixel:" );
-         
+        this.setTitle(this.getTitle() + " - pixel resolutions (x, y, z) um/pixel:");
+
         if (!openImage()) {
             quit();
             return;
         }
-        
+
         IJ.run("Brightness/Contrast...");
-        //IJ.run("Channels Tool...", "");
         IJ.run("Misc...", "divide=Infinity require");
-        //IJ.run("Synchronize Windows", "");
-        
+        //IJ.run("Synchronize Windows", "");        
+
+        /* load channel windows */
+        // Old way:
+        // IJ.run("Channels Tool...", "");
+        // New way:
+        main_channel_window = new ChannelTool2(imp, "Main Image Chanels");
+        main_channel_window.run("");
+
+        mp_channel_window = new ChannelTool2(impZproj, "Maximum Projection Channels");
+        mp_channel_window.run("");
+        /* end load channel windows */
+
         MemoryMonitor mm = new MemoryMonitor();
         mm.run(" ");
-        
-        main_channel_window = new ChannelTool2( imp );
-        main_channel_window.run( " " );
     }
-    
+
     private ChannelTool2 main_channel_window, mp_channel_window;
 
     // <editor-fold defaultstate="collapsed" desc="methods for setting up GUI views and Table/Tree components">
@@ -185,13 +191,12 @@ public class nTracer_
         }
 
         System.setProperty("apple.laf.useScreenMenuBar", "true");
-        
+
         // add KeyListener to all components of the GUI jFrame
         //ArrayList<Component> GUIcomponentList = getAllComponents(this);
         //for (Component comp : GUIcomponentList){
         //    comp.addKeyListener(this);
         //}
-        
         // set Toolbar for Manual Tracer
         //Toolbar.removeMacroTools();
         Toolbar.getInstance().setTool("freeline");
@@ -199,6 +204,7 @@ public class nTracer_
         //Toolbar.addPlugInTool(ntToolSoma);
         //Toolbar.getInstance().setTool(ntToolTrace.toolName);
     }
+
     private ArrayList<Component> getAllComponents(final Container c) {
         Component[] comps = c.getComponents();
         ArrayList<Component> compList = new ArrayList<>();
@@ -234,7 +240,7 @@ public class nTracer_
             historyNeuronNode[i] = new ntNeuronNode("", new ArrayList<>());
             historyAllSomaNode[i] = new ntNeuronNode("", new ArrayList<>());
             historySpineNode[i] = new ntNeuronNode("", new ArrayList<>());
-            
+
             ArrayList<String> historyExpandedNeuronName = new ArrayList<>();
             historyExpandedNeuronNames.add(historyExpandedNeuronName);
 
@@ -250,32 +256,32 @@ public class nTracer_
             historyIndexStack.add(-1);
         }
     }
-    
+
     private void initPointTable() {
         // set up tracked point table
         pointTableModel = new DefaultTableModel(
                 DataHandeler.getPointTableData(new ArrayList<String[]>()),
                 pointColumnNames) {
-                    Class[] types = new Class[]{
-                        java.lang.String.class, java.lang.Float.class,
-                        java.lang.Float.class, java.lang.Float.class,
-                        java.lang.Float.class, java.lang.Integer.class,
-                        java.lang.String.class
-                    };
-                    boolean[] canEdit = new boolean[]{
-                        false, false, false, false, false, false, false
-                    };
+            Class[] types = new Class[]{
+                java.lang.String.class, java.lang.Float.class,
+                java.lang.Float.class, java.lang.Float.class,
+                java.lang.Float.class, java.lang.Integer.class,
+                java.lang.String.class
+            };
+            boolean[] canEdit = new boolean[]{
+                false, false, false, false, false, false, false
+            };
 
-                    @Override
-                    public Class getColumnClass(int columnIndex) {
-                        return types[columnIndex];
-                    }
+            @Override
+            public Class getColumnClass(int columnIndex) {
+                return types[columnIndex];
+            }
 
-                    @Override
-                    public boolean isCellEditable(int rowIndex, int columnIndex) {
-                        return canEdit[columnIndex];
-                    }
-                };
+            @Override
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit[columnIndex];
+            }
+        };
 //        pointTableModelListener = new ntPointTableModelListener();
 //        pointTableModel.addTableModelListener(pointTableModelListener);
         pointTable_jTable.setModel(pointTableModel);
@@ -357,8 +363,8 @@ public class nTracer_
         somaList_jScrollPane.setViewportView(displaySomaList_jTree);
         //displaySomaList_jTree.addKeyListener(this);
     }
-    
-    private void initSpineTree(){
+
+    private void initSpineTree() {
         rootSpineNode = new ntNeuronNode("All Spines", new ArrayList<String[]>());
         spineTreeModel = new DefaultTreeModel(rootSpineNode);
         spineList_jTree = new JTree(spineTreeModel);
@@ -1659,7 +1665,7 @@ public class nTracer_
                 .addComponent(selected_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(206, Short.MAX_VALUE))
+                .addContainerGap(198, Short.MAX_VALUE))
         );
 
         jPanel1.getAccessibleContext().setAccessibleName("");
@@ -1987,7 +1993,7 @@ public class nTracer_
         xyProjectionArea_jLabel.setForeground(new java.awt.Color(153, 0, 102));
         xyProjectionArea_jLabel.setText("X/Y");
 
-        xyProjectionArea_jSpinner.setModel(new javax.swing.SpinnerListModel(new String[] {"512", "800", "1024", "1300", "1600", "1800", "2048", "2300", "2600"}));
+        xyProjectionArea_jSpinner.setModel(new javax.swing.SpinnerListModel(new String[] {"500", "1000", "1500", "2000", "2500", "3000", "3500", "4000", "4500"}));
         xyProjectionArea_jSpinner.setFocusable(false);
         xyProjectionArea_jSpinner.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -2011,10 +2017,10 @@ public class nTracer_
                 .addComponent(zProjectionInterval_jLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(zProjectionInterval_jSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 60, Short.MAX_VALUE)
                 .addComponent(xyProjectionArea_jLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(xyProjectionArea_jSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(xyProjectionArea_jSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         zProjectionInterval_jPanelLayout.setVerticalGroup(
@@ -2344,7 +2350,7 @@ public class nTracer_
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(channel_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(91, Short.MAX_VALUE))
+                .addContainerGap(83, Short.MAX_VALUE))
         );
 
         main_jTabbedPane.addTab("Tracing   ", tracing_jPanel);
@@ -2993,22 +2999,23 @@ public class nTracer_
 
     private boolean openImage() {
         //System.err.println("OpenImage Ran");
-        
+
         System.gc();
         System.gc();
         imp = IO.loadImage();
-        if (imp == null)
+        if (imp == null) {
             return false;
-        
+        }
+
         initiateTracing();
         System.gc();
         return true;
     }
 
     private void initiateTracing() {
-        if (imp.getType()==ImagePlus.COLOR_RGB){
+        if (imp.getType() == ImagePlus.COLOR_RGB) {
             IJ.run(imp, "Make Composite", "");
-        } else if (!imp.isComposite()){
+        } else if (!imp.isComposite()) {
             String impTitle = imp.getTitle();
             Calibration impCal = imp.getCalibration();
             ImagePlus imp2 = imp.duplicate();
@@ -3027,27 +3034,27 @@ public class nTracer_
             IJ.run(imp, "Green", "");
             imp.setC(1);
         }
-        
+
         if (impNChannel > 8) {
             IJ.error("Image needs to be 8 channels or less!");
             quit();
             return;
         }
-        
+
         startPoint = new int[7];
         endPoint = new int[7];
         initImage();
         initiateCalibration();
         initChannels();
         Functions.setup(imp);
-        updatePointTable(tablePoints);        
+        updatePointTable(tablePoints);
         initImageOverlay();
         //initTempHistoryZipFile();
         loadData();
         startAutosave(autosaveIntervalMin);
         initImageZproj();
     }
-    
+
     private void initImage() {
         impWidth = imp.getWidth();
         impHeight = imp.getHeight();
@@ -3078,15 +3085,15 @@ public class nTracer_
         //}
         cns.addMouseListener(this);
         cns.addMouseMotionListener(this);
-                
+
         // remove default keyboard shortcut
         cns.removeKeyListener(IJ.getInstance());
         //cns.removeKeyListener(cns.getKeyListeners()[0]);
         cns.addKeyListener(this);
         cns.disablePopupMenu(true);
     }
-    
-    private void initImageZproj(){
+
+    private void initImageZproj() {
         //impZproj = DuplicateProjector.duplicateAndProject( imp, 1, 1, 1, 1 );
         impZproj = new ZProjector().run(imp, "max", 1, 1);
         impZproj.show();
@@ -3109,10 +3116,11 @@ public class nTracer_
         for (int k = 0; k < impZprojMWL.length; k++) {
             winZproj.removeMouseWheelListener(impZprojMWL[k]);
         }
-        zProjInterval = (Integer) zProjectionInterval_jSpinner.getValue() ;
+        zProjInterval = (Integer) zProjectionInterval_jSpinner.getValue();
         zProjXY = Integer.parseInt((String) xyProjectionArea_jSpinner.getValue());
         updateZprojectionImp();
     }
+
     private void initiateCalibration() {
         Calibration cal = imp.getCalibration();
         Calibration oriCal = cal.copy();
@@ -3127,38 +3135,39 @@ public class nTracer_
         gd.addNumericField("y resolution", cal.pixelHeight, 3, 8, "um/pixel");
         gd.addNumericField("z resolution", cal.pixelDepth, 3, 8, "um/pixel");
         gd.showDialog();
-        
-        if (gd.wasOKed()){
+
+        if (gd.wasOKed()) {
             cal.pixelWidth = gd.getNextNumber();
             cal.pixelHeight = gd.getNextNumber();
-            cal.pixelDepth = gd.getNextNumber();        
-            cal.setUnit("\u00B5m");            
+            cal.pixelDepth = gd.getNextNumber();
+            cal.setUnit("\u00B5m");
         }
-        
+
         if (!(cal.pixelWidth == oriCal.pixelWidth && cal.pixelHeight == oriCal.pixelHeight && cal.pixelDepth == oriCal.pixelDepth)) {
             YesNoCancelDialog yncDialog = new YesNoCancelDialog(new java.awt.Frame(),
-                    "Save image ...", "Image calibration changed !"+"\n"+"Do you want to save new calibration to image?");
+                    "Save image ...", "Image calibration changed !" + "\n" + "Do you want to save new calibration to image?");
             if (yncDialog.yesPressed()) {
-                IJ.save(imp, IJ.getDirectory("image")+"/"+imp.getTitle());
+                IJ.save(imp, IJ.getDirectory("image") + "/" + imp.getTitle());
             }
         }
-        
-        if (!cal.getUnit().equals("\u00B5m") || cal.pixelWidth < 0 || cal.pixelHeight < 0 || cal.pixelDepth < 0){
+
+        if (!cal.getUnit().equals("\u00B5m") || cal.pixelWidth < 0 || cal.pixelHeight < 0 || cal.pixelDepth < 0) {
             cal.pixelWidth = 0;
             cal.pixelHeight = 0;
             cal.pixelDepth = 0;
         }
-        
+
         xyzResolutions[0] = cal.pixelWidth;
         xyzResolutions[1] = cal.pixelHeight;
-        xyzResolutions[2] = cal.pixelDepth;     
-        this.setTitle( this.VERSION + " - pixel resolutions (x, y, z) um/pixel: (" + xyzResolutions[0] + ", " + xyzResolutions[1] + ", " + xyzResolutions[2] + ")");
+        xyzResolutions[2] = cal.pixelDepth;
+        this.setTitle(this.VERSION + " - pixel resolutions (x, y, z) um/pixel: (" + xyzResolutions[0] + ", " + xyzResolutions[1] + ", " + xyzResolutions[2] + ")");
         int currentZ = imp.getZ();
         imp.setZ(1);
         imp.setZ(imp.getNSlices());
         imp.setZ(currentZ);
     }
-    private void initChannels(){
+
+    private void initChannels() {
         toggleColor = "Red";
         r_jRadioButton.setSelected(true);
         g_jRadioButton.setSelected(false);
@@ -3230,7 +3239,8 @@ public class nTracer_
         cmp = (CompositeImage) imp;
         activeChannels = cmp.getActiveChannels();
     }
-    private void initImageOverlay(){
+
+    private void initImageOverlay() {
         allNeuronTraceOLextPt = new Overlay[impNSlice];
         allNeuronNameOLextPt = new Overlay[impNSlice];
         selectedNeuronTraceOLextPt = new Overlay[impNSlice];
@@ -3244,6 +3254,7 @@ public class nTracer_
         selectedSomaTraceOL = new Overlay[impNSlice];
         selectedSomaNameOL = new Overlay[impNSlice];
     }
+
     private void startAutosave(long interval) {
         //IJ.log(IJ.getDirectory("current"));
         final String folder = IJ.getDirectory("current") + "/" + imp.getTitle() + "_nTracer_Autosave" + "/";
@@ -3258,6 +3269,7 @@ public class nTracer_
         }, 0, interval, MINUTES);
 
     }
+
     private boolean closeImage() {
         if (imp != null) {
             YesNoCancelDialog saveResultBeforeClose = new YesNoCancelDialog(new java.awt.Frame(),
@@ -3291,7 +3303,7 @@ public class nTracer_
             b_jRadioButton.setSelected(false);
             deselectInvisualizeAllChannelCheckboxes();
             //visualizeDisableAllChannelCheckboxes();            
-            
+
             cmp.close();
             imp.close();
             impZproj.close();
@@ -3302,6 +3314,7 @@ public class nTracer_
             return false;
         }
     }
+
     private void stopAutosave(boolean deleteAutosaved) {
         scheduler.shutdown();
         if (deleteAutosaved) {
@@ -3326,7 +3339,7 @@ public class nTracer_
     private void quit() {
         if (imp == null || (imp != null && closeImage())) {
             Toolbar.restoreTools();
-            this.dispose();            
+            this.dispose();
             IJ.run("Misc...", "divide=Infinity");
             IJ.getInstance().addKeyListener(IJ.getInstance());
             System.gc();
@@ -3347,7 +3360,7 @@ public class nTracer_
         if (imp != null) {
             String directory = IJ.getDirectory("current");
             String fileName = imp.getTitle() + ".zip";
-          
+
             final JFileChooser fileChooser = new JFileChooser();
             fileChooser.setSelectedFile(new File(directory + "/" + fileName));
             fileChooser.setFileFilter(new FileFilter() {
@@ -3400,11 +3413,11 @@ public class nTracer_
                 (int) (spineLine * 2) + "", (int) (pointBoxLine * 2) + "",
                 (int) synapseRadius + "", pointBoxRadius + "", (int) (lineWidthOffset * 2) + "",
                 autosaveIntervalMin + "", delAutosaved + ""};
-                //synapseSize = synapseRadius*2+1 
-            
+            //synapseSize = synapseRadius*2+1 
+
             //Calibration impCal = imp.getCalibration();
             try {
-                IO.savePackagedData(rootNeuronNode, rootAllSomaNode, rootSpineNode, 
+                IO.savePackagedData(rootNeuronNode, rootAllSomaNode, rootSpineNode,
                         neuronList_jTree, displaySomaList_jTree, pointTable_jTable, selectedFile,
                         imp.getC(), imp.getZ(), imp.getFrame(), panelParameters);
             } catch (IOException e) {
@@ -3422,6 +3435,7 @@ public class nTracer_
         int f = impPosition[historyLevel][2];
         imp.setPosition(c, z, f);
     }
+
     private void recordPanelParameters(int historyLevel) {
         nTracerParameters[historyLevel][0] = xyRadius + "";
         nTracerParameters[historyLevel][1] = zRadius + "";
@@ -3458,11 +3472,13 @@ public class nTracer_
         nTracerParameters[historyLevel][32] = delAutosaved + "";
         //synapseSize = synapseRadius*2+1 
     }
+
     private void recordImagePosition(int historyLevel) {
         impPosition[historyLevel][0] = imp.getC();
         impPosition[historyLevel][1] = imp.getZ();
         impPosition[historyLevel][2] = imp.getFrame();
     }
+
     private void restoreStartEndPointStatus(int historyLevel) {
         for (int i = 0; i < 5; i++) {
             startPoint[i] = historyStartPoint[historyLevel][i];
@@ -3471,13 +3487,14 @@ public class nTracer_
         hasStartPt = historyHasStartPt[historyLevel];
         hasEndPt = historyHasEndPt[historyLevel];
     }
+
     private void recordStartEndPointStatus(int historyLevel) {
-        if (startPoint== null){
+        if (startPoint == null) {
             historyStartPoint[historyLevel] = new int[7];
         } else {
             System.arraycopy(startPoint, 0, historyStartPoint[historyLevel], 0, 7);
         }
-        if (endPoint == null){
+        if (endPoint == null) {
             historyEndPoint[historyLevel] = new int[7];
         } else {
             System.arraycopy(endPoint, 0, historyEndPoint[historyLevel], 0, 7);
@@ -3485,13 +3502,14 @@ public class nTracer_
         historyHasStartPt[historyLevel] = hasStartPt;
         historyHasEndPt[historyLevel] = hasEndPt;
     }
+
     private boolean saveHistory2Memory(int historyLevel) {
         if (imp == null) {
             return false;
         }
         //IJ.log("saved historyLevel "+historyLevel);
         recordPanelParameters(historyLevel);
-        recordImagePosition(historyLevel); 
+        recordImagePosition(historyLevel);
         recordStartEndPointStatus(historyLevel);
         historyNeuronNode[historyLevel] = DataHandeler.replicateNodeAndChild(rootNeuronNode);
         /*
@@ -3502,7 +3520,7 @@ public class nTracer_
         }
         IJ.log("after replicate neuron name = "+historyNeuronNode[historyLevel].toString()+"; child = "+historyNeuronNode[historyLevel].getChildCount());
         IJ.log("replicated "+historyNeuronNode[historyLevel].getChildCount());
-        */
+         */
         historyAllSomaNode[historyLevel] = DataHandeler.replicateNodeAndChild(rootAllSomaNode);
         //IJ.log("after replicate soma name = "+historyAllSomaNode[historyLevel].toString()+"; child = "+historyAllSomaNode[historyLevel].getChildCount());
         historySpineNode[historyLevel] = DataHandeler.replicateNodeAndChild(rootSpineNode);
@@ -3513,9 +3531,10 @@ public class nTracer_
 //        IJ.log("ok7 "+(historySelectedTableRows.get(historyLevel)).get(0));
 
         return true;
-    }  
+    }
+
     private boolean loadHistoryFromMemory(int historyLevel) {
-        if (imp == null){
+        if (imp == null) {
             return false;
         }
         try {
@@ -3543,15 +3562,16 @@ public class nTracer_
             return false;
         }
     }
+
     private boolean autoSave2File(String folder, int historyLevel) {
-        if (imp != null && (rootNeuronNode.getChildCount()>0 || rootAllSomaNode.getChildCount()>0)) {
+        if (imp != null && (rootNeuronNode.getChildCount() > 0 || rootAllSomaNode.getChildCount() > 0)) {
             SimpleDateFormat fileFormatter = new SimpleDateFormat("yyyy-MM-dd'at'HHmm");
             Date now = new Date();
             String fileName = imp.getTitle() + "_" + fileFormatter.format(now);
 
             ntNeuronNode autosaveNeuronNode = DataHandeler.replicateNodeAndChild(historyNeuronNode[historyLevel]);
             ntNeuronNode autosaveAllSomaNode = DataHandeler.replicateNodeAndChild(historyAllSomaNode[historyLevel]);
-            ntNeuronNode autosaveSpineNode = DataHandeler.replicateNodeAndChild(historySpineNode[historyLevel]);            
+            ntNeuronNode autosaveSpineNode = DataHandeler.replicateNodeAndChild(historySpineNode[historyLevel]);
             ArrayList<String> autosaveExpandedNeuronNames = historyExpandedNeuronNames.get(historyLevel);
             ArrayList<String> autosaveSelectedNeuronNames = historySelectedNeuronNames.get(historyLevel);
             ArrayList<String> autosaveSelectedSomaSliceNames = historySelectedSomaSliceNames.get(historyLevel);
@@ -3576,12 +3596,13 @@ public class nTracer_
             return false;
         }
     }
+
     private void saveHistory() {
-        if (historyPointer < 0){ // initial saving
+        if (historyPointer < 0) { // initial saving
             historyPointer++;
             historyIndexStack.set(historyPointer, 0);
             saveHistory2Memory(historyIndexStack.get(historyPointer));
-        } else if (historyPointer < maxHistoryLevel-1) {
+        } else if (historyPointer < maxHistoryLevel - 1) {
             historyPointer++;
             if (historyIndexStack.get(historyPointer - 1) == maxHistoryLevel - 1) {
                 historyIndexStack.set(historyPointer, 0);
@@ -3596,10 +3617,11 @@ public class nTracer_
         } else { // historyPonter = maxHistoryLevel-1 : at the end of the index stack
             historyIndexStack.add(historyIndexStack.get(0));
             historyIndexStack.remove(0);
-            saveHistory2Memory(historyIndexStack.get(historyIndexStack.size()-1));
+            saveHistory2Memory(historyIndexStack.get(historyIndexStack.size() - 1));
         }
         //IJ.log("prevHistoryLevel = "+(historyPointer-1)+"; currentHistoryLevel = "+historyPointer+"; load memory "+historyIndexStack.get(historyPointer));
     }
+
     private void backwardHistory() {
         if (historyPointer > 0) {
             historyPointer--;
@@ -3612,6 +3634,7 @@ public class nTracer_
             }
         }
     }
+
     private void forwardHistory() {
         if (historyPointer < maxHistoryLevel - 1 && historyIndexStack.get(historyPointer + 1) >= 0) {
             historyPointer++;
@@ -3624,7 +3647,7 @@ public class nTracer_
             }
         }
     }
-    
+
     private void loadData_jMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadData_jMenuItemActionPerformed
         loadData();
     }//GEN-LAST:event_loadData_jMenuItemActionPerformed
@@ -3652,14 +3675,14 @@ public class nTracer_
                 }
             });
             int returnVal = fileChooser.showOpenDialog(this);
-            if(returnVal == JFileChooser.CANCEL_OPTION) {
+            if (returnVal == JFileChooser.CANCEL_OPTION) {
                 return false;
             }
             File selectedFile = fileChooser.getSelectedFile();
             if (directory == null || dataFileName == null) {
                 return false;
             }
-            
+
             InputStream parameterAndNeuronIS, expansionAndSelectionIS, colorTableIS;
             try {
                 System.gc();
@@ -3670,7 +3693,7 @@ public class nTracer_
             } catch (IOException e) {
                 return false;
             }
-            
+
             if (parameterAndNeuronIS == null) {
                 IJ.error("No neurite tracing data file found !");
                 return false;
@@ -3679,7 +3702,7 @@ public class nTracer_
                 IJ.error("No tree status file found !");
                 return false;
             }
-            if (colorTableIS == null ) {
+            if (colorTableIS == null) {
                 IJ.log("No saved color lookup table was found, will calculate from file...");
             } else {
                 try {
@@ -3687,24 +3710,25 @@ public class nTracer_
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(colorTableIS, "UTF-8"));
                     Scanner loadScanner = new Scanner(bufferedReader);
 
-                    while(loadScanner.hasNext()) {
+                    while (loadScanner.hasNext()) {
                         String line = loadScanner.nextLine();
                         line = line.replaceAll("\n", "");
 
-                        String[] line_split = line.split( "\t" );
+                        String[] line_split = line.split("\t");
 
-                        int[] coords = { 
+                        int[] coords = {
                             Integer.parseInt(line_split[0]),
                             Integer.parseInt(line_split[1]),
                             Integer.parseInt(line_split[2])
                         };
 
-                        coord3D newPt = new coord3D( coords );
+                        coord3D newPt = new coord3D(coords);
                         float newFloat = Float.parseFloat(line_split[3]);
-                        
+
                         this.color_buffer.put(newPt, newFloat);
                     }
-                } catch( Exception e ) {} // we dont care, because the table can just be remade
+                } catch (Exception e) {
+                } // we dont care, because the table can just be remade
             }
             returnValue = loadInputStreamData(parameterAndNeuronIS, expansionAndSelectionIS);
         }
@@ -3722,7 +3746,7 @@ public class nTracer_
             // load neurons
             DefaultTreeModel[] treeModels = IO.loadTracingParametersAndNeurons(parameterAndNeuronIS);
             allSomaTreeModel = treeModels[0];
-            rootAllSomaNode = (ntNeuronNode) (allSomaTreeModel.getRoot());           
+            rootAllSomaNode = (ntNeuronNode) (allSomaTreeModel.getRoot());
             neuronTreeModel = treeModels[1];
             rootNeuronNode = (ntNeuronNode) (neuronTreeModel.getRoot());
             spineTreeModel = treeModels[2];
@@ -3773,7 +3797,7 @@ public class nTracer_
             boolean[] active = cmp.getActiveChannels();
             System.arraycopy(activeChannels, 0, active, 0, active.length);
             cmp.updateAndDraw();
-            this.setTitle( this.VERSION + " - pixel resolutions (x, y, z) um/pixel: (" + xyzResolutions[0] + ", " + xyzResolutions[1] + ", " + xyzResolutions[2] + ")");
+            this.setTitle(this.VERSION + " - pixel resolutions (x, y, z) um/pixel: (" + xyzResolutions[0] + ", " + xyzResolutions[1] + ", " + xyzResolutions[2] + ")");
         } catch (IOException e) {
             return false;
         }
@@ -3794,7 +3818,7 @@ public class nTracer_
                     }
                 }
             }
-                //IJ.log("set neuron tree expansion");
+            //IJ.log("set neuron tree expansion");
 
             // status[1] -- neuron tree selection status
             if (status[1].size() > 0) {
@@ -3806,7 +3830,7 @@ public class nTracer_
                     }
                 }
             }
-                //IJ.log("set neuron tree selection");
+            //IJ.log("set neuron tree selection");
 
             // status[2] -- neuron tree visible rectangle
             if (status[2].size() > 0) {
@@ -3817,7 +3841,7 @@ public class nTracer_
                 Rectangle neuronListVisibleRectangle = new Rectangle(x, y, width, height);
                 neuronList_jTree.scrollRectToVisible(neuronListVisibleRectangle);
             }
-                //IJ.log("set neuronList rectangle");
+            //IJ.log("set neuronList rectangle");
 
             // status[3] -- soma tree selection status
             if (status[3].size() > 0) {
@@ -3832,7 +3856,7 @@ public class nTracer_
                     }
                 }
             }
-                //IJ.log("set soma tree selection status");
+            //IJ.log("set soma tree selection status");
 
             // status[4] -- soma tree visible rectangle
             if (status[4].size() > 0) {
@@ -3843,7 +3867,7 @@ public class nTracer_
                 Rectangle somaListVisibleRectangle = new Rectangle(x, y, width, height);
                 displaySomaList_jTree.scrollRectToVisible(somaListVisibleRectangle);
             }
-                //IJ.log("set soma tree visible rectangle");
+            //IJ.log("set soma tree visible rectangle");
 
             // status[5] -- tracePoint_Table selection status
             if (status[5].size() > 0) {
@@ -3852,7 +3876,7 @@ public class nTracer_
                     pointTable_jTable.addRowSelectionInterval(selectedRow, selectedRow);
                 }
             }
-                //IJ.log("tracePoint_Table selection status");
+            //IJ.log("tracePoint_Table selection status");
 
             // status[6] -- traced point table visible rectangle
             if (status[6].size() > 0) {
@@ -3863,7 +3887,7 @@ public class nTracer_
                 Rectangle pointTableVisibleRectangle = new Rectangle(x, y, width, height);
                 pointTable_jTable.scrollRectToVisible(pointTableVisibleRectangle);
             }
-                //IJ.log("traced point table visible rectangle");
+            //IJ.log("traced point table visible rectangle");
 
             // status[7] -- image position
             if (status[7].size() > 0) {
@@ -3872,7 +3896,7 @@ public class nTracer_
                 int f = Integer.parseInt((String) status[7].get(2));
                 imp.setPosition(c, z, f);
             }
-            
+
             // status[8] -- nTracer control panel parameters
             if (status[8].size() > 0) {
                 int size = status[8].size();
@@ -3996,7 +4020,7 @@ public class nTracer_
                             allSomaLine = (somaLine - lineWidthOffset > 0.5) ? somaLine - lineWidthOffset : 0.5f;
                             allNeuronLine = (neuronLine - lineWidthOffset > 0.5) ? neuronLine - lineWidthOffset : 0.5f;
                             allSpineLine = (spineLine - lineWidthOffset > 0.5) ? spineLine - lineWidthOffset : 0.5f;
-                            allSynapseRadius = (synapseRadius-lineWidthOffset/2 > 0.5)?synapseRadius-lineWidthOffset/2:0.5;
+                            allSynapseRadius = (synapseRadius - lineWidthOffset / 2 > 0.5) ? synapseRadius - lineWidthOffset / 2 : 0.5;
                             allSynapseSize = allSynapseRadius * 2;
                         }
                     }
@@ -4020,6 +4044,7 @@ public class nTracer_
         updateDisplay();
         return true;
     }
+
     private boolean isInteger(String input) {
         try {
             Integer.parseInt(input);
@@ -4028,6 +4053,7 @@ public class nTracer_
             return false;
         }
     }
+
     private boolean isFloat(String input) {
         try {
             Float.parseFloat(input);
@@ -4036,6 +4062,7 @@ public class nTracer_
             return false;
         }
     }
+
     private boolean isDouble(String input) {
         try {
             Double.parseDouble(input);
@@ -4044,6 +4071,7 @@ public class nTracer_
             return false;
         }
     }
+
     private boolean isLong(String input) {
         try {
             Long.parseLong(input);
@@ -4052,7 +4080,7 @@ public class nTracer_
             return false;
         }
     }
-    
+
     private void overlaySelectedNeuron_jCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_overlaySelectedNeuron_jCheckBoxActionPerformed
         updateOverlay();
     }//GEN-LAST:event_overlaySelectedNeuron_jCheckBoxActionPerformed
@@ -4071,6 +4099,7 @@ public class nTracer_
             IJ.error("Fail to load nTracer_Manual.pdf");
         }
     }
+
     private void openManual() throws IOException {
         InputStream resource = getClass().getResourceAsStream("nTracer_Manual.pdf");
         try {
@@ -4371,7 +4400,7 @@ public class nTracer_
     private void logNormChIntensity_jMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logNormChIntensity_jMenuItemActionPerformed
         analysis.logNeuronNormChIntensity();
     }//GEN-LAST:event_logNormChIntensity_jMenuItemActionPerformed
-    
+
     private void logNeuronConnection_jMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logNeuronConnection_jMenuItemActionPerformed
         if (neuronList_jTree.getSelectionCount() == 0) {
             YesNoCancelDialog yncDialog = new YesNoCancelDialog(new java.awt.Frame(),
@@ -4438,7 +4467,7 @@ public class nTracer_
 
     private void neuronLineWidth_jSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_neuronLineWidth_jSpinnerStateChanged
         neuronLine = (Integer) neuronLineWidth_jSpinner.getValue() * 0.5f;
-        allNeuronLine = (neuronLine-lineWidthOffset>0.5)?neuronLine-lineWidthOffset:0.5f;
+        allNeuronLine = (neuronLine - lineWidthOffset > 0.5) ? neuronLine - lineWidthOffset : 0.5f;
         updateAllNeuronTraceOL();
         if (selectedNeuronTraceOL != null) {
             for (int j = 0; j < selectedNeuronTraceOL.size(); j++) {
@@ -4505,7 +4534,7 @@ public class nTracer_
         canUpdateDisplay = false;
         saveHistory();
         recordNeuronTreeExpansionStatus();
-        
+
         TreePath[] selectedNeuronPaths = neuronList_jTree.getSelectionPaths();
         for (TreePath selectedNeuronPath : selectedNeuronPaths) {
             ntNeuronNode selectedNeuronTreeNode = (ntNeuronNode) selectedNeuronPath.getLastPathComponent();
@@ -4514,7 +4543,7 @@ public class nTracer_
             }
             addBranchConnectedToSelection(selectedNeuronTreeNode);
         }
-        
+
         restoreNeuronTreeExpansionStatus();
         saveHistory();
         canUpdateDisplay = true;
@@ -4581,7 +4610,7 @@ public class nTracer_
             IJ.error("Select a terminal branch !");
             return;
         }
-        
+
         String[] names = selectedNode.toString().split("-");
         String primaryBranchName = names[0] + "-" + names[1];
 
@@ -4739,30 +4768,29 @@ public class nTracer_
             IJ.error("Both neurons contain soma tracing results !" + "/n" + "Use 'Combine 2' neurons instead !");
             return;
         }
-        
+
         // targetNode eventually keep in neuronTree; sourceNode eventually remove from neuronTree
         // the following codes try to determine which node is targetNode:
-        
         // default: node1 has soma traced, while node0 has NO soma traced
         ntNeuronNode sourceNode = node0;
         String type0 = node0.getType();
         ntNeuronNode targetNode = node1;
         String type1 = node1.getType();
-        
+
         // or if node0 has soma traced, while node1 has NO soma traced
-        if (somaSomaNode0.getChildCount() > 0){
+        if (somaSomaNode0.getChildCount() > 0) {
             sourceNode = node1;
             targetNode = node0;
         } else { // or if both neurons have NO soma traced
             // set neuron contains more arbors as targetNode -- default is node1
             ntNeuronNode neuronSomaNode0 = getSomaNodeFromNeuronTreeByNeuronNumber(node0NeuronNumber);
             ntNeuronNode neuronSomaNode1 = getSomaNodeFromNeuronTreeByNeuronNumber(node1NeuronNumber);
-           
+
             // if node0 has more arbors, then set node0 as targetNode
             if (neuronSomaNode0.getChildCount() > neuronSomaNode1.getChildCount()) {
                 sourceNode = node1;
                 targetNode = node0;
-            } else if (neuronSomaNode0.getChildCount() == neuronSomaNode1.getChildCount()) { 
+            } else if (neuronSomaNode0.getChildCount() == neuronSomaNode1.getChildCount()) {
                 // if both contains the same number of arbors
                 // then the smaler neuron number is set to targetNode : default targetNode is node1
                 if (Integer.parseInt(node0NeuronNumber) < Integer.parseInt(node1NeuronNumber)) {
@@ -4774,7 +4802,7 @@ public class nTracer_
         }
         //IJ.log("sourceNode = "+sourceNode.toString());
         //IJ.log("targetNode = "+targetNode.toString());
-        
+
         // then determines the connecting points, which are the closet two end points between the two nodes
         ArrayList<String[]> targetTracingPts = targetNode.getTracingResult();
         String[] targetFirstPoint = targetTracingPts.get(0);
@@ -4787,7 +4815,6 @@ public class nTracer_
         int[] s1 = {Integer.parseInt(sourceLastPoint[1]), Integer.parseInt(sourceLastPoint[2]), Integer.parseInt(sourceLastPoint[3]), 0, 0};
 
         //IJ.log("t0s1 = "+t0s1+"; t1s1 = "+t1s1+"; t0s0 = "+t0s0+"; t1s0 = "+t1s0);
-
         if (targetNode.isPrimaryBranchNode() && !targetNode.isLeaf()) {
             ntNeuronNode newTragetPrimaryNode = (ntNeuronNode) targetNode.getChildAt(0);
             while (newTragetPrimaryNode.getChildCount() > 0) {
@@ -4797,7 +4824,7 @@ public class nTracer_
             newTragetPrimaryNode = getTracingNodeByNodeName(targetNode.toString());
             targetNode = searchNodeByEndPoints(targetFirstPoint, targetLastPoint, newTragetPrimaryNode);
         }
-        
+
         targetFirstPoint = targetTracingPts.get(0);
         targetLastPoint = targetTracingPts.get(targetTracingPts.size() - 1);
         int[] t0 = {Integer.parseInt(targetFirstPoint[1]), Integer.parseInt(targetFirstPoint[2]), Integer.parseInt(targetFirstPoint[3]), 0, 0};
@@ -4807,7 +4834,7 @@ public class nTracer_
         int t1s1 = Functions.getPointDistanceSquare(t1, s1);
         int t0s0 = Functions.getPointDistanceSquare(t0, s0);
         int t1s0 = Functions.getPointDistanceSquare(t1, s0);
-        
+
         if (targetNode.isPrimaryBranchNode() && targetNode.isLeaf()) {
             //IJ.log(targetNode.toString() + " is primary branch");
             if (sourceNode.isPrimaryBranchNode() && sourceNode.isLeaf()) {
@@ -4846,7 +4873,7 @@ public class nTracer_
         String[] targetPoint = targetTracingPts.get(originalLastTargetPoint);
         sourceTracingPts = sourceNode.getTracingResult();
         String[] sourcePoint = sourceTracingPts.get(sourceTracingPts.size() - 1);
-        if (sourceNode.isPrimaryBranchNode() && !sourceNode.isLeaf()){
+        if (sourceNode.isPrimaryBranchNode() && !sourceNode.isLeaf()) {
             sourcePoint = sourceTracingPts.get(0);
         }
         int[] startPt = {0, Integer.parseInt(targetPoint[1]), Integer.parseInt(targetPoint[2]),
@@ -4896,18 +4923,19 @@ public class nTracer_
         pointTable_jTable.setRowSelectionInterval(originalLastTargetPoint, originalLastTargetPoint);
         scroll2pointTableVisible(originalLastTargetPoint, 0);
         // set tracing type
-        if (!type0.equals(type1)){
-            if (!type0.equals("Neurite") && !type1.equals("Neurite")){
+        if (!type0.equals(type1)) {
+            if (!type0.equals("Neurite") && !type1.equals("Neurite")) {
                 setTracingType("Neurite");
-            } else if (type0.equals("Neurite")){
+            } else if (type0.equals("Neurite")) {
                 setTracingType(type1);
-            } else if (type1.equals("Neurite")){
+            } else if (type1.equals("Neurite")) {
                 setTracingType(type0);
             }
         }
         saveHistory();
         updateDisplay();
     }
+
     private ntNeuronNode searchNodeByEndPoints(String[] firstPt, String[] lastPt, ntNeuronNode primaryNode) {
         ArrayList<ntNeuronNode> allNodes = new ArrayList<>();
         getAllNodes(primaryNode, allNodes);
@@ -4918,6 +4946,7 @@ public class nTracer_
         }
         return null;
     }
+
     private void getAllNodes(ntNeuronNode primaryNode, ArrayList<ntNeuronNode> allNodes) {
         allNodes.add(primaryNode);
         for (int i = 0; i < primaryNode.getChildCount(); i++) {
@@ -4925,15 +4954,17 @@ public class nTracer_
             getAllNodes(childNode, allNodes);
         }
     }
-    private boolean nodeContainsEndPoints(String[] firstPt, String[] lastPt, ntNeuronNode node){
+
+    private boolean nodeContainsEndPoints(String[] firstPt, String[] lastPt, ntNeuronNode node) {
         ArrayList<String[]> result = node.getTracingResult();
         String[] result0 = result.get(0);
-        String[] result1 = result.get(result.size()-1);
-        return (firstPt[1].equals(result0[1]) && firstPt[2].equals(result0[2]) && firstPt[3].equals(result0[3]) 
+        String[] result1 = result.get(result.size() - 1);
+        return (firstPt[1].equals(result0[1]) && firstPt[2].equals(result0[2]) && firstPt[3].equals(result0[3])
                 && lastPt[1].equals(result1[1]) && lastPt[2].equals(result1[2]) && lastPt[3].equals(result1[3]))
                 || (firstPt[1].equals(result1[1]) && firstPt[2].equals(result1[2]) && firstPt[3].equals(result1[3])
                 && lastPt[1].equals(result0[1]) && lastPt[2].equals(result0[2]) && lastPt[3].equals(result0[3]));
     }
+
     private void joinSouceToTargetBranchByNode(ntNeuronNode targetNode, ntNeuronNode sourceNode) {
         String[] sourceNames = sourceNode.toString().split("-");
         String sourceNeuronNumber = sourceNames[0];
@@ -5058,7 +5089,7 @@ public class nTracer_
 
             TreePath[] selectedPaths = displaySomaList_jTree.getSelectionPaths();
             String neuronNumber = ((ntNeuronNode) selectedPaths[0].getPathComponent(0)).toString();
-            if (neuronNumber.contains("/")){
+            if (neuronNumber.contains("/")) {
                 neuronNumber = neuronNumber.split("/")[0];
             }
 
@@ -5101,13 +5132,13 @@ public class nTracer_
         String selectedNodeName = somaSliceNode.toString();
         ArrayList<String[]> somaSliceTracingPts = somaSliceNode.getTracingResult();
         // remove all the connected synapses from all soma slice tracing points
-        for (int i=0; i<somaSliceTracingPts.size(); i++) {
+        for (int i = 0; i < somaSliceTracingPts.size(); i++) {
             String[] somaSliceTracingPt = somaSliceTracingPts.get(i);
             if (!somaSliceTracingPt[6].equals("0")) {
                 removeConnectionBySelectedNodeAndSynapseName(selectedNodeName, somaSliceTracingPt[6]);
             }
             // determine whether a spine needs to be removed
-            if (somaSliceTracingPt[0].contains(":Spine#")){
+            if (somaSliceTracingPt[0].contains(":Spine#")) {
                 removeSpine(somaSliceTracingPt[0]);
                 somaSliceNode.setSpine(i, "0");
             }
@@ -5119,13 +5150,13 @@ public class nTracer_
         String selectedNodeName = somaSliceNode.toString();
         ArrayList<String[]> somaSliceTracingPts = somaSliceNode.getTracingResult();
         // remove all the connected synapses from all soma slice tracing points
-        for (int i=0; i<somaSliceTracingPts.size(); i++) {
+        for (int i = 0; i < somaSliceTracingPts.size(); i++) {
             String[] somaSliceTracingPt = somaSliceTracingPts.get(i);
             if (!somaSliceTracingPt[6].equals("0")) {
                 removeConnectionBySelectedNodeAndSynapseName(selectedNodeName, somaSliceTracingPt[6]);
             }
             // determine whether a spine needs to be removed
-            if (somaSliceTracingPt[0].contains(":Spine#")){
+            if (somaSliceTracingPt[0].contains(":Spine#")) {
                 removeSpine(somaSliceTracingPt[0]);
                 somaSliceNode.setSpine(i, "0");
             }
@@ -5156,7 +5187,7 @@ public class nTracer_
         }
     }
 
-    private void deleteOneBranchAndChildByNode(ntNeuronNode delBranchNode) {        
+    private void deleteOneBranchAndChildByNode(ntNeuronNode delBranchNode) {
         if (delBranchNode.isPrimaryBranchNode()) { // delNode is a primary branch node
             String deleteNeuronNumber = delBranchNode.getNeuronNumber();
             deleteBranchAndChildNode(delBranchNode);
@@ -5182,13 +5213,13 @@ public class nTracer_
         String selectedNodeName = delParentBranchNode.toString();
         ArrayList<String[]> tracingPts = delParentBranchNode.getTracingResult();
         // remove all the connected synapses from all branch tracing points
-        for (int i = 0; i<tracingPts.size(); i++) {
+        for (int i = 0; i < tracingPts.size(); i++) {
             String[] tracingPt = tracingPts.get(i);
             if (!tracingPt[6].equals("0")) {
                 removeConnectionBySelectedNodeAndSynapseName(selectedNodeName, tracingPt[6]);
             }
             // determine whether a spine needs to be removed
-            if (tracingPt[0].contains(":Spine#")){                
+            if (tracingPt[0].contains(":Spine#")) {
                 removeSpine(tracingPt[0]);
                 delParentBranchNode.setSpine(i, "0");
             }
@@ -5249,10 +5280,10 @@ public class nTracer_
     private void renameNodeByNewNodeNameAndSetConnection(ntNeuronNode node, String newNodeName, int synapseNumberOffset) {
         // set the node's connection first with synapseNumberOffset 
         String oldNodeName = node.toString();
-        if (oldNodeName.contains("/")){
+        if (oldNodeName.contains("/")) {
             oldNodeName = oldNodeName.split("/")[0];
         }
-        if (newNodeName.contains("/")){
+        if (newNodeName.contains("/")) {
             newNodeName = newNodeName.split("/")[0];
         }
         ArrayList<String[]> nodeTracingResult = node.getTracingResult();
@@ -5269,15 +5300,15 @@ public class nTracer_
                 String newConnectedSynapseName = connectedNames[2] + "#" + newNodeName + "#" + (Integer.parseInt(connectedNames[0]) + synapseNumberOffset);
                 String newTargetSynapseName = (Integer.parseInt(connectedNames[0]) + synapseNumberOffset) + "#" + connectedNodeName + "#" + connectedNames[2];
                 String newNodeNumber = newNodeName;
-                if (newNodeNumber.contains("-")){
+                if (newNodeNumber.contains("-")) {
                     newNodeNumber = newNodeNumber.split("-")[0];
-                } else if (newNodeNumber.contains(":")){
+                } else if (newNodeNumber.contains(":")) {
                     newNodeNumber = newNodeNumber.split(":")[0];
                 }
                 String connectedNodeNumber = connectedNodeName;
-                if (connectedNodeNumber.contains("-")){
+                if (connectedNodeNumber.contains("-")) {
                     connectedNodeNumber = connectedNodeNumber.split("-")[0];
-                } else if (connectedNodeNumber.contains(":")){
+                } else if (connectedNodeNumber.contains(":")) {
                     connectedNodeNumber = connectedNodeNumber.split(":")[0];
                 }
                 if (newNodeNumber.equals(connectedNodeNumber)) {
@@ -5314,7 +5345,7 @@ public class nTracer_
         completeSomaSliceRoi();
     }//GEN-LAST:event_completeSomaSliceRoi_jButtonActionPerformed
     private void completeSomaSliceRoi() {
-        if (membraneLabel_jRadioButton.isSelected()) {            
+        if (membraneLabel_jRadioButton.isSelected()) {
             if (manualTracing_jRadioButton.isSelected()) {
                 completeSomaMinCostPath();
             }
@@ -5347,43 +5378,43 @@ public class nTracer_
         ntNeuronNode sourceNeuonSomaNode = (number0 > number1) ? neuronSomaNode0 : neuronSomaNode1;
         ntNeuronNode targetNeuronSomaNode = (number0 < number1) ? neuronSomaNode0 : neuronSomaNode1;
         String sourceNeuonTag = sourceNeuonSomaNode.toString();
-        if (sourceNeuonTag.contains("/")){
+        if (sourceNeuonTag.contains("/")) {
             sourceNeuonTag = sourceNeuonTag.split("/")[1];
         } else {
             sourceNeuonTag = "";
         }
         String targetNeuonTag = targetNeuronSomaNode.toString();
-        if (targetNeuonTag.contains("/")){
+        if (targetNeuonTag.contains("/")) {
             targetNeuonTag = targetNeuonTag.split("/")[1];
         } else {
             targetNeuonTag = "";
         }
-        if (!sourceNeuonTag.equals(targetNeuonTag)){
+        if (!sourceNeuonTag.equals(targetNeuonTag)) {
             YesNoCancelDialog yncDialog = new YesNoCancelDialog(new java.awt.Frame(),
-                    "", "Choose Tag for combined neuron: "+"\n\n"+"Press Yes:   '"+sourceNeuonTag+"'\n\n"+
-                            "Press No:    '"+targetNeuonTag+"'");
-            if (yncDialog.cancelPressed()){
+                    "", "Choose Tag for combined neuron: " + "\n\n" + "Press Yes:   '" + sourceNeuonTag + "'\n\n"
+                    + "Press No:    '" + targetNeuonTag + "'");
+            if (yncDialog.cancelPressed()) {
                 return;
-            } else if (yncDialog.yesPressed()){                
-                if (sourceNeuonTag.equals("")){
+            } else if (yncDialog.yesPressed()) {
+                if (sourceNeuonTag.equals("")) {
                     targetNeuronSomaNode.setName(targetNeuronSomaNode.getNeuronNumber());
                 } else {
                     targetNeuronSomaNode.setName(targetNeuronSomaNode.getNeuronNumber() + "/" + sourceNeuonTag);
                 }
                 saveHistory = true;
-            } else {                
-                if (targetNeuonTag.equals("")){
+            } else {
+                if (targetNeuonTag.equals("")) {
                     sourceNeuonSomaNode.setName(sourceNeuonSomaNode.getNeuronNumber());
                 } else {
                     sourceNeuonSomaNode.setName(sourceNeuonSomaNode.getNeuronNumber() + "/" + targetNeuonTag);
                 }
                 saveHistory = true;
             }
-        }else{
+        } else {
             saveHistory = true;
         }
         recordTreeExpansionSelectionStatus();
-        
+
         // insert unique Roi of sourceNeuonSomaNode into targetNeuronSomaNode
         // add all child (branch tracings) of sourceNeuronSomaNode to targetNeuronSomaNode
         combineSomaAndBranchesOfTwoNeuronTreeSomas(targetNeuronSomaNode, sourceNeuonSomaNode);
@@ -5393,7 +5424,7 @@ public class nTracer_
         TreePath targetPath = new TreePath(targetNeuronSomaNode.getPath());
         neuronList_jTree.setSelectionPath(targetPath);
         neuronList_jTree.scrollPathToVisible(targetPath);
-        if (saveHistory){
+        if (saveHistory) {
             saveHistory();
         }
     }
@@ -5492,13 +5523,13 @@ public class nTracer_
 
     private void somaLineWidth_jSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_somaLineWidth_jSpinnerStateChanged
         somaLine = (Integer) somaLineWidth_jSpinner.getValue() * 0.5f;
-        allSomaLine = (somaLine-lineWidthOffset>0.5)?somaLine-lineWidthOffset:0.5f;
+        allSomaLine = (somaLine - lineWidthOffset > 0.5) ? somaLine - lineWidthOffset : 0.5f;
         updateAllSomaTraceOL();
         updateSelectedSomaRoi();
         updateOverlay();
     }//GEN-LAST:event_somaLineWidth_jSpinnerStateChanged
-    private void updateAllSomaTraceOL(){
-        if (allSomaTraceOL != null){
+    private void updateAllSomaTraceOL() {
+        if (allSomaTraceOL != null) {
             for (Overlay somaTraceOL : allSomaTraceOL) {
                 for (int j = 0; j < somaTraceOL.size(); j++) {
                     somaTraceOL.get(j).setStrokeWidth(allSomaLine);
@@ -5506,8 +5537,9 @@ public class nTracer_
             }
         }
     }
-    private void updateSelectedSomaRoi(){
-        if (selectedSomaTraceOL != null){
+
+    private void updateSelectedSomaRoi() {
+        if (selectedSomaTraceOL != null) {
             for (Overlay somaTraceOL : selectedSomaTraceOL) {
                 for (int j = 0; j < somaTraceOL.size(); j++) {
                     somaTraceOL.get(j).setStrokeWidth(somaLine);
@@ -5515,7 +5547,7 @@ public class nTracer_
             }
         }
     }
-    
+
     private void arborLineWidth_jSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_arborLineWidth_jSpinnerStateChanged
         arborLine = (Integer) arborLineWidth_jSpinner.getValue() * 0.5f;
         if (selectedArborTraceOL != null) {
@@ -5537,16 +5569,16 @@ public class nTracer_
     }//GEN-LAST:event_branchLineWidth_jSpinnerStateChanged
 
     private void synapseRadius_jSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_synapseRadius_jSpinnerStateChanged
-        double oldSynapseRadius = synapseRadius;   
+        double oldSynapseRadius = synapseRadius;
         synapseRadius = ((Integer) synapseRadius_jSpinner.getValue()).doubleValue();
         synapseSize = synapseRadius * 2 + 1;
         double synapseRadiusOffset = oldSynapseRadius - synapseRadius;
         updateSelectedSynapseConnectionRoi(synapseRadiusOffset);
-        
-        double oldAllSynapseRadius = allSynapseRadius; 
-        allSynapseRadius = (synapseRadius-lineWidthOffset/2 > 0.5)?synapseRadius-lineWidthOffset/2:0.5;
+
+        double oldAllSynapseRadius = allSynapseRadius;
+        allSynapseRadius = (synapseRadius - lineWidthOffset / 2 > 0.5) ? synapseRadius - lineWidthOffset / 2 : 0.5;
         allSynapseSize = allSynapseRadius * 2;
-        double allSynapseRadiusOffset = oldAllSynapseRadius - allSynapseRadius;        
+        double allSynapseRadiusOffset = oldAllSynapseRadius - allSynapseRadius;
         updateAllSynapseConnectionRoi(allSynapseRadiusOffset);
 
         updateOverlay();
@@ -5609,124 +5641,125 @@ public class nTracer_
             }
         }
     }
-    private void updateSelectedSynapseConnectionRoi(double offset){
-        if (selectedNeuronSynapseOL!= null){
-            for (int j = 0; j< selectedNeuronSynapseOL.size(); j++) {
+
+    private void updateSelectedSynapseConnectionRoi(double offset) {
+        if (selectedNeuronSynapseOL != null) {
+            for (int j = 0; j < selectedNeuronSynapseOL.size(); j++) {
                 OvalRoi oldRoi = (OvalRoi) selectedNeuronSynapseOL.get(0);
                 selectedNeuronSynapseOL.remove(0);
                 OvalRoi newRoi = new OvalRoi(
-                                oldRoi.getBounds().x+offset, oldRoi.getBounds().y+offset,
-                                 synapseSize, synapseSize);
-                newRoi.setName(oldRoi.getName());                
+                        oldRoi.getBounds().x + offset, oldRoi.getBounds().y + offset,
+                        synapseSize, synapseSize);
+                newRoi.setName(oldRoi.getName());
                 newRoi.setPosition(0, oldRoi.getZPosition(), oldRoi.getTPosition());
                 newRoi.setStrokeColor(oldRoi.getStrokeColor());
                 newRoi.setStrokeWidth(synapseRadius);
-                selectedNeuronSynapseOL.add(newRoi);              
+                selectedNeuronSynapseOL.add(newRoi);
             }
         }
-        if (selectedNeuronConnectedOL!= null){
-            for (int j = 0; j< selectedNeuronConnectedOL.size(); j++) {
+        if (selectedNeuronConnectedOL != null) {
+            for (int j = 0; j < selectedNeuronConnectedOL.size(); j++) {
                 OvalRoi oldRoi = (OvalRoi) selectedNeuronConnectedOL.get(0);
                 selectedNeuronConnectedOL.remove(0);
                 OvalRoi newRoi = new OvalRoi(
-                                oldRoi.getBounds().x+offset, oldRoi.getBounds().y+offset,
-                                 synapseSize, synapseSize);
-                newRoi.setName(oldRoi.getName());                
+                        oldRoi.getBounds().x + offset, oldRoi.getBounds().y + offset,
+                        synapseSize, synapseSize);
+                newRoi.setName(oldRoi.getName());
                 newRoi.setPosition(0, oldRoi.getZPosition(), oldRoi.getTPosition());
                 newRoi.setStrokeColor(oldRoi.getStrokeColor());
                 newRoi.setStrokeWidth(synapseRadius);
-                selectedNeuronConnectedOL.add(newRoi);       
+                selectedNeuronConnectedOL.add(newRoi);
             }
         }
-        if (selectedArborSynapseOL!= null){
-            for (int j = 0; j< selectedArborSynapseOL.size(); j++) {
+        if (selectedArborSynapseOL != null) {
+            for (int j = 0; j < selectedArborSynapseOL.size(); j++) {
                 OvalRoi oldRoi = (OvalRoi) selectedArborSynapseOL.get(0);
                 selectedArborSynapseOL.remove(0);
                 OvalRoi newRoi = new OvalRoi(
-                                oldRoi.getBounds().x+offset, oldRoi.getBounds().y+offset,
-                                 synapseSize, synapseSize);
-                newRoi.setName(oldRoi.getName());                
+                        oldRoi.getBounds().x + offset, oldRoi.getBounds().y + offset,
+                        synapseSize, synapseSize);
+                newRoi.setName(oldRoi.getName());
                 newRoi.setPosition(0, oldRoi.getZPosition(), oldRoi.getTPosition());
                 newRoi.setStrokeColor(oldRoi.getStrokeColor());
                 newRoi.setStrokeWidth(synapseRadius);
-                selectedArborSynapseOL.add(newRoi);              
+                selectedArborSynapseOL.add(newRoi);
             }
         }
-        if (selectedArborConnectedOL!= null){
-            for (int j = 0; j< selectedArborConnectedOL.size(); j++) {
+        if (selectedArborConnectedOL != null) {
+            for (int j = 0; j < selectedArborConnectedOL.size(); j++) {
                 OvalRoi oldRoi = (OvalRoi) selectedArborConnectedOL.get(0);
                 selectedArborConnectedOL.remove(0);
                 OvalRoi newRoi = new OvalRoi(
-                                oldRoi.getBounds().x+offset, oldRoi.getBounds().y+offset,
-                                 synapseSize, synapseSize);
-                newRoi.setName(oldRoi.getName());                
+                        oldRoi.getBounds().x + offset, oldRoi.getBounds().y + offset,
+                        synapseSize, synapseSize);
+                newRoi.setName(oldRoi.getName());
                 newRoi.setPosition(0, oldRoi.getZPosition(), oldRoi.getTPosition());
                 newRoi.setStrokeColor(oldRoi.getStrokeColor());
                 newRoi.setStrokeWidth(synapseRadius);
-                selectedArborConnectedOL.add(newRoi);       
+                selectedArborConnectedOL.add(newRoi);
             }
         }
-        if (selectedBranchSynapseOL!= null){
-            for (int j = 0; j< selectedBranchSynapseOL.size(); j++) {
+        if (selectedBranchSynapseOL != null) {
+            for (int j = 0; j < selectedBranchSynapseOL.size(); j++) {
                 OvalRoi oldRoi = (OvalRoi) selectedBranchSynapseOL.get(0);
                 selectedBranchSynapseOL.remove(0);
                 OvalRoi newRoi = new OvalRoi(
-                                oldRoi.getBounds().x+offset, oldRoi.getBounds().y+offset,
-                                 synapseSize, synapseSize);
-                newRoi.setName(oldRoi.getName());                
+                        oldRoi.getBounds().x + offset, oldRoi.getBounds().y + offset,
+                        synapseSize, synapseSize);
+                newRoi.setName(oldRoi.getName());
                 newRoi.setPosition(0, oldRoi.getZPosition(), oldRoi.getTPosition());
                 newRoi.setStrokeColor(oldRoi.getStrokeColor());
                 newRoi.setStrokeWidth(synapseRadius);
-                selectedBranchSynapseOL.add(newRoi);              
+                selectedBranchSynapseOL.add(newRoi);
             }
         }
-        if (selectedBranchConnectedOL!= null){
-            for (int j = 0; j< selectedBranchConnectedOL.size(); j++) {
+        if (selectedBranchConnectedOL != null) {
+            for (int j = 0; j < selectedBranchConnectedOL.size(); j++) {
                 OvalRoi oldRoi = (OvalRoi) selectedBranchConnectedOL.get(0);
                 selectedBranchConnectedOL.remove(0);
                 OvalRoi newRoi = new OvalRoi(
-                                oldRoi.getBounds().x+offset, oldRoi.getBounds().y+offset,
-                                 synapseSize, synapseSize);
-                newRoi.setName(oldRoi.getName());                
+                        oldRoi.getBounds().x + offset, oldRoi.getBounds().y + offset,
+                        synapseSize, synapseSize);
+                newRoi.setName(oldRoi.getName());
                 newRoi.setPosition(0, oldRoi.getZPosition(), oldRoi.getTPosition());
                 newRoi.setStrokeColor(oldRoi.getStrokeColor());
                 newRoi.setStrokeWidth(synapseRadius);
-                selectedBranchConnectedOL.add(newRoi);       
+                selectedBranchConnectedOL.add(newRoi);
             }
         }
 
-        if (selectedSomaSynapseOL!= null){
-            for (int j = 0; j< selectedSomaSynapseOL.size(); j++) {
+        if (selectedSomaSynapseOL != null) {
+            for (int j = 0; j < selectedSomaSynapseOL.size(); j++) {
                 OvalRoi oldRoi = (OvalRoi) selectedSomaSynapseOL.get(0);
                 selectedSomaSynapseOL.remove(0);
                 OvalRoi newRoi = new OvalRoi(
-                                oldRoi.getBounds().x+offset, oldRoi.getBounds().y+offset,
-                                 synapseSize, synapseSize);
-                newRoi.setName(oldRoi.getName());                
+                        oldRoi.getBounds().x + offset, oldRoi.getBounds().y + offset,
+                        synapseSize, synapseSize);
+                newRoi.setName(oldRoi.getName());
                 newRoi.setPosition(0, oldRoi.getZPosition(), oldRoi.getTPosition());
                 newRoi.setStrokeColor(oldRoi.getStrokeColor());
                 newRoi.setStrokeWidth(synapseRadius);
-                selectedSomaSynapseOL.add(newRoi);              
+                selectedSomaSynapseOL.add(newRoi);
             }
         }
-        if (selectedSomaConnectedOL!= null){
-            for (int j = 0; j< selectedSomaConnectedOL.size(); j++) {
+        if (selectedSomaConnectedOL != null) {
+            for (int j = 0; j < selectedSomaConnectedOL.size(); j++) {
                 OvalRoi oldRoi = (OvalRoi) selectedSomaConnectedOL.get(0);
                 selectedSomaConnectedOL.remove(0);
                 OvalRoi newRoi = new OvalRoi(
-                                oldRoi.getBounds().x+offset, oldRoi.getBounds().y+offset,
-                                 synapseSize, synapseSize);
-                newRoi.setName(oldRoi.getName());                
+                        oldRoi.getBounds().x + offset, oldRoi.getBounds().y + offset,
+                        synapseSize, synapseSize);
+                newRoi.setName(oldRoi.getName());
                 newRoi.setPosition(0, oldRoi.getZPosition(), oldRoi.getTPosition());
                 newRoi.setStrokeColor(oldRoi.getStrokeColor());
                 newRoi.setStrokeWidth(synapseRadius);
-                selectedSomaConnectedOL.add(newRoi);       
+                selectedSomaConnectedOL.add(newRoi);
             }
         }
     }
-    
+
     private void pointBoxRadiu_jSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_pointBoxRadiu_jSpinnerStateChanged
-        pointBoxRadius = (Integer) pointBoxRadiu_jSpinner.getValue() ;
+        pointBoxRadius = (Integer) pointBoxRadiu_jSpinner.getValue();
         updatePointBox();
     }//GEN-LAST:event_pointBoxRadiu_jSpinnerStateChanged
 
@@ -5766,6 +5799,7 @@ public class nTracer_
             }
         }
     }
+
     private void updateAllSomaSpineOL() {
         if (allSomaSpineOLextPt != null) {
             for (Overlay somaSpineOLextPt : allSomaSpineOLextPt) {
@@ -5775,7 +5809,7 @@ public class nTracer_
             }
         }
     }
-    
+
     private void pointBoxLineWidth_jSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_pointBoxLineWidth_jSpinnerStateChanged
         pointBoxLine = (Integer) pointBoxLineWidth_jSpinner.getValue() * 0.5f;
         updatePointBox();
@@ -5818,12 +5852,12 @@ public class nTracer_
         toggleConnection();
     }//GEN-LAST:event_toggleConnection_jButtonActionPerformed
     private void toggleConnection() {
-        if (pointTable_jTable.getSelectedRowCount() != 1){
+        if (pointTable_jTable.getSelectedRowCount() != 1) {
             IJ.error("Select one table point to add or remove connection !");
             return;
         }
         int row = pointTable_jTable.getSelectedRow();
-        if (((String) pointTableModel.getValueAt(row, 6)).equals("0")){
+        if (((String) pointTableModel.getValueAt(row, 6)).equals("0")) {
             if (editTargetNodeName.equals("0")) {
                 String selectedNeuronNumber = ((ntNeuronNode) neuronList_jTree.getLastSelectedPathComponent()).getNeuronNumber();
                 ArrayList<String> containedRoiNames = getContainedRoiNamesOnScreen(selectedNeuronNumber, crossX, crossY, crossZ, roiSearchRange);
@@ -5844,7 +5878,8 @@ public class nTracer_
         }
         saveHistory();
     }
-    private boolean formConnectionBetweenSelectedPointAndNodeName(String targetNodeName){
+
+    private boolean formConnectionBetweenSelectedPointAndNodeName(String targetNodeName) {
         // get selected node
         ntNeuronNode selectedNode = getTracingNodeFromPointTableSelection();
         // get target node
@@ -5874,33 +5909,33 @@ public class nTracer_
         }
         String selectedNodeFlowType = "input";
         String targetNodeFlowType = "input";
-        if (!selectedNodeType.equals("Axon")){
+        if (!selectedNodeType.equals("Axon")) {
             selectedNodeFlowType = "output";
         }
-        if (!targetNodeType.equals("Axon")){
+        if (!targetNodeType.equals("Axon")) {
             targetNodeFlowType = "output";
         }
         if (selectedNodeFlowType.equals(targetNodeFlowType)) {
             IJ.error("Connection CANNOT be set between Neuron "
-                    +selectedNeuronNumber+" ("+selectedNodeType+
-                    ") and Neuron "+targetNeuronNumber+" ("+targetNodeType +") !");
-            updateInfo("Connection CANNOT be set between "+selectedNodeType+" and "+targetNodeType +" !");
+                    + selectedNeuronNumber + " (" + selectedNodeType
+                    + ") and Neuron " + targetNeuronNumber + " (" + targetNodeType + ") !");
+            updateInfo("Connection CANNOT be set between " + selectedNodeType + " and " + targetNodeType + " !");
             return false;
         }
-        
+
         // find the closest point to the pointTable selected point to connect
         int insertPosition = pointTable_jTable.getSelectedRow();
         int x = ((Float) pointTableModel.getValueAt(insertPosition, 1)).intValue();
         int y = ((Float) pointTableModel.getValueAt(insertPosition, 2)).intValue();
         int z = ((Float) pointTableModel.getValueAt(insertPosition, 3)).intValue();
         ArrayList<String[]> targetTracingResult = targetNode.getTracingResult();
-        int connectPosition = -1;                
+        int connectPosition = -1;
         if (hasStartPt && hasEndPt) {
-            for (int n = 0; n<targetTracingResult.size(); n++){
+            for (int n = 0; n < targetTracingResult.size(); n++) {
                 String[] tracingPt = targetTracingResult.get(n);
-                if (endPoint[1] == Integer.parseInt(tracingPt[1])){
-                    if (endPoint[2] == Integer.parseInt(tracingPt[2])){
-                        if (endPoint[3] == Integer.parseInt(tracingPt[3])){
+                if (endPoint[1] == Integer.parseInt(tracingPt[1])) {
+                    if (endPoint[2] == Integer.parseInt(tracingPt[2])) {
+                        if (endPoint[3] == Integer.parseInt(tracingPt[3])) {
                             connectPosition = n;
                             break;
                         }
@@ -5913,11 +5948,11 @@ public class nTracer_
         if (connectPosition < 0) {
             IJ.error(targetNodeName + " has NO tracing result to connect!");
             return false;
-        }        
+        }
         // found connection position -- need to check redundancy
-        int maxSearch = (connectPosition+10<targetTracingResult.size()-1)?connectPosition+10:targetTracingResult.size()-1;
-        int minSearch = (connectPosition-10>0)?connectPosition-10:0;
-        for (int i = minSearch; i<=maxSearch; i++){
+        int maxSearch = (connectPosition + 10 < targetTracingResult.size() - 1) ? connectPosition + 10 : targetTracingResult.size() - 1;
+        int minSearch = (connectPosition - 10 > 0) ? connectPosition - 10 : 0;
+        for (int i = minSearch; i <= maxSearch; i++) {
             String targetConnectedNodeName = ((String[]) targetTracingResult.get(i))[6];
             //IJ.log(targetConnectedNodeName);
             if (!targetConnectedNodeName.equals("0")) {
@@ -5934,23 +5969,23 @@ public class nTracer_
         boolean hasEmptySpot = false;
         int offset = 0;
 //IJ.log("ok2");
-        while (connectPosition-offset>=minSearch || connectPosition+offset<=maxSearch){
-            String targetConnectedNodeName = ((String[]) targetTracingResult.get(connectPosition-offset))[6];
+        while (connectPosition - offset >= minSearch || connectPosition + offset <= maxSearch) {
+            String targetConnectedNodeName = ((String[]) targetTracingResult.get(connectPosition - offset))[6];
             if (targetConnectedNodeName.equals("0")) {
-                connectPosition = connectPosition-offset;
+                connectPosition = connectPosition - offset;
                 hasEmptySpot = true;
                 break;
             }
-            targetConnectedNodeName = ((String[]) targetTracingResult.get(connectPosition+offset))[6];
+            targetConnectedNodeName = ((String[]) targetTracingResult.get(connectPosition + offset))[6];
             if (targetConnectedNodeName.equals("0")) {
-                connectPosition = connectPosition+offset;
+                connectPosition = connectPosition + offset;
                 hasEmptySpot = true;
                 break;
             }
             offset++;
         }
 //IJ.log("ok3");
-        if (hasEmptySpot){
+        if (hasEmptySpot) {
             //saveHistory();
             recordTreeExpansionSelectionStatus();
 //IJ.log("ok4");
@@ -5972,11 +6007,11 @@ public class nTracer_
             restoreTreeExpansionSelectionStatus();
             return true;
         } else {
-            IJ.error(targetNodeName+"/n has no more empty spot to form connection close this spot !");
+            IJ.error(targetNodeName + "/n has no more empty spot to form connection close this spot !");
             return false;
         }
     }
-    
+
     //TODO Trace with new synapse methods
     private boolean eraseConnectionFromPoint() {
         int selectedRow = pointTable_jTable.getSelectedRow();
@@ -6005,17 +6040,17 @@ public class nTracer_
                 removeSpine(selectedTag);
                 selectedNode.setSpine(selectedRow, "0");
                 String newTag = selectedTag.split(":")[0];
-                if (selectedTag.contains("/")){
-                    newTag = newTag+"/"+selectedTag.split("/")[1];
-                } else if (selectedTag.endsWith("*")){
-                    newTag = newTag+"*";
+                if (selectedTag.contains("/")) {
+                    newTag = newTag + "/" + selectedTag.split("/")[1];
+                } else if (selectedTag.endsWith("*")) {
+                    newTag = newTag + "*";
                 }
                 pointTableModel.setValueAt(newTag, selectedRow, 0);
             } else {
                 selectedNode.setSynapse(selectedRow, (int) 0);
             }
             selectedNode.setConnectionTo(selectedRow, "0");
-            
+
             int connectedPosition = getPositionInTracingResultBySynapseName(connectedNode.getTracingResult(), connectedSynapseName);
             if (connectedPosition >= 0) {
                 if (!yncDialog.yesPressed()) {
@@ -6050,18 +6085,18 @@ public class nTracer_
     private void autosaveSetup() {
         String[] saveIntervals = {"5", "10", "15", "20", "25", "30"};
         GenericDialog gd = new GenericDialog("Autosave Setup");
-        gd.addChoice("Save every (min): ", saveIntervals, autosaveIntervalMin+"");
+        gd.addChoice("Save every (min): ", saveIntervals, autosaveIntervalMin + "");
         gd.addCheckbox("Delete autosaved when closing image ?", delAutosaved);
         gd.showDialog();
         autosaveIntervalMin = Long.parseLong(gd.getNextChoice());
         delAutosaved = gd.getNextBoolean();
-        if (!gd.wasCanceled()){
+        if (!gd.wasCanceled()) {
             scheduler.shutdown();
             scheduler = Executors.newScheduledThreadPool(1);
             startAutosave(autosaveIntervalMin);
         }
     }
-    
+
     private void setAxon_jButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setAxon_jButtonActionPerformed
         setTracingType("Axon");
     }//GEN-LAST:event_setAxon_jButtonActionPerformed
@@ -6112,7 +6147,7 @@ public class nTracer_
                 resolutions[1] = 0;
                 resolutions[2] = 0;
             }
-            
+
             try {
                 ArrayList<String> selectedNeuronNumbers = getSelectedNeuronNumberSortSmall2Large();
                 IO.exportSelectedNeuronSWC(rootNeuronNode, rootAllSomaNode, rootSpineNode,
@@ -6144,10 +6179,10 @@ public class nTracer_
             recordTreeExpansionSelectionStatus();
             ntNeuronNode primaryNode = getNodeFromNeuronTreeByNodeName(selectedPrimaryNodeName.get(0));
             String selectedType = primaryNode.getType();
-            if (neuronList_jTree.getSelectionCount() == 1 && 
-                    ((selectedType.equals("Neurite")) || 
-                    (selectedType.equals("Dendrite") && newType.equals("Apical")) ||
-                    (newType.equals("Dendrite") && selectedType.equals("Apical")))) {
+            if (neuronList_jTree.getSelectionCount() == 1
+                    && ((selectedType.equals("Neurite"))
+                    || (selectedType.equals("Dendrite") && newType.equals("Apical"))
+                    || (newType.equals("Dendrite") && selectedType.equals("Apical")))) {
                 setTracingTypeToPrimaryAndChild(primaryNode, newType, true);
             } else {
                 GenericDialog gd = new GenericDialog("Remove All Connections ...");
@@ -6173,7 +6208,7 @@ public class nTracer_
                             removeAllConnectionsFromPrimaryAndChild(primaryNode,
                                     keepSynapseFromSelectedArbor, keepSynapseFromTargetProcess);
                         }
-                        setTracingTypeToPrimaryAndChild(primaryNode, newType, 
+                        setTracingTypeToPrimaryAndChild(primaryNode, newType,
                                 (selectedType.equals("Dendrite") && newType.equals("Apical"))
                                 || (newType.equals("Dendrite") && selectedType.equals("Apical")));
                     }
@@ -6185,8 +6220,8 @@ public class nTracer_
             saveHistory();
         }
     }
-    
-    private void removeAllConnectionsFromPrimaryAndChild(ntNeuronNode primaryNode, 
+
+    private void removeAllConnectionsFromPrimaryAndChild(ntNeuronNode primaryNode,
             boolean keepPrimaryNodeSynapse, boolean keepTargetNodeSynapse) {
         ArrayList<String[]> result = primaryNode.getTracingResult();
         for (int i = 0; i < result.size(); i++) {
@@ -6220,13 +6255,13 @@ public class nTracer_
             removeAllConnectionsFromPrimaryAndChild(childNode, keepPrimaryNodeSynapse, keepTargetNodeSynapse);
         }
     }
-    
-    private void setTracingTypeToPrimaryAndChild(ntNeuronNode primaryNode, String type, boolean keepSpine){
+
+    private void setTracingTypeToPrimaryAndChild(ntNeuronNode primaryNode, String type, boolean keepSpine) {
         ArrayList<String[]> result = primaryNode.getTracingResult();
         boolean traceComplete = primaryNode.isComplete();
         if (keepSpine) {
             for (String[] point : result) {
-                if (!point[0].contains(":Spine#")){
+                if (!point[0].contains(":Spine#")) {
                     point[0] = type;
                 }
             }
@@ -6235,9 +6270,9 @@ public class nTracer_
                 setTracingTypeToPrimaryAndChild(childNode, type, keepSpine);
             }
         } else {
-            for (int i = 0; i<result.size(); i++) {
+            for (int i = 0; i < result.size(); i++) {
                 String[] point = result.get(i);
-                if (point[0].contains(":Spine#")){
+                if (point[0].contains(":Spine#")) {
                     removeSpine(point[0]);
                     primaryNode.setSpine(i, "0");
                 }
@@ -6248,11 +6283,11 @@ public class nTracer_
                 setTracingTypeToPrimaryAndChild(childNode, type, keepSpine);
             }
         }
-        if (!traceComplete){
+        if (!traceComplete) {
             primaryNode.toggleComplete();
-        }        
+        }
     }
- 
+
     private void cropData_jMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cropData_jMenuItemActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cropData_jMenuItemActionPerformed
@@ -6266,60 +6301,61 @@ public class nTracer_
     private void addLabelToSelection_jButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addLabelToSelection_jButtonActionPerformed
         addLabelToSelection();
     }//GEN-LAST:event_addLabelToSelection_jButtonActionPerformed
-    private void addLabelToSelection(){
+    private void addLabelToSelection() {
         String label = selectionTag_jTextField.getText();
-        if (label.contains("/")){
+        if (label.contains("/")) {
             IJ.error("No '/' allowed in tag !");
             return;
         }
-        if (label.contains("*")){
+        if (label.contains("*")) {
             IJ.error("No '*' (Asterisk) allowed in tag !");
             return;
         }
-        if (label.contains(" ")){
+        if (label.contains(" ")) {
             IJ.error("No 'space' allowed in tag !");
             return;
         }
-        if (label.contains("\t")){
+        if (label.contains("\t")) {
             IJ.error("No 'tab' allowed in tag !");
             return;
         }
-        if (label.contains("=")){
+        if (label.contains("=")) {
             IJ.error("No '=' (logic equal) allowed in tag !");
             return;
         }
-        if (label.contains("|")){
+        if (label.contains("|")) {
             IJ.error("No '|' (logic OR) allowed in tag !");
             return;
         }
-        if (label.contains("&")){
+        if (label.contains("&")) {
             IJ.error("No '&' (logic AND) allowed in tag !");
             return;
         }
-        if (label.contains("!")){
+        if (label.contains("!")) {
             IJ.error("No '!' (logic NOT) allowed in tag !");
             return;
         }
-        if (pointTable_jTable.getSelectedRowCount()>0){
+        if (pointTable_jTable.getSelectedRowCount() > 0) {
             addLabelToSelectedPoint(label);
             return;
         }
-        if (neuronList_jTree.getSelectionCount()>0){
+        if (neuronList_jTree.getSelectionCount() > 0) {
             // add tags to neuron_jTree selection
             addLabelToSelectedNeuron(label, getSelectedNeuronNumberSortSmall2Large());
         }
     }
-    private void addLabelToSelectedPoint(String pointLabel){
+
+    private void addLabelToSelectedPoint(String pointLabel) {
         // add tags to pointTable selected points 
-        if (pointTable_jTable.getSelectedRowCount()==0){
+        if (pointTable_jTable.getSelectedRowCount() == 0) {
             return;
         }
-        if (!pointLabel.equals("")){
+        if (!pointLabel.equals("")) {
             pointLabel = "/" + pointLabel;
         }
         recordTreeExpansionSelectionStatus();
         ntNeuronNode selectedNode;
-        if (displaySomaList_jTree.getSelectionCount()==1){
+        if (displaySomaList_jTree.getSelectionCount() == 1) {
             selectedNode = (ntNeuronNode) displaySomaList_jTree.getLastSelectedPathComponent();
         } else {
             selectedNode = (ntNeuronNode) neuronList_jTree.getLastSelectedPathComponent();
@@ -6329,11 +6365,11 @@ public class nTracer_
         for (int selectionRow : pointTable_jTable.getSelectedRows()) {
             String currentTag = tracingResult.get(selectionRow)[0];
             String asterisk = "";
-            if (currentTag.contains("*")){
+            if (currentTag.contains("*")) {
                 currentTag = currentTag.split("\\*")[0];
                 asterisk = "*";
             }
-            if (currentTag.contains("/")){
+            if (currentTag.contains("/")) {
                 currentTag = currentTag.split("/")[0];
             }
             String newTag = currentTag + pointLabel + asterisk;
@@ -6348,9 +6384,10 @@ public class nTracer_
         restoreTreeExpansionSelectionStatus();
         saveHistory();
     }
+
     private void addLabelToSelectedNeuron(String neuronTag, ArrayList<String> treeSelectedNeurons) {
         // add tags to neuron_jTree selection, if not selected, add to neuronNumber_jTextField input
-        if (!neuronTag.equals("")){
+        if (!neuronTag.equals("")) {
             neuronTag = "/" + neuronTag;
         }
         if (!treeSelectedNeurons.isEmpty()) {
@@ -6364,7 +6401,7 @@ public class nTracer_
             saveHistory();
         }
     }
-    
+
     private void selectNeurons_jButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectNeurons_jButtonActionPerformed
         String neuronTag = selectionTag_jTextField.getText();
         String selectedNeuronNumbers = selectNeuronNumber_jTextField.getText();
@@ -6372,19 +6409,19 @@ public class nTracer_
         updateOverlay();
     }//GEN-LAST:event_selectNeurons_jButtonActionPerformed
     private void selectTaggedNeurons(String neuronTag, String selectedNeuronNumbers) {
-        if (neuronTag.contains("/")){
+        if (neuronTag.contains("/")) {
             IJ.error("No '/' allowed !");
             return;
         }
-        if (neuronTag.contains(" ")){
+        if (neuronTag.contains(" ")) {
             IJ.error("No 'space' allowed !");
             return;
         }
-        if (neuronTag.contains("\t")){
+        if (neuronTag.contains("\t")) {
             IJ.error("No 'tab' allowed !");
             return;
         }
-        if (neuronTag.equals("") && selectedNeuronNumbers.equals("")){
+        if (neuronTag.equals("") && selectedNeuronNumbers.equals("")) {
             IJ.error("Type in a valid Tag and/or Neuron Number to select !");
             return;
         }
@@ -6477,12 +6514,12 @@ public class nTracer_
                             }
                         }
                     }
-                } else if (neuronTag.contains("&")){
+                } else if (neuronTag.contains("&")) {
                     String[] neuronTagANDsplit = neuronTag.split("&");
                     if (!neuronTagANDsplit[0].equals("")) {
-                        if (neuronTagANDsplit[0].contains("!")){
+                        if (neuronTagANDsplit[0].contains("!")) {
                             String[] neuronTagNOTsplit = neuronTagANDsplit[0].split("!");
-                            if (!neuronTagNOTsplit[0].equals("")){
+                            if (!neuronTagNOTsplit[0].equals("")) {
                                 ORtags.add(neuronTagNOTsplit[0]);
                             }
                             for (int j = 1; j < neuronTagNOTsplit.length; j++) {
@@ -6503,7 +6540,7 @@ public class nTracer_
                             ANDtags.add(neuronTagANDsplit[i]);
                         }
                     }
-                } else if (neuronTag.contains("!")){
+                } else if (neuronTag.contains("!")) {
                     String[] neuronTagNOTsplit = neuronTag.split("!");
                     if (!neuronTagNOTsplit[0].equals("")) {
                         ORtags.add(neuronTagNOTsplit[0]);
@@ -6528,38 +6565,38 @@ public class nTracer_
             for (String NOTtag : NOTtags) {
                 IJ.log("   " + NOTtag);
             }
-            */
+             */
             updateSelectedSomaNodes(selectedSomaNodes, ORtags, ANDtags, NOTtags);
         }
-    
+
         // find primary branch nodes that match the additional selection criteria
-        String operation = (String)selectTagOperator_jComboBox.getSelectedItem();
-        String criteria = (String)selectTagAdditionalCriteria_jComboBox.getSelectedItem();
+        String operation = (String) selectTagOperator_jComboBox.getSelectedItem();
+        String criteria = (String) selectTagAdditionalCriteria_jComboBox.getSelectedItem();
         ArrayList<String> criteriaList = new ArrayList<String>();
         if (!criteria.equals("Whole Neuron")) {
             if (operation.equals("+")) {
-                if (criteria.equals("Neurite")){
+                if (criteria.equals("Neurite")) {
                     criteriaList.add("Neurite");
-                } else if (criteria.equals("Axon")){
+                } else if (criteria.equals("Axon")) {
                     criteriaList.add("Axon");
-                } else if(criteria.equals("All Dendrite")){
+                } else if (criteria.equals("All Dendrite")) {
                     criteriaList.add("Dendrite");
                     criteriaList.add("Apical");
                 } else if (criteria.startsWith("(Basal)")) {
                     criteriaList.add("Dendrite");
                 } else if (criteria.startsWith("Apical")) {
                     criteriaList.add("Apical");
-                }                 
-            } else if (operation.equals("-")){
-                if (criteria.equals("Neurite")){
+                }
+            } else if (operation.equals("-")) {
+                if (criteria.equals("Neurite")) {
                     criteriaList.add("Axon");
                     criteriaList.add("Dendrite");
                     criteriaList.add("Apical");
-                } else if (criteria.equals("Axon")){
+                } else if (criteria.equals("Axon")) {
                     criteriaList.add("Neurite");
                     criteriaList.add("Dendrite");
                     criteriaList.add("Apical");
-                } else if(criteria.equals("All Dendrite")){
+                } else if (criteria.equals("All Dendrite")) {
                     criteriaList.add("Neurite");
                     criteriaList.add("Axon");
                 } else if (criteria.startsWith("(Basal)")) {
@@ -6570,7 +6607,7 @@ public class nTracer_
                     criteriaList.add("Neurite");
                     criteriaList.add("Axon");
                     criteriaList.add("Dendrite");
-                }  
+                }
             }
             for (ntNeuronNode somaNode : selectedSomaNodes) {
                 for (int i = 0; i < somaNode.getChildCount(); i++) {
@@ -6585,7 +6622,7 @@ public class nTracer_
                 }
             }
         }
-        
+
         // set selection to neuron tree
         if (selectedSomaNodes.size() > 0 && criteria.equals("Whole Neuron")) {
             for (ntNeuronNode node : selectedSomaNodes) {
@@ -6599,10 +6636,10 @@ public class nTracer_
                 selectedPaths.add(selectionPath);
             }
         }
-        if (selectedPaths.size()>0){
+        if (selectedPaths.size() > 0) {
             TreePath[] selectionPaths = new TreePath[selectedPaths.size()];
-            for (int i = 0; i < selectedPaths.size(); i++){
-                selectionPaths[i] = (TreePath)selectedPaths.get(i);
+            for (int i = 0; i < selectedPaths.size(); i++) {
+                selectionPaths[i] = (TreePath) selectedPaths.get(i);
             }
             main_jTabbedPane.setSelectedIndex(2);
             neuronList_jTree.clearSelection();
@@ -6613,6 +6650,7 @@ public class nTracer_
             IJ.error("No neuron is selected - check tag typo (case sensitive) !");
         }
     }
+
     private void updateSelectedSomaNodes(ArrayList<ntNeuronNode> selectedSomaNodes,
             String selectedNeuronNumbers) {
         if (!selectedNeuronNumbers.equals("")) {
@@ -6665,14 +6703,15 @@ public class nTracer_
                 for (int i = selectedSomaNodes.size() - 1; i >= 0; i--) {
                     ntNeuronNode node = (ntNeuronNode) selectedSomaNodes.get(i);
                     int nodeNumber = Integer.parseInt(node.getNeuronNumber());
-                    if (nodeNumber != Integer.parseInt(selectedNeuronNumbers)){
+                    if (nodeNumber != Integer.parseInt(selectedNeuronNumbers)) {
                         selectedSomaNodes.remove(i);
                     }
                 }
             }
         }
     }
-    private void updateSelectedSomaNodes(ArrayList<ntNeuronNode> selectedSomaNodes, 
+
+    private void updateSelectedSomaNodes(ArrayList<ntNeuronNode> selectedSomaNodes,
             ArrayList<String> ORtags, ArrayList<String> ANDtags, ArrayList<String> NOTtags) {
         // filter by ORtags
         if (!ORtags.isEmpty()) {
@@ -6755,27 +6794,27 @@ public class nTracer_
     }
 
     private void allNeuronLineWidthOffset_jSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_allNeuronLineWidthOffset_jSpinnerStateChanged
-        lineWidthOffset = (Integer) allNeuronLineWidthOffset_jSpinner.getValue()*0.5f;
+        lineWidthOffset = (Integer) allNeuronLineWidthOffset_jSpinner.getValue() * 0.5f;
 
-        allSomaLine = (somaLine-lineWidthOffset>0.5)?somaLine-lineWidthOffset:0.5f;
+        allSomaLine = (somaLine - lineWidthOffset > 0.5) ? somaLine - lineWidthOffset : 0.5f;
         updateAllSomaTraceOL();
-        
-        allNeuronLine = (neuronLine-lineWidthOffset>0.5)?neuronLine-lineWidthOffset:0.5f;
+
+        allNeuronLine = (neuronLine - lineWidthOffset > 0.5) ? neuronLine - lineWidthOffset : 0.5f;
         updateAllNeuronTraceOL();
-        
-        allSpineLine = (spineLine-lineWidthOffset>0.5)?spineLine-lineWidthOffset:0.5f;
+
+        allSpineLine = (spineLine - lineWidthOffset > 0.5) ? spineLine - lineWidthOffset : 0.5f;
         updateAllNeuronSpineOL();
         updateAllSomaSpineOL();
-        
+
         double oldAllSynapseSize = allSynapseSize;
-        allSynapseRadius = (synapseRadius-lineWidthOffset/2 > 0.5)?synapseRadius-lineWidthOffset/2:0.5;
+        allSynapseRadius = (synapseRadius - lineWidthOffset / 2 > 0.5) ? synapseRadius - lineWidthOffset / 2 : 0.5;
         allSynapseSize = allSynapseRadius * 2;
-        int offset = (int)(oldAllSynapseSize/2)-(int)(allSynapseSize/2);
+        int offset = (int) (oldAllSynapseSize / 2) - (int) (allSynapseSize / 2);
         updateAllSynapseConnectionRoiLineWidth(offset);
-        
-        updateOverlay();        
+
+        updateOverlay();
     }//GEN-LAST:event_allNeuronLineWidthOffset_jSpinnerStateChanged
-    private void updateAllSynapseConnectionRoiLineWidth(int offset){
+    private void updateAllSynapseConnectionRoiLineWidth(int offset) {
         if (allNeuronSynapseOL != null) {
             for (int j = 0; j < allNeuronSynapseOL.size(); j++) {
                 OvalRoi oldRoi = (OvalRoi) allNeuronSynapseOL.get(0);
@@ -6835,7 +6874,7 @@ public class nTracer_
             }
         }
     }
-    
+
     private void copyNeuronTag_jButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_copyNeuronTag_jButtonActionPerformed
         if (neuronList_jTree.getSelectionCount() == 1) {
             ntNeuronNode selectedNode = (ntNeuronNode) neuronList_jTree.getSelectionPath().getPathComponent(1);
@@ -6857,17 +6896,17 @@ public class nTracer_
     private void jumpToNextIncompleted_jButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jumpToNextIncompleted_jButtonActionPerformed
         jumpToNextIncompleteProcess();
     }//GEN-LAST:event_jumpToNextIncompleted_jButtonActionPerformed
-    private void jumpToNextIncompleteProcess(){
+    private void jumpToNextIncompleteProcess() {
         recordTreeExpansionSelectionStatus();
         for (int i = 0; i < rootNeuronNode.getChildCount(); i++) {
             neuronList_jTree.expandPath(new TreePath(((ntNeuronNode) rootNeuronNode.getChildAt(i)).getPath()));
         }
         int selectRow = 0, nextRow = 0;
         int totalRows = neuronList_jTree.getRowCount();
-                //IJ.log(totalRows+"");
+        //IJ.log(totalRows+"");
         int[] selectedRows = neuronList_jTree.getSelectionRows();
-        if (selectedRows!=null){
-            selectRow = selectedRows[selectedRows.length-1];
+        if (selectedRows != null) {
+            selectRow = selectedRows[selectedRows.length - 1];
             //IJ.log("selected "+selectRow);
         }
 
@@ -6885,7 +6924,7 @@ public class nTracer_
                 ntNeuronNode node = (ntNeuronNode) neuronList_jTree.getPathForRow(i).getLastPathComponent();
                 if (!node.isComplete()) {
                     found = true;
-                    nextRow = i;                    
+                    nextRow = i;
                     break;
                 }
             }
@@ -6902,14 +6941,14 @@ public class nTracer_
                 int tableSelectRow = tablePoints.size() - 1;
                 pointTable_jTable.setRowSelectionInterval(tableSelectRow, tableSelectRow);
                 scroll2pointTableVisible(tableSelectRow, 0);
-            }            
-        }        
+            }
+        }
     }
-    
+
     private void toogleTracingCompleteness_jButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toogleTracingCompleteness_jButtonActionPerformed
         changeTracingCompleteness();
     }//GEN-LAST:event_toogleTracingCompleteness_jButtonActionPerformed
-    private void changeTracingCompleteness(){
+    private void changeTracingCompleteness() {
         if (neuronList_jTree.getSelectionCount() > 0) {
             recordTreeExpansionSelectionStatus();
             TreePath[] selectedPaths = neuronList_jTree.getSelectionPaths();
@@ -6919,27 +6958,27 @@ public class nTracer_
             }
             updateTrees();
             restoreTreeExpansionSelectionStatus();
-        }       
+        }
     }
-    
+
     private void jumpToNextSelected_jButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jumpToNextSelected_jButtonActionPerformed
         scrollToNextSelectedProcess();
     }//GEN-LAST:event_jumpToNextSelected_jButtonActionPerformed
-    private void scrollToNextSelectedProcess(){
+    private void scrollToNextSelectedProcess() {
         TreePath[] selectedPaths = neuronList_jTree.getSelectionPaths();
-        if (selectedPaths!= null){
+        if (selectedPaths != null) {
             Rectangle visibleRect = neuronList_jScrollPane.getViewport().getViewRect();
             int currentVisible = 0;
-            for (int i = 0; i< selectedPaths.length; i++) {
+            for (int i = 0; i < selectedPaths.length; i++) {
                 Rectangle selectionRect = neuronList_jTree.getPathBounds(selectedPaths[i]);
-                if (selectionRect.intersects(visibleRect)){
+                if (selectionRect.intersects(visibleRect)) {
                     currentVisible = i;
                 }
             }
-            if (currentVisible == selectedPaths.length-1){
+            if (currentVisible == selectedPaths.length - 1) {
                 neuronList_jTree.scrollPathToVisible(selectedPaths[0]);
             } else {
-                neuronList_jTree.scrollPathToVisible(selectedPaths[currentVisible+1]);
+                neuronList_jTree.scrollPathToVisible(selectedPaths[currentVisible + 1]);
             }
         }
     }
@@ -6955,7 +6994,7 @@ public class nTracer_
         saveHistory();
         updateDisplay();
     }
-    
+
     private void xyzResolutions_jMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_xyzResolutions_jMenuItemActionPerformed
         initiateCalibration();
     }//GEN-LAST:event_xyzResolutions_jMenuItemActionPerformed
@@ -6996,10 +7035,10 @@ public class nTracer_
                 resolutions[1] = 0;
                 resolutions[2] = 0;
             }
-            
+
             try {
                 ArrayList<String> selectedNeuronNumbers = getSelectedNeuronNumberSortSmall2Large();
-                IO.exportSelectedNeuronSynapse(rootNeuronNode, rootAllSomaNode, 
+                IO.exportSelectedNeuronSynapse(rootNeuronNode, rootAllSomaNode,
                         selectedNeuronNumbers, directory, prefixName, resolutions);
                 updateInfo("Synapse exported !");
             } catch (IOException e) {
@@ -7047,7 +7086,7 @@ public class nTracer_
     }//GEN-LAST:event_overlayAllSpine_jCheckBoxActionPerformed
 
     private void zProjectionInterval_jSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_zProjectionInterval_jSpinnerStateChanged
-        zProjInterval = (Integer) zProjectionInterval_jSpinner.getValue() ;
+        zProjInterval = (Integer) zProjectionInterval_jSpinner.getValue();
         updateZprojectionImp();
     }//GEN-LAST:event_zProjectionInterval_jSpinnerStateChanged
 
@@ -7094,15 +7133,23 @@ public class nTracer_
     private void loadRoiList() {
         String color_name = jComboBox1.getSelectedItem().toString();
         Color color = null;
-        
-        switch( color_name ) {
-            case "Blue": color = Color.blue; break;
-            case "Red": color = Color.red; break;
-            case "Green": color = Color.green; break;
+
+        switch (color_name) {
+            case "Blue":
+                color = Color.blue;
+                break;
+            case "Red":
+                color = Color.red;
+                break;
+            case "Green":
+                color = Color.green;
+                break;
         }
-        
-        if( color == null ) return;
-        
+
+        if (color == null) {
+            return;
+        }
+
         OpenDialog od = new OpenDialog("Select Points File", "");
         String name = od.getFileName();
         String dir = od.getDirectory();
@@ -7110,10 +7157,10 @@ public class nTracer_
         if (name == null || name.length() == 0) {
             return;
         }
-        
+
         java.util.List<SynapsePoint> list = new ArrayList<>();
-        File file = new File( dir + name );
-        System.out.println( "Loading points from: " + dir + name );
+        File file = new File(dir + name);
+        System.out.println("Loading points from: " + dir + name);
         BufferedReader reader = null;
 
         try {
@@ -7123,13 +7170,13 @@ public class nTracer_
             while ((text = reader.readLine()) != null) {
                 //list.add(Integer.parseInt(text));
                 String[] parts = text.split("\t");
-                
-                int x = parseIntClean( parts[0] );
-                int y = parseIntClean( parts[1] );
-                int z = (int) Math.round( Float.valueOf( parts[2] ) );
-                float r = Float.valueOf( parts[3] );
-                
-                list.add( new SynapsePoint( x, y, z, r ) );
+
+                int x = parseIntClean(parts[0]);
+                int y = parseIntClean(parts[1]);
+                int z = (int) Math.round(Float.valueOf(parts[2]));
+                float r = Float.valueOf(parts[3]);
+
+                list.add(new SynapsePoint(x, y, z, r));
             }
         } catch (FileNotFoundException ex) {
             //Logger.getLogger(ROITest.class.getName()).log(Level.SEVERE, null, ex);
@@ -7143,29 +7190,29 @@ public class nTracer_
             } catch (IOException e) {
             }
         }
-        
+
         if (auxOverlay == null) {
             auxOverlay = new ArrayList<Roi>();
         }
-        
+
         for (SynapsePoint p : list) {
             float r = p.getR();
             Roi toadd = new OvalRoi(p.getY() - r, p.getX() - r, r * 2, r * 2);
-            toadd.setPosition( 0, p.getZ(), 0 );
+            toadd.setPosition(0, p.getZ(), 0);
             toadd.setStrokeColor(color);
             auxOverlay.add(toadd);
         }
-        
+
         updateOverlay();
     }
-    
-    private int parseIntClean( String x ) {
-        double temp = Double.parseDouble( x );
-        temp = Math.round( temp );
-        
+
+    private int parseIntClean(String x) {
+        double temp = Double.parseDouble(x);
+        temp = Math.round(temp);
+
         return (int) temp;
     }
-    
+
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboBox1ActionPerformed
@@ -7234,7 +7281,7 @@ public class nTracer_
                 insertPosition = getNextPrimaryBranchNodePositionINneuronSomaNode(targetNeuronSomaNode);
             }
             String targetNeuronSomaName = targetNeuronSomaNode.toString();
-            if (targetNeuronSomaName.contains("/")){
+            if (targetNeuronSomaName.contains("/")) {
                 targetNeuronSomaName = targetNeuronSomaName.split("/")[0];
             }
             String insertChildNodeName = targetNeuronSomaName + "-" + (insertPosition + 1);
@@ -7253,7 +7300,7 @@ public class nTracer_
             ArrayList<String> selectedNeurons = getSelectedNeuronNumberSortSmall2Large();
             recordTreeExpansionSelectionStatus();
             neuronList_jTree.clearSelection();
-            
+
             // create individual neuron overlay
             ArrayList<Overlay> skeletonOverlays = new ArrayList<>();
             for (String neuronNumber : selectedNeurons) {
@@ -7262,7 +7309,7 @@ public class nTracer_
                 neuronList_jTree.setSelectionPath(neuronTreeSelectionPath);
                 skeletonOverlays.add(displayOL.duplicate());
             }
-            
+
             // create output skeleton image(s)
             if (allSkeletonInOneImage) {
                 Overlay allSkeletonOL = new Overlay();
@@ -7274,8 +7321,8 @@ public class nTracer_
                         allSkeletonOL.add((Roi) skeletonOL.get(n));
                     }
                 }
-                if (selectedNeurons.size()>10){
-                    allNeuronTitle = "-multiple("+selectedNeurons.size()+")";
+                if (selectedNeurons.size() > 10) {
+                    allNeuronTitle = "-multiple(" + selectedNeurons.size() + ")";
                 }
                 // create new black background image
                 ImagePlus skeletonImage = createBackgroundImage(impWidth, impHeight, totalSlices, totalChannel);
@@ -7289,7 +7336,7 @@ public class nTracer_
                     for (String neuronName : selectedNeurons) {
                         addAllPointsOfOneNeuron(allPoints, neuronName);
                     }
-                    int[] bounds = getNeuronTracingBound(allPoints, impWidth, impHeight); 
+                    int[] bounds = getNeuronTracingBound(allPoints, impWidth, impHeight);
                     ImageStack skeletonStack = skeletonImage.getImageStack().crop(
                             bounds[0], bounds[1], bounds[2], bounds[3], bounds[4], bounds[5]);
                     skeletonImage.setStack(skeletonStack);
@@ -7326,13 +7373,14 @@ public class nTracer_
                     cal.pixelDepth = xyzResolutions[2];
                 }
             }
-            
+
             restoreTreeExpansionSelectionStatus();
         } else {
             IJ.error("Select at least one neuron !");
         }
     }
-    private ImagePlus createBackgroundImage(int width, int height, 
+
+    private ImagePlus createBackgroundImage(int width, int height,
             int totalSlices, int totalChannel) {
         byte[] pixels = new byte[width * height];
         for (int i = 0; i < width * height; i++) {
@@ -7344,7 +7392,8 @@ public class nTracer_
             backgroundStack.addSlice(processor);
         }
         return new ImagePlus("", backgroundStack);
-    }    
+    }
+
     private void addAllPointsOfOneNeuron(ArrayList<int[]> allPoints, String neuronNumber) {
         // add soma points
         ntNeuronNode somaSomaNode = getSomaNodeFromAllSomaTreeByNeuronNumber(neuronNumber);
@@ -7356,7 +7405,7 @@ public class nTracer_
                 allPoints.add(intPt);
             }
         }
-        
+
         // add neurite points
         ntNeuronNode neuronSomaNode = getSomaNodeFromNeuronTreeByNeuronNumber(neuronNumber);
         for (int i = 0; i < neuronSomaNode.getChildCount(); i++) {
@@ -7364,38 +7413,52 @@ public class nTracer_
             addAllPointsOfOneBranchAndChildNode(allPoints, primaryBranchNode);
         }
     }
-    private void addAllPointsOfOneBranchAndChildNode(ArrayList<int[]> allPoints, ntNeuronNode branchNode){
+
+    private void addAllPointsOfOneBranchAndChildNode(ArrayList<int[]> allPoints, ntNeuronNode branchNode) {
         ArrayList<String[]> tracingResult = branchNode.getTracingResult();
-        for (String[] stringPt : tracingResult){
+        for (String[] stringPt : tracingResult) {
             int[] intPt = {Integer.parseInt(stringPt[1]), Integer.parseInt(stringPt[2]), Integer.parseInt(stringPt[3])};
             allPoints.add(intPt);
         }
-        for (int i = 0; i<branchNode.getChildCount(); i++){
-            ntNeuronNode childNode = (ntNeuronNode)branchNode.getChildAt(i);
+        for (int i = 0; i < branchNode.getChildCount(); i++) {
+            ntNeuronNode childNode = (ntNeuronNode) branchNode.getChildAt(i);
             addAllPointsOfOneBranchAndChildNode(allPoints, childNode);
         }
     }
-    private int[] getNeuronTracingBound(ArrayList<int[]> allPoints, int imgWidth, int imgHeight){
+
+    private int[] getNeuronTracingBound(ArrayList<int[]> allPoints, int imgWidth, int imgHeight) {
         int xMin = 1000000000, yMin = 1000000000, zMin = 1000000000;
         int xMax = 0, yMax = 0, zMax = 0;
-        
-        for(int[] point : allPoints){
-            if (point[0]<xMin) xMin = point[0];
-            if (point[1]<yMin) yMin = point[1];
-            if (point[2]<zMin) zMin = point[2];
-            if (point[0]>xMax) xMax = point[0];
-            if (point[1]>yMax) yMax = point[1];
-            if (point[2]>zMax) zMax = point[2];
+
+        for (int[] point : allPoints) {
+            if (point[0] < xMin) {
+                xMin = point[0];
+            }
+            if (point[1] < yMin) {
+                yMin = point[1];
+            }
+            if (point[2] < zMin) {
+                zMin = point[2];
+            }
+            if (point[0] > xMax) {
+                xMax = point[0];
+            }
+            if (point[1] > yMax) {
+                yMax = point[1];
+            }
+            if (point[2] > zMax) {
+                zMax = point[2];
+            }
         }
-        zMin = (zMin-1)<0?0:zMin-1;
-        xMin = (xMin-10)<0?0:xMin-10;
-        yMin = (yMin-10)<0?0:yMin-10;
-        int width = (xMax+11)>imgWidth?imgWidth-xMin:xMax+10-xMin;
-        int height = (yMax+11)>imgHeight?imgHeight-yMin:yMax+10-yMin;
-        int depth = zMax-zMin;
+        zMin = (zMin - 1) < 0 ? 0 : zMin - 1;
+        xMin = (xMin - 10) < 0 ? 0 : xMin - 10;
+        yMin = (yMin - 10) < 0 ? 0 : yMin - 10;
+        int width = (xMax + 11) > imgWidth ? imgWidth - xMin : xMax + 10 - xMin;
+        int height = (yMax + 11) > imgHeight ? imgHeight - yMin : yMax + 10 - yMin;
+        int depth = zMax - zMin;
         int[] bounds = {xMin, yMin, zMin, width, height, depth};
         return bounds;
-    }    
+    }
 
     private void toggleChannel(int Ch) {
         imp.setC(Ch);
@@ -7479,9 +7542,9 @@ public class nTracer_
     @Override
     public void mousePressed(MouseEvent e) {
     }
-    
+
     @Override
-    public void mouseClicked(MouseEvent e) { 
+    public void mouseClicked(MouseEvent e) {
         // first determine click number without repeated executing lower order click actions
         boolean singleClicked = false;
         boolean doubleClicked = false;
@@ -7498,8 +7561,8 @@ public class nTracer_
             singleClicked = true;
             doubleClicked = false;
             tripleClicked = false;
-        } 
-        
+        }
+
         if (e.getSource().equals(neuronList_jTree)) {
             if (doubleClicked) {
                 setupNeuronTreeSelection(e);
@@ -7511,17 +7574,17 @@ public class nTracer_
             }
         }
         if (e.getSource().equals(cns)) {
-            if (Toolbar.getToolName().equals("zoom")) { 
-                if (e.getButton() == LEFT_BUTTON){
+            if (Toolbar.getToolName().equals("zoom")) {
+                if (e.getButton() == LEFT_BUTTON) {
                     cnsZproj.zoomIn(0, 0);
                     updateZprojectionImp();
                 }
-                if (e.getButton() == RIGHT_BUTTON){
+                if (e.getButton() == RIGHT_BUTTON) {
                     cnsZproj.zoomOut(0, 0);
                     updateZprojectionImp();
                 }
             } else if (Toolbar.getToolName().equals(ntToolTrace.toolName) // trace tool
-                    || Toolbar.getToolName().equals("freeline")) { 
+                    || Toolbar.getToolName().equals("freeline")) {
                 if (doubleClicked) {
                     clearStartEndPts();
                     imp.killRoi();
@@ -7530,7 +7593,7 @@ public class nTracer_
                 if (e.getButton() == LEFT_BUTTON) {
                     // no modifier
                     if (!e.isControlDown() && !e.isShiftDown() && !e.isAltDown()) {
-                        if (tripleClicked){
+                        if (tripleClicked) {
                             // Left_Triple-click
                             setSingleTracingNodeInTreeToEndPointFromScreen(e);
                         } else if (doubleClicked) {
@@ -7553,9 +7616,9 @@ public class nTracer_
                         }
                     } // Shift down
                     else if (!e.isControlDown() && e.isShiftDown() && !e.isAltDown()) {
-                            // Left_Shift_Single-click
-                            // On trace or Soma name: Select single branch or soma slice as Edit Target;
-                            // On everywhere else, clear Edit Target
+                        // Left_Shift_Single-click
+                        // On trace or Soma name: Select single branch or soma slice as Edit Target;
+                        // On everywhere else, clear Edit Target
                         if (singleClicked) {
                             getEditTargetTraceFromScreen(e);
                         }
@@ -7566,16 +7629,15 @@ public class nTracer_
                             // Get next tracing Point ignoring color and intensity threshold
                             setStartEndPoint2DInt(e);
                         }
-                    }
-                    else if (!e.isControlDown() && e.isShiftDown() && e.isAltDown()) {
-                            // Left_Shift-Alt_Single-click
-                            // On trace or Soma name: Select single branch or soma slice as Edit Target; Select single point
-                            // On everywhere else, clear Edit Target
+                    } else if (!e.isControlDown() && e.isShiftDown() && e.isAltDown()) {
+                        // Left_Shift-Alt_Single-click
+                        // On trace or Soma name: Select single branch or soma slice as Edit Target; Select single point
+                        // On everywhere else, clear Edit Target
                         if (singleClicked) {
                             getEditTargetPointFromScreen(e);
                         }
                     }
-                    
+
                 } else if (e.getButton() == RIGHT_BUTTON) {
                     // no modifier
                     if (!e.isControlDown() && !e.isShiftDown() && !e.isAltDown()) {
@@ -7590,12 +7652,12 @@ public class nTracer_
                             // -- Prepare for adding a new primary branch or soma slice
                             setAllToNeuronSomaNodeInTree(e);
                         }
-                    }                
+                    }
                 }
             }
         }
     }
-    
+
     /**
      * methods implement MouseMotionListener
      *
@@ -7608,23 +7670,23 @@ public class nTracer_
 
     @Override
     public void mouseMoved(MouseEvent me) {
-        if (me.getSource() == cns && impZproj!=null) {
+        if (me.getSource() == cns && impZproj != null) {
             Point pt = cns.getCursorLoc();
             if (pt == null) {
                 return;
             }
-            double offsetX = roiXmin +0.5;
-            double offsetY = roiYmin +0.5;
+            double offsetX = roiXmin + 0.5;
+            double offsetY = roiYmin + 0.5;
             //IJ.log("pt.xOut = "+pt.xOut+", cns.offScreenX(0) = "+cns.offScreenX(0)+", cnsZproj.offScreenX(0) = "+cnsZproj.offScreenX(0)+", roiXmin = "+roiXmin);
             double mag = cns.getMagnification();
-            double xpSZ = pt.x-offsetX + 8/mag;
-            double xmSZ = pt.x-offsetX - 8/mag;
-            double ypSZ = pt.y-offsetY + 8/mag;
-            double ymSZ = pt.y-offsetY - 8/mag;
-            double xp2 = pt.x-offsetX + 2/mag;
-            double xm2 = pt.x-offsetX - 2/mag;
-            double yp2 = pt.y-offsetY + 2/mag;
-            double ym2 = pt.y-offsetY - 2/mag;
+            double xpSZ = pt.x - offsetX + 8 / mag;
+            double xmSZ = pt.x - offsetX - 8 / mag;
+            double ypSZ = pt.y - offsetY + 8 / mag;
+            double ymSZ = pt.y - offsetY - 8 / mag;
+            double xp2 = pt.x - offsetX + 2 / mag;
+            double xm2 = pt.x - offsetX - 2 / mag;
+            double yp2 = pt.y - offsetY + 2 / mag;
+            double ym2 = pt.y - offsetY - 2 / mag;
             GeneralPath path = new GeneralPath();
             path.moveTo(xmSZ, ymSZ);
             path.lineTo(xm2, ym2);
@@ -7645,7 +7707,7 @@ public class nTracer_
             impZproj.setOverlay(cursorOL);
         }
     }
-    
+
     private void setupSomaTreeSelection(MouseEvent e) {
         int row = displaySomaList_jTree.getRowForLocation(e.getX(), e.getY());
         if (row == -1) //When user clicks on the "empty surface"  
@@ -7731,7 +7793,7 @@ public class nTracer_
     }
 
     private void setupNeuronTreeSelection(MouseEvent e) {
-        int row = neuronList_jTree.getRowForLocation(e.getX(), e.getY());  
+        int row = neuronList_jTree.getRowForLocation(e.getX(), e.getY());
         if (row == -1) //When user clicks on the "empty surface"  
         {
             if (neuronList_jTree.getSelectionCount() > 0) {
@@ -7772,7 +7834,7 @@ public class nTracer_
         if (!(e.isControlDown() && e.isAltDown())) {
             int[] newPoint = Functions.meanShift2CentOfInt(mousePoint, imp.getFrame(),
                     xyRadius, zRadius, 1);
-        //int[] maskPt1 = {-10, -10, -10};
+            //int[] maskPt1 = {-10, -10, -10};
             //int[] maskPt2 = {-10, -10, -10};
             baseIntColor = Functions.getWinMeanIntColor(newPoint, analysisChannels, imp.getFrame(), 1, 1);
             int maxItreation = 5;
@@ -7858,6 +7920,7 @@ public class nTracer_
         imp.setZ(crossZ);
         imp.killRoi();
     }
+
     private void setStartEndPoint2DIntColor(MouseEvent e) {
         updatePositionInfo(e);
         //IJ.log("("+crossX+", "+crossY+", "+crossZ+")");
@@ -7950,6 +8013,7 @@ public class nTracer_
         imp.setZ(crossZ);
         imp.killRoi();
     }
+
     private void setStartEndPoint2DInt(MouseEvent e) {
         updatePositionInfo(e);
         //IJ.log("("+crossX+", "+crossY+", "+crossZ+")");
@@ -8035,7 +8099,6 @@ public class nTracer_
         imp.killRoi();
     }
 
-
     private void getEditTargetTraceFromScreen(MouseEvent e) {
         updatePositionInfo(e);
         ArrayList<String> containedRoiNames = getContainedRoiNamesOnScreen(crossX, crossY, crossZ, roiSearchRange);
@@ -8051,6 +8114,7 @@ public class nTracer_
         }
         editTargetName_jLabel.setText(editTargetNodeName);
     }
+
     private void getEditTargetPointFromScreen(MouseEvent e) {
         updatePositionInfo(e);
         ArrayList<String> containedRoiNames = getContainedRoiNamesOnScreen(crossX, crossY, crossZ, roiSearchRange);
@@ -8083,7 +8147,7 @@ public class nTracer_
                 if (editTargetNodeName.equals(somaSliceNode.toString())) {
                     ArrayList<String[]> tracingResult = somaSliceNode.getTracingResult();
                     targetPosition = getPositionInTracingResultWithSmallestDistanceToPoint(tracingResult,
-                                    crossX, crossY, crossZ)[0];
+                            crossX, crossY, crossZ)[0];
                     targetPt = tracingResult.get(targetPosition);
                     break;
                 }
@@ -8107,7 +8171,7 @@ public class nTracer_
             imp.setZ(endPoint[3]);
         }
     }
-    
+
     private void clearAllNeuronTreeSelection() {
         canUpdateDisplay = false;
         //recallTreeStatusOnly = true;
@@ -8116,6 +8180,7 @@ public class nTracer_
         canUpdateDisplay = true;
         updateDisplay();
     }
+
     private void selectAllVisibleNeuronTreeNodes() {
         canUpdateDisplay = false;
         neuronList_jTree.clearSelection();
@@ -8125,21 +8190,21 @@ public class nTracer_
         canUpdateDisplay = true;
         updateDisplay();
     }
-    
+
     private void setAllToNeuronSomaNodeInTree(MouseEvent e) {
         if (neuronList_jTree.getSelectionCount() >= 1) {
             //recallTreeStatusOnly = true;
             recordTreeExpansionSelectionStatus();
             TreePath[] selectedPaths = neuronList_jTree.getSelectionPaths();
             neuronList_jTree.clearSelection();
-            for (TreePath selectedPath: selectedPaths){
+            for (TreePath selectedPath : selectedPaths) {
                 ntNeuronNode selectedNeuronSomaNode = (ntNeuronNode) selectedPath.getPathComponent(1);
-                TreePath newPath = new TreePath (selectedNeuronSomaNode.getPath());
+                TreePath newPath = new TreePath(selectedNeuronSomaNode.getPath());
                 neuronList_jTree.addSelectionPath(newPath);
             }
-            TreePath lastPath = new TreePath (selectedPaths[selectedPaths.length-1].getPath());
-            neuronList_jTree.scrollPathToVisible(lastPath);            
-        } 
+            TreePath lastPath = new TreePath(selectedPaths[selectedPaths.length - 1].getPath());
+            neuronList_jTree.scrollPathToVisible(lastPath);
+        }
     }
 
     private void toggleTracingNodeInTreeFromScreen(MouseEvent e) {
@@ -8150,22 +8215,21 @@ public class nTracer_
             updateInfo(defaultInfo);
             return;
         }
-        
+
         //recallTreeStatusOnly = true;
         //recordTreeExpansionSelectionStatus();
-        
         TreePath[] selectedPaths = neuronList_jTree.getSelectionPaths();
         boolean inSelection = false;
-        for (TreePath TreePath : selectedPaths){
-            ntNeuronNode selectedNode = (ntNeuronNode)TreePath.getLastPathComponent();
+        for (TreePath TreePath : selectedPaths) {
+            ntNeuronNode selectedNode = (ntNeuronNode) TreePath.getLastPathComponent();
             //IJ.log(clickedTarget+" =? "+selectedNode.toString());
-            if (clickedTarget.equals(selectedNode.toString())){
+            if (clickedTarget.equals(selectedNode.toString())) {
                 neuronList_jTree.removeSelectionPath(TreePath);
                 inSelection = true;
                 break;
-            }            
+            }
         }
-        if (!inSelection){
+        if (!inSelection) {
             ntNeuronNode newlySelectedNode = getTracingNodeByNodeName(clickedTarget);
             TreePath newlySelectedPath = new TreePath(newlySelectedNode.getPath());
             neuronList_jTree.addSelectionPath(newlySelectedPath);
@@ -8231,7 +8295,7 @@ public class nTracer_
         if (clickedTarget.equals("0")) { // return if still not found
             updateInfo(defaultInfo);
             return;
-        } 
+        }
         //recallTreeStatusOnly = true;
         //recordTreeExpansionSelectionStatus();
         // go to the clicked target node
@@ -8241,7 +8305,7 @@ public class nTracer_
             TreePath clickedPath = new TreePath(clickedNode.getPath());
             neuronList_jTree.setSelectionPath(clickedPath);
             neuronList_jTree.scrollPathToVisible(clickedPath);
-            int endPosition = pointTable_jTable.getRowCount()-1;
+            int endPosition = pointTable_jTable.getRowCount() - 1;
             pointTable_jTable.setRowSelectionInterval(endPosition, endPosition);
             scroll2pointTableVisible(endPosition, 0);
         } else { // selected soma slice node
@@ -8282,6 +8346,7 @@ public class nTracer_
         }
         return containedNames;
     }
+
     private ArrayList<String> getPtContainingRoiName(String avoidNeuronName, Overlay traceOL, int x, int y, int range) {
         ArrayList<String> containedNames = new ArrayList<String>();
         for (int i = 0; i < traceOL.size(); i++) {
@@ -8295,7 +8360,7 @@ public class nTracer_
             Polygon roiPolygon = roi.getPolygon();
             for (int n = -range; n <= range; n++) {
                 for (int m = -range; m <= range; m++) {
-                    if (roiPolygon.contains(x + n, y + m)) {                       
+                    if (roiPolygon.contains(x + n, y + m)) {
                         if (!roiNeuronName.equals(avoidNeuronName)) {
                             containedNames.add(roi.getName());
                         }
@@ -8305,6 +8370,7 @@ public class nTracer_
         }
         return containedNames;
     }
+
     private ArrayList<String> getContainedRoiNamesOnScreen(int x, int y, int z, int searchRange) {
         int currentZ = z - 1;
         ArrayList<String> name = new ArrayList<String>();
@@ -8382,6 +8448,7 @@ public class nTracer_
         }
         return name;
     }
+
     private ArrayList<String> getContainedRoiNamesOnScreen(String avoidNeuronName, int x, int y, int z, int searchRange) {
         int currentZ = z - 1;
         ArrayList<String> name = new ArrayList<String>();
@@ -8459,6 +8526,7 @@ public class nTracer_
         }
         return name;
     }
+
     private String getNearestRoiName(int x, int y, int z, ArrayList<String> containedRoiNames) {
         String nearestRoiName = "0";
         int nearestDistance2 = 1000000000;
@@ -8473,7 +8541,7 @@ public class nTracer_
         }
         return nearestRoiName;
     }
-    
+
     @Override
     public void mouseEntered(MouseEvent e) {
     }
@@ -8491,13 +8559,13 @@ public class nTracer_
     public void mouseWheelMoved(MouseWheelEvent event) {
         synchronized (this) {
             int slice = imp.getZ() + event.getWheelRotation();
-            
+
             if (slice < 1) {
                 slice = 1;
             } else if (slice > impNSlice) {
                 slice = impNSlice;
             }
-            
+
             imp.setZ(slice);
             updateZprojectionImp();
         }
@@ -8512,15 +8580,15 @@ public class nTracer_
      */
     @Override
     public void keyPressed(KeyEvent keyevent) {
-        if ((int) keyevent.getKeyChar() == 32){
+        if ((int) keyevent.getKeyChar() == 32) {
             Toolbar.getInstance().setTool("hand");
         }
     }
 
     @Override
     public void keyReleased(KeyEvent keyevent) {
-        if ((int) keyevent.getKeyChar() == 32){
-            IJ.setTool( "freehand" );
+        if ((int) keyevent.getKeyChar() == 32) {
+            IJ.setTool("freehand");
             //Toolbar.getInstance().setTool("freehand");
             //Toolbar.getInstance().setTool(Toolbar.getInstance().getToolId(ntToolTrace.toolName));
         }
@@ -8531,7 +8599,7 @@ public class nTracer_
         //IJ.log(keyevent.getKeyChar() + " = " + (int) keyevent.getKeyChar());
         int xIn, yIn, xOut, yOut;
         Point locIn, locOut;
-        
+
         switch ((int) keyevent.getKeyChar()) {
             case 1: // 'ctrl-a'
                 break;
@@ -8539,7 +8607,7 @@ public class nTracer_
                 IJ.run(imp, "Blue", "");
                 break;
             case 4: // 'ctrl-d'
-                break;  
+                break;
             case 7: // 'ctrl-g'
                 IJ.run(imp, "Green", "");
                 break;
@@ -8556,28 +8624,28 @@ public class nTracer_
                 break;
             case 17: // 'ctrl-q'
                 quit();
-                break; 
+                break;
             case 18: // 'ctrl-r'
                 IJ.run(imp, "Red", "");
                 break;
             case 19: // 'ctrl-s'
                 saveData();
-                break;  
+                break;
             case 25: // 'ctrl-yIn'
                 forwardHistory();
                 break;
             case 26: // 'ctrl-z'
                 backwardHistory();
-                break;  
+                break;
             case 32: // 'space'
                 //IJ.setTool("hand");
                 break;
             case 44: // ','
-                if (zProjectionInterval_jSpinner.getPreviousValue()!=null){
+                if (zProjectionInterval_jSpinner.getPreviousValue() != null) {
                     zProjectionInterval_jSpinner.setValue(zProjectionInterval_jSpinner.getPreviousValue());
                     zProjInterval = (Integer) zProjectionInterval_jSpinner.getValue();
                     updateZprojectionImp();
-                }                
+                }
                 break;
             case 45: // '-'
                 locOut = cns.getCursorLoc();
@@ -8595,11 +8663,11 @@ public class nTracer_
                 updateZprojectionImp();
                 break;
             case 46: // '.'
-                if (zProjectionInterval_jSpinner.getNextValue()!=null){
+                if (zProjectionInterval_jSpinner.getNextValue() != null) {
                     zProjectionInterval_jSpinner.setValue(zProjectionInterval_jSpinner.getNextValue());
                     zProjInterval = (Integer) zProjectionInterval_jSpinner.getValue();
                     updateZprojectionImp();
-                }        
+                }
                 break;
             case 49: // '1'
                 if (impNChannel >= 1 && toggleCh1_jCheckBox.isSelected()) {
@@ -8824,7 +8892,7 @@ public class nTracer_
         // update information
         info_jLabel.setText(messega);
     }
-    
+
     Thread z_project_thread = null;
 
     private void updateZprojectionImp() {
@@ -8838,30 +8906,32 @@ public class nTracer_
 
     private void decrease_synapse_number() {
         // This method will decrese the number of selected synapse
-        
-        if (pointTable_jTable.getSelectedRowCount() != 1){
+
+        if (pointTable_jTable.getSelectedRowCount() != 1) {
             IJ.error("Select only one point to add/erase synapse !");
             return;
         }
-        
+
         int row = pointTable_jTable.getSelectedRow();
         ntNeuronNode selectedNode = (ntNeuronNode) neuronList_jTree.getLastSelectedPathComponent();
         if (!selectedNode.isBranchNode()) { // selected node is a somaSlice node
             selectedNode = (ntNeuronNode) displaySomaList_jTree.getLastSelectedPathComponent();
             selectedNode = getSomaSliceNodeFromAllSomaTreeBySomaSliceName(selectedNode.toString());
         }
-        
+
         // set synapse
         int synapseStatus = (Integer) pointTableModel.getValueAt(row, 5);
-        if( synapseStatus == 0 ) return;
-        
+        if (synapseStatus == 0) {
+            return;
+        }
+
         synapseStatus--;
-        selectedNode.setSynapse( row, synapseStatus );
-        pointTableModel.setValueAt( synapseStatus, row, 5);
-        
-        if( synapseStatus == 0 ) {
+        selectedNode.setSynapse(row, synapseStatus);
+        pointTableModel.setValueAt(synapseStatus, row, 5);
+
+        if (synapseStatus == 0) {
             String synapseName = (String) pointTableModel.getValueAt(row, 6);
-            
+
             if (synapseName.equals("0")) { // no connection to break
                 Object spineStatus = pointTableModel.getValueAt(row, 0);
                 String currentTag = spineStatus.toString();
@@ -8879,10 +8949,10 @@ public class nTracer_
             } else {// ask for breaking connection
                 eraseConnectionFromPoint(); // MUST INVESTIGATE
             }
-            
+
         }
-        
-        editTargetName_jLabel.setText( (String) pointTableModel.getValueAt(row, 6) );
+
+        editTargetName_jLabel.setText((String) pointTableModel.getValueAt(row, 6));
         saveHistory();
         updateDisplay();
     }
@@ -8959,7 +9029,6 @@ public class nTracer_
             int roiYmid = (roiYmin + roiYmax) / 2;
 
             //System.err.println(roiXmax + "," + roiXmid + " - " + roiYmax + "," + roiYmid);
-
             if (roiXmax - roiXmin > zProjXY) {
                 roiXmin = roiXmid - zProjXY / 2 + 1;
                 roiXmax = roiXmid + zProjXY / 2 - 1;
@@ -9011,6 +9080,7 @@ public class nTracer_
         recordNeuronTreeExpansionStatus();
         recordTreeSelectionStatus();
     }
+
     private void recordTreeExpansionSelectionStatus(int historyLevel) {
         recordNeuronTreeExpansionStatus(historyLevel);
         recordTreeSelectionStatus(historyLevel);
@@ -9020,6 +9090,7 @@ public class nTracer_
         restoreNeuronTreeExpansionStatus();
         restoreTreeSelectionStatus();
     }
+
     private void restoreTreeExpansionSelectionStatus(int historyLevel) {
         restoreNeuronTreeExpansionStatus(historyLevel);
         restoreTreeSelectionStatus(historyLevel);
@@ -9036,6 +9107,7 @@ public class nTracer_
             }
         }
     }
+
     private void recordNeuronTreeExpansionStatus(int historyLevel) {
         ArrayList<String> levelExpandedNeuronNames = historyExpandedNeuronNames.get(historyLevel);
         levelExpandedNeuronNames.clear();
@@ -9067,6 +9139,7 @@ public class nTracer_
             }
         }
     }
+
     private void restoreNeuronTreeExpansionStatus(int historyLevel) {
         ArrayList<String> levelExpandedNeuronNames = historyExpandedNeuronNames.get(historyLevel);
         for (int n = 0; n < rootNeuronNode.getChildCount(); n++) {
@@ -9114,6 +9187,7 @@ public class nTracer_
         displaySomaTreeVisibleRect = displaySomaList_jTree.getVisibleRect();
         pointTableVisibleRect = pointTable_jTable.getVisibleRect();
     }
+
     private void recordTreeSelectionStatus(int historyLevel) {
         ArrayList<String> levelSelectedNeuronNames = historySelectedNeuronNames.get(historyLevel);
         ArrayList<String> levelSelectedSomaSliceNames = historySelectedSomaSliceNames.get(historyLevel);
@@ -9160,12 +9234,12 @@ public class nTracer_
             if (selectedNeuronNode != null) {
                 TreePath selectedNeuronPath = new TreePath(selectedNeuronNode.getPath());
                 selectedPaths.add(selectedNeuronPath);
-            }            
+            }
         }
-        if (selectedPaths.size()>0){
+        if (selectedPaths.size() > 0) {
             TreePath[] selectionPaths = new TreePath[selectedPaths.size()];
-            for (int i = 0; i < selectedPaths.size(); i++){
-                selectionPaths[i] = (TreePath)selectedPaths.get(i);
+            for (int i = 0; i < selectedPaths.size(); i++) {
+                selectionPaths[i] = (TreePath) selectedPaths.get(i);
             }
             neuronList_jTree.setSelectionPaths(selectionPaths);
         }
@@ -9201,6 +9275,7 @@ public class nTracer_
             pointTable_jTable.scrollRectToVisible(pointTableVisibleRect);
         }
     }
+
     private void restoreTreeSelectionStatus(int historyLevel) {
         ArrayList<String> levelSelectedNeuronNames = historySelectedNeuronNames.get(historyLevel);
         ArrayList<String> levelSelectedSomaSliceNames = historySelectedSomaSliceNames.get(historyLevel);
@@ -9213,14 +9288,14 @@ public class nTracer_
                 selectedPaths.add(selectedNeuronPath);
             }
         }
-        if (selectedPaths.size()>0){
+        if (selectedPaths.size() > 0) {
             TreePath[] selectionPaths = new TreePath[selectedPaths.size()];
-            for (int i = 0; i < selectedPaths.size(); i++){
-                selectionPaths[i] = (TreePath)selectedPaths.get(i);
+            for (int i = 0; i < selectedPaths.size(); i++) {
+                selectionPaths[i] = (TreePath) selectedPaths.get(i);
             }
             neuronList_jTree.setSelectionPaths(selectionPaths);
         }
-        
+
         for (String selectedSomaSliceName : levelSelectedSomaSliceNames) {
             //IJ.log("input "+selectedSomaSliceName);
             for (int i = 0; i < rootDisplaySomaNode.getChildCount(); i++) {
@@ -9332,93 +9407,98 @@ public class nTracer_
 
     public static ArrayList<int[]> getAllPrimaryBranchPoints(ntNeuronNode node) {
         ArrayList<int[]> allPoints = new ArrayList<int[]>();
-        
-        if(node==null){
+
+        if (node == null) {
             return allPoints;
         }
-        
+
         ntNeuronNode somaNode = getSomaNodeFromNeuronTreeByNeuronNumber(node.getNeuronNumber());
-        
+
         for (int i = 0; i < somaNode.getChildCount(); i++) {
             ntNeuronNode primaryBranchNode = (ntNeuronNode) somaNode.getChildAt(i);
             ArrayList<String[]> tracing = primaryBranchNode.getTracingResult();
-            
+
             for (String[] point : tracing) {
-                int[] intPt = {0, Integer.parseInt(point[1]), 
+                int[] intPt = {0, Integer.parseInt(point[1]),
                     Integer.parseInt(point[2]), Integer.parseInt(point[3]), 0, 0, 0};
                 allPoints.add(intPt);
             }
         }
-        
+
         return allPoints;
     }
-    
+
     private Map<ntNeuronNode, Color> neuronColorTable = new HashMap<>();
     private Lock neuronColorTableLock = new ReentrantLock();
-    
-    private Color getNeuronColorFromNode( ntNeuronNode node, float alpha ) {
-        if( node == null ) return Color.white; // um this is broken?
-        
+
+    private Color getNeuronColorFromNode(ntNeuronNode node, float alpha) {
+        if (node == null) {
+            return Color.white; // um this is broken?
+        }
         Color toreturn = null;
-        
+
         neuronColorTableLock.lock();
-        if(neuronColorTable.containsKey(node)) {
+        if (neuronColorTable.containsKey(node)) {
             toreturn = neuronColorTable.get(node);
             neuronColorTableLock.unlock();
             return toreturn;
         }
-        
+
         neuronColorTableLock.unlock();
-        
+
         toreturn = getNeuronColorFromNodeOriginal(node);
-        if( toreturn == null ) toreturn = Color.white;
-        
+        if (toreturn == null) {
+            toreturn = Color.white;
+        }
+
         neuronColorTableLock.lock();
         neuronColorTable.put(node, toreturn);
         neuronColorTableLock.unlock();
-                
+
         float[] cc = toreturn.getRGBComponents(null); // decompose to add alpha
-        toreturn = new Color( cc[0], cc[1], cc[2], alpha );
-        
+        toreturn = new Color(cc[0], cc[1], cc[2], alpha);
+
         return toreturn;
     }
-    
+
     private Color getNeuronColorFromNodeOriginal(ntNeuronNode node) {
         ArrayList<int[]> neuronPoints = getAllPrimaryBranchPoints(node);
 
-        if ( neuronPoints.isEmpty() ) {
+        if (neuronPoints.isEmpty()) {
             return Color.white;
         }
-        
+
         System.out.println(node);
         long start = System.currentTimeMillis();
-        
+
         float[] tempColor = new float[impNChannel];
         this.color_lock.lock();
 
         for (int channel = 0; channel < impNChannel; channel++) {
             for (int[] neuronPt : neuronPoints) {
-                if (!analysisChannels[channel]) continue;
+                if (!analysisChannels[channel]) {
+                    continue;
+                }
                 int index = imp.getStackIndex(channel + 1, neuronPt[3], imp.getFrame());
                 // // retrive color[channel] and calculate total intensity
-                 //tempColor[channel] += stk.getProcessor(index).get(neuronPt[1], neuronPt[2]);
-                 
-                coord3D pt = new coord3D( neuronPt[1], neuronPt[2], index );
-                
-                if( this.color_buffer.containsKey(pt) ) {
-                    tempColor[channel] += this.color_buffer.get( pt );
-                } else {                    
+                //tempColor[channel] += stk.getProcessor(index).get(neuronPt[1], neuronPt[2]);
+
+                coord3D pt = new coord3D(neuronPt[1], neuronPt[2], index);
+
+                if (this.color_buffer.containsKey(pt)) {
+                    tempColor[channel] += this.color_buffer.get(pt);
+                } else {
                     float newColor = stk.getProcessor(index).get(neuronPt[1], neuronPt[2]);
                     tempColor[channel] += newColor;
-                    
+
                     this.color_buffer.put(pt, newColor);
                 }
-                
+
             }
         }
-        
+
         this.color_lock.unlock();
-        
+
         float[][] allChRGBratios = Functions.getAllChRGBratios();
         float[] allChActiveFloat = Functions.getAllChActiveFloat();
         float[] allChAnalysisFloat = Functions.getAllChAnalysisFloat();
@@ -9434,10 +9514,11 @@ public class nTracer_
             max = rgbColor[color] > max ? rgbColor[color] : max;
         }
         //IJ.log("max = "+max);
-        
+
         //System.out.println( "Took " + (System.currentTimeMillis() - start) );
-        
-        for( int i = 0; i < rgbColor.length; i++ ) rgbColor[i] /= max;
+        for (int i = 0; i < rgbColor.length; i++) {
+            rgbColor[i] /= max;
+        }
 
         return new Color(rgbColor[0], rgbColor[1], rgbColor[2]);
     }
@@ -9447,22 +9528,22 @@ public class nTracer_
         int frameNumber = imp.getFrame();
         String neuriteName = neuriteNode.toString();
         boolean uniqueSelected = false;
-        if (neuronList_jTree.getSelectionCount()==1){
-            ntNeuronNode selectedNode = (ntNeuronNode)neuronList_jTree.getLastSelectedPathComponent();
-            if (neuriteNode.getNeuronNumber().equals(selectedNode.getNeuronNumber())){
+        if (neuronList_jTree.getSelectionCount() == 1) {
+            ntNeuronNode selectedNode = (ntNeuronNode) neuronList_jTree.getLastSelectedPathComponent();
+            if (neuriteNode.getNeuronNumber().equals(selectedNode.getNeuronNumber())) {
                 uniqueSelected = true;
             }
         }
         ArrayList<String[]> linkedPoints = neuriteNode.getTracingResult();
         String nodeType = neuriteNode.getType();
-        if (lineColor.getRGB() == -16777216){ // Color.black
-            if (nodeType.startsWith("Axon")){
+        if (lineColor.getRGB() == -16777216) { // Color.black
+            if (nodeType.startsWith("Axon")) {
                 lineColor = Color.blue;
-            } else if (nodeType.startsWith("Dendrite")){
+            } else if (nodeType.startsWith("Dendrite")) {
                 lineColor = Color.red;
-            } else if (nodeType.startsWith("Apical")){
+            } else if (nodeType.startsWith("Apical")) {
                 lineColor = Color.magenta;
-            } else if (nodeType.startsWith("Neurite")){
+            } else if (nodeType.startsWith("Neurite")) {
                 lineColor = Color.gray;
             }
         }
@@ -9497,7 +9578,7 @@ public class nTracer_
                         synapseRoi.setPosition(0, Integer.parseInt(linkedPt[3]), frameNumber);
                         synapseRoi.setStrokeWidth(synapseRadius);
                         //synapseRoi.setStrokeColor(lineColor);
-                        synapseRoi.setStrokeColor( mapSynapseColor( linkedPt[5] ) );
+                        synapseRoi.setStrokeColor(mapSynapseColor(linkedPt[5]));
                         neuriteSynapseOL.add(synapseRoi);
                     }
                     if (!linkedPt[6].equals("0")) {
@@ -9581,21 +9662,21 @@ public class nTracer_
         }
     }
 
-    private void getOneBranchTraceRoiAllPt(Overlay neuriteTraceOL, Overlay neuriteNameOL, Overlay neuriteSynapseOL, Overlay neuriteConnectedOL, 
+    private void getOneBranchTraceRoiAllPt(Overlay neuriteTraceOL, Overlay neuriteNameOL, Overlay neuriteSynapseOL, Overlay neuriteConnectedOL,
             Overlay neuriteSpineOL, ntNeuronNode neuriteNode, Color lineColor, float lineWidth, float spineLine, double synapseRadius, double synapseSize) {
         int frameNumber = imp.getFrame();
         String neuriteName = neuriteNode.toString();
         boolean uniqueSelected = false;
-        if (neuronList_jTree.getSelectionCount()==1){
-            ntNeuronNode selectedNode = (ntNeuronNode)neuronList_jTree.getLastSelectedPathComponent();
-            if (neuriteNode.getNeuronNumber().equals(selectedNode.getNeuronNumber())){
+        if (neuronList_jTree.getSelectionCount() == 1) {
+            ntNeuronNode selectedNode = (ntNeuronNode) neuronList_jTree.getLastSelectedPathComponent();
+            if (neuriteNode.getNeuronNumber().equals(selectedNode.getNeuronNumber())) {
                 uniqueSelected = true;
             }
         }
         ArrayList<String[]> linkedPoints = neuriteNode.getTracingResult();
 //        IJ.log("RGB = "+lineColor.getRGB()+" ("+lineColor.getRed()+", "+lineColor.getGreen()+", "+lineColor.getBlue()+")");
-        
-        if (lineColor.getRGB() == -16777216){ // Color.black
+
+        if (lineColor.getRGB() == -16777216) { // Color.black
             String nodeType = neuriteNode.getType();
             if (nodeType.startsWith("Axon")) {
                 lineColor = Color.blue;
@@ -9607,7 +9688,7 @@ public class nTracer_
                 lineColor = Color.gray;
             }
         }
-        
+
         int totalRoiPoints = linkedPoints.size();
         int[] xPoints = new int[totalRoiPoints];
         int[] yPoints = new int[totalRoiPoints];
@@ -9645,17 +9726,17 @@ public class nTracer_
                     synapseRoi.setPosition(0, 0, frameNumber);
                     synapseRoi.setStrokeWidth(synapseRadius);
                     //synapseRoi.setStrokeColor(lineColor);
-                    synapseRoi.setStrokeColor( mapSynapseColor( linkedPt[5] ) );
+                    synapseRoi.setStrokeColor(mapSynapseColor(linkedPt[5]));
                     neuriteSynapseOL.add(synapseRoi);
                 }
-                
+
                 if (!linkedPt[6].equals("0")) {
                     OvalRoi connectedRoi = new OvalRoi(
                             (double) xPoints[n] - synapseRadius,
                             (double) yPoints[n] - synapseRadius, synapseSize, synapseSize);
                     connectedRoi.setPosition(0, 0, frameNumber);
                     connectedRoi.setStrokeWidth(synapseRadius);
-                    if (uniqueSelected){
+                    if (uniqueSelected) {
                         String connected = linkedPt[6].split("#")[1];
                         connectedRoi.setStrokeColor(getNeuronColorFromNode(getNodeFromNeuronTreeByNodeName(connected), connectionAlpha));
                     } else {
@@ -9682,20 +9763,25 @@ public class nTracer_
         nameRoi.setPosition(0, 0, frameNumber);
         neuriteNameOL.add(nameRoi);
     }
-    
-    private static Color mapSynapseColor( String type ){
-        return mapSynapseColor( (int) Integer.valueOf( type ) );
+
+    private static Color mapSynapseColor(String type) {
+        return mapSynapseColor((int) Integer.valueOf(type));
     }
-    
-    private static Color mapSynapseColor( int type ) {
-        switch( type ) {
-            case 0: return Color.black; // this shouldn't get called.
-            case 1: return Color.red;
-            case 2: return Color.green;
-            case 3: return Color.blue;
-            case 4: return Color.magenta;
+
+    private static Color mapSynapseColor(int type) {
+        switch (type) {
+            case 0:
+                return Color.black; // this shouldn't get called.
+            case 1:
+                return Color.red;
+            case 2:
+                return Color.green;
+            case 3:
+                return Color.blue;
+            case 4:
+                return Color.magenta;
         }
-                
+
         return Color.white;
     }
 
@@ -9703,9 +9789,9 @@ public class nTracer_
             Overlay[] neuronSpineOL, ntNeuronNode currentNode, Color lineColor, float lineWidth, float spineLine, double synapseRadius, double synapseSize, int extDispPts) {
         for (int k = 0; k < currentNode.getChildCount(); k++) {
             ntNeuronNode childNode = (ntNeuronNode) (currentNode.getChildAt(k));
-            getOneBranchTraceRoiExtPt(neuriteTraceOL, neuriteNameOL, neuriteSynapseOL, neuriteConnectedOL, neuronSpineOL, 
+            getOneBranchTraceRoiExtPt(neuriteTraceOL, neuriteNameOL, neuriteSynapseOL, neuriteConnectedOL, neuronSpineOL,
                     childNode, lineColor, lineWidth, spineLine, synapseRadius, synapseSize, extDispPts);
-            getAllChildNodeRoiExtPt(neuriteTraceOL, neuriteNameOL, neuriteSynapseOL, neuriteConnectedOL, neuronSpineOL, 
+            getAllChildNodeRoiExtPt(neuriteTraceOL, neuriteNameOL, neuriteSynapseOL, neuriteConnectedOL, neuronSpineOL,
                     childNode, lineColor, lineWidth, spineLine, synapseRadius, synapseSize, extDispPts);
         }
     }
@@ -9726,7 +9812,7 @@ public class nTracer_
         getOneBranchTraceRoiExtPt(neuriteTraceOL, neuriteNameOL, neuriteSynapseOL, neuriteConnectedOL, neuriteSpineOL, arborNode, lineColor, lineWidth, spineLine, synapseRadius, synapseSize, extDispPts);
         if (arborNode.getChildCount() > 0) {
             //retrieve everage color of neuron from primary axon/dendrite branch
-            getAllChildNodeRoiExtPt(neuriteTraceOL, neuriteNameOL, neuriteSynapseOL, neuriteConnectedOL, neuriteSpineOL, 
+            getAllChildNodeRoiExtPt(neuriteTraceOL, neuriteNameOL, neuriteSynapseOL, neuriteConnectedOL, neuriteSpineOL,
                     arborNode, lineColor, lineWidth, spineLine, synapseRadius, synapseSize, extDispPts);
         }
     }
@@ -9748,10 +9834,10 @@ public class nTracer_
         if (neuronSomaNode.getChildCount() > 0) {
             //retrieve everage color of neuron from primary axon/dendrite branch
             Color lineColor = getNeuronColorFromNode(neuronSomaNode, lineAlpha);
-            if (!brainbowColor_jCheckBox.isSelected()){
+            if (!brainbowColor_jCheckBox.isSelected()) {
                 lineColor = Color.black;
             }
-            getAllChildNodeRoiExtPt(neuriteTraceOL, neuriteNameOL, neuriteSynapseOL, neuriteConnectedOL, neuronSpineOL, 
+            getAllChildNodeRoiExtPt(neuriteTraceOL, neuriteNameOL, neuriteSynapseOL, neuriteConnectedOL, neuronSpineOL,
                     neuronSomaNode, lineColor, lineWidth, spineLine, synapseRadius, synapseSize, extDispPts);
         }
     }
@@ -9776,9 +9862,9 @@ public class nTracer_
         int frameNumber = imp.getT();
         String somaSliceName = somaSliceNode.toString();
         boolean uniqueSelected = false;
-        if (neuronList_jTree.getSelectionCount()==1){
-            ntNeuronNode selectedNode = (ntNeuronNode)neuronList_jTree.getLastSelectedPathComponent();
-            if (somaSliceNode.getNeuronNumber().equals(selectedNode.getNeuronNumber())){
+        if (neuronList_jTree.getSelectionCount() == 1) {
+            ntNeuronNode selectedNode = (ntNeuronNode) neuronList_jTree.getLastSelectedPathComponent();
+            if (somaSliceNode.getNeuronNumber().equals(selectedNode.getNeuronNumber())) {
                 uniqueSelected = true;
             }
         }
@@ -9828,7 +9914,7 @@ public class nTracer_
                             yPoints[n] - synapseRadius, synapseSize, synapseSize);
                     connectedRoi.setPosition(0, 0, frameNumber);
                     connectedRoi.setStrokeWidth(synapseRadius);
-                    if (uniqueSelected){
+                    if (uniqueSelected) {
                         String connected = linkedPt[6].split("#")[1];
                         connectedRoi.setStrokeColor(getNeuronColorFromNode(getNodeFromNeuronTreeByNodeName(connected), connectionAlpha));
                     } else {
@@ -9842,7 +9928,7 @@ public class nTracer_
 
             }
         }
-        
+
         PolygonRoi pointTraceRoi = new PolygonRoi(xPoints, yPoints, totalRoiPoints, Roi.POLYLINE);
         pointTraceRoi.setName(somaSliceName);
         pointTraceRoi.setPosition(0, zPosition, frameNumber);
@@ -9859,19 +9945,19 @@ public class nTracer_
         somaNameOL[zPosition - 1].add(nameRoi);
     }
 
-    private void getOneWholeSomaRoi(Overlay[] somaTraceOL, Overlay[] somaNameOL, Overlay somaSynapseOL, Overlay somaConnectedOL, Overlay[] somaSpineOL, 
+    private void getOneWholeSomaRoi(Overlay[] somaTraceOL, Overlay[] somaNameOL, Overlay somaSynapseOL, Overlay somaConnectedOL, Overlay[] somaSpineOL,
             ntNeuronNode neuronNode, float somaLine, float spineLine, double synapseRadius, double synapseSize, boolean singleSliceSynapse) {
         ntNeuronNode somaNode = getSomaNodeFromAllSomaTreeByNeuronNumber(neuronNode.getNeuronNumber());
         //IJ.log("show soma "+somaNode.toString());
         if (somaNode.getChildCount() > 0) {
             //retrieve everage color of neuron from primary axon/dendrite branch
             Color lineColor = getNeuronColorFromNode(neuronNode, lineAlpha);
-            if (!brainbowColor_jCheckBox.isSelected()){
+            if (!brainbowColor_jCheckBox.isSelected()) {
                 lineColor = Color.lightGray;
             }
             for (int n = 0; n < somaNode.getChildCount(); n++) {
                 ntNeuronNode somaSlice = (ntNeuronNode) somaNode.getChildAt(n);
-                getSomaSliceRoi(somaTraceOL, somaNameOL, somaSynapseOL, somaConnectedOL, somaSpineOL, 
+                getSomaSliceRoi(somaTraceOL, somaNameOL, somaSynapseOL, somaConnectedOL, somaSpineOL,
                         somaSlice, lineColor, somaLine, spineLine, synapseRadius, synapseSize, singleSliceSynapse);
             }
         }
@@ -9909,7 +9995,7 @@ public class nTracer_
         }
     }
 
-    private void traceSpine(){
+    private void traceSpine() {
         if (manualTracing_jRadioButton.isSelected()) {
             manualTraceSpine();
         } else if (semiAutoTracing_jRadioButton.isSelected()) {
@@ -9917,7 +10003,6 @@ public class nTracer_
         }
     }
 
-    
     /**
      * Manual tracing using A-star to find minimum cost path between two points.
      */
@@ -9951,7 +10036,7 @@ public class nTracer_
             updateInfo("Pick both Start Point and End Point before Manual Tracing!");
         }
     }
-    
+
     private void manualTraceNeurite() {
         if (hasStartPt && hasEndPt) {
             ArrayList<int[]> minCostPathPoints = Functions.getMinCostPath3D(
@@ -10030,7 +10115,7 @@ public class nTracer_
 minCostPathPoints = Functions.getMinCostPath3D(
                     startPoint, endPoint, analysisChannels, imp.getFrame(),
                     xyExtension, zExtension);
-*/
+                     */
                     minCostPathPoints = Functions.semiAutoGetMinCostPath3D(
                             startPoint, tablePoints, analysisChannels, imp.getFrame(),
                             xyRadius, zRadius, colorThreshold, intensityThreshold);
@@ -10135,9 +10220,9 @@ minCostPathPoints = Functions.getMinCostPath3D(
         }
     }
 
-    private void traceSomaROI(Roi impROI){
+    private void traceSomaROI(Roi impROI) {
         FloatPolygon roiPolygon = impROI.getFloatPolygon();
-        if (roiPolygon.npoints<1){
+        if (roiPolygon.npoints < 1) {
             IJ.error("Need Roi points !");
             imp.killRoi();
             updateInfo("Need Roi points !");
@@ -10145,10 +10230,10 @@ minCostPathPoints = Functions.getMinCostPath3D(
         }
         int[] xPts = Roi.toIntR(roiPolygon.xpoints);
         int[] yPts = Roi.toIntR(roiPolygon.ypoints);
-        String z = imp.getZ()+"";
+        String z = imp.getZ() + "";
         ArrayList<String[]> somaPts = new ArrayList<String[]>();
-        for (int i =0; i<roiPolygon.npoints; i++){
-            String[] point = {"0", xPts[i]+"", yPts[i]+"", z, "0", "0", "0"};
+        for (int i = 0; i < roiPolygon.npoints; i++) {
+            String[] point = {"0", xPts[i] + "", yPts[i] + "", z, "0", "0", "0"};
             somaPts.add(point);
         }
         endPoint[1] = xPts[0];
@@ -10194,7 +10279,7 @@ minCostPathPoints = Functions.getMinCostPath3D(
             restoreTreeExpansionSelectionStatus();
         }
     }
-    
+
     private void traceSomaMinCostPath() {
         if (hasStartPt && hasEndPt) {
             if (startPoint[3] == endPoint[3]) {
@@ -10266,12 +10351,12 @@ minCostPathPoints = Functions.getMinCostPath3D(
 
         // remove redundant points
         ArrayList<int[]> finalPathPoints = Functions.removeRedundantTracingPoints(minCostPathPoints);
-        finalPathPoints.remove(finalPathPoints.size()-1);
+        finalPathPoints.remove(finalPathPoints.size() - 1);
         if (finalPathPoints.isEmpty()) {
             updateInfo(endPtTooFarError);
             return;
         }
-        
+
         recordNeuronTreeExpansionStatus();
         // add tracing result to neuron tree at the soma node
         pointTable_jTable.setRowSelectionInterval(pointTable_jTable.getRowCount() - 1, pointTable_jTable.getRowCount() - 1);
@@ -10329,7 +10414,7 @@ minCostPathPoints = Functions.getMinCostPath3D(
                 String[] addPoint = points.get(i);
                 addPoint[0] = "Neurite";
                 tablePoints.add(i, addPoint);
-            //IJ.log("added (" + tablePoints.get(i)[1] + ", " + tablePoints.get(i)[2] + ", " + tablePoints.get(i)[3] + ")");
+                //IJ.log("added (" + tablePoints.get(i)[1] + ", " + tablePoints.get(i)[2] + ", " + tablePoints.get(i)[3] + ")");
             }
             createNewNeuronWithNeuriteData(tablePoints);
             return tablePoints.size() - 1;
@@ -10393,7 +10478,7 @@ minCostPathPoints = Functions.getMinCostPath3D(
             }
         }
     }
-    
+
     private void addTracingAsSpine(ArrayList<String[]> points) {
         //IJ.log("tablePoints is empty? " + (tablePoints.isEmpty()));
         if (neuronList_jTree.getSelectionCount() != 1) { // start fresh tracing
@@ -10401,8 +10486,8 @@ minCostPathPoints = Functions.getMinCostPath3D(
         } else {
             ntNeuronNode selectedNode = (ntNeuronNode) neuronList_jTree.getLastSelectedPathComponent();
             String nodeType = selectedNode.getType();
-            if (selectedNode.isBranchNode() && 
-                    (nodeType.equals("Dendrite") || nodeType.equals("Apical"))) { // selected one dendrite
+            if (selectedNode.isBranchNode()
+                    && (nodeType.equals("Dendrite") || nodeType.equals("Apical"))) { // selected one dendrite
                 if (pointTable_jTable.getSelectedRowCount() == 1) { // add to existing tracing
                     int row = pointTable_jTable.getSelectedRow();
                     //IJ.log("selected rows = "+pointTable_jTable.getSelectedRowCount());
@@ -10415,7 +10500,7 @@ minCostPathPoints = Functions.getMinCostPath3D(
                     }
                     String spineNumber = getNextSpineNumber();
                     selectedNode.setSpine(row, spineNumber);
-                    pointTableModel.setValueAt(nodeType+":Spine#"+spineNumber, row, 0);
+                    pointTableModel.setValueAt(nodeType + ":Spine#" + spineNumber, row, 0);
                     pointTableModel.setValueAt((int) 1, row, 5); //TODO FIX SYNAPSE
                     createSpine(spineNumber, points);
                 } else {// selected more than one point
@@ -10518,14 +10603,14 @@ minCostPathPoints = Functions.getMinCostPath3D(
 
     private String getNextSpineNumber() {
         int nextNumber = 1;
-        for (int i = 0; i<rootSpineNode.getChildCount(); i++) {
+        for (int i = 0; i < rootSpineNode.getChildCount(); i++) {
             ntNeuronNode spineNode = (ntNeuronNode) rootSpineNode.getChildAt(i);
-            if (Integer.parseInt(spineNode.toString()) - nextNumber > 0){
+            if (Integer.parseInt(spineNode.toString()) - nextNumber > 0) {
                 break;
             }
-            nextNumber ++;
+            nextNumber++;
         }
-        return nextNumber+"";
+        return nextNumber + "";
     }
 
     private int getNextPrimaryBranchNodePositionINneuronSomaNode(ntNeuronNode neuronSomaNode) {
@@ -10596,7 +10681,7 @@ minCostPathPoints = Functions.getMinCostPath3D(
         neuronTreeModel.insertNodeInto(primaryNeurite, newNeuronSoma, 0);
 
         updateTrees();
-       
+
         restoreTreeExpansionSelectionStatus();
         TreePath childPath = new TreePath(primaryNeurite.getPath());
         neuronList_jTree.scrollPathToVisible(childPath);
@@ -10619,7 +10704,7 @@ minCostPathPoints = Functions.getMinCostPath3D(
         allSomaTreeModel.insertNodeInto(newSomaSoma, rootAllSomaNode, newSomaPosition);
         ntNeuronNode newSomaTracing = new ntNeuronNode(neuronName + ":" + dataPoints.get(0)[3], dataPoints);
         allSomaTreeModel.insertNodeInto(newSomaTracing, newSomaSoma, newSomaSoma.getChildCount());
-        
+
         //add to rootNeuronNode
         ArrayList<String[]> newNeuronSomaData = new ArrayList<String[]>();
         String[] neuronSomaData = {"Neurite", "-1", "-1", "-1", "0", "0", "0"};
@@ -10657,17 +10742,17 @@ minCostPathPoints = Functions.getMinCostPath3D(
                 if (sliceNumber.equals(sliceNames[1])) {
                     ArrayList<String[]> sliceTracingResult = sliceNode.getTracingResult();
                     String hasConnection = "";
-                    for (String[] tracing : sliceTracingResult){
-                        if (!tracing[6].equals("0")){
+                    for (String[] tracing : sliceTracingResult) {
+                        if (!tracing[6].equals("0")) {
                             hasConnection = "    And has connection(s) !\n";
                             break;
                         }
                     }
                     YesNoCancelDialog replaceDialog = new YesNoCancelDialog(new java.awt.Frame(),
                             "Replace traced Soma slice", "Current slice has been traced!\n"
-                                    +hasConnection+"        Want to replace?");
+                            + hasConnection + "        Want to replace?");
                     if (replaceDialog.yesPressed()) {
-                        deleteOneSomaSliceNodeByName(sliceNode.toString());      
+                        deleteOneSomaSliceNodeByName(sliceNode.toString());
 
                     } else {
                         tablePoints = new ArrayList<String[]>();
@@ -10726,11 +10811,11 @@ minCostPathPoints = Functions.getMinCostPath3D(
     }
 
     private void createSpine(String spineNumber, ArrayList<String[]> points) {
-        ntNeuronNode newSpineNode = new ntNeuronNode(spineNumber+"", points);
-        spineTreeModel.insertNodeInto(newSpineNode, rootSpineNode, Integer.parseInt(spineNumber)-1);
+        ntNeuronNode newSpineNode = new ntNeuronNode(spineNumber + "", points);
+        spineTreeModel.insertNodeInto(newSpineNode, rootSpineNode, Integer.parseInt(spineNumber) - 1);
     }
-    
-    private void removeSpine(String spineTag){
+
+    private void removeSpine(String spineTag) {
         //IJ.log("spineTag = "+spineTag);
         ntNeuronNode removeNode = getSpineNode(spineTag);
         //IJ.log("removeNode = "+removeNode.toString());
@@ -10739,38 +10824,40 @@ minCostPathPoints = Functions.getMinCostPath3D(
             //IJ.log("removed ");
         }
     }
-    private String getSpineNumberFromTag(String spineTag){
+
+    private String getSpineNumberFromTag(String spineTag) {
         String spineNumber = spineTag;
-        if (spineTag.contains("/")){
+        if (spineTag.contains("/")) {
             spineNumber = spineTag.split("/")[0];
-        } else if (spineTag.contains("*")){
+        } else if (spineTag.contains("*")) {
             spineNumber = spineTag.split("\\*")[0];
         }
         spineNumber = spineNumber.split("#")[1];
         return spineNumber;
     }
-    private ntNeuronNode getSpineNode (String spineTag){
+
+    private ntNeuronNode getSpineNode(String spineTag) {
         int totalSpine = rootSpineNode.getChildCount();
         String spineNumber = getSpineNumberFromTag(spineTag);
         //IJ.log("#"+spineNumber);
-        if (Integer.parseInt(spineNumber) >= totalSpine){
-            for (int i = totalSpine-1; i>=0; i--){
-                ntNeuronNode spineNode = (ntNeuronNode)rootSpineNode.getChildAt(i);
-                if (spineNumber.equals(spineNode.toString())){
+        if (Integer.parseInt(spineNumber) >= totalSpine) {
+            for (int i = totalSpine - 1; i >= 0; i--) {
+                ntNeuronNode spineNode = (ntNeuronNode) rootSpineNode.getChildAt(i);
+                if (spineNumber.equals(spineNode.toString())) {
                     return spineNode;
                 }
             }
         } else {
-            for (int i = Integer.parseInt(spineNumber)-1; i>=0; i--){
-                ntNeuronNode spineNode = (ntNeuronNode)rootSpineNode.getChildAt(i);
-                if (spineNumber.equals(spineNode.toString())){
-                    return spineNode; 
+            for (int i = Integer.parseInt(spineNumber) - 1; i >= 0; i--) {
+                ntNeuronNode spineNode = (ntNeuronNode) rootSpineNode.getChildAt(i);
+                if (spineNumber.equals(spineNode.toString())) {
+                    return spineNode;
                 }
             }
         }
         return null;
     }
-    
+
     private void createNewBranch(ArrayList<String[]> points) {
         recordTreeExpansionSelectionStatus();
 
@@ -10817,7 +10904,7 @@ minCostPathPoints = Functions.getMinCostPath3D(
             for (int i = 0; i < rootAllSomaNode.getChildCount(); i++) {
                 ntNeuronNode compareNode = (ntNeuronNode) rootAllSomaNode.getChildAt(i);
                 String compareNeuronNumber = compareNode.toString();
-                if (compareNeuronNumber.contains("/")){
+                if (compareNeuronNumber.contains("/")) {
                     compareNeuronNumber = compareNeuronNumber.split("/")[0];
                 }
                 if (NeuronNumber.equals(compareNeuronNumber)) {
@@ -10861,7 +10948,7 @@ minCostPathPoints = Functions.getMinCostPath3D(
 
     private ntNeuronNode getNodeFromNeuronTreeByNodeName(String nodeName) {
         ntNeuronNode node;
-        if (nodeName.contains("/")){ // selected neuron root
+        if (nodeName.contains("/")) { // selected neuron root
             node = getSomaNodeFromNeuronTreeByNeuronNumber(nodeName.split("/")[0]);
         } else if (nodeName.contains("-")) { // selected branch
             String[] names = nodeName.split("-");
@@ -10935,7 +11022,7 @@ minCostPathPoints = Functions.getMinCostPath3D(
             }
             // determine whether a spine needs to be removed
             String spineTag = selectedNodeTracingResult.get(deletePositions[i])[0];
-            if (spineTag.contains(":Spine#")){
+            if (spineTag.contains(":Spine#")) {
                 removeSpine(spineTag);
                 node.setSpine(i, "0");
             }
@@ -10991,7 +11078,7 @@ minCostPathPoints = Functions.getMinCostPath3D(
                 updateTrees();
                 restoreTreeExpansionSelectionStatus();
                 saveHistory();
-                updateDisplay();                
+                updateDisplay();
             }
         }
     }
@@ -11039,7 +11126,7 @@ minCostPathPoints = Functions.getMinCostPath3D(
         }
         return sortedNeuronNumbers;
     }
-    
+
     private ArrayList<String> getSelectedPrimaryNodeName() {
         TreePath[] selectedPaths = neuronList_jTree.getSelectionPaths();
         ArrayList<String> selectedPrimaryNodeNames = new ArrayList<String>();
@@ -11363,7 +11450,7 @@ minCostPathPoints = Functions.getMinCostPath3D(
     private int impWidth, impHeight, impNSlice, impNFrame;
     private int crossX, crossY, crossZ, roiXmin, roiYmin, zProjInterval, zProjXY;
     private String editTargetNodeName = "0";
-    private ArrayList<String[]> tablePoints;    
+    private ArrayList<String[]> tablePoints;
     private int[] startPoint, endPoint;
     private boolean hasStartPt = false, hasEndPt = false;
     private String colorInfo;
@@ -11412,24 +11499,24 @@ minCostPathPoints = Functions.getMinCostPath3D(
     private Overlay[] selectedSomaTraceOL;
     private Overlay[] selectedSomaNameOL;
     private Overlay[] selectedSomaSpineOLextPt;
-    
+
     private final int roiSearchRange = 8;
     private Line xyHL, xyVL;
-    private Roi startBoxXY, endBoxXY;    
+    private Roi startBoxXY, endBoxXY;
     private final String[] pointColumnNames = {"Type", "X", "Y", "Z", "Radius", "Synapse?", "Connection"};
     private DefaultTableModel pointTableModel;
     private ntPointSelectionListener pointSelectionListener;
 //    private ntPointTableModelListener pointTableModelListener;
     public static ntNeuronNode rootNeuronNode, rootAllSomaNode, rootDisplaySomaNode, rootSpineNode;
     private DefaultTreeModel neuronTreeModel, allSomaTreeModel, displaySomaTreeModel, spineTreeModel;
-    private JTree spineList_jTree;    
+    private JTree spineList_jTree;
     private ntNeuriteTreeSelectionListener neuriteTreeSlectionListener;
     private ntNeuriteTreeExpansionListener neuriteTreeExpansionListener;
     private ntSomaTreeSelectionListener somaTreeSlectionListener;
     private float colorThreshold;
     private float intensityThreshold;
     private int xyRadius, zRadius, outLinkXYradius;
-    private int extendDisplayPoints;    
+    private int extendDisplayPoints;
     private float lineWidthOffset, allSomaLine, somaLine, allNeuronLine, neuronLine, arborLine, branchLine, allSpineLine, spineLine, pointBoxLine;
     private int pointBoxRadius;
     private double allSynapseRadius, synapseRadius, allSynapseSize, synapseSize;// = synapseRadius*2+1  
@@ -11437,7 +11524,7 @@ minCostPathPoints = Functions.getMinCostPath3D(
     //private boolean manualTrace = true, semiAutoTrace = false, autoTrace = false;
     private final int xyExtension = 21, zExtension = 7;
     private final double rho = 0.2d;
-    private final String defaultInfo = "Information";    
+    private final String defaultInfo = "Information";
     private final String endPtTooFarError = "No path found. Pick a closer END point!";
     private final String pickNextEndPt = "Pick next END point to continue tracing!";
     private final ArrayList<String> expandedNeuronNames = new ArrayList<String>();
@@ -11548,12 +11635,12 @@ minCostPathPoints = Functions.getMinCostPath3D(
 
             // overlay all neurons            
             if (overlayAllNeuron_jCheckBox.isSelected()
-                    ||overlayAllSynapse_jCheckBox.isSelected()) {
+                    || overlayAllSynapse_jCheckBox.isSelected()) {
                 if (overlayAllPoints_jCheckBox.isSelected()) {
-                    getAllNeuronAndNameOLMultiThread(allNeuronTraceOL, 
+                    getAllNeuronAndNameOLMultiThread(allNeuronTraceOL,
                             allNeuronNameOL, allNeuronSynapseOL, allNeuronConnectedOL, allNeuronSpineOL);
                 } else {
-                    getAllNeuronAndNameOLextPtMultiThread(allNeuronTraceOLextPt, 
+                    getAllNeuronAndNameOLextPtMultiThread(allNeuronTraceOLextPt,
                             allNeuronNameOLextPt, allNeuronSynapseOL, allNeuronConnectedOL, allNeuronSpineOLextPt, extendDisplayPoints);
                     for (int j = 0; j < impNSlice; j++) {
                         if (allNeuronTraceOLextPt[j] != null) {
@@ -11576,13 +11663,13 @@ minCostPathPoints = Functions.getMinCostPath3D(
             }
 
             // overlay selected neuron(s)
-            if (overlaySelectedNeuron_jCheckBox.isSelected() 
+            if (overlaySelectedNeuron_jCheckBox.isSelected()
                     || overlaySelectedSynapse_jCheckBox.isSelected()) {
                 if (overlayAllSelectedPoints_jCheckBox.isSelected()) {
-                    getSelectedNeuronAndNameOLMultiThread(selectedNeuronTraceOL, 
+                    getSelectedNeuronAndNameOLMultiThread(selectedNeuronTraceOL,
                             selectedNeuronNameOL, selectedNeuronSynapseOL, selectedNeuronConnectedOL, selectedNeuronSpineOL);
                 } else {
-                    getSelectedNeuronAndNameOLextPtMultiThread(selectedNeuronTraceOLextPt, 
+                    getSelectedNeuronAndNameOLextPtMultiThread(selectedNeuronTraceOLextPt,
                             selectedNeuronNameOLextPt, selectedNeuronSynapseOL, selectedNeuronConnectedOL, selectedNeuronSpineOLextPt, extendDisplayPoints);
                     for (int j = 0; j < impNSlice; j++) {
                         if (selectedNeuronTraceOLextPt[j] != null) {
@@ -11608,10 +11695,10 @@ minCostPathPoints = Functions.getMinCostPath3D(
             if (overlaySelectedArbor_jCheckBox.isSelected()
                     || overlaySelectedSynapse_jCheckBox.isSelected()) {
                 if (overlayAllSelectedPoints_jCheckBox.isSelected()) {
-                    getSelectedArborAndNameOLMultiThread(selectedArborTraceOL, 
+                    getSelectedArborAndNameOLMultiThread(selectedArborTraceOL,
                             selectedArborNameOL, selectedArborSynapseOL, selectedArborConnectedOL, selectedArborSpineOL);
                 } else {
-                    getSelectedArborAndNameOLextPtMultiThread(selectedArborTraceOLextPt, 
+                    getSelectedArborAndNameOLextPtMultiThread(selectedArborTraceOLextPt,
                             selectedArborNameOLextPt, selectedArborSynapseOL, selectedArborConnectedOL, selectedArborSpineOLextPt, extendDisplayPoints);
                     for (int j = 0; j < impNSlice; j++) {
                         if (selectedArborTraceOLextPt[j] != null) {
@@ -11639,10 +11726,10 @@ minCostPathPoints = Functions.getMinCostPath3D(
                     || overlaySelectedName_jCheckBox.isSelected()
                     || overlaySelectedSynapse_jCheckBox.isSelected()) {
                 if (overlayAllSelectedPoints_jCheckBox.isSelected() || overlayAllPoints_jCheckBox.isSelected()) {
-                    getSelectedBranchAndNameOLMultiThread(selectedBranchTraceOL, 
+                    getSelectedBranchAndNameOLMultiThread(selectedBranchTraceOL,
                             selectedBranchNameOL, selectedBranchSynapseOL, selectedBranchConnectedOL, selectedBranchSpineOL);
                 } else if (!overlayAllSelectedPoints_jCheckBox.isSelected()) {
-                    getSelectedBranchAndNameOLextPtMultiThread(selectedBranchTraceOLextPt, 
+                    getSelectedBranchAndNameOLextPtMultiThread(selectedBranchTraceOLextPt,
                             selectedBranchNameOLextPt, selectedBranchSynapseOL, selectedBranchConnectedOL, selectedBranchSpineOLextPt, extendDisplayPoints);
                     for (int j = 0; j < impNSlice; j++) {
                         if (selectedBranchTraceOLextPt[j] != null) {
@@ -11665,8 +11752,8 @@ minCostPathPoints = Functions.getMinCostPath3D(
             }
 
             // overlay all somas
-            if (overlayAllSoma_jCheckBox.isSelected()||overlayAllSynapse_jCheckBox.isSelected()) {
-                getAllSomaAndNameOLextPtMultiThread(allSomaTraceOL, allSomaNameOL, 
+            if (overlayAllSoma_jCheckBox.isSelected() || overlayAllSynapse_jCheckBox.isSelected()) {
+                getAllSomaAndNameOLextPtMultiThread(allSomaTraceOL, allSomaNameOL,
                         allSomaSynapseOL, allSomaConnectedOL, allSomaSpineOLextPt, !overlayAllPoints_jCheckBox.isSelected());
             }
 
@@ -11675,7 +11762,7 @@ minCostPathPoints = Functions.getMinCostPath3D(
                     || overlayAllName_jCheckBox.isSelected()
                     || overlaySelectedName_jCheckBox.isSelected()
                     || overlaySelectedSynapse_jCheckBox.isSelected()) {
-                getSelectedSomaAndNameOLextPtMultiThread(selectedSomaTraceOL, selectedSomaNameOL, 
+                getSelectedSomaAndNameOLextPtMultiThread(selectedSomaTraceOL, selectedSomaNameOL,
                         selectedSomaSynapseOL, selectedSomaConnectedOL, selectedSomaSpineOLextPt, !overlayAllSelectedPoints_jCheckBox.isSelected());
             }
 
@@ -11684,11 +11771,12 @@ minCostPathPoints = Functions.getMinCostPath3D(
             //IJ.log("total display update time = "+(endTime-startTime));
         }
     }
-    
+
     public java.util.List<Roi> auxOverlay;
-    private void updateOverlay(){
+
+    private void updateOverlay() {
         displayOL.clear();
-        
+
         // overlay all neurons
         if (overlayAllNeuron_jCheckBox.isSelected()) {
             add2displayOL(allNeuronTraceOL);
@@ -11696,7 +11784,7 @@ minCostPathPoints = Functions.getMinCostPath3D(
         if (overlayAllName_jCheckBox.isSelected()) {
             add2displayOL(allNeuronNameOL);
         }
-        if (overlayAllSpine_jCheckBox.isSelected()){
+        if (overlayAllSpine_jCheckBox.isSelected()) {
             add2displayOL(allNeuronSpineOL);
         }
         if (overlayAllSynapse_jCheckBox.isSelected()) {
@@ -11705,7 +11793,7 @@ minCostPathPoints = Functions.getMinCostPath3D(
         if (overlayAllConnection_jCheckBox.isSelected()) {
             add2displayOL(allNeuronConnectedOL);
         }
-        
+
         // overlay selected whole neuron(s)
         if (overlaySelectedNeuron_jCheckBox.isSelected()) {
             add2displayOL(selectedNeuronTraceOL);
@@ -11723,7 +11811,6 @@ minCostPathPoints = Functions.getMinCostPath3D(
             add2displayOL(selectedNeuronNameOL);
         }
 
-        
         // overlay selected arbor(s)
         if (overlaySelectedArbor_jCheckBox.isSelected()) {
             add2displayOL(selectedArborTraceOL);
@@ -11740,7 +11827,7 @@ minCostPathPoints = Functions.getMinCostPath3D(
         if (overlaySelectedName_jCheckBox.isSelected()) {
             add2displayOL(selectedArborNameOL);
         }
-        
+
         // overlay selected branch(es)
         if (overlaySelectedBranch_jCheckBox.isSelected()) {
             add2displayOL(selectedBranchTraceOL);
@@ -11760,7 +11847,7 @@ minCostPathPoints = Functions.getMinCostPath3D(
                 add2displayOL(selectedBranchNameOL);
             }
         }
-        
+
         // overlay all somas
         if (overlayAllSoma_jCheckBox.isSelected()) {
             for (int j = 0; j < impNSlice; j++) {
@@ -11806,7 +11893,7 @@ minCostPathPoints = Functions.getMinCostPath3D(
                     }
                 }
             }
-        }        
+        }
         if (overlaySelectedSpine_jCheckBox.isSelected()) {
             for (int j = 0; j < impNSlice; j++) {
                 if (selectedSomaSpineOLextPt[j] != null) {
@@ -11820,21 +11907,21 @@ minCostPathPoints = Functions.getMinCostPath3D(
         if (overlaySelectedConnection_jCheckBox.isSelected()) {
             add2displayOL(selectedSomaConnectedOL);
         }
-        
+
         // overlay points
         if (overlayPointBox_jCheckBox.isSelected()) {
             addPointBoxes(pointBoxRadius);
         }
-        
+
         if (this.auxOverlay != null) {
             for (Roi i : auxOverlay) {
                 displayOL.add(i);
             }
         }
-        
+
         cns.setOverlay(displayOL);
     }
-    
+
     // <editor-fold defaultstate="collapsed" desc="inner Class for multi-threading -- getAllNeuronAndNameOL">
     private void getAllNeuronAndNameOLMultiThread(
             Overlay neuronTraceOL, Overlay neuronNameOL, Overlay neuronSynapseOL, Overlay neuronConnectedOL, Overlay allNeuronSpineOL) {
@@ -11911,7 +11998,7 @@ minCostPathPoints = Functions.getMinCostPath3D(
         int startNode, endNode;
 
         public GetAllNeuronAndNameOLthread(
-                Overlay neuronTraceOL, Overlay neuronNameOL, Overlay neuronSynapseOL, Overlay neuronConnectedOL, 
+                Overlay neuronTraceOL, Overlay neuronNameOL, Overlay neuronSynapseOL, Overlay neuronConnectedOL,
                 Overlay allNeuronSpineOL, int startNode, int endNode
         ) {
             this.neuronTraceOL = neuronTraceOL;
@@ -11936,9 +12023,8 @@ minCostPathPoints = Functions.getMinCostPath3D(
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="inner Class for multi-threading -- getAllNeuronAndNameOLextPt">
-
     private void getAllNeuronAndNameOLextPtMultiThread(
-            Overlay[] neuronTraceOL, Overlay[] neuronNameOL, Overlay neuronSynapseOL, 
+            Overlay[] neuronTraceOL, Overlay[] neuronNameOL, Overlay neuronSynapseOL,
             Overlay neuronConnectedOL, Overlay[] neuronSpineOL, int extendPoints) {
         int totalChild = rootNeuronNode.getChildCount();
         if (totalChild == 0) {
@@ -11973,21 +12059,23 @@ minCostPathPoints = Functions.getMinCostPath3D(
                                 neuronNameOLs[i], neuronSynapseOLs[i], neuronConnectedOLs[i], neuronSpineOLs[i], start, end, extendPoints);
                 threads[i] = new Thread(getAllNeuronAndNameOLextPt);
             }
-            
-            for(Thread t : threads)
+
+            for (Thread t : threads) {
                 t.start();
-            
-            for(Thread t : threads) {
-                try{
-                    t.join();
-                } catch(Exception e) {}
             }
-            
+
+            for (Thread t : threads) {
+                try {
+                    t.join();
+                } catch (Exception e) {
+                }
+            }
+
             for (int i = 0; i < threadNum; i++) {
                 for (int j = 0; j < impNSlice; j++) {
                     if (neuronTraceOLs[i][j] != null) {
                         for (int n = 0; n < neuronTraceOLs[i][j].size(); n++) {
-                            neuronTraceOL[j].add( neuronTraceOLs[i][j].get(n) );
+                            neuronTraceOL[j].add(neuronTraceOLs[i][j].get(n));
                         }
                     }
                     if (neuronNameOLs[i][j] != null) {
@@ -12001,13 +12089,13 @@ minCostPathPoints = Functions.getMinCostPath3D(
                         }
                     }
                 }
-                
+
                 if (neuronSynapseOLs[i] != null) {
                     for (int n = 0; n < neuronSynapseOLs[i].size(); n++) {
                         neuronSynapseOL.add(neuronSynapseOLs[i].get(n));
                     }
                 }
-                
+
                 if (neuronConnectedOLs[i] != null) {
                     for (int n = 0; n < neuronConnectedOLs[i].size(); n++) {
                         neuronConnectedOL.add(neuronConnectedOLs[i].get(n));
@@ -12019,7 +12107,7 @@ minCostPathPoints = Functions.getMinCostPath3D(
             getOneWholeNeuronRoiExtPt(neuronTraceOL, neuronNameOL, neuronSynapseOL, neuronConnectedOL, neuronSpineOL, childNode, allNeuronLine, allSpineLine, allSynapseRadius, allSynapseSize, extendPoints);
         }
     }
-    
+
     class GetAllNeuronAndNameOLExtPtThread extends Thread {
 
         Overlay[] neuronTraceOL, neuronNameOL, neuronSpineOL;
@@ -12138,7 +12226,7 @@ minCostPathPoints = Functions.getMinCostPath3D(
                     (ntNeuronNode) selectedNodes.get(0), neuronLine, spineLine, synapseRadius, synapseSize);
         }
     }
-        
+
     class GetSelectedNeuronAndNameOLthread extends Thread {
 
         Overlay neuronTraceOL, neuronNameOL, neuronSynapseOL, neuronConnectedOL, neuronSpineOL;
@@ -12172,7 +12260,6 @@ minCostPathPoints = Functions.getMinCostPath3D(
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="inner Class for multi-threading -- getSelectedNeuronAndNameOLextPt">
-
     private void getSelectedNeuronAndNameOLextPtMultiThread(
             Overlay[] neuronTraceOL, Overlay[] neuronNameOL, Overlay neuronSynapseOL, Overlay neuronConnectedOL, Overlay[] neuronSpineOL,
             int extendPoints) {
@@ -12326,7 +12413,7 @@ minCostPathPoints = Functions.getMinCostPath3D(
             Overlay[] arborTraceOLs = new Overlay[threadNum];
             Overlay[] arborNameOLs = new Overlay[threadNum];
             Overlay[] arborSynapseOLs = new Overlay[threadNum];
-            Overlay[] arborConnectedOLs = new Overlay[threadNum];            
+            Overlay[] arborConnectedOLs = new Overlay[threadNum];
             Overlay[] arborTraceSpineOLs = new Overlay[threadNum];
             Thread[] threads = new Thread[threadNum];
             int increament = (int) Math.ceil((double) totalDisplayNodeNumber / (double) threadNum);
@@ -12344,7 +12431,7 @@ minCostPathPoints = Functions.getMinCostPath3D(
                 }
                 //IJ.log("i = "+i+"; start = "+start+" end = "+end);
                 GetSelectedArborAndNameOLthread getSelectedArborAndNameOL
-                        = new GetSelectedArborAndNameOLthread(arborTraceOLs[i], arborNameOLs[i], 
+                        = new GetSelectedArborAndNameOLthread(arborTraceOLs[i], arborNameOLs[i],
                                 arborSynapseOLs[i], arborConnectedOLs[i], arborTraceSpineOLs[i], selectedNodes, start, end);
                 threads[i] = new Thread(getSelectedArborAndNameOL);
             }
@@ -12419,7 +12506,6 @@ minCostPathPoints = Functions.getMinCostPath3D(
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="inner Class for multi-threading -- getSelectedArborAndNameOLextPt">
-
     private void getSelectedArborAndNameOLextPtMultiThread(
             Overlay[] arborTraceOL, Overlay[] arborNameOL, Overlay arborSynapseOL, Overlay arborConnectedOL,
             Overlay[] arborSpineOL, int extendPoints) {
@@ -12445,7 +12531,7 @@ minCostPathPoints = Functions.getMinCostPath3D(
             Overlay[][] arborTraceOLs = new Overlay[threadNum][impNSlice];
             Overlay[][] arborNameOLs = new Overlay[threadNum][impNSlice];
             Overlay[] arborSynapseOLs = new Overlay[threadNum];
-            Overlay[] arborConnectedOLs = new Overlay[threadNum];            
+            Overlay[] arborConnectedOLs = new Overlay[threadNum];
             Overlay[][] arborSpineOLs = new Overlay[threadNum][impNSlice];
             Thread[] threads = new Thread[threadNum];
             int increament = (int) Math.ceil((double) totalDisplayNodeNumber / (double) threadNum);
@@ -12569,7 +12655,7 @@ minCostPathPoints = Functions.getMinCostPath3D(
             Overlay[] branchTraceOLs = new Overlay[threadNum];
             Overlay[] branchNameOLs = new Overlay[threadNum];
             Overlay[] branchSynapseOLs = new Overlay[threadNum];
-            Overlay[] branchConnectedOLs = new Overlay[threadNum];            
+            Overlay[] branchConnectedOLs = new Overlay[threadNum];
             Overlay[] branchSpineOLs = new Overlay[threadNum];
             Thread[] threads = new Thread[threadNum];
             int increament = (int) Math.ceil((double) totalDisplayNodeNumber / (double) threadNum);
@@ -12670,7 +12756,6 @@ minCostPathPoints = Functions.getMinCostPath3D(
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="inner Class for multi-threading -- getSelectedBranchAndNameOLextPt">
-
     private void getSelectedBranchAndNameOLextPtMultiThread(
             Overlay[] branchTraceOL, Overlay[] branchNameOL, Overlay branchSynapseOL, Overlay branchConnectedOL,
             Overlay[] branchSpineOL, int extendPoints) {
@@ -12690,7 +12775,7 @@ minCostPathPoints = Functions.getMinCostPath3D(
             Overlay[][] branchTraceOLs = new Overlay[threadNum][impNSlice];
             Overlay[][] branchNameOLs = new Overlay[threadNum][impNSlice];
             Overlay[] branchSynapseOLs = new Overlay[threadNum];
-            Overlay[] branchConnectedOLs = new Overlay[threadNum];            
+            Overlay[] branchConnectedOLs = new Overlay[threadNum];
             Overlay[][] branchSpineOLs = new Overlay[threadNum][impNSlice];
             Thread[] threads = new Thread[threadNum];
             int increament = (int) Math.ceil((double) totalDisplayNodeNumber / (double) threadNum);
@@ -12741,7 +12826,7 @@ minCostPathPoints = Functions.getMinCostPath3D(
                         for (int n = 0; n < branchSpineOLs[i][j].size(); n++) {
                             branchSpineOL[j].add(branchSpineOLs[i][j].get(n));
                         }
-                    }                   
+                    }
                 }
                 if (branchSynapseOLs[i] != null) {
                     for (int n = 0; n < branchSynapseOLs[i].size(); n++) {
@@ -12804,7 +12889,7 @@ minCostPathPoints = Functions.getMinCostPath3D(
 
     // <editor-fold defaultstate="collapsed" desc="inner Class for multi-threading -- getAllSomaAndNameOL">
     private void getAllSomaAndNameOLextPtMultiThread(
-            Overlay[] somaTraceOL, Overlay[] somaNameOL, Overlay somaSynapseOL, Overlay somaConnectedOL, 
+            Overlay[] somaTraceOL, Overlay[] somaNameOL, Overlay somaSynapseOL, Overlay somaConnectedOL,
             Overlay[] somaSpineOL, boolean singleSliceSynapse) {
         int totalChild = rootNeuronNode.getChildCount();
         if (totalChild == 0) {
@@ -12835,7 +12920,7 @@ minCostPathPoints = Functions.getMinCostPath3D(
                 }
                 //IJ.log("i = "+i+"; start = "+start+" end = "+end);
                 GetAllSomaAndNameOLthread getAllSomaAndNameOL
-                        = new GetAllSomaAndNameOLthread(somaTraceOLs[i], somaNameOLs[i], somaSynapseOLs[i], 
+                        = new GetAllSomaAndNameOLthread(somaTraceOLs[i], somaNameOLs[i], somaSynapseOLs[i],
                                 somaConnectedOLs[i], somaSpineOLs[i], start, end, singleSliceSynapse);
                 threads[i] = new Thread(getAllSomaAndNameOL);
             }
@@ -12879,11 +12964,11 @@ minCostPathPoints = Functions.getMinCostPath3D(
             }
         } else {
             ntNeuronNode childNode = (ntNeuronNode) (rootNeuronNode.getChildAt(0));
-            getOneWholeSomaRoi(somaTraceOL, somaNameOL, somaSynapseOL, somaConnectedOL, somaSpineOL, 
+            getOneWholeSomaRoi(somaTraceOL, somaNameOL, somaSynapseOL, somaConnectedOL, somaSpineOL,
                     childNode, allSomaLine, allSpineLine, allSynapseRadius, allSynapseSize, singleSliceSynapse);
         }
     }
-        
+
     class GetAllSomaAndNameOLthread extends Thread {
 
         Overlay[] somaTraceOL, somaNameOL, somaSpineOL;
@@ -12910,7 +12995,7 @@ minCostPathPoints = Functions.getMinCostPath3D(
             // overlay neuron traces (neuronNode is the soma node)
             for (int k = startNode; k <= endNode; k++) {
                 ntNeuronNode somaNode = (ntNeuronNode) (rootAllSomaNode.getChildAt(k));
-                getOneWholeSomaRoi(somaTraceOL, somaNameOL, somaSynapseOL, somaConnectedOL, somaSpineOL, 
+                getOneWholeSomaRoi(somaTraceOL, somaNameOL, somaSynapseOL, somaConnectedOL, somaSpineOL,
                         somaNode, allSomaLine, allSpineLine, allSynapseRadius, allSynapseSize, singleSliceSynapse);
             }
         }
@@ -12919,9 +13004,8 @@ minCostPathPoints = Functions.getMinCostPath3D(
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="inner Class for multi-threading -- getSelectedSomaAndNameOL">
-
     private void getSelectedSomaAndNameOLextPtMultiThread(
-            Overlay[] somaTraceOL, Overlay[] somaNameOL, Overlay somaSynapseOL, 
+            Overlay[] somaTraceOL, Overlay[] somaNameOL, Overlay somaSynapseOL,
             Overlay somaConnectedOL, Overlay[] somaSpineOL, boolean singleSliceSynapse) {
         // retreive all selected paths to be displayed
         if (neuronList_jTree.getSelectionCount() == 0) {
@@ -12944,7 +13028,7 @@ minCostPathPoints = Functions.getMinCostPath3D(
             Overlay[][] somaTraceOLs = new Overlay[threadNum][impNSlice];
             Overlay[][] somaNameOLs = new Overlay[threadNum][impNSlice];
             Overlay[] somaSynapseOLs = new Overlay[threadNum];
-            Overlay[] somaConnectedOLs = new Overlay[threadNum];  
+            Overlay[] somaConnectedOLs = new Overlay[threadNum];
             Overlay[][] somaSpineOLs = new Overlay[threadNum][impNSlice];
             Thread[] threads = new Thread[threadNum];
             int increament = (int) Math.ceil((double) totalDisplayNodeNumber / (double) threadNum);
@@ -12964,8 +13048,8 @@ minCostPathPoints = Functions.getMinCostPath3D(
                 }
                 //IJ.log("i = "+i+"; start = "+start+" end = "+end);
                 GetSelectedSomaAndNameOLthread getSelectedSomaAndNameOL
-                        = new GetSelectedSomaAndNameOLthread(somaTraceOLs[i], somaNameOLs[i], somaSynapseOLs[i], 
-                                somaConnectedOLs[i],somaSpineOLs[i], selectedNodes, start, end, singleSliceSynapse);
+                        = new GetSelectedSomaAndNameOLthread(somaTraceOLs[i], somaNameOLs[i], somaSynapseOLs[i],
+                                somaConnectedOLs[i], somaSpineOLs[i], selectedNodes, start, end, singleSliceSynapse);
                 threads[i] = new Thread(getSelectedSomaAndNameOL);
             }
             for (int i = 0; i < threadNum; i++) {
@@ -13009,12 +13093,13 @@ minCostPathPoints = Functions.getMinCostPath3D(
             }
         } else if (totalDisplayNodeNumber == 1) {
             ntNeuronNode childNode = (ntNeuronNode) (selectedNodes.get(0));
-            getOneWholeSomaRoi(somaTraceOL, somaNameOL, somaSynapseOL, somaConnectedOL, somaSpineOL, 
+            getOneWholeSomaRoi(somaTraceOL, somaNameOL, somaSynapseOL, somaConnectedOL, somaSpineOL,
                     childNode, somaLine, spineLine, synapseRadius, synapseSize, singleSliceSynapse);
         }
     }
 
     class GetSelectedSomaAndNameOLthread extends Thread {
+
         Overlay[] somaTraceOL, somaNameOL, somaSpineOL;
         Overlay somaSynapseOL, somaConnectedOL;
         ArrayList<ntNeuronNode> selectedSomaNodes;
@@ -13042,14 +13127,14 @@ minCostPathPoints = Functions.getMinCostPath3D(
             // overlay neuron traces (neuronNode is the soma node)
             for (int k = startNode; k <= endNode; k++) {
                 ntNeuronNode somaNode = (ntNeuronNode) (selectedSomaNodes.get(k));
-                getOneWholeSomaRoi(somaTraceOL, somaNameOL, somaSynapseOL, somaConnectedOL, somaSpineOL, 
+                getOneWholeSomaRoi(somaTraceOL, somaNameOL, somaSynapseOL, somaConnectedOL, somaSpineOL,
                         somaNode, somaLine, spineLine, synapseRadius, synapseSize, singleSliceSynapse);
             }
         }
 
     }
     // </editor-fold>
-   
+
     private void removeRedundantNode(ArrayList<ntNeuronNode> nodeArray) {
         //long sT = System.currentTimeMillis();
         for (int i = nodeArray.size() - 1; i >= 0; i--) {
@@ -13248,5 +13333,5 @@ minCostPathPoints = Functions.getMinCostPath3D(
         }
     }
     // </editor-fold>
-    
+
 }

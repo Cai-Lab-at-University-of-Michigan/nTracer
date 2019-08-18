@@ -33,17 +33,18 @@ public class ChannelTool2 extends PlugInDialog implements PlugIn, ItemListener, 
     private Choice choice;
     private Checkbox[] checkbox;
     private Button moreButton;
-    private static ChannelTool2 instance;
-    private int id;
+    private ChannelTool2 instance; // make this not static to allow multiple instances -LAW
+    //private int id;
     private static Point location;
     private PopupMenu pm;
     private CompositeImage imp;
-
-    public ChannelTool2(ImagePlus imp_in) {
-        super("Channels");
+    
+    public ChannelTool2(ij.ImagePlus imp_in, String label) {
+        super(label);
 
         if (imp_in == null || !imp_in.isComposite()) {
             //Print an error message to say this is wrong
+            System.err.println( "Error finding composite image in Channels tool!");
             return;
         } else {
             imp = (CompositeImage) imp_in;
@@ -53,6 +54,7 @@ public class ChannelTool2 extends PlugInDialog implements PlugIn, ItemListener, 
             instance.toFront();
             return;
         }
+        
         ImageJ ij = IJ.getInstance();
         WindowManager.addWindow(this);
         instance = this;
@@ -120,7 +122,7 @@ public class ChannelTool2 extends PlugInDialog implements PlugIn, ItemListener, 
         } else {
             setLocation(location);
         }
-        show();
+        show(); //depricated interface
     }
 
     public void update() {
@@ -156,7 +158,7 @@ public class ChannelTool2 extends PlugInDialog implements PlugIn, ItemListener, 
         choice.select(index);
     }
 
-    public static void updateChannels() {
+    public void updateChannels() { // remove static declaration
         if (instance != null) {
             instance.update();
         }

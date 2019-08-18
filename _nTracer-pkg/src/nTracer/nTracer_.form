@@ -1245,7 +1245,7 @@
                       <Component id="selected_jPanel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="206" max="32767" attributes="0"/>
+                      <EmptySpace pref="198" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -2151,7 +2151,7 @@
                       <Component id="jPanel4" min="-2" pref="93" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="channel_jPanel" min="-2" pref="176" max="-2" attributes="0"/>
-                      <EmptySpace pref="91" max="32767" attributes="0"/>
+                      <EmptySpace pref="83" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -2719,10 +2719,10 @@
                           <Component id="zProjectionInterval_jLabel" min="-2" pref="30" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="zProjectionInterval_jSpinner" min="-2" pref="36" max="-2" attributes="0"/>
-                          <EmptySpace max="32767" attributes="0"/>
+                          <EmptySpace pref="60" max="32767" attributes="0"/>
                           <Component id="xyProjectionArea_jLabel" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Component id="xyProjectionArea_jSpinner" min="-2" pref="52" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="xyProjectionArea_jSpinner" min="-2" pref="58" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -2781,15 +2781,15 @@
                   <Properties>
                     <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
                       <SpinnerModel type="list">
-                        <ListItem value="512"/>
-                        <ListItem value="800"/>
-                        <ListItem value="1024"/>
-                        <ListItem value="1300"/>
-                        <ListItem value="1600"/>
-                        <ListItem value="1800"/>
-                        <ListItem value="2048"/>
-                        <ListItem value="2300"/>
-                        <ListItem value="2600"/>
+                        <ListItem value="500"/>
+                        <ListItem value="1000"/>
+                        <ListItem value="1500"/>
+                        <ListItem value="2000"/>
+                        <ListItem value="2500"/>
+                        <ListItem value="3000"/>
+                        <ListItem value="3500"/>
+                        <ListItem value="4000"/>
+                        <ListItem value="4500"/>
                       </SpinnerModel>
                     </Property>
                     <Property name="focusable" type="boolean" value="false"/>
