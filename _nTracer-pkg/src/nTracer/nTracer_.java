@@ -80,7 +80,7 @@ public class nTracer_
         MouseWheelListener,
         KeyListener {
 
-    public static final String VERSION = "nTracer 1.3.3";
+    public static final String VERSION = "nTracer 1.3.4";
 
     private int last_current_z;
     private Instant last_z_update_time;
@@ -538,6 +538,7 @@ public class nTracer_
         jComboBox1 = new javax.swing.JComboBox<>();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
         tracing_jPanel = new javax.swing.JPanel();
         tracingMethod_jPanel = new javax.swing.JPanel();
         manualTracing_jRadioButton = new javax.swing.JRadioButton();
@@ -1616,6 +1617,13 @@ public class nTracer_
 
         jLabel7.setText("ROI Color:");
 
+        jButton2.setText("Clear ROIs");
+        jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton2MouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -1628,9 +1636,11 @@ public class nTracer_
                         .addComponent(jLabel7)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -1644,7 +1654,9 @@ public class nTracer_
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(jLabel6))
-                .addContainerGap(9, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton2)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout overlay_jPanelLayout = new javax.swing.GroupLayout(overlay_jPanel);
@@ -1669,7 +1681,7 @@ public class nTracer_
                 .addComponent(selected_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(198, Short.MAX_VALUE))
+                .addContainerGap(153, Short.MAX_VALUE))
         );
 
         jPanel1.getAccessibleContext().setAccessibleName("");
@@ -2354,7 +2366,7 @@ public class nTracer_
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(channel_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(83, Short.MAX_VALUE))
+                .addContainerGap(72, Short.MAX_VALUE))
         );
 
         main_jTabbedPane.addTab("Tracing   ", tracing_jPanel);
@@ -7222,6 +7234,13 @@ public class nTracer_
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
+    private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
+        if( auxOverlay == null ) return;
+        
+        auxOverlay.clear();
+        updateOverlay();
+    }//GEN-LAST:event_jButton2MouseClicked
+
     private void combineSomaAndBranchesOfTwoNeuronTreeSomas(ntNeuronNode targetNeuronSomaNode, ntNeuronNode sourceNeuronSomaNode) {
         String targetSNeuronNumber = targetNeuronSomaNode.getNeuronNumber();
         String sourceNeuronNumber = sourceNeuronSomaNode.getNeuronNumber();
@@ -8593,7 +8612,7 @@ public class nTracer_
     @Override
     public void keyReleased(KeyEvent keyevent) {
         if ((int) keyevent.getKeyChar() == 32) {
-            IJ.setTool("freehand");
+            IJ.setTool("freeline");
             //Toolbar.getInstance().setTool("freehand");
             //Toolbar.getInstance().setTool(Toolbar.getInstance().getToolId(ntToolTrace.toolName));
         }
@@ -11304,6 +11323,7 @@ minCostPathPoints = Functions.getMinCostPath3D(
     private javax.swing.JLabel intensityThreshold_jLabel;
     private javax.swing.JSpinner intensityThreshold_jSpinner;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JCheckBox jCheckBox9;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;

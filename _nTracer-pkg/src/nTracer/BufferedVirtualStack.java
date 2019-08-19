@@ -256,18 +256,23 @@ public class BufferedVirtualStack extends VirtualStack implements PlugIn {
         
         ImageProcessor to_return = null;
         if( processor_buffer.containsKey(n) ){
-            //IJ.log("Cache HIT (" + n + ") " + processor_buffer.size()) ;
+            IJ.log("Cache HIT (" + n + ") " + processor_buffer.size()) ;
             to_return = processor_buffer.get(n);
         } else {
-            //IJ.log( "Cache MISS (" + n + ")");
+            IJ.log( "Cache MISS (" + n + ")");
             to_return = getProcessor_internal(n);
             processor_buffer.put(n, to_return);
             processor_fifo.add(n);
         }
+        
         this.gui.updateStatus();
         test_lock.unlock();
+
+        return to_return.duplicate();
+        //return to_return_real;
         
-        return to_return;
+
+//        return to_return;
     }
     
     public ImageProcessor getProcessor_internal(int n) {
