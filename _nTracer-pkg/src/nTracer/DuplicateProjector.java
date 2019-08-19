@@ -22,6 +22,7 @@ import ij.gui.*;
 import ij.measure.Calibration;
 import java.util.ArrayList;
 
+
 public class DuplicateProjector {
 
     public static ImagePlus duplicateAndProject(ImagePlus imp, ImagePlus impZproj, int firstC, int lastC, int firstZ, int lastZ, Roi roi) {

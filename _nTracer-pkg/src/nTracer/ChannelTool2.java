@@ -175,6 +175,7 @@ public class ChannelTool2 extends PlugInDialog implements PlugIn, ItemListener, 
     }
 
     public void itemStateChanged(ItemEvent e) {
+        WindowManager.setCurrentWindow( imp.getWindow() );
         if (imp == null) {
             return;
         }
@@ -290,8 +291,10 @@ public class ChannelTool2 extends PlugInDialog implements PlugIn, ItemListener, 
             Point bloc = moreButton.getLocation();
             pm.show(this, bloc.x, bloc.y);
         } else if (command.equals("Convert to RGB")) {
+            WindowManager.setCurrentWindow( imp.getWindow() );
             IJ.doCommand("Stack to RGB");
         } else {
+            WindowManager.setCurrentWindow( imp.getWindow() );
             IJ.doCommand(command);
         }
     }

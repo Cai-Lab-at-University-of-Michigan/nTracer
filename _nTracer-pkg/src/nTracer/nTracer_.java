@@ -158,7 +158,7 @@ public class nTracer_
             return;
         }
 
-        IJ.run("Brightness/Contrast...");
+        //IJ.run("Brightness/Contrast...");
         IJ.run("Misc...", "divide=Infinity require");
         //IJ.run("Synchronize Windows", "");        
 
@@ -171,6 +171,9 @@ public class nTracer_
 
         mp_channel_window = new ChannelTool2(impZproj, "Maximum Projection");
         mp_channel_window.run("");
+        
+        contrast_window = new ContrastTool2( imp );
+        contrast_window.run( "");
         /* end load channel windows */
 
         MemoryMonitor mm = new MemoryMonitor();
@@ -178,7 +181,8 @@ public class nTracer_
     }
 
     private ChannelTool2 main_channel_window, mp_channel_window;
-
+    private ContrastTool2 contrast_window;
+    
     // <editor-fold defaultstate="collapsed" desc="methods for setting up GUI views and Table/Tree components">
     /**
      * Establish windows style
