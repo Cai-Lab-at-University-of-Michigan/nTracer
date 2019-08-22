@@ -11,17 +11,18 @@ import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * This plugin opens a multi-page TIFF file as a virtual stack. It implements
- * the File/Import/TIFF Virtual Stack command. 
+ * the File/Import/TIFF Virtual Stack command.
  */
 public class BufferedVirtualStack extends VirtualStack implements PlugIn {
+
     protected List<FileInfo> info;
     protected BufferVirtualStackGUI gui;
-    
-    public Map<Integer,ImageProcessor> processor_buffer; // 300 * ~20MB -> ~6GB? 100 * ~30MB -> ~2GB?
-    public int proc_buffer_MAX; 
+
+    public Map<Integer, ImageProcessor> processor_buffer; // 300 * ~20MB -> ~6GB? 100 * ~30MB -> ~2GB?
+    public int proc_buffer_MAX;
     public Queue<Integer> processor_fifo;
     public int buffer_clean_count;
-    
+
     public Lock test_lock;
 
     /* Default constructor. */
@@ -32,8 +33,8 @@ public class BufferedVirtualStack extends VirtualStack implements PlugIn {
         this.processor_fifo = new LinkedList<>();
         this.processor_buffer = new HashMap<>();
         this.info = new ArrayList<>();
-        
-        this.gui = new BufferVirtualStackGUI( this );
+
+        this.gui = new BufferVirtualStackGUI(this);
     }
 
     /* Constructs a FileInfoVirtualStack from a FileInfo object. */
@@ -44,15 +45,15 @@ public class BufferedVirtualStack extends VirtualStack implements PlugIn {
         this.processor_fifo = new LinkedList<>();
         this.processor_buffer = new HashMap<>();
         this.info = new ArrayList<>();
-        
-        info.add( fi );
-        
+
+        info.add(fi);
+
         ImagePlus imp = open();
         if (imp != null) {
             imp.show();
         }
-        
-        this.gui = new BufferVirtualStackGUI( this );
+
+        this.gui = new BufferVirtualStackGUI(this);
     }
 
     /* Constructs a FileInfoVirtualStack from a FileInfo 
@@ -64,15 +65,15 @@ public class BufferedVirtualStack extends VirtualStack implements PlugIn {
         this.processor_fifo = new LinkedList<>();
         this.processor_buffer = new HashMap<>();
         this.info = new ArrayList<>();
-        
-        info.add( fi );
+
+        info.add(fi);
 
         ImagePlus imp = open();
         if (imp != null && show) {
             imp.show();
         }
-        
-        this.gui = new BufferVirtualStackGUI( this );
+
+        this.gui = new BufferVirtualStackGUI(this);
     }
 
     /**
@@ -122,7 +123,7 @@ public class BufferedVirtualStack extends VirtualStack implements PlugIn {
         }
         IJ.showStatus("Decoding TIFF header...");
         try {
-            info = Arrays.asList( td.getTiffInfo() );
+            info = Arrays.asList(td.getTiffInfo());
         } catch (IOException e) {
             String msg = e.getMessage();
             if (msg == null || msg.equals("")) {
@@ -144,7 +145,7 @@ public class BufferedVirtualStack extends VirtualStack implements PlugIn {
     private ImagePlus open() {
         FileInfo fi = info.get(0);
         int n = fi.nImages;
-        
+
         if (info.size() == 1 && n > 1) {
             info = new ArrayList<>();
             long size = fi.width * fi.height * fi.getBytesPerPixel();
@@ -152,16 +153,16 @@ public class BufferedVirtualStack extends VirtualStack implements PlugIn {
                 FileInfo toadd = (FileInfo) fi.clone();
                 toadd.nImages = 1;
                 toadd.longOffset = fi.getOffset() + i * (size + fi.gapBetweenImages);
-                info.add( toadd );
+                info.add(toadd);
             }
         }
-        
+
         FileOpener fo = new FileOpener(info.get(0));
         ImagePlus imp = fo.open(false);
-        if ( getSize() == 1 && fi.fileType == FileInfo.RGB48) {
+        if (getSize() == 1 && fi.fileType == FileInfo.RGB48) {
             return imp;
         }
-        
+
         Properties props = fo.decodeDescriptionString(fi);
         ImagePlus imp2 = new ImagePlus(fi.fileName, this);
         imp2.setFileInfo(fi);
@@ -169,32 +170,32 @@ public class BufferedVirtualStack extends VirtualStack implements PlugIn {
             setBitDepth(imp.getBitDepth());
             imp2.setCalibration(imp.getCalibration());
             imp2.setOverlay(imp.getOverlay());
-            
+
             if (fi.info != null) {
                 imp2.setProperty("Info", fi.info);
             }
-            
+
             int channels = getInt(props, "channels");
             int slices = getInt(props, "slices");
             int frames = getInt(props, "frames");
-            if ( channels * slices * frames == getSize() ) {
+            if (channels * slices * frames == getSize()) {
                 imp2.setDimensions(channels, slices, frames);
                 if (getBoolean(props, "hyperstack")) {
                     imp2.setOpenAsHyperStack(true);
                 }
             }
-            
+
             if (channels > 1 && fi.description != null) {
                 int mode = IJ.COMPOSITE;
-                if ( fi.description.contains("mode=color") ) {
+                if (fi.description.contains("mode=color")) {
                     mode = IJ.COLOR;
-                } else if ( fi.description.contains("mode=gray") ) {
+                } else if (fi.description.contains("mode=gray")) {
                     mode = IJ.GRAYSCALE;
                 }
                 imp2 = new CompositeImage(imp2, mode);
             }
         }
-        
+
         return imp2;
     }
 
@@ -226,79 +227,93 @@ public class BufferedVirtualStack extends VirtualStack implements PlugIn {
         if (n < 1 || n > getSize()) {
             throw new IllegalArgumentException("Argument out of range: " + n);
         }
-        
+
         if (getSize() == 0) {
             return;
         }
-        
-        info.remove(n-1);
+
+        info.remove(n - 1);
     }
 
     /**
      * Returns an ImageProcessor for the specified image, were 1<=n<=nImages.
      * Returns null if the stack is empty.
      */
-    public ImageProcessor getProcessor(int n){
+    public ImageProcessor getProcessor(int n) {
         //IJ.log("Current Cache Size: " + processor_fifo.size());
-        
+
         test_lock.lock();
-        if( processor_fifo.size() > proc_buffer_MAX ) {
+        if (processor_fifo.size() > proc_buffer_MAX) {
             int to_remove = processor_fifo.remove();
             //IJ.log( "\tClearing Cache Item " + to_remove );
-            processor_buffer.remove( to_remove );
-            
+            processor_buffer.remove(to_remove);
+
             buffer_clean_count++;
-            if( buffer_clean_count % 10 == 0 ) {
+            if (buffer_clean_count % 10 == 0) {
                 System.gc();
                 buffer_clean_count = 0;
             }
         }
-        
+
         ImageProcessor to_return = null;
-        if( processor_buffer.containsKey(n) ){
-            IJ.log("Cache HIT (" + n + ") " + processor_buffer.size()) ;
+        if (processor_buffer.containsKey(n)) {
+            IJ.log("Cache HIT (" + n + ") " + processor_buffer.size());
             to_return = processor_buffer.get(n);
         } else {
-            IJ.log( "Cache MISS (" + n + ")");
+            IJ.log("Cache MISS (" + n + ")");
             to_return = getProcessor_internal(n);
             processor_buffer.put(n, to_return);
             processor_fifo.add(n);
         }
-        
+
         this.gui.updateStatus();
         test_lock.unlock();
 
-        return to_return.duplicate();
-        //return to_return_real;
+        //return to_return;
         
-
-//        return to_return;
-    }
-    
-    public ImageProcessor getProcessor_internal(int n) {
-        //IJ.log("Loading Processor " + n + "...");
-        if ( isOutOfRange(n) ) {
-            throw new IllegalArgumentException("Argument out of range: " + n);
+        if( to_return instanceof ByteProcessor ) {
+            ByteProcessor out = new ByteProcessor( to_return.getWidth(), to_return.getHeight(), (byte[]) to_return.getPixels(), to_return.getColorModel() );
+            return out; 
+        } else if( to_return instanceof ShortProcessor ) {
+            ShortProcessor out = new ShortProcessor( to_return.getWidth(), to_return.getHeight(), (short[]) to_return.getPixels(), to_return.getColorModel() );
+            return out; 
+        } else if( to_return instanceof FloatProcessor ) {
+            FloatProcessor out = new FloatProcessor( to_return.getWidth(), to_return.getHeight(), (float[]) to_return.getPixels(), to_return.getColorModel() );
+            return out; 
+        } else if( to_return instanceof ColorProcessor ) {
+            ColorProcessor out = new ColorProcessor( to_return.getWidth(), to_return.getHeight(), (int[]) to_return.getPixels() );
+            return out; 
         }
         
+        return to_return;
+        //return to_return.duplicate(); // This fixes the color error but slows everything tf down
+
+    }
+
+    public ImageProcessor getProcessor_internal(int n) {
+        //IJ.log("Loading Processor " + n + "...");
+        if (isOutOfRange(n)) {
+            throw new IllegalArgumentException("Argument out of range: " + n);
+        }
+
         //if (n>1) IJ.log("  "+(info[n-1].getOffset()-info[n-2].getOffset()));
-        info.get(n-1).nImages = 1; // why is this needed?
-        
+        info.get(n - 1).nImages = 1; // why is this needed?
+
         long t0 = System.currentTimeMillis(); // Used by debug, but doesn't hurt to not use
-        
-        FileOpener fo = new FileOpener( info.get(n-1) );
+
+        FileOpener fo = new FileOpener(info.get(n - 1));
         ImagePlus imp = fo.open(false);
 
         if (IJ.debugMode) {
             t0 = System.currentTimeMillis() - t0; // calc time delta
-            IJ.log( "FileInfoVirtualStack: " + n + ", offset=" + info.get(n-1).getOffset() + ", " + t0 + "ms" );
+            IJ.log("FileInfoVirtualStack: " + n + ", offset=" + info.get(n - 1).getOffset() + ", " + t0 + "ms");
         }
-        
+
         if (imp != null) {
             return imp.getProcessor();
         } else {
             int w = getWidth(), h = getHeight();
-            IJ.log( "Read error or file not found (" + n + "): " + info.get(n-1).directory + " " + info.get(n-1).fileName );
+            IJ.log("Read error or file not found (" + n + "): " + info.get(n - 1).directory + " " + info.get(n - 1).fileName);
             switch (getBitDepth()) {
                 case 8:
                     return new ByteProcessor(w, h);
@@ -318,14 +333,14 @@ public class BufferedVirtualStack extends VirtualStack implements PlugIn {
      * Returns the label of the Nth image.
      */
     public String getSliceLabel(int n) {
-        if ( isOutOfRange(n) ) {
+        if (isOutOfRange(n)) {
             throw new IllegalArgumentException("Argument out of range: " + n);
         }
-        
-        if ( info.get(0).sliceLabels == null || info.get(0).sliceLabels.length != getSize() ) {
+
+        if (info.get(0).sliceLabels == null || info.get(0).sliceLabels.length != getSize()) {
             return null;
         }
-        
+
         return info.get(0).sliceLabels[n - 1];
     }
 
@@ -336,21 +351,21 @@ public class BufferedVirtualStack extends VirtualStack implements PlugIn {
     public int getHeight() {
         return info.get(0).height;
     }
-    
+
     /**
      * Returns the number of images in this stack.
      */
     public int getSize() {
         return info.size();
     }
-    
+
     /**
      * Checks if a given 'n' is a valid processor index
-     * 
+     *
      * @param n a test index variable
      * @return (boolean) True if n is a valid processor, false otherwise
      */
-    public boolean isOutOfRange( int n ) {
+    public boolean isOutOfRange(int n) {
         return n < 1 || n > getSize();
     }
 
@@ -358,8 +373,8 @@ public class BufferedVirtualStack extends VirtualStack implements PlugIn {
      * Adds an image to this stack.
      */
     public synchronized void addImage(FileInfo fileInfo) {
-        info.add( fileInfo );
+        info.add(fileInfo);
     }
-    
+
     //ImagePlus.close();
 }
