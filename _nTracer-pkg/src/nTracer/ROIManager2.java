@@ -89,6 +89,8 @@ public class ROIManager2 extends PlugInFrame implements ActionListener, ItemList
     private double translateX = 10.0;
     private double translateY = 10.0;
     private static String errorMessage;
+    
+    private ImagePlus target = null;
 
     /**
      * Opens the "ROI Manager" window, or activates it if it is already open.
@@ -96,12 +98,12 @@ public class ROIManager2 extends PlugInFrame implements ActionListener, ItemList
      * @see #RoiManager(boolean)
      * @see #getRoiManager
      */
-    public ROIManager2() {
+    public ROIManager2(ImagePlus t) {
         super("ROI Manager");
-        if (instance != null) {
-            WindowManager.toFront(instance);
-            return;
-        }
+        
+        target = t;
+        instance = t.getWindow();
+        
         if (IJ.isMacro() && Interpreter.getBatchModeRoiManager() != null) {
             list = new JList();
             listModel = new DefaultListModel();
@@ -2235,7 +2237,7 @@ public class ROIManager2 extends PlugInFrame implements ActionListener, ItemList
         if (instance != null) {
             return (ROIManager2) instance;
         } else {
-            return new ROIManager2();
+            return new ROIManager2(null);
         }
     }
 

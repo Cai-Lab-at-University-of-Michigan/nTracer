@@ -80,7 +80,7 @@ public class nTracer_
         MouseWheelListener,
         KeyListener {
 
-    public static final String VERSION = "nTracer 1.3.4";
+    public static final String VERSION = "nTracer 1.3.5";
 
     private int last_current_z;
     private Instant last_z_update_time;
@@ -174,6 +174,9 @@ public class nTracer_
         
         contrast_window = new ContrastTool2( imp );
         contrast_window.run( "");
+        
+        roi_window = new ROIManager2( imp );
+        roi_window.run( "" );
         /* end load channel windows */
 
         MemoryMonitor mm = new MemoryMonitor();
@@ -182,6 +185,7 @@ public class nTracer_
 
     private ChannelTool2 main_channel_window, mp_channel_window;
     private ContrastTool2 contrast_window;
+    private ROIManager2 roi_window;
     
     // <editor-fold defaultstate="collapsed" desc="methods for setting up GUI views and Table/Tree components">
     /**
@@ -3323,6 +3327,12 @@ public class nTracer_
             cmp.close();
             imp.close();
             impZproj.close();
+            
+            main_channel_window.close();
+            mp_channel_window.close();
+            contrast_window.close();
+            roi_window.close();
+            
             //imp.flush();
             //imp = null;
             return true;
