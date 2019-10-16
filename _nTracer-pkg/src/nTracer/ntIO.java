@@ -976,11 +976,13 @@ public class ntIO {
             int nCount, String typeIdentifyer, double[] xyzrScales, boolean stdSWC, boolean expSpine) throws IOException {
         try {
             for (int k = 0; k < neuriteParentNode.getChildCount(); k++) {
+                                
                 // get primary branch note and set its type identifier
                 ntNeuronNode primaryBranchNode = (ntNeuronNode) (neuriteParentNode.getChildAt(k));
                 ArrayList<String[]> data = primaryBranchNode.getTracingResult();
                 String[] firstPoint = data.get(0);
-                if (firstPoint[0].equals("Axon")) {
+                System.out.println(firstPoint[0]);
+                if (firstPoint[0].equals("Axon") || firstPoint[0].equals("Neurite")) {
                     typeIdentifyer = "2";
                 }
                 if (firstPoint[0].equals("Dendrite")) {
@@ -1130,7 +1132,7 @@ public class ntIO {
                 ntNeuronNode primaryBranchNode = (ntNeuronNode) (neuriteParentNode.getChildAt(k));
                 ArrayList<String[]> data = primaryBranchNode.getTracingResult();
                 String[] firstPoint = data.get(0);
-                if (firstPoint[0].equals("Axon")) {
+                if (firstPoint[0].equals("Axon") || firstPoint[0].equals("Neurite")) {
                     typeIdentifyer = "2";
                 }
                 if (firstPoint[0].equals("Dendrite")) {
