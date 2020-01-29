@@ -185,20 +185,28 @@
             <Property name="text" type="java.lang.String" value="Analysis"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="logColorRatio_jMenuItem">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Log Neuron Color Ratio"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="logColorRatio_jMenuItemActionPerformed"/>
-              </Events>
-            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="logNormChIntensity_jMenuItem">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Log Neuron Channel Intensity"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="logNormChIntensity_jMenuItemActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem1">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Log Neuron RGB Values"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem1ActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="logColorRatio_jMenuItem">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Log Neuron Color Ratio"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="logColorRatio_jMenuItemActionPerformed"/>
               </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="logNeuronConnection_jMenuItem">
@@ -1558,7 +1566,7 @@
                                       <Component id="overlaySelectedSynapse_jCheckBox" linkSize="33" min="-2" max="-2" attributes="0"/>
                                       <Component id="overlaySelectedSpine_jCheckBox" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <EmptySpace pref="10" max="32767" attributes="0"/>
+                                  <EmptySpace max="32767" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Component id="pointBoxLineWidth_jSpinner" linkSize="48" alignment="0" min="-2" pref="39" max="-2" attributes="0"/>
                                       <Component id="synapseRadius_jSpinner" linkSize="48" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -1568,7 +1576,7 @@
                                       <Component id="neuronLineWidth_jSpinner" linkSize="48" alignment="0" max="32767" attributes="0"/>
                                       <Component id="somaLineWidth_jSpinner" linkSize="48" alignment="0" max="32767" attributes="0"/>
                                   </Group>
-                                  <EmptySpace pref="11" max="32767" attributes="0"/>
+                                  <EmptySpace max="32767" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Component id="pointBoxRadiu_jSpinner" linkSize="48" min="-2" max="-2" attributes="0"/>
                                       <Component id="overlaySelectedConnection_jCheckBox" min="-2" pref="67" max="-2" attributes="0"/>
@@ -2033,10 +2041,8 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Component id="jButton2" pref="140" max="32767" attributes="0"/>
-                              <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                                  <Component id="jComboBox1" max="32767" attributes="0"/>
-                                  <Component id="jButton1" pref="140" max="32767" attributes="0"/>
-                              </Group>
+                              <Component id="jComboBox1" alignment="1" max="32767" attributes="0"/>
+                              <Component id="jButton1" alignment="1" pref="140" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>

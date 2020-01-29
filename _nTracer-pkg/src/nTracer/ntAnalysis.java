@@ -15,6 +15,7 @@ import ij.IJ;
 import ij.gui.PolygonRoi;
 import ij.gui.Roi;
 import ij.measure.Calibration;
+import java.awt.Color;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import static nTracer.nTracer_.getAllPrimaryBranchPoints;
@@ -287,7 +288,9 @@ public class ntAnalysis {
         }
     }
     // log ColorRatio of selected neuron(s)
+    
 
+    
     // log intensity of all traced neurons
     public void logNeuronNormChIntensity() {
         for (int n = 0; n < rootNeuronNode.getChildCount(); n++) {

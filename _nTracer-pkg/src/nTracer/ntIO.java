@@ -505,9 +505,11 @@ public class ntIO {
                         }
                         // load soma data
                         if (nodeName.contains(":")) {
+                            System.out.println( "Node: " + nodeName );
                             String[] parentNames = nodeName.split(":"); // parentName[0] = soma name; parentName[1] = soma Z
                             //IJ.log("load soma "+parentNames[0] + " : " + parentNames[1]);
                             int zPlane = Integer.parseInt(parentNames[1]);
+                            
                             if (zPlane >= 0) {
                                 // insert somaChildNode into somaSomaNode
                                 ArrayList<String[]> somaNodeData = new ArrayList<String[]>();

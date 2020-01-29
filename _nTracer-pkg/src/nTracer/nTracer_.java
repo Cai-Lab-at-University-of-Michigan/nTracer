@@ -657,8 +657,9 @@ public class nTracer_
         exportSynapseFromSelectedNeurons_jMenuItem = new javax.swing.JMenuItem();
         autosaveSetup_jMenuItem = new javax.swing.JMenuItem();
         analysis_jMenu = new javax.swing.JMenu();
-        logColorRatio_jMenuItem = new javax.swing.JMenuItem();
         logNormChIntensity_jMenuItem = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        logColorRatio_jMenuItem = new javax.swing.JMenuItem();
         logNeuronConnection_jMenuItem = new javax.swing.JMenuItem();
         logSomaStatistics_jMenuItem = new javax.swing.JMenuItem();
         model3D_jMenu = new javax.swing.JMenu();
@@ -1517,7 +1518,7 @@ public class nTracer_
                             .addComponent(overlayPointBox_jCheckBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(overlaySelectedSynapse_jCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(overlaySelectedSpine_jCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(selected_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(pointBoxLineWidth_jSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(synapseRadius_jSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1526,7 +1527,7 @@ public class nTracer_
                             .addComponent(arborLineWidth_jSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(neuronLineWidth_jSpinner)
                             .addComponent(somaLineWidth_jSpinner))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(selected_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(pointBoxRadiu_jSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(overlaySelectedConnection_jCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -1642,9 +1643,8 @@ public class nTracer_
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)))
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -2760,14 +2760,6 @@ public class nTracer_
 
         analysis_jMenu.setText("Analysis");
 
-        logColorRatio_jMenuItem.setText("Log Neuron Color Ratio");
-        logColorRatio_jMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                logColorRatio_jMenuItemActionPerformed(evt);
-            }
-        });
-        analysis_jMenu.add(logColorRatio_jMenuItem);
-
         logNormChIntensity_jMenuItem.setText("Log Neuron Channel Intensity");
         logNormChIntensity_jMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2775,6 +2767,22 @@ public class nTracer_
             }
         });
         analysis_jMenu.add(logNormChIntensity_jMenuItem);
+
+        jMenuItem1.setText("Log Neuron RGB Values");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        analysis_jMenu.add(jMenuItem1);
+
+        logColorRatio_jMenuItem.setText("Log Neuron Color Ratio");
+        logColorRatio_jMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                logColorRatio_jMenuItemActionPerformed(evt);
+            }
+        });
+        analysis_jMenu.add(logColorRatio_jMenuItem);
 
         logNeuronConnection_jMenuItem.setText("Log Neuron Connections");
         logNeuronConnection_jMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -4427,6 +4435,30 @@ public class nTracer_
         analysis.logNeuronNormChIntensity();
     }//GEN-LAST:event_logNormChIntensity_jMenuItemActionPerformed
 
+        // log RGB of all traced neurons
+    public void logNeuronRGB() {
+        for (int n = 0; n < rootNeuronNode.getChildCount(); n++) {
+            ntNeuronNode neuronSomaNode = (ntNeuronNode) rootNeuronNode.getChildAt(n);
+            Color color = getNeuronColorFromNode(neuronSomaNode, 0.5f);
+            
+            String logTag = "Neuron "+neuronSomaNode.getNeuronNumber()+" : color (";
+
+            //+color[0];
+            //for (int i = 1; i<color.length; i++){
+            //    logTag = logTag + ", " + color[i];
+            //}
+            
+            logTag += color.getRed() + ", ";
+            logTag += color.getGreen() + ", ";
+            logTag += color.getBlue() + "";
+            
+            //logTag += color.toString();
+            
+            logTag = logTag+")";
+            IJ.log(logTag);
+        }
+    }
+    
     private void logNeuronConnection_jMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logNeuronConnection_jMenuItemActionPerformed
         if (neuronList_jTree.getSelectionCount() == 0) {
             YesNoCancelDialog yncDialog = new YesNoCancelDialog(new java.awt.Frame(),
@@ -7251,6 +7283,10 @@ public class nTracer_
         updateOverlay();
     }//GEN-LAST:event_jButton2MouseClicked
 
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        logNeuronRGB();
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
     private void combineSomaAndBranchesOfTwoNeuronTreeSomas(ntNeuronNode targetNeuronSomaNode, ntNeuronNode sourceNeuronSomaNode) {
         String targetSNeuronNumber = targetNeuronSomaNode.getNeuronNumber();
         String sourceNeuronNumber = sourceNeuronSomaNode.getNeuronNumber();
@@ -9468,7 +9504,7 @@ public class nTracer_
     private Map<ntNeuronNode, Color> neuronColorTable = new HashMap<>();
     private Lock neuronColorTableLock = new ReentrantLock();
 
-    private Color getNeuronColorFromNode(ntNeuronNode node, float alpha) {
+    public Color getNeuronColorFromNode(ntNeuronNode node, float alpha) {
         if (node == null) {
             return Color.white; // um this is broken?
         }
@@ -9498,7 +9534,7 @@ public class nTracer_
         return toreturn;
     }
 
-    private Color getNeuronColorFromNodeOriginal(ntNeuronNode node) {
+    public Color getNeuronColorFromNodeOriginal(ntNeuronNode node) {
         ArrayList<int[]> neuronPoints = getAllPrimaryBranchPoints(node);
 
         if (neuronPoints.isEmpty()) {
@@ -11343,6 +11379,7 @@ minCostPathPoints = Functions.getMinCostPath3D(
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JButton joinBranches_jButton;
