@@ -96,6 +96,7 @@ public class nTracer_
         IO = new ntIO(this);
         analysis = new ntAnalysis();
         Functions = new ntTracing();
+        dataHelper = new DataHelper(this);
 
         if (!IJ.isJava18()) {
             IJ.error("Fiji/ImageJ-Java8 version is required !");
@@ -3036,7 +3037,7 @@ public class nTracer_
         updatePointTable(tablePoints);
         initImageOverlay();
         //initTempHistoryZipFile();
-        loadData();
+        dataHelper.loadData();
         history.startAutosave(autosaveIntervalMin);
         initImageZproj();
     }
@@ -3248,7 +3249,7 @@ public class nTracer_
             if (saveResultBeforeClose.cancelPressed()) {
                 return false;
             } else if (saveResultBeforeClose.yesPressed()) {
-                if (!saveData()) {
+                if (!dataHelper.saveData()) {
                     return false;
                 }
             }
@@ -3331,477 +3332,14 @@ public class nTracer_
     }//GEN-LAST:event_overlayAllNeuron_jCheckBoxActionPerformed
 
     private void saveData_jMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveData_jMenuItemActionPerformed
-        saveData();
+        dataHelper.saveData();
     }//GEN-LAST:event_saveData_jMenuItemActionPerformed
-    private boolean saveData() {
-        if (imp != null) {
-            String directory = IJ.getDirectory("current");
-            String fileName = imp.getTitle() + ".zip";
-
-            final JFileChooser fileChooser = new JFileChooser();
-            fileChooser.setSelectedFile(new File(directory + "/" + fileName));
-            fileChooser.setFileFilter(new FileFilter() {
-                @Override
-                public boolean accept(File f) {
-                    if (f.isDirectory()) {
-                        return true;
-                    }
-                    final String name = f.getName();
-                    return name.endsWith(".zip");
-                }
-
-                @Override
-                public String getDescription() {
-                    return "*.zip";
-                }
-            });
-            int returnVal = fileChooser.showOpenDialog(this);
-            if (returnVal == JFileChooser.CANCEL_OPTION) {
-                return false;
-            }
-            File selectedFile = fileChooser.getSelectedFile();
-            fileName = fileChooser.getName(selectedFile);
-            if (fileName == null) {
-                return false;
-            }
-
-            String[] panelParameters = {xyRadius + "", zRadius + "",
-                colorThreshold + "", intensityThreshold + "",
-                extendDisplayPoints + "",
-                overlayAllPoints_jCheckBox.isSelected() + "",
-                overlayAllName_jCheckBox.isSelected() + "",
-                overlayAllSoma_jCheckBox.isSelected() + "",
-                overlayAllNeuron_jCheckBox.isSelected() + "",
-                overlayAllSpine_jCheckBox.isSelected() + "",
-                overlayAllSynapse_jCheckBox.isSelected() + "",
-                overlayAllConnection_jCheckBox.isSelected() + "",
-                overlayAllSelectedPoints_jCheckBox.isSelected() + "",
-                overlaySelectedName_jCheckBox.isSelected() + "",
-                overlaySelectedSoma_jCheckBox.isSelected() + "",
-                overlaySelectedNeuron_jCheckBox.isSelected() + "",
-                overlaySelectedArbor_jCheckBox.isSelected() + "",
-                overlaySelectedBranch_jCheckBox.isSelected() + "",
-                overlaySelectedSpine_jCheckBox.isSelected() + "",
-                overlaySelectedSynapse_jCheckBox.isSelected() + "",
-                overlaySelectedConnection_jCheckBox.isSelected() + "",
-                overlayPointBox_jCheckBox.isSelected() + "",
-                (int) (somaLine * 2) + "", (int) (neuronLine * 2) + "",
-                (int) (arborLine * 2) + "", (int) (branchLine * 2) + "",
-                (int) (spineLine * 2) + "", (int) (pointBoxLine * 2) + "",
-                (int) synapseRadius + "", pointBoxRadius + "", (int) (lineWidthOffset * 2) + "",
-                autosaveIntervalMin + "", delAutosaved + ""};
-            //synapseSize = synapseRadius*2+1 
-
-            //Calibration impCal = imp.getCalibration();
-            try {
-                IO.savePackagedData(rootNeuronNode, rootAllSomaNode, rootSpineNode,
-                        neuronList_jTree, displaySomaList_jTree, pointTable_jTable, selectedFile,
-                        imp.getC(), imp.getZ(), imp.getFrame(), panelParameters);
-            } catch (IOException e) {
-                return false;
-            }
-            return true;
-        } else {
-            return false;
-        }
-    }
+    
 
     private void loadData_jMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadData_jMenuItemActionPerformed
-        loadData();
+        dataHelper.loadData();
     }//GEN-LAST:event_loadData_jMenuItemActionPerformed
-    private boolean loadData() {
-        canUpdateDisplay = false;
-        boolean returnValue = false;
-        if (imp != null) {
-            String directory = IJ.getDirectory("current");
-            String dataFileName = (String) (imp.getTitle() + ".zip");
-            final JFileChooser fileChooser = new JFileChooser();
-            fileChooser.setSelectedFile(new File(directory + "/" + dataFileName));
-            fileChooser.setFileFilter(new FileFilter() {
-                @Override
-                public boolean accept(File f) {
-                    if (f.isDirectory()) {
-                        return true;
-                    }
-                    final String name = f.getName();
-                    return name.endsWith(".zip");
-                }
 
-                @Override
-                public String getDescription() {
-                    return "*.zip";
-                }
-            });
-            int returnVal = fileChooser.showOpenDialog(this);
-            if (returnVal == JFileChooser.CANCEL_OPTION) {
-                return false;
-            }
-            File selectedFile = fileChooser.getSelectedFile();
-            if (directory == null || dataFileName == null) {
-                return false;
-            }
-
-            InputStream parameterAndNeuronIS, expansionAndSelectionIS, colorTableIS;
-            try {
-                System.gc();
-                parameterAndNeuronIS = IO.loadPackagedParameterAndNeuron(selectedFile);
-                expansionAndSelectionIS = IO.loadPackagedExpansionAndSelection(selectedFile);
-                colorTableIS = IO.loadPackagedColorTable(selectedFile);
-                System.gc();
-            } catch (IOException e) {
-                return false;
-            }
-
-            if (parameterAndNeuronIS == null) {
-                IJ.error("No neurite tracing data file found !");
-                return false;
-            }
-            if (expansionAndSelectionIS == null) {
-                IJ.error("No tree status file found !");
-                return false;
-            }
-            if (colorTableIS == null) {
-                IJ.log("No saved color lookup table was found, will calculate from file...");
-            } else {
-                try {
-                    // I am going to load the color table here, instead of branching again                        
-                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(colorTableIS, "UTF-8"));
-                    Scanner loadScanner = new Scanner(bufferedReader);
-
-                    while (loadScanner.hasNext()) {
-                        String line = loadScanner.nextLine();
-                        line = line.replaceAll("\n", "");
-
-                        String[] line_split = line.split("\t");
-
-                        int[] coords = {
-                            Integer.parseInt(line_split[0]),
-                            Integer.parseInt(line_split[1]),
-                            Integer.parseInt(line_split[2])
-                        };
-
-                        coord3D newPt = new coord3D(coords);
-                        float newFloat = Float.parseFloat(line_split[3]);
-
-                        this.color_buffer.put(newPt, newFloat);
-                    }
-                } catch (Exception e) {
-                } // we dont care, because the table can just be remade
-            }
-            returnValue = loadInputStreamData(parameterAndNeuronIS, expansionAndSelectionIS);
-        }
-        if (returnValue) {
-            history = new History(this);
-            history.saveHistory();
-        }
-        canUpdateDisplay = true;
-        return returnValue;
-    }
-
-    private boolean loadInputStreamData(InputStream parameterAndNeuronIS, InputStream expansionAndSelectionIS) {
-        // load tracing parameters and neurons
-        try {
-            // load neurons
-            DefaultTreeModel[] treeModels = IO.loadTracingParametersAndNeurons(parameterAndNeuronIS);
-            allSomaTreeModel = treeModels[0];
-            rootAllSomaNode = (ntNeuronNode) (allSomaTreeModel.getRoot());
-            neuronTreeModel = treeModels[1];
-            rootNeuronNode = (ntNeuronNode) (neuronTreeModel.getRoot());
-            spineTreeModel = treeModels[2];
-            rootSpineNode = (ntNeuronNode) (spineTreeModel.getRoot());
-            neuronList_jTree.setModel(neuronTreeModel);
-            startPoint = new int[7];
-            hasStartPt = false;
-            endPoint = new int[7];
-            hasEndPt = false;
-
-            if (impNChannel >= 1) {
-                toggleCh1_jCheckBox.setSelected(toggleChannels[0]);
-                analysisCh1_jCheckBox.setSelected(analysisChannels[0]);
-            }
-            if (impNChannel >= 2) {
-                toggleCh2_jCheckBox.setSelected(toggleChannels[1]);
-                analysisCh2_jCheckBox.setSelected(analysisChannels[1]);
-            }
-            if (impNChannel >= 3) {
-                toggleCh3_jCheckBox.setSelected(toggleChannels[2]);
-                analysisCh3_jCheckBox.setSelected(analysisChannels[2]);
-            }
-            if (impNChannel >= 4) {
-                toggleCh4_jCheckBox.setSelected(toggleChannels[3]);
-                analysisCh4_jCheckBox.setSelected(analysisChannels[3]);
-            }
-            if (impNChannel >= 5) {
-                toggleCh5_jCheckBox.setSelected(toggleChannels[4]);
-                analysisCh5_jCheckBox.setSelected(analysisChannels[4]);
-            }
-            if (impNChannel >= 6) {
-                toggleCh6_jCheckBox.setSelected(toggleChannels[5]);
-                analysisCh6_jCheckBox.setSelected(analysisChannels[5]);
-            }
-            if (impNChannel >= 7) {
-                toggleCh7_jCheckBox.setSelected(toggleChannels[6]);
-                analysisCh7_jCheckBox.setSelected(analysisChannels[6]);
-            }
-            if (impNChannel >= 8) {
-                toggleCh8_jCheckBox.setSelected(toggleChannels[7]);
-                analysisCh8_jCheckBox.setSelected(analysisChannels[7]);
-            }
-            for (int ch = 1; ch <= impNChannel; ch++) {
-                if (toggleChannels[ch - 1]) {
-                    toggleChannel(ch);
-                }
-            }
-            boolean[] active = cmp.getActiveChannels();
-            System.arraycopy(activeChannels, 0, active, 0, active.length);
-            cmp.updateAndDraw();
-            this.setTitle(this.VERSION + " - pixel resolutions (x, y, z) um/pixel: (" + xyzResolutions[0] + ", " + xyzResolutions[1] + ", " + xyzResolutions[2] + ")");
-        } catch (IOException e) {
-            return false;
-        }
-
-        // set tree expansion and selection
-        try {
-            ArrayList[] status = IO.loadExpansionSelectionPositionParameter(expansionAndSelectionIS);
-            // status[0] -- neuron tree expansion status
-            if (status[0].size() > 0) {
-                for (int i = 0; i < status[0].size(); i++) {
-                    String neuronNumber = (String) status[0].get(i);
-                    if (neuronNumber.contains("/")) {
-                        neuronNumber = neuronNumber.split("/")[0];
-                    }
-                    ntNeuronNode expandedNeurite = getSomaNodeFromNeuronTreeByNeuronNumber(neuronNumber);
-                    if (expandedNeurite != null) {
-                        neuronList_jTree.expandPath(new TreePath(expandedNeurite.getPath()));
-                    }
-                }
-            }
-            //IJ.log("set neuron tree expansion");
-
-            // status[1] -- neuron tree selection status
-            if (status[1].size() > 0) {
-                for (int i = 0; i < status[1].size(); i++) {
-                    String nodeName = (String) status[1].get(i);
-                    ntNeuronNode selectedNeuriteNode = getNodeFromNeuronTreeByNodeName(nodeName);
-                    if (selectedNeuriteNode != null) {
-                        neuronList_jTree.addSelectionPath(new TreePath(selectedNeuriteNode.getPath()));
-                    }
-                }
-            }
-            //IJ.log("set neuron tree selection");
-
-            // status[2] -- neuron tree visible rectangle
-            if (status[2].size() > 0) {
-                int x = Integer.parseInt((String) status[2].get(0));
-                int y = Integer.parseInt((String) status[2].get(1));
-                int width = Integer.parseInt((String) status[2].get(2));
-                int height = Integer.parseInt((String) status[2].get(3));
-                Rectangle neuronListVisibleRectangle = new Rectangle(x, y, width, height);
-                neuronList_jTree.scrollRectToVisible(neuronListVisibleRectangle);
-            }
-            //IJ.log("set neuronList rectangle");
-
-            // status[3] -- soma tree selection status
-            if (status[3].size() > 0) {
-                for (int i = 0; i < status[3].size(); i++) {
-                    String somaName = (String) status[3].get(i);
-                    for (int n = 0; n < rootDisplaySomaNode.getChildCount(); n++) {
-                        ntNeuronNode somaSlice = (ntNeuronNode) rootDisplaySomaNode.getChildAt(n);
-                        if (somaName.equals(somaSlice.toString())) {
-                            displaySomaList_jTree.addSelectionRow(n);
-                            break;
-                        }
-                    }
-                }
-            }
-            //IJ.log("set soma tree selection status");
-
-            // status[4] -- soma tree visible rectangle
-            if (status[4].size() > 0) {
-                int x = Integer.parseInt((String) status[4].get(0));
-                int y = Integer.parseInt((String) status[4].get(1));
-                int width = Integer.parseInt((String) status[4].get(2));
-                int height = Integer.parseInt((String) status[4].get(3));
-                Rectangle somaListVisibleRectangle = new Rectangle(x, y, width, height);
-                displaySomaList_jTree.scrollRectToVisible(somaListVisibleRectangle);
-            }
-            //IJ.log("set soma tree visible rectangle");
-
-            // status[5] -- tracePoint_Table selection status
-            if (status[5].size() > 0) {
-                for (int i = 0; i < status[5].size(); i++) {
-                    int selectedRow = Integer.parseInt((String) status[5].get(i));
-                    pointTable_jTable.addRowSelectionInterval(selectedRow, selectedRow);
-                }
-            }
-            //IJ.log("tracePoint_Table selection status");
-
-            // status[6] -- traced point table visible rectangle
-            if (status[6].size() > 0) {
-                int x = Integer.parseInt((String) status[6].get(0));
-                int y = Integer.parseInt((String) status[6].get(1));
-                int width = Integer.parseInt((String) status[6].get(2));
-                int height = Integer.parseInt((String) status[6].get(3));
-                Rectangle pointTableVisibleRectangle = new Rectangle(x, y, width, height);
-                pointTable_jTable.scrollRectToVisible(pointTableVisibleRectangle);
-            }
-            //IJ.log("traced point table visible rectangle");
-
-            // status[7] -- image position
-            if (status[7].size() > 0) {
-                int c = Integer.parseInt((String) status[7].get(0));
-                int z = Integer.parseInt((String) status[7].get(1));
-                int f = Integer.parseInt((String) status[7].get(2));
-                imp.setPosition(c, z, f);
-            }
-
-            // status[8] -- nTracer control panel parameters
-            if (status[8].size() > 0) {
-                int size = status[8].size();
-                if (Utils.isInteger((String) status[8].get(0))) {
-                    if (Integer.parseInt((String) status[8].get(0)) > 0) {
-                        xyRadius = Integer.parseInt((String) status[8].get(0));
-                        xyRadius_jSpinner.setValue((Integer) xyRadius);
-                    }
-                }
-                if (Utils.isInteger((String) status[8].get(1))) {
-                    if (Integer.parseInt((String) status[8].get(1)) > 0) {
-                        zRadius = Integer.parseInt((String) status[8].get(1));
-                        zRadius_jSpinner.setValue((Integer) zRadius);
-                    }
-                }
-                if (Utils.isFloat((String) status[8].get(2))) {
-                    if (Float.parseFloat((String) status[8].get(2)) > 0) {
-                        colorThreshold = Float.parseFloat((String) status[8].get(2));
-                        colorThreshold_jSpinner.setValue((Float) colorThreshold);
-                    }
-                }
-                if (Utils.isFloat((String) status[8].get(3))) {
-                    if (Float.parseFloat((String) status[8].get(3)) > 0) {
-                        intensityThreshold = Float.parseFloat((String) status[8].get(3));
-                        intensityThreshold_jSpinner.setValue((Float) intensityThreshold);
-                    }
-                }
-                if (Utils.isInteger((String) status[8].get(4))) {
-                    if (Integer.parseInt((String) status[8].get(4)) > 0) {
-                        extendDisplayPoints = Integer.parseInt((String) status[8].get(4));
-                        extendAllDisplayPoints_jSpinner.setValue((Integer) extendDisplayPoints);
-                    }
-                }
-                overlayAllPoints_jCheckBox.setSelected(Boolean.parseBoolean((String) status[8].get(5)));
-                overlayAllName_jCheckBox.setSelected(Boolean.parseBoolean((String) status[8].get(6)));
-                overlayAllSoma_jCheckBox.setSelected(Boolean.parseBoolean((String) status[8].get(7)));
-                overlayAllNeuron_jCheckBox.setSelected(Boolean.parseBoolean((String) status[8].get(8)));
-                overlayAllSpine_jCheckBox.setSelected(Boolean.parseBoolean((String) status[8].get(9)));
-                overlayAllSynapse_jCheckBox.setSelected(Boolean.parseBoolean((String) status[8].get(10)));
-                overlayAllConnection_jCheckBox.setSelected(Boolean.parseBoolean((String) status[8].get(11)));
-                overlayAllSelectedPoints_jCheckBox.setSelected(Boolean.parseBoolean((String) status[8].get(12)));
-                overlaySelectedName_jCheckBox.setSelected(Boolean.parseBoolean((String) status[8].get(13)));
-                overlaySelectedSoma_jCheckBox.setSelected(Boolean.parseBoolean((String) status[8].get(14)));
-                overlaySelectedNeuron_jCheckBox.setSelected(Boolean.parseBoolean((String) status[8].get(15)));
-                overlaySelectedArbor_jCheckBox.setSelected(Boolean.parseBoolean((String) status[8].get(16)));
-                overlaySelectedBranch_jCheckBox.setSelected(Boolean.parseBoolean((String) status[8].get(17)));
-                overlaySelectedSpine_jCheckBox.setSelected(Boolean.parseBoolean((String) status[8].get(18)));
-                overlaySelectedSynapse_jCheckBox.setSelected(Boolean.parseBoolean((String) status[8].get(19)));
-                overlaySelectedConnection_jCheckBox.setSelected(Boolean.parseBoolean((String) status[8].get(20)));
-                overlayPointBox_jCheckBox.setSelected(Boolean.parseBoolean((String) status[8].get(21)));
-                if (size > 22) {
-                    if (Utils.isFloat((String) status[8].get(22))) {
-                        if (Float.parseFloat((String) status[8].get(22)) > 0) {
-                            somaLine = Float.parseFloat((String) status[8].get(22)) / 2;
-                            somaLineWidth_jSpinner.setValue((int) (somaLine * 2));
-                        }
-                    }
-                }
-                if (size > 23) {
-                    if (Utils.isFloat((String) status[8].get(23))) {
-                        if (Float.parseFloat((String) status[8].get(23)) > 0) {
-                            neuronLine = Float.parseFloat((String) status[8].get(23)) / 2;
-                            neuronLineWidth_jSpinner.setValue((int) (neuronLine * 2));
-                        }
-                    }
-                }
-                if (size > 24) {
-                    if (Utils.isFloat((String) status[8].get(24))) {
-                        if (Float.parseFloat((String) status[8].get(24)) > 0) {
-                            arborLine = Float.parseFloat((String) status[8].get(24)) / 2;
-                            arborLineWidth_jSpinner.setValue((int) (arborLine * 2));
-                        }
-                    }
-                }
-                if (size > 25) {
-                    if (Utils.isFloat((String) status[8].get(25))) {
-                        if (Float.parseFloat((String) status[8].get(25)) > 0) {
-                            branchLine = Float.parseFloat((String) status[8].get(25)) / 2;
-                            branchLineWidth_jSpinner.setValue((int) (branchLine * 2));
-                        }
-                    }
-                }
-                if (size > 26) {
-                    if (Utils.isFloat((String) status[8].get(26))) {
-                        if (Float.parseFloat((String) status[8].get(26)) > 0) {
-                            spineLine = Float.parseFloat((String) status[8].get(26)) / 2;
-                            spineLineWidth_jSpinner.setValue((int) (spineLine * 2));
-                        }
-                    }
-                }
-                if (size > 27) {
-                    if (Utils.isFloat((String) status[8].get(27))) {
-                        if (Float.parseFloat((String) status[8].get(27)) > 0) {
-                            pointBoxLine = Float.parseFloat((String) status[8].get(27)) / 2;
-                            pointBoxLineWidth_jSpinner.setValue((int) (pointBoxLine * 2));
-                        }
-                    }
-                }
-                if (size > 28) {
-                    if (Utils.isDouble((String) status[8].get(28))) {
-                        if (Double.parseDouble((String) status[8].get(28)) > 0) {
-                            synapseRadius = Double.parseDouble((String) status[8].get(28));
-                            synapseSize = synapseRadius * 2 + 1;
-                            synapseRadius_jSpinner.setValue((int) synapseRadius);
-                        }
-                    }
-                }
-                if (size > 29) {
-                    if (Utils.isInteger((String) status[8].get(29))) {
-                        if (Float.parseFloat((String) status[8].get(29)) > 0) {
-                            pointBoxRadius = Integer.parseInt((String) status[8].get(29));
-                            pointBoxRadiu_jSpinner.setValue((Integer) pointBoxRadius);
-                        }
-                    }
-                }
-                if (size > 30) {
-                    if (Utils.isFloat((String) status[8].get(30))) {
-                        if (Float.parseFloat((String) status[8].get(30)) > 0) {
-                            lineWidthOffset = Float.parseFloat((String) status[8].get(30)) / 2;
-                            allNeuronLineWidthOffset_jSpinner.setValue((int) (lineWidthOffset * 2));
-                            allSomaLine = (somaLine - lineWidthOffset > 0.5) ? somaLine - lineWidthOffset : 0.5f;
-                            allNeuronLine = (neuronLine - lineWidthOffset > 0.5) ? neuronLine - lineWidthOffset : 0.5f;
-                            allSpineLine = (spineLine - lineWidthOffset > 0.5) ? spineLine - lineWidthOffset : 0.5f;
-                            allSynapseRadius = (synapseRadius - lineWidthOffset / 2 > 0.5) ? synapseRadius - lineWidthOffset / 2 : 0.5;
-                            allSynapseSize = allSynapseRadius * 2;
-                        }
-                    }
-                    if (size > 31) {
-                        if (Utils.isLong((String) status[8].get(31))) {
-                            if (Long.parseLong((String) status[8].get(31)) > 0) {
-                                autosaveIntervalMin = Long.parseLong((String) status[8].get(31));
-                            }
-                        }
-                    }
-                    if (size > 32) {
-                        delAutosaved = Boolean.parseBoolean((String) status[8].get(32));
-                    }
-                }
-            }
-        } catch (IOException e) {
-            return false;
-        }
-
-        imp.updateAndRepaintWindow();
-        updateDisplay();
-        return true;
-    }
 
     private void overlaySelectedNeuron_jCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_overlaySelectedNeuron_jCheckBoxActionPerformed
         updateOverlay();
@@ -7218,7 +6756,7 @@ public class nTracer_
         return bounds;
     }
 
-    private void toggleChannel(int Ch) {
+    protected void toggleChannel(int Ch) {
         imp.setC(Ch);
         IJ.run(imp, toggleColor, "");
 
@@ -8378,7 +7916,7 @@ public class nTracer_
                 }
                 break;
             case 12: // 'ctrl-l'
-                loadData();
+                dataHelper.loadData();
                 break;
             case 17: // 'ctrl-q'
                 quit();
@@ -8387,7 +7925,7 @@ public class nTracer_
                 IJ.run(imp, "Red", "");
                 break;
             case 19: // 'ctrl-s'
-                saveData();
+                dataHelper.saveData();
                 break;
             case 25: // 'ctrl-yIn'
                 history.forwardHistory();
@@ -10547,7 +10085,7 @@ minCostPathPoints = Functions.getMinCostPath3D(
         }
     }
 
-    private static ntNeuronNode getSomaNodeFromNeuronTreeByNeuronNumber(String somaName) {
+    protected static ntNeuronNode getSomaNodeFromNeuronTreeByNeuronNumber(String somaName) {
         for (int i = 0; i < rootNeuronNode.getChildCount(); i++) {
             ntNeuronNode compareNode = (ntNeuronNode) rootNeuronNode.getChildAt(i);
             String compareName = compareNode.toString();
@@ -10857,25 +10395,25 @@ minCostPathPoints = Functions.getMinCostPath3D(
     // <editor-fold defaultstate="collapsed" desc="GUI variables">
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addLabelToSelection_jButton;
-    private javax.swing.JSpinner allNeuronLineWidthOffset_jSpinner;
+    protected javax.swing.JSpinner allNeuronLineWidthOffset_jSpinner;
     private javax.swing.JLabel allPlusMinus_jLabel;
     private javax.swing.JPanel all_jPanel;
-    private javax.swing.JCheckBox analysisCh1_jCheckBox;
-    private javax.swing.JCheckBox analysisCh2_jCheckBox;
-    private javax.swing.JCheckBox analysisCh3_jCheckBox;
-    private javax.swing.JCheckBox analysisCh4_jCheckBox;
-    private javax.swing.JCheckBox analysisCh5_jCheckBox;
-    private javax.swing.JCheckBox analysisCh6_jCheckBox;
-    private javax.swing.JCheckBox analysisCh7_jCheckBox;
-    private javax.swing.JCheckBox analysisCh8_jCheckBox;
+    protected javax.swing.JCheckBox analysisCh1_jCheckBox;
+    protected javax.swing.JCheckBox analysisCh2_jCheckBox;
+    protected javax.swing.JCheckBox analysisCh3_jCheckBox;
+    protected javax.swing.JCheckBox analysisCh4_jCheckBox;
+    protected javax.swing.JCheckBox analysisCh5_jCheckBox;
+    protected javax.swing.JCheckBox analysisCh6_jCheckBox;
+    protected javax.swing.JCheckBox analysisCh7_jCheckBox;
+    protected javax.swing.JCheckBox analysisCh8_jCheckBox;
     private javax.swing.JLabel analysisChannel_jLabel;
     private javax.swing.JMenu analysis_jMenu;
-    private javax.swing.JSpinner arborLineWidth_jSpinner;
+    protected javax.swing.JSpinner arborLineWidth_jSpinner;
     private javax.swing.JRadioButton autoTracing_jRadioButton;
     private javax.swing.JMenuItem autosaveSetup_jMenuItem;
     private javax.swing.JRadioButton b_jRadioButton;
     private javax.swing.JCheckBox brainbowColor_jCheckBox;
-    private javax.swing.JSpinner branchLineWidth_jSpinner;
+    protected javax.swing.JSpinner branchLineWidth_jSpinner;
     private javax.swing.JButton breakBranch_jButton;
     private javax.swing.ButtonGroup channelColor_buttonGroup;
     private javax.swing.JPanel channel_jPanel;
@@ -10884,7 +10422,7 @@ minCostPathPoints = Functions.getMinCostPath3D(
     private javax.swing.JButton collapseAllNeuron_jButton;
     private javax.swing.JPanel colorSamplingRadius_jPanel;
     private javax.swing.JLabel colorThreshold_jLabel;
-    private javax.swing.JSpinner colorThreshold_jSpinner;
+    protected javax.swing.JSpinner colorThreshold_jSpinner;
     private javax.swing.JButton comnibeTwoNeuron_jButton;
     private javax.swing.JButton completeSomaSliceRoi_jButton;
     private javax.swing.JLabel connectedSynapse_jLabel;
@@ -10918,15 +10456,15 @@ minCostPathPoints = Functions.getMinCostPath3D(
     private javax.swing.JButton expanAllNeuron_jButton;
     private javax.swing.JMenuItem exportSWCfromSelectedNeurons_jMenuItem;
     private javax.swing.JMenuItem exportSynapseFromSelectedNeurons_jMenuItem;
-    private javax.swing.JSpinner extendAllDisplayPoints_jSpinner;
-    private javax.swing.JSpinner extendSelectedDisplayPoints_jSpinner;
+    protected javax.swing.JSpinner extendAllDisplayPoints_jSpinner;
+    protected javax.swing.JSpinner extendSelectedDisplayPoints_jSpinner;
     private javax.swing.JRadioButton g_jRadioButton;
     private javax.swing.JButton gotoConnection_jButton;
     private javax.swing.JMenu help_jMenu;
     private javax.swing.JMenuItem help_jMenuItem;
     private javax.swing.JLabel info_jLabel;
     private javax.swing.JLabel intensityThreshold_jLabel;
-    private javax.swing.JSpinner intensityThreshold_jSpinner;
+    protected javax.swing.JSpinner intensityThreshold_jSpinner;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JCheckBox jCheckBox9;
@@ -10964,7 +10502,7 @@ minCostPathPoints = Functions.getMinCostPath3D(
     private javax.swing.JMenuBar menu_jMenuBar;
     private javax.swing.JMenu model3D_jMenu;
     private javax.swing.JMenu model3D_jMenu1;
-    private javax.swing.JSpinner neuronLineWidth_jSpinner;
+    protected javax.swing.JSpinner neuronLineWidth_jSpinner;
     private javax.swing.JScrollPane neuronList_jScrollPane;
     protected javax.swing.JTree neuronList_jTree;
     private javax.swing.JLabel neuronTree_jLabel;
@@ -10986,8 +10524,8 @@ minCostPathPoints = Functions.getMinCostPath3D(
     protected javax.swing.JCheckBox overlaySelectedSpine_jCheckBox;
     protected javax.swing.JCheckBox overlaySelectedSynapse_jCheckBox;
     private javax.swing.JPanel overlay_jPanel;
-    private javax.swing.JSpinner pointBoxLineWidth_jSpinner;
-    private javax.swing.JSpinner pointBoxRadiu_jSpinner;
+    protected javax.swing.JSpinner pointBoxLineWidth_jSpinner;
+    protected javax.swing.JSpinner pointBoxRadiu_jSpinner;
     private javax.swing.JScrollPane pointTable_jScrollPane;
     protected javax.swing.JTable pointTable_jTable;
     private javax.swing.JCheckBox projectionUpdate_jCheckBox;
@@ -11014,24 +10552,24 @@ minCostPathPoints = Functions.getMinCostPath3D(
     private javax.swing.JButton showConnectedNeurons_jButton;
     private javax.swing.ButtonGroup showConnected_buttonGroup;
     private javax.swing.JMenuItem skeleton_jMenuItem;
-    private javax.swing.JSpinner somaLineWidth_jSpinner;
+    protected javax.swing.JSpinner somaLineWidth_jSpinner;
     private javax.swing.JScrollPane somaList_jScrollPane;
-    private javax.swing.JSpinner spineLineWidth_jSpinner;
+    protected javax.swing.JSpinner spineLineWidth_jSpinner;
     private javax.swing.JLabel srtPtCol_jLabel;
     private javax.swing.JLabel srtPtInt_jLabel;
     private javax.swing.JLabel startColor_jLabel;
     private javax.swing.JLabel startIntensity_jLabel;
     private javax.swing.JLabel startPosition_jLabel;
     private javax.swing.JLabel startPt_jLabel;
-    private javax.swing.JSpinner synapseRadius_jSpinner;
-    private javax.swing.JCheckBox toggleCh1_jCheckBox;
-    private javax.swing.JCheckBox toggleCh2_jCheckBox;
-    private javax.swing.JCheckBox toggleCh3_jCheckBox;
-    private javax.swing.JCheckBox toggleCh4_jCheckBox;
-    private javax.swing.JCheckBox toggleCh5_jCheckBox;
-    private javax.swing.JCheckBox toggleCh6_jCheckBox;
-    private javax.swing.JCheckBox toggleCh7_jCheckBox;
-    private javax.swing.JCheckBox toggleCh8_jCheckBox;
+    protected javax.swing.JSpinner synapseRadius_jSpinner;
+    protected javax.swing.JCheckBox toggleCh1_jCheckBox;
+    protected javax.swing.JCheckBox toggleCh2_jCheckBox;
+    protected javax.swing.JCheckBox toggleCh3_jCheckBox;
+    protected javax.swing.JCheckBox toggleCh4_jCheckBox;
+    protected javax.swing.JCheckBox toggleCh5_jCheckBox;
+    protected javax.swing.JCheckBox toggleCh6_jCheckBox;
+    protected javax.swing.JCheckBox toggleCh7_jCheckBox;
+    protected javax.swing.JCheckBox toggleCh8_jCheckBox;
     private javax.swing.JLabel toggleChannel_jLabel;
     private javax.swing.JLabel toggleColor_jLabel;
     private javax.swing.JButton toggleConnection_jButton;
@@ -11050,13 +10588,13 @@ minCostPathPoints = Functions.getMinCostPath3D(
     private javax.swing.JLabel xyProjectionArea_jLabel;
     private javax.swing.JSpinner xyProjectionArea_jSpinner;
     private javax.swing.JLabel xyRadius_jLabel;
-    private javax.swing.JSpinner xyRadius_jSpinner;
+    protected javax.swing.JSpinner xyRadius_jSpinner;
     private javax.swing.JMenuItem xyzResolutions_jMenuItem;
     private javax.swing.JLabel zProjectionInterval_jLabel;
     private javax.swing.JPanel zProjectionInterval_jPanel;
     private javax.swing.JSpinner zProjectionInterval_jSpinner;
     private javax.swing.JLabel zRadius_jLabel;
-    private javax.swing.JSpinner zRadius_jSpinner;
+    protected javax.swing.JSpinner zRadius_jSpinner;
     // End of variables declaration//GEN-END:variables
     // </editor-fold>
 
@@ -11071,9 +10609,10 @@ minCostPathPoints = Functions.getMinCostPath3D(
     protected final ntIO IO;
     private final ntAnalysis analysis;
     private ntTracing Functions;
-    private History history;
+    protected History history;
+    protected DataHelper dataHelper;
     public static ImagePlus imp, impZproj;
-    private CompositeImage cmp;
+    protected CompositeImage cmp;
     private ImageCanvas cns, cnsZproj;
     public static ImageStack stk;
     private ImageWindow win, winZproj;
