@@ -505,4 +505,13 @@ public class DataHelper {
         nTracer.updateDisplay();
         return true;
     }
+    
+    public void clearData() {
+        nTracer.initPointTable();
+        nTracer.initNeuriteTree();
+        nTracer.initSomaTree();
+        nTracer.initSpineTree();
+        nTracer.history.saveHistory();
+        nTracer.updateDisplay();
+    }
 }
