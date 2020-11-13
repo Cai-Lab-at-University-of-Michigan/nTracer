@@ -6,12 +6,15 @@
 package nTracer;
 
 import ij.IJ;
+import ij.gui.GenericDialog;
 import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import static java.util.concurrent.TimeUnit.MINUTES;
 import javax.swing.tree.TreePath;
 import static nTracer.nTracer_.imp;
@@ -39,7 +42,11 @@ public class History {
     private int[][] historyStartPoint, historyEndPoint;
     private boolean[] historyHasStartPt, historyHasEndPt;
     
-    public History(nTracer_ nTracer) {
+    protected long autosaveIntervalMin = 5L;
+    protected boolean delAutosaved = false;
+    private ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+    
+    protected History(nTracer_ nTracer) {
         this.nTracer = nTracer;
         historyIndexStack = new ArrayList<>();
         historyPointer = 0;
@@ -81,7 +88,7 @@ public class History {
     }
     
         
-    public void saveHistory() {
+    protected void saveHistory() {
         if (historyPointer < 0) { // initial saving
             historyPointer++;
             historyIndexStack.set(historyPointer, 0);
@@ -106,7 +113,7 @@ public class History {
         //IJ.log("prevHistoryLevel = "+(historyPointer-1)+"; currentHistoryLevel = "+historyPointer+"; load memory "+historyIndexStack.get(historyPointer));
     }
 
-    public void backwardHistory() {
+    protected void backwardHistory() {
         if (historyPointer > 0) {
             historyPointer--;
             //IJ.log("prevHistoryLevel = "+(historyPointer+1)+"; currentHistoryLevel = "+historyPointer+"; load memory "+historyIndexStack.get(historyPointer));
@@ -119,7 +126,7 @@ public class History {
         }
     }
 
-    public void forwardHistory() {
+    protected void forwardHistory() {
         if (historyPointer < maxHistoryLevel - 1 && historyIndexStack.get(historyPointer + 1) >= 0) {
             historyPointer++;
             //IJ.log("prevHistoryLevel = "+(historyPointer-1)+"; currentHistoryLevel = "+historyPointer+"; load memory "+historyIndexStack.get(historyPointer));
@@ -132,7 +139,22 @@ public class History {
         }
     }
     
-    public void startAutosave(long interval) {
+    protected void autosaveSetup() {
+        String[] saveIntervals = {"5", "10", "15", "20", "25", "30"};
+        GenericDialog gd = new GenericDialog("Autosave Setup");
+        gd.addChoice("Save every (min): ", saveIntervals, autosaveIntervalMin + "");
+        gd.addCheckbox("Delete autosaved when closing image ?", delAutosaved);
+        gd.showDialog();
+        autosaveIntervalMin = Long.parseLong(gd.getNextChoice());
+        delAutosaved = gd.getNextBoolean();
+        if (!gd.wasCanceled()) {
+            scheduler.shutdown();
+            scheduler = Executors.newScheduledThreadPool(1);
+            startAutosave();
+        }
+    }
+    
+    protected void startAutosave() {
         //IJ.log(IJ.getDirectory("current"));
         final String folder = IJ.getDirectory("current") + "/" + imp.getTitle() + "_nTracer_Autosave" + "/";
         File autosaveFolder = new File(folder);
@@ -141,10 +163,28 @@ public class History {
         }
         //IJ.log("autosave: "+historyIndexStack.get(historyPointer)+"; "+interval+"; "+MINUTES);
 
-        nTracer.scheduler.scheduleAtFixedRate(() -> {
+        scheduler.scheduleAtFixedRate(() -> {
             autoSave2File(folder, historyIndexStack.get(historyPointer));
-        }, 0, interval, MINUTES);
+        }, 0, autosaveIntervalMin, MINUTES);
 
+    }
+    
+    protected void stopAutosave() {
+        scheduler.shutdown();
+        if (delAutosaved) {
+            // delete tracing autosave folder
+            String folder = IJ.getDirectory("current") + "/" + imp.getTitle() + "_nTracer_Autosave" + "/";
+            File autosaveFolder = new File(folder);
+            //make sure directory exists
+            if (!autosaveFolder.exists()) {
+                IJ.error(autosaveFolder + " does not exist.");
+            } else {
+                try {
+                    nTracer.IO.delete(autosaveFolder);
+                } catch (IOException e) {
+                }
+            }
+        }
     }
     
     private void recordTreeExpansionSelectionStatus(int historyLevel) {
@@ -376,8 +416,8 @@ public class History {
         nTracerParameters[historyLevel][28] = (int) nTracer.synapseRadius + "";
         nTracerParameters[historyLevel][29] = nTracer.pointBoxRadius + "";
         nTracerParameters[historyLevel][30] = nTracer.lineWidthOffset + "";
-        nTracerParameters[historyLevel][31] = nTracer.autosaveIntervalMin + "";
-        nTracerParameters[historyLevel][32] = nTracer.delAutosaved + "";
+        nTracerParameters[historyLevel][31] = autosaveIntervalMin + "";
+        nTracerParameters[historyLevel][32] = delAutosaved + "";
         //synapseSize = synapseRadius*2+1 
     }
 

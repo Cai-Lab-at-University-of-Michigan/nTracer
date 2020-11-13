@@ -95,7 +95,7 @@ public class DataHelper {
                 (int) (nTracer.arborLine * 2) + "", (int) (nTracer.branchLine * 2) + "",
                 (int) (nTracer.spineLine * 2) + "", (int) (nTracer.pointBoxLine * 2) + "",
                 (int) nTracer.synapseRadius + "", nTracer.pointBoxRadius + "", (int) (nTracer.lineWidthOffset * 2) + "",
-                nTracer.autosaveIntervalMin + "", nTracer.delAutosaved + ""};
+                nTracer.history.autosaveIntervalMin + "", nTracer.history.delAutosaved + ""};
             //synapseSize = synapseRadius*2+1 
 
             //Calibration impCal = imp.getCalibration();
@@ -488,12 +488,12 @@ public class DataHelper {
                     if (size > 31) {
                         if (Utils.isLong((String) status[8].get(31))) {
                             if (Long.parseLong((String) status[8].get(31)) > 0) {
-                                nTracer.autosaveIntervalMin = Long.parseLong((String) status[8].get(31));
+                                nTracer.history.autosaveIntervalMin = Long.parseLong((String) status[8].get(31));
                             }
                         }
                     }
                     if (size > 32) {
-                        nTracer.delAutosaved = Boolean.parseBoolean((String) status[8].get(32));
+                        nTracer.history.delAutosaved = Boolean.parseBoolean((String) status[8].get(32));
                     }
                 }
             }
