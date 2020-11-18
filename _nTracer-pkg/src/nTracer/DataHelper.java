@@ -30,6 +30,7 @@ import static nTracer.nTracer_.toggleChannels;
 import static nTracer.nTracer_.xyzResolutions;
 
 /**
+ * Methods to save, load, and process data.
  *
  * @author Dawen, Wei Jie
  */
@@ -39,6 +40,9 @@ public class DataHelper {
         this.nTracer = nTracer;
     }
     
+    /**
+    * Save data
+    */
     public boolean saveData() {
         if (imp != null) {
             String directory = IJ.getDirectory("current");
@@ -112,6 +116,9 @@ public class DataHelper {
         }
     }
     
+    /**
+    * Load data
+    */
     public boolean loadData() {
         nTracer.canUpdateDisplay = false;
         boolean returnValue = false;
@@ -201,6 +208,9 @@ public class DataHelper {
         return returnValue;
     }
     
+    /**
+    * Load input stream data
+    */
     public boolean loadInputStreamData(InputStream parameterAndNeuronIS, InputStream expansionAndSelectionIS) {
         // load tracing parameters and neurons
         try {
@@ -506,6 +516,9 @@ public class DataHelper {
         return true;
     }
     
+    /**
+    * Clear data
+    */
     public void clearData() {
         nTracer.initPointTable();
         nTracer.initNeuriteTree();
