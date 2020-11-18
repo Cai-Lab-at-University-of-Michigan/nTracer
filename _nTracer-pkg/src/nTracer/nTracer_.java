@@ -18,6 +18,9 @@ kalle.ha...@gmail.com		Owner
 ra4k...@gmail.com		Committer
 
  */
+
+
+
 package nTracer;
 
 import ij.*;
@@ -68,7 +71,8 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- *
+ * Main class - contains the main function and implements the GUI. 
+ * 
  * @author Dawen Cai <dwcai@umich.edu>
  */
 public class nTracer_
@@ -87,6 +91,10 @@ public class nTracer_
     public Map<coord3D, Float> color_buffer;
     public Lock color_lock;
 
+    /**
+     * default constructor for nTracer_ object
+     */
+    
     public nTracer_() {
         this.color_buffer = new HashMap<>();
         this.last_current_z = -1;
@@ -224,7 +232,13 @@ public class nTracer_
         }
         return compList;
     }
-
+    
+    /**
+     * set up tracked point table
+     * 
+     */
+    
+    
     protected void initPointTable() {
         // set up tracked point table
         pointTableModel = new DefaultTableModel(
@@ -261,6 +275,10 @@ public class nTracer_
         //pointTable_jTable.addKeyListener(this);
     }
 
+    /**
+     set up neuron list tree
+     */
+    
     protected void initNeuriteTree() {
         // set up neuron list tree
         rootNeuronNode = new ntNeuronNode("Traced Neuron", new ArrayList<String[]>());
@@ -309,6 +327,10 @@ public class nTracer_
             }
         });
     }
+    
+    /**
+     * set up soma list tree
+     */
 
     protected void initSomaTree() {
         // set up neuron list tree
@@ -332,6 +354,10 @@ public class nTracer_
         //displaySomaList_jTree.addKeyListener(this);
     }
 
+    /**
+     * set up spine Tree
+     */
+    
     protected void initSpineTree() {
         rootSpineNode = new ntNeuronNode("All Spines", new ArrayList<String[]>());
         spineTreeModel = new DefaultTreeModel(rootSpineNode);
@@ -3516,8 +3542,12 @@ public class nTracer_
         analysis.logNeuronNormChIntensity();
     }//GEN-LAST:event_logNormChIntensity_jMenuItemActionPerformed
 
-        // log RGB of all traced neurons
+    /**
+     * Logs the RGB (Red Green Blue) of all traced neurons
+     */
+    
     public void logNeuronRGB() {
+        // log RGB of all traced neurons
         for (int n = 0; n < rootNeuronNode.getChildCount(); n++) {
             ntNeuronNode neuronSomaNode = (ntNeuronNode) rootNeuronNode.getChildAt(n);
             Color color = getNeuronColorFromNode(neuronSomaNode, 0.5f);
@@ -3653,6 +3683,14 @@ public class nTracer_
         return positionAndSmallestDistance2;
     }
 
+    /**
+     * Returns the position of the synapse in the tracingResult array, by comparing names.
+     * It will return a value of -1 if the (name of the) synapse is not in the tracingResult array
+     * @param tracingResult
+     * @param synapseName
+     * @return 
+     */
+    
     protected int getPositionInTracingResultBySynapseName(ArrayList<String[]> tracingResult, String synapseName) {
         // "return -1" means the synapseName is not in the tracingResult
         for (int i = 0; i < tracingResult.size(); i++) {
@@ -3833,6 +3871,12 @@ public class nTracer_
         }
     }
 
+    /**
+     * removes the connection between the "selectedNodeName" node and the "selectedSynapseName" by setting it to 0
+     * @param selectedNodeName
+     * @param selectedSynapseName 
+     */
+    
     protected void removeConnectionBySelectedNodeAndSynapseName(String selectedNodeName, String selectedSynapseName) {
         String[] connectedNames = selectedSynapseName.split("#");
         String connectedNodeName = connectedNames[1];
@@ -3841,7 +3885,13 @@ public class nTracer_
         int connectedPosition = getPositionInTracingResultBySynapseName(connectedNode.getTracingResult(), connectedSynapseName);
         connectedNode.setConnectionTo(connectedPosition, "0");
     }
-
+    
+    /**
+     * deletes the somaSliceNode from the soma tree model
+     * Removes all the connected synapses and required spines
+     * @param somaSliceNodeName 
+     */
+    
     protected void deleteOneSomaSliceNodeByName(String somaSliceNodeName) {
         ntNeuronNode somaSliceNode = getSomaSliceNodeFromAllSomaTreeBySomaSliceName(somaSliceNodeName);
         deleteOneSomaSliceNodeByNode(somaSliceNode);
@@ -4548,6 +4598,12 @@ public class nTracer_
     private void setNeurite_jButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setNeurite_jButtonActionPerformed
         setTracingType("Neurite");
     }//GEN-LAST:event_setNeurite_jButtonActionPerformed
+    
+    /**
+     * sets the tracing type based on newType
+     * @param newType 
+     */
+    
     protected void setTracingType(String newType) {
         ArrayList<String> selectedPrimaryNodeName = getSelectedPrimaryNodeName();
         if (selectedPrimaryNodeName.size() > 0) {
@@ -5789,6 +5845,12 @@ public class nTracer_
         return bounds;
     }
 
+    /**
+     * toggles the channel so that the ch-1 channel position in activeChannels is set to true, while the
+     * others are set to false. It then updates the window and display.
+     * @param Ch 
+     */
+    
     protected void toggleChannel(int Ch) {
         imp.setC(Ch);
         IJ.run(imp, toggleColor, "");
@@ -5818,45 +5880,91 @@ public class nTracer_
     public void windowActivated(WindowEvent windowevent) {
     }
 
+    /**
+     * implement window listener. 
+     * Override but no implementation as we do not close any image window here, as it will cause imageJ to crash
+     * @param windowevent 
+     */
+    
     @Override
     public void windowClosed(WindowEvent windowevent) {
         // do NOT close any image window here! Will cause ImageJ crushes!
     }
 
+    /**
+     * implement window listener.
+     * Gives an error message that says "Close image through menu option!"
+     * @param windowevent 
+     */
+    
     @Override
     public void windowClosing(WindowEvent windowevent) {
         IJ.error("Close image through menu option!");
     }
 
+    /**
+     * implement window listener when window is deactivated. 
+     * Override but no implementation
+     * @param windowevent 
+     */
     @Override
     public void windowDeactivated(WindowEvent windowevent) {
     }
-
+    
+    /**
+     * implement window listener when window is deiconified. 
+     * Override but no implementation
+     * @param windowevent 
+     */
+    
     @Override
     public void windowDeiconified(WindowEvent windowevent) {
     }
 
+    /**
+     * implement window listener when window is iconified. 
+     * Override but no implementation
+     * @param windowevent 
+     */
+    
     @Override
     public void windowIconified(WindowEvent windowevent) {
     }
 
+    /**
+     * implement window listener when window is opened.
+     * Override but no implementation
+     * @param windowevent 
+     */
+    
     @Override
     public void windowOpened(WindowEvent windowevent) {
     }
 
     /**
-     * methods implement MouseListener
-     *
+     * methods implement MouseMotionListener - respond to mouse event when mouse is exited
+     * override function, but with no implementation given
      * @param e
      */
     @Override
     public void mouseExited(MouseEvent e) {
     }
-
+    
+    /**
+     * methods implement MouseMotionListener - respond to mouse event when mouse is pressed
+     * override function, but with no implementation given
+     * @param e 
+     */
+    
     @Override
     public void mousePressed(MouseEvent e) {
     }
 
+    /**
+     * methods implement MouseMotionListener - respond to mouse event when mouse is clicked
+     * @param e 
+     */
+    
     @Override
     public void mouseClicked(MouseEvent e) {
         // first determine click number without repeated executing lower order click actions
@@ -5973,15 +6081,20 @@ public class nTracer_
     }
 
     /**
-     * methods implement MouseMotionListener
-     *
-     * @param e
+     * methods implement MouseMotionListener - respond to mouse event when mouse is dragged
+     * it calls the updateZprojectionImp() function
+     * @param me
      */
     @Override
     public void mouseDragged(MouseEvent me) {
         updateZprojectionImp();
     }
 
+    /**
+     * methods implement MouseMotionListener - respond to mouse event when mouse is moved
+     * @param me 
+     */
+    
     @Override
     public void mouseMoved(MouseEvent me) {
         if (me.getSource() == cns && impZproj != null) {
@@ -6082,6 +6195,13 @@ public class nTracer_
         }
     }
 
+    /**
+     * It calls scrollRectToVisible for pointTable_jTable and pointTable_jTable.getParent().
+     * It also sets the location of pointTable_jTable.getCellRect based on the parameters
+     * @param vRowIndex
+     * @param vColIndex 
+     */
+    
     protected void scroll2pointTableVisible(int vRowIndex, int vColIndex) {
         if (!(pointTable_jTable.getParent() instanceof JViewport)) {
             return;
@@ -6856,10 +6976,22 @@ public class nTracer_
         return nearestRoiName;
     }
 
+    /**
+     * methods implement MouseMotionListener - respond to mouse event when mouse is entered
+     * Override function, but no implementation given
+     * @param e 
+     */
+    
     @Override
     public void mouseEntered(MouseEvent e) {
     }
 
+    /**
+     * methods implement MouseMotionListener - respond to mouse event when mouse is released
+     * Override function, but no implementation given
+     * @param e 
+     */
+    
     @Override
     public void mouseReleased(MouseEvent e) {
     }
@@ -6889,7 +7021,7 @@ public class nTracer_
 
     /**
      * methods implement KeyListener -- response to keyboard event
-     *
+     * this is when key is pressed
      * @param keyevent
      */
     @Override
@@ -6898,7 +7030,11 @@ public class nTracer_
             Toolbar.getInstance().setTool("hand");
         }
     }
-
+    /**
+     * methods implement KeyListener -- response to keyboard event
+     * this is when key is released
+     * @param keyevent 
+     */
     @Override
     public void keyReleased(KeyEvent keyevent) {
         if ((int) keyevent.getKeyChar() == 32) {
@@ -6907,7 +7043,11 @@ public class nTracer_
             //Toolbar.getInstance().setTool(Toolbar.getInstance().getToolId(ntToolTrace.toolName));
         }
     }
-
+    /**
+     *  methods implement KeyListener -- response to keyboard event
+     * this is when key is type
+     * @param keyevent 
+     */
     @Override
     public void keyTyped(KeyEvent keyevent) {
         //IJ.log(keyevent.getKeyChar() + " = " + (int) keyevent.getKeyChar());
@@ -7173,6 +7313,11 @@ public class nTracer_
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="retrieve position and color info corresponding to mouse/wheel movement">
+    
+    /**
+     * updates position info based on MouseEvent e
+     * @param e 
+     */
     protected void updatePositionInfo(MouseEvent e) {
         crossX = cns.offScreenX(e.getX());
         crossY = cns.offScreenY(e.getY());
@@ -7202,6 +7347,11 @@ public class nTracer_
         colorInfo = colorInfo + (ptIntColor[impNChannel] + ")");
     }
 
+    /**
+     * updates the info so that the info jLabel's text is set to messega
+     * @param messega 
+     */
+    
     protected void updateInfo(String messega) {
         // update information
         info_jLabel.setText(messega);
@@ -7393,16 +7543,30 @@ public class nTracer_
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="update image display">
+    
+    /**
+     * records the the tree expansions selection status. 
+     * Does this by calling the recordNeuronTreeExpansionStatus() and recordTreeSelectionStatus() functions
+     */
     protected void recordTreeExpansionSelectionStatus() {
         recordNeuronTreeExpansionStatus();
         recordTreeSelectionStatus();
     }
 
+    /**
+     * restores the tree expansions selections status. 
+     * Does this by calling the restoreNeuronTreeExpansionStatus() and restoreTreeSelectionStatus() functions
+     */
+    
     protected void restoreTreeExpansionSelectionStatus() {
         restoreNeuronTreeExpansionStatus();
         restoreTreeSelectionStatus();
     }
 
+    /**
+     * records the expansions status of the neuron tree
+     */
+    
     protected void recordNeuronTreeExpansionStatus() {
         expandedNeuronNames.clear();
         for (int n = 0; n < rootNeuronNode.getChildCount(); n++) {
@@ -7415,6 +7579,10 @@ public class nTracer_
         }
     }
 
+    /**
+     * restores the expansions status of the neuron tree
+     */
+    
     protected void restoreNeuronTreeExpansionStatus() {
         for (int n = 0; n < rootNeuronNode.getChildCount(); n++) {
             ntNeuronNode neuron = (ntNeuronNode) rootNeuronNode.getChildAt(n);
@@ -7511,6 +7679,10 @@ public class nTracer_
         }
     }
 
+    /**
+     * updates neuron tree model and all soma tree model
+     */
+    
     protected void updateTrees() {
         neuronTreeModel.nodeStructureChanged(rootNeuronNode);
         allSomaTreeModel.nodeStructureChanged(rootAllSomaNode);
@@ -7593,6 +7765,12 @@ public class nTracer_
         }
     }
 
+    
+    /**
+     * returns an integer ArrayList of all the primary branch points associate with node
+     * @param node
+     * @return 
+     */
     public static ArrayList<int[]> getAllPrimaryBranchPoints(ntNeuronNode node) {
         ArrayList<int[]> allPoints = new ArrayList<int[]>();
 
@@ -7619,6 +7797,14 @@ public class nTracer_
     private Map<ntNeuronNode, Color> neuronColorTable = new HashMap<>();
     private Lock neuronColorTableLock = new ReentrantLock();
 
+    /**
+     * returns the RGB components of a neuron from a node as a color object
+     * If the color returned is white, the node or getNeuronColorFromNodeOriginal(node) function may be null
+     * @param node
+     * @param alpha
+     * @return 
+     */
+    
     public Color getNeuronColorFromNode(ntNeuronNode node, float alpha) {
         if (node == null) {
             return Color.white; // um this is broken?
@@ -7649,6 +7835,13 @@ public class nTracer_
         return toreturn;
     }
 
+    /**
+     * returns the RGB components of a neuron from a node original as a color object
+     * If the color returned is white, the node may not have any primary branch points
+     * @param node
+     * @return 
+     */
+    
     public Color getNeuronColorFromNodeOriginal(ntNeuronNode node) {
         ArrayList<int[]> neuronPoints = getAllPrimaryBranchPoints(node);
 
@@ -8175,6 +8368,12 @@ public class nTracer_
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="methods for addion/deletion of manual tracing results">
+    
+    /**
+     * updates the point table
+     * @param dataPoints 
+     */
+    
     protected void updatePointTable(ArrayList<String[]> dataPoints) {
         Object[][] pointData = ntDataHandler.getPointTableData(dataPoints);
         pointTableModel = new DefaultTableModel(pointData, pointColumnNames) {
@@ -8203,6 +8402,14 @@ public class nTracer_
         pointTable_jTable.setModel(pointTableModel);
     }
 
+    /**
+     * returns the soma node from the soma tree that corresponds to Neuron Number
+     * The input parameter must NOT contain ':' nor '-', otherwise, null will be returned
+     * returns null is no such soma exists
+     * @param NeuronNumber
+     * @return 
+     */
+    
     public static ntNeuronNode getSomaNodeFromAllSomaTreeByNeuronNumber(String NeuronNumber) {
         if (NeuronNumber.contains(":") || NeuronNumber.contains("-")) {
             IJ.error("Input parameter must be soma name that does NOT contain ':' nor '-' !");
@@ -8222,6 +8429,13 @@ public class nTracer_
         }
     }
 
+    /**
+     * returns the soma node in the neuron tree that somaName refers to
+     * If no such soma node exists, return null
+     * @param somaName
+     * @return 
+     */
+    
     protected static ntNeuronNode getSomaNodeFromNeuronTreeByNeuronNumber(String somaName) {
         for (int i = 0; i < rootNeuronNode.getChildCount(); i++) {
             ntNeuronNode compareNode = (ntNeuronNode) rootNeuronNode.getChildAt(i);
@@ -8253,6 +8467,13 @@ public class nTracer_
         }
     }
 
+    /**
+     * returns the "nodeName" node in the neuron tree
+     * Different implementations will be run depending on whether the node is a neuron root, branch, or soma slice
+     * @param nodeName
+     * @return 
+     */
+    
     protected ntNeuronNode getNodeFromNeuronTreeByNodeName(String nodeName) {
         ntNeuronNode node;
         if (nodeName.contains("/")) { // selected neuron root
@@ -8283,6 +8504,15 @@ public class nTracer_
         return node;
     }
 
+    /**
+     * return the "nodeName" tracing node
+     * calls getNodeFromNeuronTreeByNodeName(nodeName) if it a branch node
+     * calls getSomaSliceNodeFromAllSomaTreeBySomaSliceName(nodeName) if it is a soma slice node
+     * returns null if it is a trunck node, soma node, or not a node at all
+     * @param nodeName
+     * @return 
+     */
+    
     protected ntNeuronNode getTracingNodeByNodeName(String nodeName) {
         if (nodeName.contains("/")) { // a trunck node
             return null;
@@ -8518,6 +8748,7 @@ public class nTracer_
     // </editor-fold>
 
     /**
+     * creates a new tTracer_() object that is visible
      * @param args the command line arguments
      */
     public static void main(String args[]) {
@@ -8861,6 +9092,11 @@ public class nTracer_
     // </editor-fold>
     // </editor-fold>
     // </editor-fold>
+    
+    /**
+     * updates the display
+     */
+    
     protected void updateDisplay() {
         //IJ.log("update");
         if (imp != null) {
