@@ -149,6 +149,7 @@ public class nTracer_
         this.setTitle(nTracer_.VERSION);
 
         history = new History(this);
+        update = new Update(this);
         initPointTable();
         initNeuriteTree();
         initSomaTree();
@@ -3061,7 +3062,7 @@ public class nTracer_
         initiateCalibration();
         initChannels();
         Functions.setup(imp);
-        updatePointTable(tablePoints);
+        update.updatePointTable(tablePoints);
         initImageOverlay();
         //initTempHistoryZipFile();
         dataHelper.loadData();
@@ -3250,7 +3251,7 @@ public class nTracer_
             clearStartEndPts();
             initPointTable();
             tablePoints = new ArrayList<>();
-            updatePointTable(tablePoints);
+            update.updatePointTable(tablePoints);
             initNeuriteTree();
             initSomaTree();
             initSpineTree();
@@ -8369,45 +8370,14 @@ public class nTracer_
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="methods for addion/deletion of manual tracing results">
     
-    /**
-     * updates the point table
-     * @param dataPoints 
-     */
+    //incluedes updatePointTable function in update class ad other functions in update class
     
-    protected void updatePointTable(ArrayList<String[]> dataPoints) {
-        Object[][] pointData = ntDataHandler.getPointTableData(dataPoints);
-        pointTableModel = new DefaultTableModel(pointData, pointColumnNames) {
-            Class[] types = new Class[]{
-                java.lang.String.class, java.lang.Float.class,
-                java.lang.Float.class, java.lang.Float.class,
-                java.lang.Float.class, java.lang.Integer.class,
-                java.lang.String.class
-            };
-            boolean[] canEdit = new boolean[]{
-                false, false, false, false, false, false, false
-            };
-
-            @Override
-            public Class getColumnClass(int columnIndex) {
-                return types[columnIndex];
-            }
-
-            @Override
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return false; //canEdit[columnIndex];
-            }
-        };
-//        pointTableModelListener = new ntPointTableModelListener();
-//        pointTableModel.addTableModelListener(pointTableModelListener);
-        pointTable_jTable.setModel(pointTableModel);
-    }
-
     /**
      * returns the soma node from the soma tree that corresponds to Neuron Number
      * The input parameter must NOT contain ':' nor '-', otherwise, null will be returned
      * returns null is no such soma exists
      * @param NeuronNumber
-     * @return 
+     * @return ntNeuronNode
      */
     
     public static ntNeuronNode getSomaNodeFromAllSomaTreeByNeuronNumber(String NeuronNumber) {
@@ -8830,7 +8800,7 @@ public class nTracer_
     private javax.swing.JButton gotoConnection_jButton;
     private javax.swing.JMenu help_jMenu;
     private javax.swing.JMenuItem help_jMenuItem;
-    private javax.swing.JLabel info_jLabel;
+    protected javax.swing.JLabel info_jLabel;
     private javax.swing.JLabel intensityThreshold_jLabel;
     protected javax.swing.JSpinner intensityThreshold_jSpinner;
     private javax.swing.JButton jButton1;
@@ -8978,19 +8948,20 @@ public class nTracer_
     private final ntAnalysis analysis;
     protected ntTracing Functions;
     protected History history;
+    protected Update update;
     protected TraceHelper traceHelper;
     protected DataHelper dataHelper;
     public static ImagePlus imp, impZproj;
     protected CompositeImage cmp;
-    private ImageCanvas cns, cnsZproj;
+    protected ImageCanvas cns, cnsZproj;
     public static ImageStack stk;
     private ImageWindow win, winZproj;
     public static boolean[] activeChannels;
     public static boolean[] toggleChannels;
     public static boolean[] analysisChannels;
     public static int impNChannel;
-    private int impWidth, impHeight, impNSlice, impNFrame;
-    private int crossX, crossY, crossZ, roiXmin, roiYmin, zProjInterval, zProjXY;
+    protected int impWidth, impHeight, impNSlice, impNFrame;
+    protected int crossX, crossY, crossZ, roiXmin, roiYmin, zProjInterval, zProjXY;
     protected String editTargetNodeName = "0";
     protected ArrayList<String[]> tablePoints;
     protected int[] startPoint, endPoint;
@@ -8999,53 +8970,53 @@ public class nTracer_
     protected final int maskRadius = 1;
     private float[] ptIntColor;
     private final Overlay displayOL = new Overlay();
-    private final Overlay allNeuronTraceOL = new Overlay();
-    private final Overlay allNeuronNameOL = new Overlay();
-    private final Overlay allNeuronSynapseOL = new Overlay();
-    private final Overlay allNeuronConnectedOL = new Overlay();
-    private final Overlay allNeuronSpineOL = new Overlay();
-    private final Overlay selectedNeuronTraceOL = new Overlay();
-    private final Overlay selectedNeuronNameOL = new Overlay();
-    private final Overlay selectedNeuronSynapseOL = new Overlay();
-    private final Overlay selectedNeuronConnectedOL = new Overlay();
-    private final Overlay selectedNeuronSpineOL = new Overlay();
-    private final Overlay selectedArborTraceOL = new Overlay();
-    private final Overlay selectedArborNameOL = new Overlay();
-    private final Overlay selectedArborSynapseOL = new Overlay();
-    private final Overlay selectedArborConnectedOL = new Overlay();
-    private final Overlay selectedArborSpineOL = new Overlay();
-    private final Overlay selectedBranchTraceOL = new Overlay();
-    private final Overlay selectedBranchNameOL = new Overlay();
-    private final Overlay selectedBranchSynapseOL = new Overlay();
-    private final Overlay selectedBranchConnectedOL = new Overlay();
-    private final Overlay selectedBranchSpineOL = new Overlay();
-    private final Overlay allSomaSynapseOL = new Overlay();
-    private final Overlay allSomaConnectedOL = new Overlay();
-    private final Overlay selectedSomaSynapseOL = new Overlay();
-    private final Overlay selectedSomaConnectedOL = new Overlay();
-    private Overlay[] allNeuronTraceOLextPt;
-    private Overlay[] allNeuronNameOLextPt;
-    private Overlay[] allNeuronSpineOLextPt;
-    private Overlay[] selectedNeuronTraceOLextPt;
-    private Overlay[] selectedNeuronNameOLextPt;
-    private Overlay[] selectedNeuronSpineOLextPt;
-    private Overlay[] selectedArborTraceOLextPt;
-    private Overlay[] selectedArborNameOLextPt;
-    private Overlay[] selectedArborSpineOLextPt;
-    private Overlay[] selectedBranchTraceOLextPt;
-    private Overlay[] selectedBranchNameOLextPt;
-    private Overlay[] selectedBranchSpineOLextPt;
-    private Overlay[] allSomaTraceOL;
-    private Overlay[] allSomaNameOL;
-    private Overlay[] allSomaSpineOLextPt;
-    private Overlay[] selectedSomaTraceOL;
-    private Overlay[] selectedSomaNameOL;
-    private Overlay[] selectedSomaSpineOLextPt;
+    protected final Overlay allNeuronTraceOL = new Overlay();
+    protected final Overlay allNeuronNameOL = new Overlay();
+    protected final Overlay allNeuronSynapseOL = new Overlay();
+    protected final Overlay allNeuronConnectedOL = new Overlay();
+    protected final Overlay allNeuronSpineOL = new Overlay();
+    protected final Overlay selectedNeuronTraceOL = new Overlay();
+    protected final Overlay selectedNeuronNameOL = new Overlay();
+    protected final Overlay selectedNeuronSynapseOL = new Overlay();
+    protected final Overlay selectedNeuronConnectedOL = new Overlay();
+    protected final Overlay selectedNeuronSpineOL = new Overlay();
+    protected final Overlay selectedArborTraceOL = new Overlay();
+    protected final Overlay selectedArborNameOL = new Overlay();
+    protected final Overlay selectedArborSynapseOL = new Overlay();
+    protected final Overlay selectedArborConnectedOL = new Overlay();
+    protected final Overlay selectedArborSpineOL = new Overlay();
+    protected final Overlay selectedBranchTraceOL = new Overlay();
+    protected final Overlay selectedBranchNameOL = new Overlay();
+    protected final Overlay selectedBranchSynapseOL = new Overlay();
+    protected final Overlay selectedBranchConnectedOL = new Overlay();
+    protected final Overlay selectedBranchSpineOL = new Overlay();
+    protected final Overlay allSomaSynapseOL = new Overlay();
+    protected final Overlay allSomaConnectedOL = new Overlay();
+    protected final Overlay selectedSomaSynapseOL = new Overlay();
+    protected final Overlay selectedSomaConnectedOL = new Overlay();
+    protected Overlay[] allNeuronTraceOLextPt;
+    protected Overlay[] allNeuronNameOLextPt;
+    protected Overlay[] allNeuronSpineOLextPt;
+    protected Overlay[] selectedNeuronTraceOLextPt;
+    protected Overlay[] selectedNeuronNameOLextPt;
+    protected Overlay[] selectedNeuronSpineOLextPt;
+    protected Overlay[] selectedArborTraceOLextPt;
+    protected Overlay[] selectedArborNameOLextPt;
+    protected Overlay[] selectedArborSpineOLextPt;
+    protected Overlay[] selectedBranchTraceOLextPt;
+    protected Overlay[] selectedBranchNameOLextPt;
+    protected Overlay[] selectedBranchSpineOLextPt;
+    protected Overlay[] allSomaTraceOL;
+    protected Overlay[] allSomaNameOL;
+    protected Overlay[] allSomaSpineOLextPt;
+    protected Overlay[] selectedSomaTraceOL;
+    protected Overlay[] selectedSomaNameOL;
+    protected Overlay[] selectedSomaSpineOLextPt;
 
     private final int roiSearchRange = 8;
     private Line xyHL, xyVL;
     private Roi startBoxXY, endBoxXY;
-    private final String[] pointColumnNames = {"Type", "X", "Y", "Z", "Radius", "Synapse?", "Connection"};
+    protected final String[] pointColumnNames = {"Type", "X", "Y", "Z", "Radius", "Synapse?", "Connection"};
     protected DefaultTableModel pointTableModel;
     private ntPointSelectionListener pointSelectionListener;
 //    private ntPointTableModelListener pointTableModelListener;
@@ -9307,7 +9278,7 @@ public class nTracer_
 
     public java.util.List<Roi> auxOverlay;
 
-    private void updateOverlay() {
+    protected void updateOverlay() {
         displayOL.clear();
 
         // overlay all neurons
@@ -9456,7 +9427,7 @@ public class nTracer_
     }
 
     // <editor-fold defaultstate="collapsed" desc="inner Class for multi-threading -- getAllNeuronAndNameOL">
-    private void getAllNeuronAndNameOLMultiThread(
+    protected void getAllNeuronAndNameOLMultiThread(
             Overlay neuronTraceOL, Overlay neuronNameOL, Overlay neuronSynapseOL, Overlay neuronConnectedOL, Overlay allNeuronSpineOL) {
         int totalChild = rootNeuronNode.getChildCount();
         if (totalChild == 0) {
@@ -9556,7 +9527,7 @@ public class nTracer_
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="inner Class for multi-threading -- getAllNeuronAndNameOLextPt">
-    private void getAllNeuronAndNameOLextPtMultiThread(
+    protected void getAllNeuronAndNameOLextPtMultiThread(
             Overlay[] neuronTraceOL, Overlay[] neuronNameOL, Overlay neuronSynapseOL,
             Overlay neuronConnectedOL, Overlay[] neuronSpineOL, int extendPoints) {
         int totalChild = rootNeuronNode.getChildCount();
@@ -9675,7 +9646,7 @@ public class nTracer_
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="inner Class for multi-threading -- getSelectedNeuronAndNameOL">
-    private void getSelectedNeuronAndNameOLMultiThread(
+    protected void getSelectedNeuronAndNameOLMultiThread(
             Overlay neuronTraceOL, Overlay neuronNameOL, Overlay neuronSynapseOL, Overlay neuronConnectedOL, Overlay neuronSpineOL) {
         // retreive all selected paths to be displayed
         if (neuronList_jTree.getSelectionCount() == 0) {
@@ -9793,7 +9764,7 @@ public class nTracer_
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="inner Class for multi-threading -- getSelectedNeuronAndNameOLextPt">
-    private void getSelectedNeuronAndNameOLextPtMultiThread(
+    protected void getSelectedNeuronAndNameOLextPtMultiThread(
             Overlay[] neuronTraceOL, Overlay[] neuronNameOL, Overlay neuronSynapseOL, Overlay neuronConnectedOL, Overlay[] neuronSpineOL,
             int extendPoints) {
         // retreive all selected paths to be displayed
@@ -9922,7 +9893,7 @@ public class nTracer_
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="inner Class for multi-threading -- getSelectedArborAndNameOL">
-    private void getSelectedArborAndNameOLMultiThread(
+    protected void getSelectedArborAndNameOLMultiThread(
             Overlay arborTraceOL, Overlay arborNameOL, Overlay arborSynapseOL, Overlay arborConnectedOL, Overlay arborSpineOL) {
         // retreive all selected paths to be displayed
         if (neuronList_jTree.getSelectionCount() == 0) {
@@ -10039,7 +10010,7 @@ public class nTracer_
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="inner Class for multi-threading -- getSelectedArborAndNameOLextPt">
-    private void getSelectedArborAndNameOLextPtMultiThread(
+    protected void getSelectedArborAndNameOLextPtMultiThread(
             Overlay[] arborTraceOL, Overlay[] arborNameOL, Overlay arborSynapseOL, Overlay arborConnectedOL,
             Overlay[] arborSpineOL, int extendPoints) {
         // retreive all selected paths to be displayed
@@ -10170,7 +10141,7 @@ public class nTracer_
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="inner Class for multi-threading -- getSelectedBranchAndNameOL">
-    private void getSelectedBranchAndNameOLMultiThread(
+    protected void getSelectedBranchAndNameOLMultiThread(
             Overlay branchTraceOL, Overlay branchNameOL, Overlay branchSynapseOL, Overlay branchConnectedOL, Overlay branchSpineOL) {
         // retreive all selected paths to be displayed
         if (neuronList_jTree.getSelectionCount() == 0) {
@@ -10289,7 +10260,7 @@ public class nTracer_
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="inner Class for multi-threading -- getSelectedBranchAndNameOLextPt">
-    private void getSelectedBranchAndNameOLextPtMultiThread(
+    protected void getSelectedBranchAndNameOLextPtMultiThread(
             Overlay[] branchTraceOL, Overlay[] branchNameOL, Overlay branchSynapseOL, Overlay branchConnectedOL,
             Overlay[] branchSpineOL, int extendPoints) {
         // retreive all selected paths to be displayed
@@ -10421,7 +10392,7 @@ public class nTracer_
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="inner Class for multi-threading -- getAllSomaAndNameOL">
-    private void getAllSomaAndNameOLextPtMultiThread(
+    protected void getAllSomaAndNameOLextPtMultiThread(
             Overlay[] somaTraceOL, Overlay[] somaNameOL, Overlay somaSynapseOL, Overlay somaConnectedOL,
             Overlay[] somaSpineOL, boolean singleSliceSynapse) {
         int totalChild = rootNeuronNode.getChildCount();
@@ -10537,7 +10508,7 @@ public class nTracer_
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="inner Class for multi-threading -- getSelectedSomaAndNameOL">
-    private void getSelectedSomaAndNameOLextPtMultiThread(
+    protected void getSelectedSomaAndNameOLextPtMultiThread(
             Overlay[] somaTraceOL, Overlay[] somaNameOL, Overlay somaSynapseOL,
             Overlay somaConnectedOL, Overlay[] somaSpineOL, boolean singleSliceSynapse) {
         // retreive all selected paths to be displayed
@@ -10787,7 +10758,7 @@ public class nTracer_
             //Make sure update the soma node.
             rootDisplaySomaNode = displaySomaNode;
             displaySomaTreeModel.setRoot(rootDisplaySomaNode);
-            updatePointTable(tablePoints);
+            update.updatePointTable(tablePoints);
             canUpdateDisplay = true;
             if (canUpdateDisplay) {
                 updateDisplay();
@@ -10859,7 +10830,7 @@ public class nTracer_
                     }
                 }
             }
-            updatePointTable(tablePoints);
+            update.updatePointTable(tablePoints);
             if (canUpdateDisplay) {
                 updateDisplay();
             }
