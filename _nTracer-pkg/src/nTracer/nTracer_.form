@@ -543,12 +543,15 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="jumpTo_jPanel" alignment="0" max="32767" attributes="0"/>
-                          <Component id="editNeuron_jPanel" alignment="0" max="32767" attributes="0"/>
-                          <Component id="editBranch_jPanel" alignment="0" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="jumpTo_jPanel" alignment="0" max="32767" attributes="0"/>
+                              <Component id="editNeuron_jPanel" alignment="0" max="32767" attributes="0"/>
+                              <Component id="editBranch_jPanel" alignment="0" max="32767" attributes="0"/>
+                          </Group>
+                          <Component id="consensusSomaButton" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace type="unrelated" max="32767" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="1" max="-2" attributes="0">
                           <Component id="editConnection_jPanel" alignment="0" max="32767" attributes="0"/>
                           <Component id="editSynapse_jPanel" alignment="0" max="32767" attributes="0"/>
@@ -570,10 +573,12 @@
                               <Component id="editNeuron_jPanel" min="-2" pref="118" max="-2" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Component id="jumpTo_jPanel" min="-2" pref="160" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="consensusSomaButton" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="1" attributes="0">
-                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="136" max="32767" attributes="0"/>
                               <Component id="delete_jPanel" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="editSoma_jPanel" min="-2" max="-2" attributes="0"/>
@@ -609,7 +614,7 @@
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="setPrimaryBranch_jButton" pref="0" max="32767" attributes="0"/>
+                              <Component id="setPrimaryBranch_jButton" max="32767" attributes="0"/>
                               <Component id="joinBranches_jButton" alignment="1" max="32767" attributes="0"/>
                               <Component id="breakBranch_jButton" alignment="1" max="32767" attributes="0"/>
                           </Group>
@@ -1217,6 +1222,14 @@
                 </Component>
               </SubComponents>
             </Container>
+            <Component class="javax.swing.JButton" name="consensusSomaButton">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Consensus"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="consensusSomaButtonActionPerformed"/>
+              </Events>
+            </Component>
           </SubComponents>
         </Container>
         <Container class="javax.swing.JPanel" name="overlay_jPanel">
@@ -2251,7 +2264,7 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="clearPoints_jButton" min="-2" pref="27" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="jPanel4" min="-2" pref="93" max="-2" attributes="0"/>
+                      <Component id="jPanel4" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="channel_jPanel" min="-2" pref="176" max="-2" attributes="0"/>
                       <EmptySpace pref="72" max="32767" attributes="0"/>
@@ -2625,7 +2638,7 @@
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="1" attributes="0">
-                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="7" max="32767" attributes="0"/>
                           <Group type="103" groupAlignment="1" max="-2" attributes="0">
                               <Component id="traceNeurite_jButton" max="32767" attributes="0"/>
                               <Group type="102" attributes="0">
