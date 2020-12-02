@@ -21,8 +21,9 @@ import static nTracer.nTracer_.rootNeuronNode;
 import static nTracer.nTracer_.rootSpineNode;
 
 /**
+ * Helper methods for tracing, branching and node creation.
  *
- * @author Dawen, Wei Jie
+ * @author Dawen Cai, Wei Jie Lee
  */
 public class TraceHelper {
     private nTracer_ nTracer;
@@ -187,8 +188,8 @@ public class TraceHelper {
     }
 
     /**
-     * Semi-Automated tracing using kick-ball to trace from single point.
-     */
+    * Semi-Automated tracing using kick-ball to trace from single point
+    */
     protected void traceKickBallPath() {
         ArrayList<int[]> kickBallPathPoints;
         kickBallPathPoints = nTracer.Functions.getKickBallPath(nTracer.startPoint, nTracer.analysisChannels, nTracer.imp.getFrame(), nTracer.colorThreshold, nTracer.xyRadius, nTracer.zRadius, nTracer.maskRadius);
@@ -214,6 +215,9 @@ public class TraceHelper {
         }
     }
 
+    /**
+    * Manual tracing of neurite
+    */
     protected void manualTraceNeurite() {
         if (nTracer.hasStartPt && nTracer.hasEndPt) {
             ArrayList<int[]> minCostPathPoints = nTracer.Functions.getMinCostPath3D(nTracer.startPoint, nTracer.endPoint, nTracer.analysisChannels, nTracer.imp.getFrame(), nTracer.xyExtension, nTracer.zExtension);
@@ -251,6 +255,9 @@ public class TraceHelper {
         }
     }
 
+    /**
+    * Semi-automated tracing of neurite
+    */
     protected void semiAutoTraceNeurite() {
         if (nTracer.hasStartPt && nTracer.hasEndPt) {
             ArrayList<int[]> minCostPathPoints = nTracer.Functions.getMinCostPath3D(nTracer.startPoint, nTracer.endPoint, nTracer.analysisChannels, nTracer.imp.getFrame(), nTracer.xyExtension, nTracer.zExtension);
@@ -317,6 +324,9 @@ public class TraceHelper {
         }
     }
 
+    /**
+    * Trace soma min cost path
+    */
     protected void traceSomaMinCostPath() {
         if (nTracer.hasStartPt && nTracer.hasEndPt) {
             if (nTracer.startPoint[3] == nTracer.endPoint[3]) {
@@ -358,15 +368,15 @@ public class TraceHelper {
     }
 
     /**
-     * Fully automated tracing.
-     */
+    * Fully automated tracing
+    */
     protected void autoTraceNeurite() {
         IJ.error("Coming soon ...");
     }
     
     /**
-     * Manual tracing using A-star to find minimum cost path between two points.
-     */
+    * Manual tracing using A-star to find minimum cost path between two points.
+    */
     protected void manualTraceSpine() {
         if (nTracer.hasStartPt && nTracer.hasEndPt) {
             ArrayList<int[]> minCostPathPoints = nTracer.Functions.getMinCostPath3D(nTracer.startPoint, nTracer.endPoint, nTracer.analysisChannels, nTracer.imp.getFrame(), nTracer.xyExtension, nTracer.zExtension);
@@ -501,6 +511,9 @@ public class TraceHelper {
         }
     }
     
+    /**
+    * Break branch of trace
+    */
     protected void breakBranch() {
         ntNeuronNode selectedBranchNode = (ntNeuronNode) nTracer.neuronList_jTree.getLastSelectedPathComponent();
         if (!(nTracer.pointTable_jTable.getSelectedRowCount() == 1 && selectedBranchNode.isBranchNode())) {
@@ -533,6 +546,9 @@ public class TraceHelper {
         nTracer.updateDisplay();
     }
     
+    /**
+    * Join branches
+    */
     protected void joinBranches() {
         if (nTracer.neuronList_jTree.getSelectionCount() != 1 || nTracer.editTargetNodeName.equals("0")) {
             IJ.error("Select one branch from the tree list and" + "/n"
@@ -742,6 +758,9 @@ public class TraceHelper {
         nTracer.updateDisplay();
     }
     
+    /**
+    * Set primary branch
+    */
     protected void setPrimaryBranch() {
         if (nTracer.neuronList_jTree.getSelectionCount() != 1) {
             IJ.error("Select only ONE branch !");
@@ -772,6 +791,9 @@ public class TraceHelper {
         }
     }
     
+    /**
+    * Delete branch from neuron tree
+    */
     protected void deleteOneBranchFromNeuronTree() {
         if (nTracer.neuronList_jTree.getSelectionCount() == 1) {
             ntNeuronNode delNode = (ntNeuronNode) (nTracer.neuronList_jTree.getLastSelectedPathComponent());
@@ -792,6 +814,9 @@ public class TraceHelper {
         }
     }
     
+    /**
+    * Delete branch and its child node
+    */
     protected void deleteBranchAndChildNode(ntNeuronNode delParentBranchNode) {
 
         // delete all nodes by recursion -- delete the most distal branches first
@@ -817,6 +842,9 @@ public class TraceHelper {
         nTracer.neuronTreeModel.removeNodeFromParent(delParentBranchNode);
     }
     
+    /**
+     * Find a node by name and replace a current node
+     */
     protected void renameNodeByNewNodeNameAndSetConnection(ntNeuronNode node, String newNodeName, int synapseNumberOffset) {
         // set the node's connection first with synapseNumberOffset 
         String oldNodeName = node.toString();
@@ -879,6 +907,9 @@ public class TraceHelper {
         return neuronSomaNode.getChildCount();
     }
     
+    /**
+     * Remove spine from spine tree
+     */
     protected void removeSpine(String spineTag) {
         //IJ.log("spineTag = "+spineTag);
         ntNeuronNode removeNode = getSpineNode(spineTag);
@@ -889,6 +920,9 @@ public class TraceHelper {
         }
     }
     
+    /**
+     * Get spine from spine tree
+     */
     protected ntNeuronNode getSpineNode(String spineTag) {
         int totalSpine = rootSpineNode.getChildCount();
         String spineNumber = getSpineNumberFromTag(spineTag);
@@ -910,9 +944,10 @@ public class TraceHelper {
         }
         return null;
     }
-
     
-    
+    /**
+    * Add tracing point as neuron
+    */
     private int addTracingToNeuron(ArrayList<String[]> points) {
         //IJ.log("tablePoints is empty? " + (tablePoints.isEmpty()));
         if (nTracer.neuronList_jTree.getSelectionCount() == 0) { // start fresh tracing
@@ -986,6 +1021,9 @@ public class TraceHelper {
         }
     }
     
+    /**
+    * Add tracing point as spine
+    */
     private void addTracingAsSpine(ArrayList<String[]> points) {
         //IJ.log("tablePoints is empty? " + (tablePoints.isEmpty()));
         if (nTracer.neuronList_jTree.getSelectionCount() != 1) { // start fresh tracing
@@ -1143,6 +1181,9 @@ public class TraceHelper {
         nTracer.allSomaTreeModel.removeNodeFromParent(getSomaNodeFromAllSomaTreeByNeuronNumber(sourceNeuronNumber));
     }
     
+    /**
+    * Search for node by end points
+    */
     private ntNeuronNode searchNodeByEndPoints(String[] firstPt, String[] lastPt, ntNeuronNode primaryNode) {
         ArrayList<ntNeuronNode> allNodes = new ArrayList<>();
         getAllNodes(primaryNode, allNodes);
@@ -1154,6 +1195,9 @@ public class TraceHelper {
         return null;
     }
     
+    /**
+    * Check if a node contain a set of end points
+    */
     private boolean nodeContainsEndPoints(String[] firstPt, String[] lastPt, ntNeuronNode node) {
         ArrayList<String[]> result = node.getTracingResult();
         String[] result0 = result.get(0);
@@ -1245,6 +1289,9 @@ public class TraceHelper {
         }
     }
 
+    /**
+    * Merge branch node and child to parent node
+    */
     private void mergeBranchNodeAndChild2ParentNode(ntNeuronNode mergeNode, ntNeuronNode parentNode) {
         // insert parentNode tracing results to the front of the mergeNode result
         ArrayList<String[]> mergeNodeResults = mergeNode.getTracingResult();
@@ -1273,6 +1320,9 @@ public class TraceHelper {
         }
     }
     
+    /**
+    * Create neuron with primary branch node
+    */
     private void createNewNeuronWithPrimaryBranchNode(ntNeuronNode primaryBranchNode) {
         int newSomaPosition = getNextSomaNodePositionINrootNeuronNode();
         String neuronName = "" + (newSomaPosition + 1);
@@ -1294,6 +1344,9 @@ public class TraceHelper {
         nTracer.neuronTreeModel.insertNodeInto(primaryBranchNode, newNeuronSoma, 0);
     }
 
+    /**
+    * Create new neuron with soma
+    */
     private void createNewNeuronWithSomaData(ArrayList<String[]> dataPoints) {
         int newSomaPosition = getNextSomaNodePositionINrootNeuronNode();
         String neuronName = "" + (newSomaPosition + 1);
@@ -1325,6 +1378,9 @@ public class TraceHelper {
         //updateDisplayMultiThread();
     }
 
+    /**
+    * Insert new soma slice into soma neuron tree
+    */
     private void insertNewSomaSliceIntoSelectedNeuronTreeSoma(ntNeuronNode neuronSomaNode) {
         String neuronNumber = neuronSomaNode.getNeuronNumber();
         String sliceNumber = nTracer.tablePoints.get(0)[3];
@@ -1381,6 +1437,9 @@ public class TraceHelper {
         //saveHistory();
     }
 
+    /**
+    * Add to front of branch
+    */
     private void addToFrontOfSelectedBranch(ArrayList<String[]> points) {
         for (int i = 1; i < points.size(); i++) {
             nTracer.tablePoints.add(0, points.get(i));
@@ -1388,6 +1447,9 @@ public class TraceHelper {
         ((ntNeuronNode) (nTracer.neuronList_jTree.getLastSelectedPathComponent())).setTracingResult(nTracer.tablePoints);
     }
 
+    /**
+    * Add to end of branch
+    */
     private void addToEndOfSelectedBranch(ArrayList<String[]> points) {
         for (int i = 1; i < points.size(); i++) {
             nTracer.tablePoints.add(nTracer.tablePoints.size(), points.get(i));
@@ -1395,6 +1457,9 @@ public class TraceHelper {
         ((ntNeuronNode) (nTracer.neuronList_jTree.getLastSelectedPathComponent())).setTracingResult(nTracer.tablePoints);
     }
 
+    /**
+    * Add to front of soma
+    */
     private void addToFrontOfSelectedSoma(ArrayList<String[]> points) {
         for (int i = 1; i < points.size(); i++) {
             String[] addPoint = points.get(i);
@@ -1404,6 +1469,9 @@ public class TraceHelper {
         ((ntNeuronNode) (nTracer.displaySomaList_jTree.getLastSelectedPathComponent())).setTracingResult(nTracer.tablePoints);
     }
 
+    /**
+    * Add to end of soma
+    */
     private void addToEndOfSelectedSoma(ArrayList<String[]> points) {
         for (int i = 1; i < points.size(); i++) {
             String[] addPoint = points.get(i);
@@ -1413,6 +1481,9 @@ public class TraceHelper {
         ((ntNeuronNode) (nTracer.displaySomaList_jTree.getLastSelectedPathComponent())).setTracingResult(nTracer.tablePoints);
     }
 
+    /**
+    * Create spine and add to spine tree model
+    */
     private void createSpine(String spineNumber, ArrayList<String[]> points) {
         ntNeuronNode newSpineNode = new ntNeuronNode(spineNumber + "", points);
         nTracer.spineTreeModel.insertNodeInto(newSpineNode, rootSpineNode, Integer.parseInt(spineNumber) - 1);

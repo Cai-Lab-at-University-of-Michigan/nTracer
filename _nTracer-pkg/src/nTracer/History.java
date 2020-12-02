@@ -6,12 +6,15 @@
 package nTracer;
 
 import ij.IJ;
+import ij.gui.GenericDialog;
 import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import static java.util.concurrent.TimeUnit.MINUTES;
 import javax.swing.tree.TreePath;
 import static nTracer.nTracer_.imp;
@@ -21,6 +24,7 @@ import static nTracer.nTracer_.rootNeuronNode;
 import static nTracer.nTracer_.rootSpineNode;
 
 /**
+ * Methods that manage history and autosave.
  *
  * @author Dawen, Wei Jie
  */
@@ -39,7 +43,11 @@ public class History {
     private int[][] historyStartPoint, historyEndPoint;
     private boolean[] historyHasStartPt, historyHasEndPt;
     
-    public History(nTracer_ nTracer) {
+    protected long autosaveIntervalMin = 5L;
+    protected boolean delAutosaved = false;
+    private ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+    
+    protected History(nTracer_ nTracer) {
         this.nTracer = nTracer;
         historyIndexStack = new ArrayList<>();
         historyPointer = 0;
@@ -80,8 +88,10 @@ public class History {
         }
     }
     
-        
-    public void saveHistory() {
+    /**
+    * Save new history state
+    */
+    protected void saveHistory() {
         if (historyPointer < 0) { // initial saving
             historyPointer++;
             historyIndexStack.set(historyPointer, 0);
@@ -106,7 +116,10 @@ public class History {
         //IJ.log("prevHistoryLevel = "+(historyPointer-1)+"; currentHistoryLevel = "+historyPointer+"; load memory "+historyIndexStack.get(historyPointer));
     }
 
-    public void backwardHistory() {
+    /**
+    * Move backwards 1 step in history
+    */
+    protected void backwardHistory() {
         if (historyPointer > 0) {
             historyPointer--;
             //IJ.log("prevHistoryLevel = "+(historyPointer+1)+"; currentHistoryLevel = "+historyPointer+"; load memory "+historyIndexStack.get(historyPointer));
@@ -119,7 +132,10 @@ public class History {
         }
     }
 
-    public void forwardHistory() {
+    /**
+    * Move forwards 1 step in history
+    */
+    protected void forwardHistory() {
         if (historyPointer < maxHistoryLevel - 1 && historyIndexStack.get(historyPointer + 1) >= 0) {
             historyPointer++;
             //IJ.log("prevHistoryLevel = "+(historyPointer-1)+"; currentHistoryLevel = "+historyPointer+"; load memory "+historyIndexStack.get(historyPointer));
@@ -132,7 +148,28 @@ public class History {
         }
     }
     
-    public void startAutosave(long interval) {
+   /**
+    * Setup autosave
+    */
+    protected void autosaveSetup() {
+        String[] saveIntervals = {"5", "10", "15", "20", "25", "30"};
+        GenericDialog gd = new GenericDialog("Autosave Setup");
+        gd.addChoice("Save every (min): ", saveIntervals, autosaveIntervalMin + "");
+        gd.addCheckbox("Delete autosaved when closing image ?", delAutosaved);
+        gd.showDialog();
+        autosaveIntervalMin = Long.parseLong(gd.getNextChoice());
+        delAutosaved = gd.getNextBoolean();
+        if (!gd.wasCanceled()) {
+            scheduler.shutdown();
+            scheduler = Executors.newScheduledThreadPool(1);
+            startAutosave();
+        }
+    }
+    
+    /**
+    * Start autosave with scheduler
+    */
+    protected void startAutosave() {
         //IJ.log(IJ.getDirectory("current"));
         final String folder = IJ.getDirectory("current") + "/" + imp.getTitle() + "_nTracer_Autosave" + "/";
         File autosaveFolder = new File(folder);
@@ -141,10 +178,31 @@ public class History {
         }
         //IJ.log("autosave: "+historyIndexStack.get(historyPointer)+"; "+interval+"; "+MINUTES);
 
-        nTracer.scheduler.scheduleAtFixedRate(() -> {
+        scheduler.scheduleAtFixedRate(() -> {
             autoSave2File(folder, historyIndexStack.get(historyPointer));
-        }, 0, interval, MINUTES);
+        }, 0, autosaveIntervalMin, MINUTES);
 
+    }
+    
+   /**
+    * Stop autosave with scheduler
+    */
+    protected void stopAutosave() {
+        scheduler.shutdown();
+        if (delAutosaved) {
+            // delete tracing autosave folder
+            String folder = IJ.getDirectory("current") + "/" + imp.getTitle() + "_nTracer_Autosave" + "/";
+            File autosaveFolder = new File(folder);
+            //make sure directory exists
+            if (!autosaveFolder.exists()) {
+                IJ.error(autosaveFolder + " does not exist.");
+            } else {
+                try {
+                    nTracer.IO.delete(autosaveFolder);
+                } catch (IOException e) {
+                }
+            }
+        }
     }
     
     private void recordTreeExpansionSelectionStatus(int historyLevel) {
@@ -157,7 +215,9 @@ public class History {
         restoreTreeSelectionStatus(historyLevel);
     }
     
-    
+    /**
+    * Record expansion status of neuron tree
+    */
     private void recordNeuronTreeExpansionStatus(int historyLevel) {
         ArrayList<String> levelExpandedNeuronNames = historyExpandedNeuronNames.get(historyLevel);
         levelExpandedNeuronNames.clear();
@@ -173,6 +233,9 @@ public class History {
         }
     }
     
+    /**
+    * Restore expansion status of neuron tree
+    */
     private void restoreNeuronTreeExpansionStatus(int historyLevel) {
         ArrayList<String> levelExpandedNeuronNames = historyExpandedNeuronNames.get(historyLevel);
         for (int n = 0; n < rootNeuronNode.getChildCount(); n++) {
@@ -191,6 +254,9 @@ public class History {
         }
     }
     
+    /**
+    * Record selection status of tree
+    */
     private void recordTreeSelectionStatus(int historyLevel) {
         ArrayList<String> levelSelectedNeuronNames = historySelectedNeuronNames.get(historyLevel);
         ArrayList<String> levelSelectedSomaSliceNames = historySelectedSomaSliceNames.get(historyLevel);
@@ -230,6 +296,9 @@ public class History {
         historyPointTableVisibleRect[historyLevel] = nTracer.pointTable_jTable.getVisibleRect();
     }
     
+    /**
+    * Restore selection status of tree
+    */
     private void restoreTreeSelectionStatus(int historyLevel) {
         ArrayList<String> levelSelectedNeuronNames = historySelectedNeuronNames.get(historyLevel);
         ArrayList<String> levelSelectedSomaSliceNames = historySelectedSomaSliceNames.get(historyLevel);
@@ -277,6 +346,9 @@ public class History {
         nTracer.pointTable_jTable.scrollRectToVisible(historyPointTableVisibleRect[historyLevel]);
     }
     
+    /**
+    * Save history to memory
+    */
     private boolean saveHistory2Memory(int historyLevel) {
         if (imp == null) {
             return false;
@@ -307,6 +379,9 @@ public class History {
         return true;
     }
 
+    /**
+    * Load history from memory
+    */
     private boolean loadHistoryFromMemory(int historyLevel) {
         if (imp == null) {
             return false;
@@ -337,6 +412,9 @@ public class History {
         }
     }
     
+    /**
+    * Restore image position
+    */
     private void restoreImagePosition(int historyLevel) {
         int c = impPosition[historyLevel][0];
         int z = impPosition[historyLevel][1];
@@ -344,6 +422,9 @@ public class History {
         imp.setPosition(c, z, f);
     }
 
+    /**
+    * Record panel parameters to history
+    */
     private void recordPanelParameters(int historyLevel) {
         nTracerParameters[historyLevel][0] = nTracer.xyRadius + "";
         nTracerParameters[historyLevel][1] = nTracer.zRadius + "";
@@ -376,17 +457,23 @@ public class History {
         nTracerParameters[historyLevel][28] = (int) nTracer.synapseRadius + "";
         nTracerParameters[historyLevel][29] = nTracer.pointBoxRadius + "";
         nTracerParameters[historyLevel][30] = nTracer.lineWidthOffset + "";
-        nTracerParameters[historyLevel][31] = nTracer.autosaveIntervalMin + "";
-        nTracerParameters[historyLevel][32] = nTracer.delAutosaved + "";
+        nTracerParameters[historyLevel][31] = autosaveIntervalMin + "";
+        nTracerParameters[historyLevel][32] = delAutosaved + "";
         //synapseSize = synapseRadius*2+1 
     }
 
+    /**
+    * Record image position
+    */
     private void recordImagePosition(int historyLevel) {
         impPosition[historyLevel][0] = imp.getC();
         impPosition[historyLevel][1] = imp.getZ();
         impPosition[historyLevel][2] = imp.getFrame();
     }
 
+   /**
+    * Record start and end point status
+    */
     private void restoreStartEndPointStatus(int historyLevel) {
         for (int i = 0; i < 5; i++) {
             nTracer.startPoint[i] = historyStartPoint[historyLevel][i];
@@ -395,7 +482,10 @@ public class History {
         nTracer.hasStartPt = historyHasStartPt[historyLevel];
         nTracer.hasEndPt = historyHasEndPt[historyLevel];
     }
-
+    
+    /**
+    * Record start and end point status
+    */
     private void recordStartEndPointStatus(int historyLevel) {
         if (nTracer.startPoint == null) {
             historyStartPoint[historyLevel] = new int[7];
@@ -411,6 +501,9 @@ public class History {
         historyHasEndPt[historyLevel] = nTracer.hasEndPt;
     }
 
+    /**
+    * Auto save to file
+    */
     private boolean autoSave2File(String folder, int historyLevel) {
         if (imp != null && (rootNeuronNode.getChildCount() > 0 || rootAllSomaNode.getChildCount() > 0)) {
             SimpleDateFormat fileFormatter = new SimpleDateFormat("yyyy-MM-dd'at'HHmm");

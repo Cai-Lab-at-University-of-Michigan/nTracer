@@ -6,10 +6,14 @@
 package nTracer;
 
 /**
+ * Utility methods for nTracer.
  *
  * @author Dawen, Wei Jie
  */
 public class Utils {
+    /**
+    * Check if string is an integer
+    */
     public static boolean isInteger(String input) {
         try {
             Integer.parseInt(input);
@@ -19,6 +23,9 @@ public class Utils {
         }
     }
 
+    /**
+    * Check if string is a float
+    */
     public static boolean isFloat(String input) {
         try {
             Float.parseFloat(input);
@@ -28,6 +35,9 @@ public class Utils {
         }
     }
 
+    /**
+    * Check if string is a double
+    */
     public static boolean isDouble(String input) {
         try {
             Double.parseDouble(input);
@@ -37,6 +47,9 @@ public class Utils {
         }
     }
 
+    /**
+    * Check if string is a long
+    */
     public static boolean isLong(String input) {
         try {
             Long.parseLong(input);

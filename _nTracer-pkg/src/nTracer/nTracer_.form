@@ -417,7 +417,7 @@
                                       <Component id="endIntensity_jLabel" min="-2" pref="145" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
-                              <EmptySpace pref="40" max="32767" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <Group type="103" groupAlignment="1" attributes="0">
@@ -853,7 +853,7 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="toggleConnection_jButton" pref="83" max="32767" attributes="0"/>
+                      <Component id="toggleConnection_jButton" max="32767" attributes="0"/>
                       <Component id="gotoConnection_jButton" alignment="0" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
@@ -1370,6 +1370,9 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="overlayAllNeuron_jCheckBoxActionPerformed"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="overlayAllSoma_jCheckBox">
                   <Properties>
@@ -1392,6 +1395,9 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="overlayAllSoma_jCheckBoxActionPerformed"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="overlayAllSynapse_jCheckBox">
                   <Properties>
@@ -1414,6 +1420,9 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="overlayAllSynapse_jCheckBoxActionPerformed"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="overlayAllName_jCheckBox">
                   <Properties>
@@ -1439,6 +1448,9 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="overlayAllName_jCheckBoxActionPerformed"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="overlayAllConnection_jCheckBox">
                   <Properties>
@@ -1458,6 +1470,9 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="overlayAllConnection_jCheckBoxActionPerformed"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JSpinner" name="extendAllDisplayPoints_jSpinner">
                   <Properties>
@@ -1469,6 +1484,9 @@
                   <Events>
                     <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="extendAllDisplayPoints_jSpinnerStateChanged"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JLabel" name="allPlusMinus_jLabel">
                   <Properties>
@@ -1495,6 +1513,9 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="overlayAllPoints_jCheckBoxActionPerformed"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JLabel" name="lineWidthOffset_jLabel">
                   <Properties>
@@ -1515,6 +1536,9 @@
                   <Events>
                     <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="allNeuronLineWidthOffset_jSpinnerStateChanged"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="overlayAllSpine_jCheckBox">
                   <Properties>
@@ -1534,6 +1558,9 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="overlayAllSpine_jCheckBoxActionPerformed"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                  </AuxValues>
                 </Component>
               </SubComponents>
             </Container>
@@ -1683,6 +1710,9 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="overlaySelectedSoma_jCheckBoxActionPerformed"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="overlaySelectedBranch_jCheckBox">
                   <Properties>
@@ -1702,6 +1732,9 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="overlaySelectedBranch_jCheckBoxActionPerformed"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="overlaySelectedName_jCheckBox">
                   <Properties>
@@ -1725,6 +1758,9 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="overlaySelectedName_jCheckBoxActionPerformed"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="overlaySelectedNeuron_jCheckBox">
                   <Properties>
@@ -1744,6 +1780,9 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="overlaySelectedNeuron_jCheckBoxActionPerformed"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="overlayAllSelectedPoints_jCheckBox">
                   <Properties>
@@ -1765,6 +1804,9 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="overlayAllSelectedPoints_jCheckBoxActionPerformed"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="overlaySelectedArbor_jCheckBox">
                   <Properties>
@@ -1784,6 +1826,9 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="overlaySelectedArbor_jCheckBoxActionPerformed"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="overlaySelectedSynapse_jCheckBox">
                   <Properties>
@@ -1803,6 +1848,9 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="overlaySelectedSynapse_jCheckBoxActionPerformed"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="overlaySelectedConnection_jCheckBox">
                   <Properties>
@@ -1822,6 +1870,9 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="overlaySelectedConnection_jCheckBoxActionPerformed"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="overlaySelectedSpine_jCheckBox">
                   <Properties>
@@ -1838,6 +1889,9 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="overlaySelectedSpine_jCheckBoxActionPerformed"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="overlayPointBox_jCheckBox">
                   <Properties>
@@ -1854,6 +1908,9 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="overlayPointBox_jCheckBoxActionPerformed"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="brainbowColor_jCheckBox">
                   <Properties>
@@ -1896,6 +1953,9 @@
                   <Events>
                     <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="extendSelectedDisplayPoints_jSpinnerStateChanged"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JSpinner" name="somaLineWidth_jSpinner">
                   <Properties>
@@ -1908,6 +1968,9 @@
                   <Events>
                     <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="somaLineWidth_jSpinnerStateChanged"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JSpinner" name="neuronLineWidth_jSpinner">
                   <Properties>
@@ -1920,6 +1983,9 @@
                   <Events>
                     <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="neuronLineWidth_jSpinnerStateChanged"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JSpinner" name="arborLineWidth_jSpinner">
                   <Properties>
@@ -1932,6 +1998,9 @@
                   <Events>
                     <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="arborLineWidth_jSpinnerStateChanged"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JSpinner" name="branchLineWidth_jSpinner">
                   <Properties>
@@ -1944,6 +2013,9 @@
                   <Events>
                     <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="branchLineWidth_jSpinnerStateChanged"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JSpinner" name="spineLineWidth_jSpinner">
                   <Properties>
@@ -1956,6 +2028,9 @@
                   <Events>
                     <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="spineLineWidth_jSpinnerStateChanged"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JSpinner" name="pointBoxLineWidth_jSpinner">
                   <Properties>
@@ -1968,6 +2043,9 @@
                   <Events>
                     <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="pointBoxLineWidth_jSpinnerStateChanged"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JSpinner" name="synapseRadius_jSpinner">
                   <Properties>
@@ -1980,6 +2058,9 @@
                   <Events>
                     <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="synapseRadius_jSpinnerStateChanged"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JSpinner" name="pointBoxRadiu_jSpinner">
                   <Properties>
@@ -1992,6 +2073,9 @@
                   <Events>
                     <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="pointBoxRadiu_jSpinnerStateChanged"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JButton" name="updateDisplay_jButton">
                   <Properties>
@@ -2242,6 +2326,9 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="manualTracing_jRadioButtonActionPerformed"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JRadioButton" name="semiAutoTracing_jRadioButton">
                   <Properties>
@@ -2261,6 +2348,9 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="semiAutoTracing_jRadioButtonActionPerformed"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JLabel" name="linkRadius_jLabel">
                   <Properties>
@@ -2359,6 +2449,9 @@
                   <Events>
                     <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="xyRadius_jSpinnerStateChanged"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JLabel" name="zRadius_jLabel">
                   <Properties>
@@ -2381,6 +2474,9 @@
                   <Events>
                     <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="zRadius_jSpinnerStateChanged"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                  </AuxValues>
                 </Component>
               </SubComponents>
             </Container>
@@ -2450,6 +2546,9 @@
                   <Events>
                     <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="colorThreshold_jSpinnerStateChanged"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JLabel" name="intensityThreshold_jLabel">
                   <Properties>
@@ -2472,6 +2571,9 @@
                   <Events>
                     <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="intensityThreshold_jSpinnerStateChanged"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                  </AuxValues>
                 </Component>
               </SubComponents>
             </Container>
@@ -2656,6 +2758,9 @@
                     <Property name="text" type="java.lang.String" value="Memb"/>
                     <Property name="focusable" type="boolean" value="false"/>
                   </Properties>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JRadioButton" name="cytoplasmLabel_jRadioButton">
                   <Properties>
@@ -2672,6 +2777,9 @@
                     <Property name="enabled" type="boolean" value="false"/>
                     <Property name="focusable" type="boolean" value="false"/>
                   </Properties>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JRadioButton" name="autoTracing_jRadioButton">
                   <Properties>
@@ -2691,6 +2799,9 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="autoTracing_jRadioButtonActionPerformed"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                  </AuxValues>
                 </Component>
               </SubComponents>
             </Container>
@@ -3033,6 +3144,9 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="analysisCh1_jCheckBoxActionPerformed"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="analysisCh2_jCheckBox">
                   <Properties>
@@ -3045,6 +3159,9 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="analysisCh2_jCheckBoxActionPerformed"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="analysisCh3_jCheckBox">
                   <Properties>
@@ -3057,6 +3174,9 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="analysisCh3_jCheckBoxActionPerformed"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="analysisCh4_jCheckBox">
                   <Properties>
@@ -3069,6 +3189,9 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="analysisCh4_jCheckBoxActionPerformed"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="analysisCh5_jCheckBox">
                   <Properties>
@@ -3081,6 +3204,9 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="analysisCh5_jCheckBoxActionPerformed"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="analysisCh6_jCheckBox">
                   <Properties>
@@ -3093,6 +3219,9 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="analysisCh6_jCheckBoxActionPerformed"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="analysisCh7_jCheckBox">
                   <Properties>
@@ -3105,6 +3234,9 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="analysisCh7_jCheckBoxActionPerformed"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="analysisCh8_jCheckBox">
                   <Properties>
@@ -3117,6 +3249,9 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="analysisCh8_jCheckBoxActionPerformed"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JLabel" name="toggleChannel_jLabel">
                   <Properties>
@@ -3137,6 +3272,9 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="toggleCh1_jCheckBoxActionPerformed"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="toggleCh2_jCheckBox">
                   <Properties>
@@ -3149,6 +3287,9 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="toggleCh2_jCheckBoxActionPerformed"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="toggleCh3_jCheckBox">
                   <Properties>
@@ -3161,6 +3302,9 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="toggleCh3_jCheckBoxActionPerformed"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="toggleCh4_jCheckBox">
                   <Properties>
@@ -3173,6 +3317,9 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="toggleCh4_jCheckBoxActionPerformed"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="toggleCh5_jCheckBox">
                   <Properties>
@@ -3185,6 +3332,9 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="toggleCh5_jCheckBoxActionPerformed"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="toggleCh6_jCheckBox">
                   <Properties>
@@ -3197,6 +3347,9 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="toggleCh6_jCheckBoxActionPerformed"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="toggleCh7_jCheckBox">
                   <Properties>
@@ -3209,6 +3362,9 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="toggleCh7_jCheckBoxActionPerformed"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="toggleCh8_jCheckBox">
                   <Properties>
@@ -3221,6 +3377,9 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="toggleCh8_jCheckBoxActionPerformed"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+                  </AuxValues>
                 </Component>
               </SubComponents>
             </Container>
@@ -3249,6 +3408,9 @@
             </Property>
             <Property name="rootVisible" type="boolean" value="false"/>
           </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+          </AuxValues>
         </Component>
       </SubComponents>
     </Container>
@@ -3280,6 +3442,9 @@
             </Property>
             <Property name="rootVisible" type="boolean" value="false"/>
           </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+          </AuxValues>
         </Component>
       </SubComponents>
     </Container>
@@ -3359,6 +3524,9 @@
               <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
             </Property>
           </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+          </AuxValues>
         </Component>
       </SubComponents>
     </Container>
@@ -3414,6 +3582,9 @@
         </Property>
         <Property name="text" type="java.lang.String" value="     "/>
       </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+      </AuxValues>
     </Component>
     <Component class="javax.swing.JLabel" name="startPt_jLabel">
       <Properties>
@@ -3459,6 +3630,9 @@
         </Property>
         <Property name="text" type="java.lang.String" value="     "/>
       </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+      </AuxValues>
     </Component>
     <Component class="javax.swing.JLabel" name="srtPtCol_jLabel">
       <Properties>
@@ -3503,6 +3677,9 @@
         </Property>
         <Property name="text" type="java.lang.String" value="     "/>
       </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
+      </AuxValues>
     </Component>
     <Component class="javax.swing.JLabel" name="editTargetName_jLabel">
       <Properties>
