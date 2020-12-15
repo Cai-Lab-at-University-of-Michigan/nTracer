@@ -948,7 +948,7 @@ public class TraceHelper {
     /**
     * Add tracing point as neuron
     */
-    private int addTracingToNeuron(ArrayList<String[]> points) {
+    protected int addTracingToNeuron(ArrayList<String[]> points) {
         //IJ.log("tablePoints is empty? " + (tablePoints.isEmpty()));
         if (nTracer.neuronList_jTree.getSelectionCount() == 0) { // start fresh tracing
             nTracer.tablePoints.clear();

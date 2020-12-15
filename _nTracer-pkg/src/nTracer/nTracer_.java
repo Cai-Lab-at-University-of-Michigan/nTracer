@@ -489,6 +489,7 @@ public class nTracer_
         toggleSynapse_jButton = new javax.swing.JButton();
         toggleSynapse_jButton1 = new javax.swing.JButton();
         consensusSomaButton = new javax.swing.JButton();
+        consensusNeuriteButton = new javax.swing.JButton();
         overlay_jPanel = new javax.swing.JPanel();
         all_jPanel = new javax.swing.JPanel();
         overlayAllNeuron_jCheckBox = new javax.swing.JCheckBox();
@@ -1040,10 +1041,17 @@ public class nTracer_
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        consensusSomaButton.setText("Consensus");
+        consensusSomaButton.setText("Soma Consensus");
         consensusSomaButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 consensusSomaButtonActionPerformed(evt);
+            }
+        });
+
+        consensusNeuriteButton.setText("Neurite Consensus");
+        consensusNeuriteButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                consensusNeuriteButtonActionPerformed(evt);
             }
         });
 
@@ -1058,7 +1066,8 @@ public class nTracer_
                         .addComponent(jumpTo_jPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(editNeuron_jPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(editBranch_jPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(consensusSomaButton))
+                    .addComponent(consensusSomaButton)
+                    .addComponent(consensusNeuriteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(editDisplay_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(editConnection_jPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1080,6 +1089,8 @@ public class nTracer_
                         .addComponent(jumpTo_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(consensusSomaButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(consensusNeuriteButton)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(editDisplay_jPanelLayout.createSequentialGroup()
                         .addGap(0, 136, Short.MAX_VALUE)
@@ -5619,6 +5630,10 @@ public class nTracer_
         traceConsensus.aggregateSomaTraces();
     }//GEN-LAST:event_consensusSomaButtonActionPerformed
 
+    private void consensusNeuriteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consensusNeuriteButtonActionPerformed
+        traceConsensus.aggregateNeuriteTraces();
+    }//GEN-LAST:event_consensusNeuriteButtonActionPerformed
+
     private void combineSomaAndBranchesOfTwoNeuronTreeSomas(ntNeuronNode targetNeuronSomaNode, ntNeuronNode sourceNeuronSomaNode) {
         String targetSNeuronNumber = targetNeuronSomaNode.getNeuronNumber();
         String sourceNeuronNumber = sourceNeuronSomaNode.getNeuronNumber();
@@ -8811,6 +8826,7 @@ public class nTracer_
     private javax.swing.JButton comnibeTwoNeuron_jButton;
     private javax.swing.JButton completeSomaSliceRoi_jButton;
     private javax.swing.JLabel connectedSynapse_jLabel;
+    private javax.swing.JButton consensusNeuriteButton;
     private javax.swing.JButton consensusSomaButton;
     private javax.swing.JButton copyNeuronTag_jButton;
     private javax.swing.JButton copyToEditTarget_jButton;

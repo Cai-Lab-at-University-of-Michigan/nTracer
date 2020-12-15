@@ -550,6 +550,7 @@
                               <Component id="editBranch_jPanel" alignment="0" max="32767" attributes="0"/>
                           </Group>
                           <Component id="consensusSomaButton" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="consensusNeuriteButton" alignment="0" min="-2" pref="149" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="1" max="-2" attributes="0">
@@ -575,6 +576,8 @@
                               <Component id="jumpTo_jPanel" min="-2" pref="160" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="consensusSomaButton" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="consensusNeuriteButton" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="1" attributes="0">
@@ -1224,10 +1227,18 @@
             </Container>
             <Component class="javax.swing.JButton" name="consensusSomaButton">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Consensus"/>
+                <Property name="text" type="java.lang.String" value="Soma Consensus"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="consensusSomaButtonActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JButton" name="consensusNeuriteButton">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Neurite Consensus"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="consensusNeuriteButtonActionPerformed"/>
               </Events>
             </Component>
           </SubComponents>
