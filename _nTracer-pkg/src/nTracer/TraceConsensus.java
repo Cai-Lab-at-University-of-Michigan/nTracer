@@ -8,6 +8,8 @@ package nTracer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -31,26 +33,54 @@ public class TraceConsensus {
         this.nTracer = nTracer;
     }
     
+    private ArrayList<Integer[]> getRankedTraces(ntNeuronNode traces) {
+        // Setup point map
+        Map<String, Integer> allPoints = new HashMap<String, Integer>();
+        for (int i = 0; i < traces.getChildCount(); ++i) {
+            ntNeuronNode node = (ntNeuronNode) traces.getChildAt(i).getChildAt(0);
+            for (String[] el: node.getTracingResult()) {
+                int count = allPoints.getOrDefault(el[1] + "," + el[2] + "," + el[3], 1);
+                allPoints.put(el[1] + "," + el[2] + "," + el[3], count);
+            }
+        }
+        
+        // Rank traces based on their correlation
+        ArrayList<Integer[]> traceOrders = new ArrayList<Integer[]>();
+        for (int i = 0; i < traces.getChildCount(); ++i) {
+            ntNeuronNode node = (ntNeuronNode) traces.getChildAt(i).getChildAt(0);
+            int score = 0;
+            for (String[] el: node.getTracingResult()) {
+                score += allPoints.getOrDefault(el[1] + "," + el[2] + "," + el[3], 0);
+            }
+            traceOrders.add(new Integer[] {i, score});
+        }
+        traceOrders.sort((a, b) -> b[1].compareTo(a[1]));
+        return traceOrders;
+    }
+    
     public void aggregateSomaTraces() {
         if ( nTracer.rootAllSomaNode.getChildCount() == 0) return;
+
+        ArrayList<Integer[]> rankedTraces = getRankedTraces(nTracer.rootAllSomaNode);
         
-        ntNeuronNode result = (ntNeuronNode) nTracer.rootAllSomaNode.getChildAt(0).getChildAt(0);
+        // Prepare first trace
+        ntNeuronNode result = (ntNeuronNode) nTracer.rootAllSomaNode
+                .getChildAt(rankedTraces.get(0)[0])
+                .getChildAt(0);
         ArrayList<String[]> resultList = new ArrayList<String []>();
         for (String[] el: result.getTracingResult()) {
             resultList.add(Arrays.copyOf(el, el.length));
         }
-        
         // Record previous order
         for (int i = 0; i < resultList.size(); ++i) {
             resultList.get(i)[4] = i + "";
         }
-        
         // Sort
         resultList.sort(new PointsCompare());
-
         
-        for (int i = 1; i < nTracer.rootAllSomaNode.getChildCount(); i++) {
-            ntNeuronNode node = (ntNeuronNode) nTracer.rootAllSomaNode.getChildAt(i).getChildAt(0);
+        // Start multi-pass merging of traces
+        for (Integer[] trace: rankedTraces.subList(1, rankedTraces.size())) {
+            ntNeuronNode node = (ntNeuronNode) nTracer.rootAllSomaNode.getChildAt(trace[0]).getChildAt(0);
             ArrayList<String[]> nodeList = new ArrayList<String []> (node.getTracingResult());
             for (String[] el: node.getTracingResult()) {
                 nodeList.add(Arrays.copyOf(el, el.length));
@@ -90,7 +120,10 @@ public class TraceConsensus {
     public void aggregateNeuriteTraces() {
         if ( nTracer.rootNeuronNode.getChildCount() == 0) return;
         
-        ntNeuronNode result = (ntNeuronNode) nTracer.rootNeuronNode.getChildAt(0).getChildAt(0);
+        ArrayList<Integer[]> rankedTraces = getRankedTraces(nTracer.rootNeuronNode);
+        
+        // Prepare first trace
+        ntNeuronNode result = (ntNeuronNode) nTracer.rootNeuronNode.getChildAt(rankedTraces.get(0)[0]).getChildAt(0);
         ArrayList<String[]> resultList = new ArrayList<String []>();
         for (String[] el: result.getTracingResult()) {
             resultList.add(Arrays.copyOf(el, el.length));
@@ -105,8 +138,8 @@ public class TraceConsensus {
         resultList.sort(new PointsCompare());
 
         
-        for (int i = 1; i < nTracer.rootNeuronNode.getChildCount(); i++) {
-            ntNeuronNode node = (ntNeuronNode) nTracer.rootNeuronNode.getChildAt(i).getChildAt(0);
+        for (Integer[] trace: rankedTraces.subList(1, rankedTraces.size())) {
+            ntNeuronNode node = (ntNeuronNode) nTracer.rootNeuronNode.getChildAt(trace[0]).getChildAt(0);
             ArrayList<String[]> nodeList = new ArrayList<String []> (node.getTracingResult());
             for (String[] el: node.getTracingResult()) {
                 nodeList.add(Arrays.copyOf(el, el.length));
