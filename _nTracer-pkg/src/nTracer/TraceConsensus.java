@@ -9,7 +9,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
+import java.util.Queue;
 
 /**
  *
@@ -179,5 +181,210 @@ public class TraceConsensus {
         
         // Add tracing
         nTracer.traceHelper.addTracingToNeuron(resultList);
+    }
+    
+    public void aggregateBranches() {
+        if (nTracer.rootNeuronNode.getChildCount() == 0) return;
+        
+        ArrayList<ArrayList<Superpoint>>[] simplifiedTraces = new ArrayList[nTracer.rootNeuronNode.getChildCount()];
+        
+        for (int i = 0; i < nTracer.rootNeuronNode.getChildCount(); ++i) { // for each trace
+            ntNeuronNode trace = (ntNeuronNode) nTracer.rootNeuronNode.getChildAt(i).getChildAt(0);
+            ArrayList<ArrayList<String[]>> branches = new ArrayList<ArrayList<String[]>>();
+            branches.add(trace.getTracingResult());
+            for (int j = 0; j < trace.getChildCount(); ++j) {
+                ntNeuronNode branch = (ntNeuronNode) trace.getChildAt(j);
+                branches.add(branch.getTracingResult());
+            }
+            
+            
+            // Generate superpoints
+            ArrayList<ArrayList<Superpoint>> branchSuperpoints = new ArrayList<ArrayList<Superpoint>>();
+            final int SUPERPOINT_STEP = 20;
+            
+            for (ArrayList<String[]> branch: branches) {
+                ArrayList<Superpoint> sps = new ArrayList<Superpoint>();
+                for (int j = 0; j < branch.size(); j += SUPERPOINT_STEP) {
+                    int end = (j + SUPERPOINT_STEP < branch.size()) ? j + SUPERPOINT_STEP : branch.size();
+                    // Average the points
+                    int avgX = 0, avgY = 0, avgZ = 0;
+                    for (int p = j; p < end; ++p) {
+                        avgX += Integer.parseInt(branch.get(p)[1]);
+                        avgY += Integer.parseInt(branch.get(p)[2]);
+                        avgZ += Integer.parseInt(branch.get(p)[3]);
+                    }
+                    
+                    avgX /= end - j;
+                    avgY /= end - j;
+                    avgZ /= end - j;
+                    
+                    Superpoint sp = new Superpoint(avgX, avgY, avgZ, end - j);
+                    sps.add(sp);
+                }
+                
+                // Sort the superpoints
+                sps.sort(null);
+                branchSuperpoints.add(sps);
+            }
+            
+            simplifiedTraces[i] = branchSuperpoints;
+        }
+        
+        // Generate list of unique branches from traces
+        ArrayList<ArrayList<int[]>> uniqueBranches = new ArrayList<ArrayList<int[]>>();
+        
+        for (int i = 0; i < simplifiedTraces.length; ++i) { // for each trace
+            // Find best branch matchings
+            float[] bestScores = new float[uniqueBranches.size()];
+            int [] bestBranches = new int[uniqueBranches.size()];
+            for (int j = 0; j < bestBranches.length; ++j) bestBranches[j] = -1;
+            
+            Queue<Integer> remainingBranches = new LinkedList<>();
+            for (int b = 0; b < simplifiedTraces[i].size(); ++b) {
+                remainingBranches.add(b);
+            } 
+            
+            while(!remainingBranches.isEmpty()) {
+                ArrayList<Superpoint> branch = simplifiedTraces[i].get(remainingBranches.peek());
+                
+                float bestCurrentScore = 0;
+                int bestCurrentUniqueBranch = -1;
+                    
+                for (int u = 0; u < uniqueBranches.size(); ++u) { // for each unique branch
+                    int[] uniqueBranch = uniqueBranches.get(u).get(0);
+                    ArrayList<Superpoint> otherBranch = simplifiedTraces[uniqueBranch[0]].get(uniqueBranch[1]);
+                    
+                    float score = calculateBranchCorrelationScore(branch, otherBranch);                    
+                    final int SCORE_THRESHOLD = 0;
+                    
+                    if (score > bestScores[u] && score > SCORE_THRESHOLD && score > bestCurrentScore) { // threshold
+                        bestCurrentScore = score;
+                        bestCurrentUniqueBranch = u;
+                    }
+                }
+                
+                if (bestCurrentUniqueBranch != -1) {
+                    int prev = bestBranches[bestCurrentUniqueBranch];
+                    bestBranches[bestCurrentUniqueBranch] = remainingBranches.peek();
+                    bestScores[bestCurrentUniqueBranch] = bestCurrentScore;
+                    remainingBranches.remove();
+                    if (prev != -1) remainingBranches.add(prev);
+                } else {
+                    remainingBranches.remove();
+                }
+            }
+            
+            boolean[] selectedBranches = new boolean[simplifiedTraces[i].size()];
+            
+            // For existing branch
+            for (int u = 0; u < uniqueBranches.size(); ++u) {
+                int correspondingBranch = bestBranches[u];
+                if (correspondingBranch == -1) continue;
+                
+                int newArr[] = {i, correspondingBranch};
+                uniqueBranches.get(u).add(newArr);
+                selectedBranches[correspondingBranch] = true;
+            }
+            
+            
+            // New unique branch
+            for (int b = 0; b < simplifiedTraces[i].size(); ++b) {
+                if (selectedBranches[b]) continue;
+                
+                int newArr[] = {i, b};
+                ArrayList<int[]> newArrList = new ArrayList<int[]>();
+                newArrList.add(newArr);
+                uniqueBranches.add(newArrList);
+            }
+        }
+        
+        // Update GUI to display branch matchings
+        for (int i = 0; i < uniqueBranches.size(); ++i) {
+            ArrayList<int[]> branch = uniqueBranches.get(i);
+            for (int[] match: branch) {
+                int traceIndex = match[0], branchIndex = match[1];
+                ntNeuronNode trace = (ntNeuronNode) nTracer.rootNeuronNode.getChildAt(traceIndex).getChildAt(0);
+                if (branchIndex == 0) {
+                    trace.addBranchLabelToName(i);
+                } else {
+                    ((ntNeuronNode )trace.getChildAt(branchIndex - 1)).addBranchLabelToName(i);
+                }
+            }
+        }
+        nTracer.neuronList_jTree.updateUI();
+    }
+    
+    // Find correlation score between two branches
+    private float calculateBranchCorrelationScore(ArrayList<Superpoint> sps1, ArrayList<Superpoint> sps2) {
+        int totalPoints1 = 0, totalPoints2 = 0;
+        for (Superpoint sp: sps1) {
+            totalPoints1 += sp.size;
+        }
+        
+        for (Superpoint sp: sps2) {
+            totalPoints2 += sp.size;
+        }
+        
+        // Reject branches that are too different in length
+        final float PERCENTAGE_CUTOFF = (float) 0.3;
+        if ((totalPoints1 < totalPoints2 && (float) totalPoints1 / totalPoints2 < PERCENTAGE_CUTOFF)
+                || (totalPoints2 < totalPoints1 && (float) totalPoints2 / totalPoints1 < PERCENTAGE_CUTOFF)) return 0;
+        
+        // Align the 2 branches
+        int startingi = 0, startingj = 0;
+        int startingScore = calculateEclidianDistanceSquared(sps1.get(0), sps2.get(0));
+        
+        while(startingi < sps1.size() - 1 && startingj < sps2.size() - 1) {
+            if (sps1.get(startingi).x < sps1.get(startingj).x) {
+                if (calculateEclidianDistanceSquared(sps1.get(startingi + 1), sps2.get(startingj)) > startingScore) {
+                    ++startingi;
+                } else {
+                    break;
+                }
+            } else if (sps1.get(startingi).x > sps1.get(startingj).x) {
+                if (calculateEclidianDistanceSquared(sps1.get(startingi), sps2.get(startingj + 1)) > startingScore) {
+                    ++startingj;
+                } else {
+                    break;
+                }
+            } else {
+                break;
+            }
+        }
+        
+        // Calculate eclidian distances
+        int distances = 0;
+        for (int i = startingi, j = startingj; i < sps1.size() && j < sps2.size(); ++i, ++j) {
+            distances += calculateEclidianDistanceSquared(sps1.get(i), sps2.get(j));
+        }
+        
+        return (float) (totalPoints1 + totalPoints2) / (float) distances;
+    }
+    
+    // Calculate square of eclidian distance between 2 points. We avoid taking square root to speed up computation.
+    private int calculateEclidianDistanceSquared(Superpoint sp1, Superpoint sp2) {
+        return (int) (Math.pow((sp1.x - sp2.x), 2) + Math.pow((sp1.y - sp2.y), 2) + Math.pow((sp1.z - sp2.z), 2));
+    }
+}
+
+class Superpoint implements Comparable<Superpoint> {
+    protected int x, y, z, size;
+    
+    Superpoint(int x, int y, int z, int size) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.size = size;
+    }
+
+    @Override
+    public int compareTo(Superpoint sp) {
+        if (this.x < sp.x) return -1;
+        if (this.x > sp.x) return 1;
+        if (this.y < sp.y) return -1;
+        if (this.y < sp.y) return 1;
+        if (this.z < sp.z) return -1;
+        if (this.z > sp.z) return -1;
+        return 0;
     }
 }

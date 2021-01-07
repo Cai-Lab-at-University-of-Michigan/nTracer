@@ -490,6 +490,7 @@ public class nTracer_
         toggleSynapse_jButton1 = new javax.swing.JButton();
         consensusSomaButton = new javax.swing.JButton();
         consensusNeuriteButton = new javax.swing.JButton();
+        branchConsensusButton = new javax.swing.JButton();
         overlay_jPanel = new javax.swing.JPanel();
         all_jPanel = new javax.swing.JPanel();
         overlayAllNeuron_jCheckBox = new javax.swing.JCheckBox();
@@ -1055,6 +1056,13 @@ public class nTracer_
             }
         });
 
+        branchConsensusButton.setLabel("Branch Consensus");
+        branchConsensusButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                branchConsensusButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout editDisplay_jPanelLayout = new javax.swing.GroupLayout(editDisplay_jPanel);
         editDisplay_jPanel.setLayout(editDisplay_jPanelLayout);
         editDisplay_jPanelLayout.setHorizontalGroup(
@@ -1067,7 +1075,8 @@ public class nTracer_
                         .addComponent(editNeuron_jPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(editBranch_jPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(consensusSomaButton)
-                    .addComponent(consensusNeuriteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(consensusNeuriteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(branchConsensusButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(editDisplay_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(editConnection_jPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1091,6 +1100,8 @@ public class nTracer_
                         .addComponent(consensusSomaButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(consensusNeuriteButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(branchConsensusButton)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(editDisplay_jPanelLayout.createSequentialGroup()
                         .addGap(0, 136, Short.MAX_VALUE)
@@ -5634,6 +5645,10 @@ public class nTracer_
         traceConsensus.aggregateNeuriteTraces();
     }//GEN-LAST:event_consensusNeuriteButtonActionPerformed
 
+    private void branchConsensusButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_branchConsensusButtonActionPerformed
+        traceConsensus.aggregateBranches();
+    }//GEN-LAST:event_branchConsensusButtonActionPerformed
+
     private void combineSomaAndBranchesOfTwoNeuronTreeSomas(ntNeuronNode targetNeuronSomaNode, ntNeuronNode sourceNeuronSomaNode) {
         String targetSNeuronNumber = targetNeuronSomaNode.getNeuronNumber();
         String sourceNeuronNumber = sourceNeuronSomaNode.getNeuronNumber();
@@ -8813,6 +8828,7 @@ public class nTracer_
     private javax.swing.JMenuItem autosaveSetup_jMenuItem;
     private javax.swing.JRadioButton b_jRadioButton;
     private javax.swing.JCheckBox brainbowColor_jCheckBox;
+    private javax.swing.JButton branchConsensusButton;
     protected javax.swing.JSpinner branchLineWidth_jSpinner;
     private javax.swing.JButton breakBranch_jButton;
     private javax.swing.ButtonGroup channelColor_buttonGroup;

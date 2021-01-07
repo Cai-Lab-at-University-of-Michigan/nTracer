@@ -551,6 +551,7 @@
                           </Group>
                           <Component id="consensusSomaButton" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="consensusNeuriteButton" alignment="0" min="-2" pref="149" max="-2" attributes="0"/>
+                          <Component id="branchConsensusButton" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="1" max="-2" attributes="0">
@@ -578,6 +579,8 @@
                               <Component id="consensusSomaButton" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="consensusNeuriteButton" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="branchConsensusButton" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="1" attributes="0">
@@ -1239,6 +1242,14 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="consensusNeuriteButtonActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JButton" name="branchConsensusButton">
+              <Properties>
+                <Property name="label" type="java.lang.String" value="Branch Consensus"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="branchConsensusButtonActionPerformed"/>
               </Events>
             </Component>
           </SubComponents>

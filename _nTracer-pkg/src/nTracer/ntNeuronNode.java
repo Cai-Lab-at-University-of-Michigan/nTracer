@@ -239,4 +239,8 @@ public class ntNeuronNode extends DefaultMutableTreeNode {
         }
         return nextNumber;
     }
+    
+    public void addBranchLabelToName(int branchIndex) {
+        this.setName(this.toString() + " b:" + branchIndex);
+    }
 }
