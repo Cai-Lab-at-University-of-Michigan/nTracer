@@ -9,9 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
-import java.util.Queue;
 
 /**
  *
@@ -200,7 +198,7 @@ public class TraceConsensus {
             
             // Generate superpoints
             ArrayList<ArrayList<Superpoint>> branchSuperpoints = new ArrayList<ArrayList<Superpoint>>();
-            final int SUPERPOINT_STEP = 20;
+            final int SUPERPOINT_STEP = 5;
             
             for (ArrayList<String[]> branch: branches) {
                 ArrayList<Superpoint> sps = new ArrayList<Superpoint>();
@@ -235,66 +233,37 @@ public class TraceConsensus {
         
         for (int i = 0; i < simplifiedTraces.length; ++i) { // for each trace
             // Find best branch matchings
-            float[] bestScores = new float[uniqueBranches.size()];
-            int [] bestBranches = new int[uniqueBranches.size()];
-            for (int j = 0; j < bestBranches.length; ++j) bestBranches[j] = -1;
-            
-            Queue<Integer> remainingBranches = new LinkedList<>();
+            ArrayList<Integer>[] branchMatchings = new ArrayList[simplifiedTraces[i].size()];
             for (int b = 0; b < simplifiedTraces[i].size(); ++b) {
-                remainingBranches.add(b);
-            } 
-            
-            while(!remainingBranches.isEmpty()) {
-                ArrayList<Superpoint> branch = simplifiedTraces[i].get(remainingBranches.peek());
-                
-                float bestCurrentScore = 0;
-                int bestCurrentUniqueBranch = -1;
-                    
-                for (int u = 0; u < uniqueBranches.size(); ++u) { // for each unique branch
+                branchMatchings[b] = new ArrayList<>();
+            }
+
+            for (int b = 0; b < simplifiedTraces[i].size(); ++b) {
+                ArrayList<Superpoint> branch = simplifiedTraces[i].get(b);
+                for (int u = 0; u < uniqueBranches.size(); ++u) {
                     int[] uniqueBranch = uniqueBranches.get(u).get(0);
                     ArrayList<Superpoint> otherBranch = simplifiedTraces[uniqueBranch[0]].get(uniqueBranch[1]);
-                    
-                    float score = calculateBranchCorrelationScore(branch, otherBranch);                    
-                    final int SCORE_THRESHOLD = 0;
-                    
-                    if (score > bestScores[u] && score > SCORE_THRESHOLD && score > bestCurrentScore) { // threshold
-                        bestCurrentScore = score;
-                        bestCurrentUniqueBranch = u;
+                    BranchCorrelation bc = new BranchCorrelation(branch, otherBranch);
+                    final float COST_THRESHOLD = 1;
+                    final double DEGREE_THRESHOLD = 30;
+                    if (bc.cost < COST_THRESHOLD && bc.degree < DEGREE_THRESHOLD) { // Determine if branches are similar enough
+                        branchMatchings[b].add(u);
                     }
                 }
-                
-                if (bestCurrentUniqueBranch != -1) {
-                    int prev = bestBranches[bestCurrentUniqueBranch];
-                    bestBranches[bestCurrentUniqueBranch] = remainingBranches.peek();
-                    bestScores[bestCurrentUniqueBranch] = bestCurrentScore;
-                    remainingBranches.remove();
-                    if (prev != -1) remainingBranches.add(prev);
-                } else {
-                    remainingBranches.remove();
-                }
             }
             
-            boolean[] selectedBranches = new boolean[simplifiedTraces[i].size()];
-            
-            // For existing branch
-            for (int u = 0; u < uniqueBranches.size(); ++u) {
-                int correspondingBranch = bestBranches[u];
-                if (correspondingBranch == -1) continue;
-                
-                int newArr[] = {i, correspondingBranch};
-                uniqueBranches.get(u).add(newArr);
-                selectedBranches[correspondingBranch] = true;
-            }
-            
-            
-            // New unique branch
             for (int b = 0; b < simplifiedTraces[i].size(); ++b) {
-                if (selectedBranches[b]) continue;
-                
-                int newArr[] = {i, b};
-                ArrayList<int[]> newArrList = new ArrayList<int[]>();
-                newArrList.add(newArr);
-                uniqueBranches.add(newArrList);
+                if (branchMatchings[b].size() == 0) {
+                    int newArr[] = {i, b};
+                    ArrayList<int[]> newArrList = new ArrayList<int[]>();
+                    newArrList.add(newArr);
+                    uniqueBranches.add(newArrList);
+                } else {
+                    for (int correspondingBranch: branchMatchings[b]) {
+                        int newArr[] = {i, b};
+                        uniqueBranches.get(correspondingBranch).add(newArr);
+                    }
+                }
             }
         }
         
@@ -313,9 +282,12 @@ public class TraceConsensus {
         }
         nTracer.neuronList_jTree.updateUI();
     }
+}
+
+class BranchCorrelation {
+    protected double cost, degree;
     
-    // Find correlation score between two branches
-    private float calculateBranchCorrelationScore(ArrayList<Superpoint> sps1, ArrayList<Superpoint> sps2) {
+    BranchCorrelation(ArrayList<Superpoint> sps1, ArrayList<Superpoint> sps2) {
         int totalPoints1 = 0, totalPoints2 = 0;
         for (Superpoint sp: sps1) {
             totalPoints1 += sp.size;
@@ -325,16 +297,11 @@ public class TraceConsensus {
             totalPoints2 += sp.size;
         }
         
-        // Reject branches that are too different in length
-        final float PERCENTAGE_CUTOFF = (float) 0.3;
-        if ((totalPoints1 < totalPoints2 && (float) totalPoints1 / totalPoints2 < PERCENTAGE_CUTOFF)
-                || (totalPoints2 < totalPoints1 && (float) totalPoints2 / totalPoints1 < PERCENTAGE_CUTOFF)) return 0;
-        
         // Align the 2 branches
         int startingi = 0, startingj = 0;
         int startingScore = calculateEclidianDistanceSquared(sps1.get(0), sps2.get(0));
         
-        while(startingi < sps1.size() - 1 && startingj < sps2.size() - 1) {
+        while(startingi < sps1.size() / 3 && startingj < sps2.size() / 3) { // Do not align beyond 1/3 of branches
             if (sps1.get(startingi).x < sps1.get(startingj).x) {
                 if (calculateEclidianDistanceSquared(sps1.get(startingi + 1), sps2.get(startingj)) > startingScore) {
                     ++startingi;
@@ -352,18 +319,36 @@ public class TraceConsensus {
             }
         }
         
-        // Calculate eclidian distances
+        // Calculate eclidian distances and angles
         int distances = 0;
+        double deltaX1 = 0, deltaY1 = 0, deltaX2 = 0, deltaY2 = 0;
         for (int i = startingi, j = startingj; i < sps1.size() && j < sps2.size(); ++i, ++j) {
-            distances += calculateEclidianDistanceSquared(sps1.get(i), sps2.get(j));
+            Superpoint sp1 = sps1.get(i), sp2 = sps2.get(j);
+            distances += calculateEclidianDistanceSquared(sp1, sp2);
+            if (i != startingi) {
+                deltaX1 += sp1.x - sps1.get(i-1).x;
+                deltaY1 += sp1.y - sps1.get(i-1).y;
+                deltaX2 += sp2.x - sps2.get(j-1).x;
+                deltaY2 += sp2.y - sps2.get(j-1).y;
+            }
         }
         
-        return (float) (totalPoints1 + totalPoints2) / (float) distances;
+        deltaX1 = Math.abs(deltaX1);
+        deltaY1 = Math.abs(deltaY1);
+        deltaX2 = Math.abs(deltaX2);
+        deltaY2 = Math.abs(deltaY2);
+        
+        double degree1 = Math.atan2(deltaY1, deltaX1), degree2 = Math.atan2(deltaY2, deltaX2);
+        
+        // Angular distance between 2 branches
+        degree = Math.abs(degree1 - degree2) / Math.PI * 180;
+        // Normalized distance between 2 branches. Longer traces have less penalty (power of 1.5 to length)
+        cost = distances / (double) Math.pow(Math.min(totalPoints1-startingi, totalPoints2-startingj), 1.5);
     }
     
     // Calculate square of eclidian distance between 2 points. We avoid taking square root to speed up computation.
     private int calculateEclidianDistanceSquared(Superpoint sp1, Superpoint sp2) {
-        return (int) (Math.pow((sp1.x - sp2.x), 2) + Math.pow((sp1.y - sp2.y), 2) + Math.pow((sp1.z - sp2.z), 2));
+        return (int) Math.pow((Math.pow((sp1.x - sp2.x), 2) + Math.pow((sp1.y - sp2.y), 2) + Math.pow((sp1.z - sp2.z), 2)), 0.5);
     }
 }
 
@@ -386,5 +371,10 @@ class Superpoint implements Comparable<Superpoint> {
         if (this.z < sp.z) return -1;
         if (this.z > sp.z) return -1;
         return 0;
+    }
+
+    @Override
+    public String toString() {
+        return "x=" + x + ", y=" + y;
     }
 }
