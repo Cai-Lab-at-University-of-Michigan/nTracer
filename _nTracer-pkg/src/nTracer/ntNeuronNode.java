@@ -20,10 +20,14 @@ public class ntNeuronNode extends DefaultMutableTreeNode {
 
     private ArrayList<String[]> tracingResult;
     private Color nodeColor = null;
+    private ArrayList<Integer> consensusBranchIndexes;
+    protected int branchMatches;
 
     ntNeuronNode(String name, ArrayList<String[]> tracingResult) {
         super(name);
         this.tracingResult = tracingResult;
+        this.consensusBranchIndexes = new ArrayList<>();
+        this.branchMatches = 0;
     }
 
     public ArrayList<String[]> getTracingResult() {
@@ -240,7 +244,19 @@ public class ntNeuronNode extends DefaultMutableTreeNode {
         return nextNumber;
     }
     
+    public ArrayList<Integer> getConsensusBranchIndex() {
+        return consensusBranchIndexes;
+    }
+    
+    public boolean matchesBranchIndex(ArrayList<Integer> matchingIndexes) {
+        for (int index: matchingIndexes) {
+            if (consensusBranchIndexes.contains(index)) return true;
+        }
+        return false;
+    }
+    
     public void addBranchLabelToName(int branchIndex) {
-        this.setName(this.toString() + " b:" + branchIndex);
+//        this.setName(this.toString() + " b:" + branchIndex);
+        this.consensusBranchIndexes.add(branchIndex);
     }
 }

@@ -286,9 +286,6 @@ public class nTracer_
         neuronTreeModel = new DefaultTreeModel(rootNeuronNode);
         neuronList_jTree = new JTree(neuronTreeModel);
         neuronList_jTree.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Neuron", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
-        DefaultTreeCellRenderer renderer = new DefaultTreeCellRenderer();
-        renderer.setBackground(Color.red);
-        neuronList_jTree.setCellRenderer(renderer);
         neuronList_jTree.setEditable(false);
         neuronList_jTree.setToggleClickCount(0);
         //neuronList_jTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
@@ -323,6 +320,12 @@ public class nTracer_
                     } else {
                         c.setForeground(Color.lightGray);
                     }
+                }
+                
+                if (node.branchMatches == 1) {
+                    setForeground(Color.RED);
+                } else if (node.branchMatches > 1) {
+                    setForeground(Color.GREEN);
                 }
                 return (this);
             }
@@ -488,9 +491,6 @@ public class nTracer_
         editSynapse_jPanel = new javax.swing.JPanel();
         toggleSynapse_jButton = new javax.swing.JButton();
         toggleSynapse_jButton1 = new javax.swing.JButton();
-        consensusSomaButton = new javax.swing.JButton();
-        consensusNeuriteButton = new javax.swing.JButton();
-        branchConsensusButton = new javax.swing.JButton();
         overlay_jPanel = new javax.swing.JPanel();
         all_jPanel = new javax.swing.JPanel();
         overlayAllNeuron_jCheckBox = new javax.swing.JCheckBox();
@@ -588,8 +588,25 @@ public class nTracer_
         toggleCh6_jCheckBox = new javax.swing.JCheckBox();
         toggleCh7_jCheckBox = new javax.swing.JCheckBox();
         toggleCh8_jCheckBox = new javax.swing.JCheckBox();
+        consensus_jPanel = new javax.swing.JPanel();
+        jPanel3 = new javax.swing.JPanel();
+        branchConsensusButton = new javax.swing.JButton();
+        overlayConsensus_jCheckBox = new javax.swing.JCheckBox();
+        consensusMatched_jCheckBox = new javax.swing.JCheckBox();
+        consensusUnmatchedJCheckBox = new javax.swing.JCheckBox();
+        consensusMatches_jLabel = new javax.swing.JLabel();
+        consensusResult_jCheckBox = new javax.swing.JCheckBox();
+        consensusStartEnd_jCheckBox = new javax.swing.JCheckBox();
+        jPanel2 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        consensusResult_JTextArea = new javax.swing.JTextArea();
+        consensusBranch1_JTextField = new javax.swing.JTextField();
+        calculateScore_jButton = new javax.swing.JButton();
+        consensusBranch2_JTextField = new javax.swing.JTextField();
         neuronList_jScrollPane = new javax.swing.JScrollPane();
         neuronList_jTree = new javax.swing.JTree();
+        consensusList_jScrollPane = new javax.swing.JScrollPane();
+        consensusList_jTree = new javax.swing.JTree();
         somaList_jScrollPane = new javax.swing.JScrollPane();
         displaySomaList_jTree = new javax.swing.JTree();
         pointTable_jScrollPane = new javax.swing.JScrollPane();
@@ -1042,42 +1059,17 @@ public class nTracer_
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        consensusSomaButton.setText("Soma Consensus");
-        consensusSomaButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                consensusSomaButtonActionPerformed(evt);
-            }
-        });
-
-        consensusNeuriteButton.setText("Neurite Consensus");
-        consensusNeuriteButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                consensusNeuriteButtonActionPerformed(evt);
-            }
-        });
-
-        branchConsensusButton.setLabel("Branch Consensus");
-        branchConsensusButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                branchConsensusButtonActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout editDisplay_jPanelLayout = new javax.swing.GroupLayout(editDisplay_jPanel);
         editDisplay_jPanel.setLayout(editDisplay_jPanelLayout);
         editDisplay_jPanelLayout.setHorizontalGroup(
             editDisplay_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, editDisplay_jPanelLayout.createSequentialGroup()
+            .addGroup(editDisplay_jPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(editDisplay_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(editDisplay_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jumpTo_jPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(editNeuron_jPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(editBranch_jPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(consensusSomaButton)
-                    .addComponent(consensusNeuriteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(branchConsensusButton))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(editDisplay_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jumpTo_jPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(editNeuron_jPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(editBranch_jPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
                 .addGroup(editDisplay_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(editConnection_jPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(editSynapse_jPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1089,22 +1081,16 @@ public class nTracer_
             editDisplay_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(editDisplay_jPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(editDisplay_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(editDisplay_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(editDisplay_jPanelLayout.createSequentialGroup()
                         .addComponent(editBranch_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(editNeuron_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jumpTo_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(consensusSomaButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(consensusNeuriteButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(branchConsensusButton)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(editDisplay_jPanelLayout.createSequentialGroup()
-                        .addGap(0, 136, Short.MAX_VALUE)
+                        .addGap(0, 169, Short.MAX_VALUE)
                         .addComponent(delete_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(editSoma_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1548,7 +1534,7 @@ public class nTracer_
                             .addComponent(arborLineWidth_jSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(neuronLineWidth_jSpinner)
                             .addComponent(somaLineWidth_jSpinner))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
                         .addGroup(selected_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(pointBoxRadiu_jSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(overlaySelectedConnection_jCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -1706,7 +1692,7 @@ public class nTracer_
                 .addComponent(selected_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(153, Short.MAX_VALUE))
+                .addContainerGap(227, Short.MAX_VALUE))
         );
 
         jPanel1.getAccessibleContext().setAccessibleName("");
@@ -1718,7 +1704,6 @@ public class nTracer_
         tracingMethod_buttonGroup.add(manualTracing_jRadioButton);
         manualTracing_jRadioButton.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
         manualTracing_jRadioButton.setForeground(new java.awt.Color(255, 51, 51));
-        manualTracing_jRadioButton.setSelected(true);
         manualTracing_jRadioButton.setText("Interactive");
         manualTracing_jRadioButton.setFocusable(false);
         manualTracing_jRadioButton.addActionListener(new java.awt.event.ActionListener() {
@@ -1960,7 +1945,6 @@ public class nTracer_
         labelingMethod_buttonGroup.add(membraneLabel_jRadioButton);
         membraneLabel_jRadioButton.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         membraneLabel_jRadioButton.setForeground(new java.awt.Color(0, 153, 153));
-        membraneLabel_jRadioButton.setSelected(true);
         membraneLabel_jRadioButton.setText("Memb");
         membraneLabel_jRadioButton.setFocusable(false);
 
@@ -2359,7 +2343,7 @@ public class nTracer_
                 .addGroup(tracing_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(toogleTracingCompleteness_jButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(zProjectionInterval_jPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(samplingTolerance_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 232, Short.MAX_VALUE)
+                    .addComponent(samplingTolerance_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 233, Short.MAX_VALUE)
                     .addComponent(colorSamplingRadius_jPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(clearPoints_jButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -2368,7 +2352,7 @@ public class nTracer_
                         .addGap(18, 18, 18)
                         .addComponent(labeling_jPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addComponent(channel_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 244, Short.MAX_VALUE)
+            .addComponent(channel_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 245, Short.MAX_VALUE)
         );
         tracing_jPanelLayout.setVerticalGroup(
             tracing_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2391,10 +2375,169 @@ public class nTracer_
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(channel_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(72, Short.MAX_VALUE))
+                .addContainerGap(105, Short.MAX_VALUE))
         );
 
         main_jTabbedPane.addTab("Tracing   ", tracing_jPanel);
+
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+
+        branchConsensusButton.setLabel("Branch Consensus");
+        branchConsensusButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                branchConsensusButtonActionPerformed(evt);
+            }
+        });
+
+        overlayConsensus_jCheckBox.setText("Consensus");
+        overlayConsensus_jCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                overlayConsensus_jCheckBoxActionPerformed(evt);
+            }
+        });
+
+        consensusMatched_jCheckBox.setText("Matched");
+        consensusMatched_jCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                consensusMatched_jCheckBoxActionPerformed(evt);
+            }
+        });
+
+        consensusUnmatchedJCheckBox.setText("Unmatched");
+        consensusUnmatchedJCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                consensusUnmatchedJCheckBoxActionPerformed(evt);
+            }
+        });
+
+        consensusMatches_jLabel.setFont(new java.awt.Font(".SF NS Text", 0, 18)); // NOI18N
+        consensusMatches_jLabel.setText(" ");
+
+        consensusResult_jCheckBox.setText("Show Results");
+        consensusResult_jCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                consensusResult_jCheckBoxActionPerformed(evt);
+            }
+        });
+
+        consensusStartEnd_jCheckBox.setText("Show start/end");
+        consensusStartEnd_jCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                consensusStartEnd_jCheckBoxActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(consensusMatches_jLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(overlayConsensus_jCheckBox)
+                    .addComponent(consensusMatched_jCheckBox)
+                    .addComponent(consensusResult_jCheckBox)
+                    .addComponent(consensusStartEnd_jCheckBox)
+                    .addComponent(branchConsensusButton)
+                    .addComponent(consensusUnmatchedJCheckBox))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(branchConsensusButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(overlayConsensus_jCheckBox)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(consensusUnmatchedJCheckBox)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(consensusMatched_jCheckBox)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(consensusResult_jCheckBox)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(consensusStartEnd_jCheckBox)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(consensusMatches_jLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Calculate Scores"));
+
+        consensusResult_JTextArea.setColumns(20);
+        consensusResult_JTextArea.setRows(5);
+        jScrollPane1.setViewportView(consensusResult_JTextArea);
+
+        consensusBranch1_JTextField.setText("Branch 1");
+        consensusBranch1_JTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                consensusBranch1_JTextFieldActionPerformed(evt);
+            }
+        });
+
+        calculateScore_jButton.setText("Calculate");
+        calculateScore_jButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                calculateScore_jButtonActionPerformed(evt);
+            }
+        });
+
+        consensusBranch2_JTextField.setText("Branch 2");
+        consensusBranch2_JTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                consensusBranch2_JTextFieldActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(consensusBranch1_JTextField)
+                        .addComponent(consensusBranch2_JTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(calculateScore_jButton)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(consensusBranch1_JTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(consensusBranch2_JTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(calculateScore_jButton)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 10, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout consensus_jPanelLayout = new javax.swing.GroupLayout(consensus_jPanel);
+        consensus_jPanel.setLayout(consensus_jPanelLayout);
+        consensus_jPanelLayout.setHorizontalGroup(
+            consensus_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(consensus_jPanelLayout.createSequentialGroup()
+                .addGap(26, 26, 26)
+                .addGroup(consensus_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(36, Short.MAX_VALUE))
+        );
+        consensus_jPanelLayout.setVerticalGroup(
+            consensus_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, consensus_jPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(329, Short.MAX_VALUE))
+        );
+
+        main_jTabbedPane.addTab("Consensus", consensus_jPanel);
 
         javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("root");
         neuronList_jTree.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
@@ -2403,6 +2546,17 @@ public class nTracer_
         neuronList_jTree.setPreferredSize(new java.awt.Dimension(30, 16));
         neuronList_jTree.setRootVisible(false);
         neuronList_jScrollPane.setViewportView(neuronList_jTree);
+
+        consensusList_jScrollPane.setMaximumSize(new java.awt.Dimension(0, 0));
+        consensusList_jScrollPane.setPreferredSize(new java.awt.Dimension(0, 362));
+        consensusList_jScrollPane.setRequestFocusEnabled(false);
+
+        treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("root");
+        consensusList_jTree.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
+        consensusList_jTree.setToolTipText("\"Double Click\" blank area to de-select all.");
+        consensusList_jTree.setMaximumSize(new java.awt.Dimension(30, 16));
+        consensusList_jTree.setPreferredSize(new java.awt.Dimension(30, 16));
+        consensusList_jScrollPane.setViewportView(consensusList_jTree);
 
         displaySomaList_jTree.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Soma Slices", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
         treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("root");
@@ -2925,7 +3079,7 @@ public class nTracer_
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(setApicalDendrite_jButton, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(selectNeuronNumber_jTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -2945,10 +3099,16 @@ public class nTracer_
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(selectTagAdditionalCriteria_jComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(somaList_jScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(pointTable_jScrollPane))
-                            .addComponent(neuronList_jScrollPane, javax.swing.GroupLayout.Alignment.LEADING))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(neuronList_jScrollPane)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(consensusList_jScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(somaList_jScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(pointTable_jScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
+                                .addGap(29, 29, 29)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -3003,7 +3163,9 @@ public class nTracer_
                             .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(selectNeurons_jButton))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(neuronList_jScrollPane)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(consensusList_jScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(neuronList_jScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 369, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(pointTable_jScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
@@ -5637,17 +5799,220 @@ public class nTracer_
         logNeuronRGB();
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
-    private void consensusSomaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consensusSomaButtonActionPerformed
-        traceConsensus.aggregateSomaTraces();
-    }//GEN-LAST:event_consensusSomaButtonActionPerformed
-
-    private void consensusNeuriteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consensusNeuriteButtonActionPerformed
-        traceConsensus.aggregateNeuriteTraces();
-    }//GEN-LAST:event_consensusNeuriteButtonActionPerformed
-
     private void branchConsensusButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_branchConsensusButtonActionPerformed
         traceConsensus.aggregateBranches();
     }//GEN-LAST:event_branchConsensusButtonActionPerformed
+
+    /**
+    * Update image with consensus tracings and matches based on user settings
+    */
+    private void updateConsensusCheckboxes() {
+        Overlay ov = new Overlay();
+        if (consensusMatched_jCheckBox.isSelected()) {
+            ArrayList<ntNeuronNode> matchingNodes = new ArrayList<>();
+            traceConsensus.decomposeBranches(rootNeuronNode, matchingNodes);
+            matchingNodes.removeIf(i -> i.branchMatches == 0);
+            int totalBranches = matchingNodes.size();
+            matchingNodes.removeIf(i -> i.branchMatches <= 1);
+
+            consensusMatches_jLabel.setText("Matches: " + matchingNodes.size() + "/" + totalBranches);
+            TextRoi textOverlay = new TextRoi(0, 0, "Matches: " + matchingNodes.size() + "/" + totalBranches);
+            ov.add(textOverlay);
+
+            Map<Integer, Integer> zMap = new HashMap<>();
+            Color [] colors = {Color.GREEN, Color.CYAN, Color.BLUE, Color.GREEN, Color.MAGENTA, Color.CYAN, Color.PINK};
+            
+            for (int t = 0; t < rootNeuronNode.getChildCount(); ++t) {
+                ntNeuronNode trace = (ntNeuronNode) rootNeuronNode.getChildAt(t);
+                matchingNodes = new ArrayList<>();
+                traceConsensus.decomposeBranches(trace, matchingNodes);
+                matchingNodes.removeIf(i -> i.branchMatches <= 1);
+                for (int n = 0; n < matchingNodes.size(); ++n) {
+                    ntNeuronNode node = matchingNodes.get(n);
+                    ArrayList<String[]> points = node.getTracingResult();
+
+                    float [] xarr = new float[points.size()], yarr = new float[points.size()];
+                    for (int i = 0; i < points.size(); ++i) {
+                        xarr[i] = Float.parseFloat(points.get(i)[1]);
+                        yarr[i] = Float.parseFloat(points.get(i)[2]);
+                        int z = Integer.parseInt(points.get(i)[3]);
+                        zMap.put(z, zMap.getOrDefault(z, 0) + 1);
+                        
+                        if (consensusStartEnd_jCheckBox.isSelected() && (i == 0 || i == points.size() - 1)) {
+                            OvalRoi circle = new OvalRoi(xarr[i] - 4, yarr[i] - 4, 8, 8);
+                            circle.setFillColor(colors[t % 7]);
+                            ov.add(circle);
+                        }
+                        
+                        if (i == points.size() - 1) {
+                            String branches = "" + node.getConsensusBranchIndex().get(0);
+                            for (int b = 1; b < node.getConsensusBranchIndex().size(); ++b) {
+                                branches += "," + node.getConsensusBranchIndex().get(b);
+                            }
+                            
+                            TextRoi branchIndex = new TextRoi(xarr[i], yarr[i], "" + branches);
+                            branchIndex.setStrokeColor(colors[t % 7]);
+                            ov.add(branchIndex);
+                        }
+                    }
+                    PolygonRoi roiLine = new PolygonRoi(xarr, yarr, Roi.POLYLINE);
+                    roiLine.setStrokeColor(colors[t%7]);
+                    roiLine.setStrokeWidth(2);
+                    ov.add(roiLine);
+                }
+            }
+        } else {
+            consensusMatches_jLabel.setText("");
+        }
+        
+        
+        if (consensusUnmatchedJCheckBox.isSelected()) {
+            int totalBranches = 0;
+            int unmatchedBranches = 0;
+            
+            for (int t = 0; t < rootNeuronNode.getChildCount(); ++t) {
+                ntNeuronNode trace = (ntNeuronNode) rootNeuronNode.getChildAt(t);
+                ArrayList<ntNeuronNode> matchingNodes = new ArrayList<>();
+                traceConsensus.decomposeBranches(trace, matchingNodes);
+                matchingNodes.removeIf(n -> n.branchMatches == 0);
+                totalBranches += matchingNodes.size();
+                matchingNodes.removeIf(n -> n.branchMatches > 1);
+                unmatchedBranches += matchingNodes.size();
+                Color [] colors = {Color.RED, Color.ORANGE, Color.BLUE, Color.GREEN, Color.MAGENTA, Color.CYAN, Color.PINK};
+
+                Map<Integer, Integer> zMap = new HashMap<>();
+                for (int n = 0; n < matchingNodes.size(); ++n) {
+                    ntNeuronNode node = matchingNodes.get(n);
+                    ArrayList<String[]> points = node.getTracingResult();
+
+                    float [] xarr = new float[points.size()], yarr = new float[points.size()];
+                    for (int i = 0; i < points.size(); ++i) {
+                        xarr[i] = Float.parseFloat(points.get(i)[1]);
+                        yarr[i] = Float.parseFloat(points.get(i)[2]);
+                        int z = Integer.parseInt(points.get(i)[3]);
+                        zMap.put(z, zMap.getOrDefault(z, 0) + 1);
+                        
+                        if (consensusStartEnd_jCheckBox.isSelected() && (i == 0 || i == points.size() - 1)) {
+                            OvalRoi circle = new OvalRoi(xarr[i] - 4, yarr[i] - 4, 8, 8);
+                            circle.setFillColor(colors[t % 7]);
+                            ov.add(circle);
+                        }
+                        
+                        if (i == points.size() - 1) {
+                            TextRoi branchIndex = new TextRoi(xarr[i], yarr[i], "" + node.getConsensusBranchIndex().get(0));
+                            branchIndex.setStrokeColor(colors[t % 7]);
+                            ov.add(branchIndex);
+                        }
+                        
+                    }
+                    PolygonRoi roiLine = new PolygonRoi(xarr, yarr, Roi.POLYLINE);
+                    roiLine.setStrokeColor(colors[t % 7]);
+                    roiLine.setStrokeWidth(2);
+                    ov.add(roiLine);
+                }
+            }
+            
+            consensusMatches_jLabel.setText("Non-matches:" + unmatchedBranches + "/" + totalBranches);
+            TextRoi textOverlay = new TextRoi(0, 0, "Non-matches:" + unmatchedBranches + "/" + totalBranches);
+            ov.add(textOverlay);
+        } else {
+            consensusMatches_jLabel.setText("");
+        }
+        
+        
+        if (consensusResult_jCheckBox.isSelected()) {
+            for (ArrayList<String[]> branch: traceConsensus.combinedBranches) {
+                float [] xarr = new float[branch.size()], yarr = new float[branch.size()];
+                for (int i = 0; i < branch.size(); ++i) {
+                    xarr[i] = Float.parseFloat(branch.get(i)[0]);
+                    yarr[i] = Float.parseFloat(branch.get(i)[1]);
+                    int z = Integer.parseInt(branch.get(i)[2]);
+                }
+                
+                PolygonRoi roiLine = new PolygonRoi(xarr, yarr, Roi.POLYLINE);
+                roiLine.setStrokeColor(Color.WHITE);
+                roiLine.setStrokeWidth(2);
+                ov.add(roiLine);
+            }
+        }
+        
+        imp.setOverlay(ov);
+        
+    }
+    
+    private void consensusMatched_jCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consensusMatched_jCheckBoxActionPerformed
+        updateConsensusCheckboxes();
+    }//GEN-LAST:event_consensusMatched_jCheckBoxActionPerformed
+
+    private void overlayConsensus_jCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_overlayConsensus_jCheckBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_overlayConsensus_jCheckBoxActionPerformed
+
+    private void consensusUnmatchedJCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consensusUnmatchedJCheckBoxActionPerformed
+        updateConsensusCheckboxes();
+    }//GEN-LAST:event_consensusUnmatchedJCheckBoxActionPerformed
+
+    private void consensusBranch1_JTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consensusBranch1_JTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_consensusBranch1_JTextFieldActionPerformed
+
+    private void consensusBranch2_JTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consensusBranch2_JTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_consensusBranch2_JTextFieldActionPerformed
+
+    /**
+    * Calculate consensus score between 2 branches (for debugging)
+    */
+    private void calculateScore_jButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_calculateScore_jButtonActionPerformed
+       ArrayList<ntNeuronNode> allNodes = new ArrayList<>();
+       traceConsensus.decomposeBranches(rootNeuronNode, allNodes);
+       ntNeuronNode node1 = null, node2 = null;
+       
+        String[] split1 = consensusBranch1_JTextField.getText().toString().split("-");
+        if (split1.length > 1) {
+            node1 = rootNeuronNode;
+            for (String component: split1) {
+                node1 = (ntNeuronNode) node1.getChildAt(Integer.parseInt(component) - 1);
+            }
+        } else {
+            int branch1 = Integer.parseInt(consensusBranch1_JTextField.getText());
+            for (ntNeuronNode node: allNodes) {
+                if (node.getConsensusBranchIndex().size() > 0 && node.getConsensusBranchIndex().get(0) == branch1) {
+                    node1 = node;
+                }
+            }
+        }
+        
+        String[] split2 = consensusBranch2_JTextField.getText().toString().split("-");
+        if (split2.length > 1) {
+            node2 = rootNeuronNode;
+            for (String component: split2) {
+                node2 = (ntNeuronNode) node2.getChildAt(Integer.parseInt(component) - 1);
+            }
+        } else {
+            int branch2 = Integer.parseInt(consensusBranch2_JTextField.getText());
+            for (ntNeuronNode node: allNodes) {
+                if (node.getConsensusBranchIndex().size() > 0 && node.getConsensusBranchIndex().get(0) == branch2) {
+                    node2 = node;
+                }
+            }
+        }
+        
+        if (node1 == null || node2 == null) {
+            return;
+        }
+       
+       BranchCorrelation bc = new BranchCorrelation(node1.getTracingResult(), node2.getTracingResult());
+       consensusResult_JTextArea.setText("Score: " + bc.cost);
+    }//GEN-LAST:event_calculateScore_jButtonActionPerformed
+
+    private void consensusResult_jCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consensusResult_jCheckBoxActionPerformed
+          updateConsensusCheckboxes();
+    }//GEN-LAST:event_consensusResult_jCheckBoxActionPerformed
+
+    private void consensusStartEnd_jCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consensusStartEnd_jCheckBoxActionPerformed
+        updateConsensusCheckboxes();
+    }//GEN-LAST:event_consensusStartEnd_jCheckBoxActionPerformed
 
     private void combineSomaAndBranchesOfTwoNeuronTreeSomas(ntNeuronNode targetNeuronSomaNode, ntNeuronNode sourceNeuronSomaNode) {
         String targetSNeuronNumber = targetNeuronSomaNode.getNeuronNumber();
@@ -6114,12 +6479,16 @@ public class nTracer_
                         if (tripleClicked) {
                             // Clear all selections --Prepare for creating a new neuron
                             clearAllNeuronTreeSelection();
+                            consensusList_jTree.clearSelection();
                         }
                         if (doubleClicked) {
                             // Right_Double-click
                             // Set all selections in neuronTree to their corresponding neuron roots (neuronSomaNode)
                             // -- Prepare for adding a new primary branch or soma slice
                             setAllToNeuronSomaNodeInTree(e);
+                            
+                            // Clear consensus tree selection
+                            consensusList_jTree.clearSelection();
                         }
                     }
                 }
@@ -6658,6 +7027,7 @@ public class nTracer_
         //recallTreeStatusOnly = true;
         recordTreeExpansionSelectionStatus();
         neuronList_jTree.clearSelection();
+        consensusList_jTree.clearSelection();
         canUpdateDisplay = true;
         updateDisplay();
     }
@@ -6665,6 +7035,7 @@ public class nTracer_
     private void selectAllVisibleNeuronTreeNodes() {
         canUpdateDisplay = false;
         neuronList_jTree.clearSelection();
+        consensusList_jTree.clearSelection();
         for (int r = 0; r < neuronList_jTree.getRowCount(); r++) {
             neuronList_jTree.addSelectionPath(neuronList_jTree.getPathForRow(r));
         }
@@ -8831,6 +9202,7 @@ public class nTracer_
     private javax.swing.JButton branchConsensusButton;
     protected javax.swing.JSpinner branchLineWidth_jSpinner;
     private javax.swing.JButton breakBranch_jButton;
+    private javax.swing.JButton calculateScore_jButton;
     private javax.swing.ButtonGroup channelColor_buttonGroup;
     private javax.swing.JPanel channel_jPanel;
     private javax.swing.JMenuItem clearData_jMenuItem;
@@ -8842,8 +9214,17 @@ public class nTracer_
     private javax.swing.JButton comnibeTwoNeuron_jButton;
     private javax.swing.JButton completeSomaSliceRoi_jButton;
     private javax.swing.JLabel connectedSynapse_jLabel;
-    private javax.swing.JButton consensusNeuriteButton;
-    private javax.swing.JButton consensusSomaButton;
+    private javax.swing.JTextField consensusBranch1_JTextField;
+    private javax.swing.JTextField consensusBranch2_JTextField;
+    protected javax.swing.JScrollPane consensusList_jScrollPane;
+    protected javax.swing.JTree consensusList_jTree;
+    private javax.swing.JCheckBox consensusMatched_jCheckBox;
+    private javax.swing.JLabel consensusMatches_jLabel;
+    private javax.swing.JTextArea consensusResult_JTextArea;
+    protected javax.swing.JCheckBox consensusResult_jCheckBox;
+    protected javax.swing.JCheckBox consensusStartEnd_jCheckBox;
+    private javax.swing.JCheckBox consensusUnmatchedJCheckBox;
+    private javax.swing.JPanel consensus_jPanel;
     private javax.swing.JButton copyNeuronTag_jButton;
     private javax.swing.JButton copyToEditTarget_jButton;
     private javax.swing.JMenuItem cropData_jMenuItem;
@@ -8896,7 +9277,10 @@ public class nTracer_
     private javax.swing.JLabel jLabel7;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton joinBranches_jButton;
     private javax.swing.JButton jumpToNextConnected_jButton;
     private javax.swing.JButton jumpToNextIncompleted_jButton;
@@ -8921,7 +9305,7 @@ public class nTracer_
     private javax.swing.JMenu model3D_jMenu;
     private javax.swing.JMenu model3D_jMenu1;
     protected javax.swing.JSpinner neuronLineWidth_jSpinner;
-    private javax.swing.JScrollPane neuronList_jScrollPane;
+    protected javax.swing.JScrollPane neuronList_jScrollPane;
     protected javax.swing.JTree neuronList_jTree;
     private javax.swing.JLabel neuronTree_jLabel;
     protected javax.swing.JCheckBox overlayAllConnection_jCheckBox;
@@ -8932,6 +9316,7 @@ public class nTracer_
     protected javax.swing.JCheckBox overlayAllSoma_jCheckBox;
     protected javax.swing.JCheckBox overlayAllSpine_jCheckBox;
     protected javax.swing.JCheckBox overlayAllSynapse_jCheckBox;
+    private javax.swing.JCheckBox overlayConsensus_jCheckBox;
     protected javax.swing.JCheckBox overlayPointBox_jCheckBox;
     protected javax.swing.JCheckBox overlaySelectedArbor_jCheckBox;
     protected javax.swing.JCheckBox overlaySelectedBranch_jCheckBox;
@@ -9031,7 +9416,7 @@ public class nTracer_
     protected TraceHelper traceHelper;
     protected DataHelper dataHelper;
     protected TraceConsensus traceConsensus;
-    public static ImagePlus imp, impZproj;
+    public static ImagePlus imp, impZproj, impConsensus;
     protected CompositeImage cmp;
     private ImageCanvas cns, cnsZproj;
     public static ImageStack stk;
@@ -10807,8 +11192,9 @@ public class nTracer_
             // if selected more than 1 row, or nothing is selected or root node is selected
             // displaySomaList_jTree is deselected and tablePoints is cleared
             tablePoints = new ArrayList<String[]>();
+            ntNeuronNode selectedNeuronNode = null;
             if (neuronList_jTree.getSelectionCount() == 1) {
-                ntNeuronNode selectedNeuronNode = (ntNeuronNode) neuronList_jTree.getLastSelectedPathComponent();
+                selectedNeuronNode = (ntNeuronNode) neuronList_jTree.getLastSelectedPathComponent();
                 // select neurite in the neuron tree
                 if (selectedNeuronNode.isBranchNode()) {
                     tablePoints = selectedNeuronNode.getTracingResult();
@@ -10840,8 +11226,84 @@ public class nTracer_
             displaySomaTreeModel.setRoot(rootDisplaySomaNode);
             updatePointTable(tablePoints);
             canUpdateDisplay = true;
+            
             if (canUpdateDisplay) {
                 updateDisplay();
+            }
+            
+            if (selectedNeuronNode != null && overlayConsensus_jCheckBox.isSelected()) {
+                // Add matching branches
+                ArrayList<Integer> branchIndexes = selectedNeuronNode.getConsensusBranchIndex();
+                ArrayList<ntNeuronNode> matchingNodes = new ArrayList<>();
+                traceConsensus.decomposeBranches(rootNeuronNode, matchingNodes);
+                matchingNodes.removeIf(i -> !i.matchesBranchIndex(branchIndexes));
+                
+                Overlay ov = new Overlay();
+                consensusMatches_jLabel.setText("Matches: " + matchingNodes.size());
+                TextRoi textOverlay = new TextRoi(0, 0, "Matches: " + matchingNodes.size());
+                ov.add(textOverlay);
+                Color [] colors = {Color.RED, Color.BLUE, Color.GREEN, Color.MAGENTA, Color.ORANGE, Color.CYAN, Color.YELLOW};
+                int colorIndex = 0;
+                
+                Map<Integer, Integer> zMap = new HashMap<>();
+                for (int n = 0; n < matchingNodes.size(); ++n) {
+                    ntNeuronNode node = matchingNodes.get(n);
+                    ArrayList<String[]> points = node.getTracingResult();
+                    
+                    float [] xarr = new float[points.size()], yarr = new float[points.size()];
+                    for (int i = 0; i < points.size(); ++i) {
+                        xarr[i] = Float.parseFloat(points.get(i)[1]);
+                        yarr[i] = Float.parseFloat(points.get(i)[2]);
+                        int z = Integer.parseInt(points.get(i)[3]);
+                        zMap.put(z, zMap.getOrDefault(z, 0) + 1);
+                        
+                        if (i == 0 || i == points.size() - 1) {
+                            OvalRoi circle = new OvalRoi(xarr[i] - 5, yarr[i] - 5, 10, 10);
+                            circle.setFillColor(colors[(colorIndex) % 7]);
+                            ov.add(circle);
+                        }
+                    }
+                    PolygonRoi roiLine = new PolygonRoi(xarr, yarr, Roi.POLYLINE);
+                    roiLine.setStrokeColor(colors[(colorIndex) % 7]);
+                    ++colorIndex;
+                    roiLine.setStrokeWidth(1.2);
+                    ov.add(roiLine);
+                }
+                
+                
+                imp.setOverlay(ov);
+                
+                if(!zMap.isEmpty()) {
+                    int maxZ = 0;
+                    int maxZCount = 0;
+                    for (Map.Entry<Integer, Integer> entry: zMap.entrySet()) {
+                        if (entry.getValue() > maxZCount) {
+                            maxZCount = entry.getValue();
+                            maxZ = entry.getKey();
+                        }
+                    }
+                    imp.setZ(maxZ);
+                }
+            }
+            
+            ArrayList<TreePath> newPath = new ArrayList<>();
+            TreePath[] paths = neuronList_jTree.getSelectionPaths();
+            if (paths == null) return;
+         
+            for (TreePath path: paths) {
+                ntNeuronNode selected = (ntNeuronNode) path.getLastPathComponent();
+                for (int branchIndex: selected.getConsensusBranchIndex()) {
+                    ntNeuronNode uniqueBranch = (ntNeuronNode) traceConsensus.consensusRootNode.getChildAt(branchIndex);
+                    for (int j = 0; j < uniqueBranch.getChildCount(); ++j) {
+                        ntNeuronNode branch = (ntNeuronNode) uniqueBranch.getChildAt(j);
+                        if (branch.toString() == selected.toString()) {
+                            newPath.add(new TreePath(branch.getPath()));
+                        }
+                    }
+                }
+            }
+            if (newPath.size() > 0) {
+                consensusList_jTree.setSelectionPaths(newPath.toArray(new TreePath[0]));
             }
             //IJ.log("NeuriteTreeSelection change complete");
         }

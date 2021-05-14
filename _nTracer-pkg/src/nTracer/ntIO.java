@@ -72,6 +72,13 @@ public class ntIO {
         Prefs.requireControlKey = true;
         return imp;
     }
+    
+    protected ImagePlus addImage() {
+        ImagePlus imp = WindowManager.getCurrentImage();
+        ImagePlus imp2 = imp.duplicate();
+        imp2.show();
+        return imp2;
+    }
 
     public ImagePlus importSequence() {
         IJ.run("Image Sequence...");
