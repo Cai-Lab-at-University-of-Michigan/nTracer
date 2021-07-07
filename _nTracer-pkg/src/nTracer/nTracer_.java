@@ -597,6 +597,7 @@ public class nTracer_
         consensusMatches_jLabel = new javax.swing.JLabel();
         consensusResult_jCheckBox = new javax.swing.JCheckBox();
         consensusStartEnd_jCheckBox = new javax.swing.JCheckBox();
+        neuronConsensus_jButton = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         consensusResult_JTextArea = new javax.swing.JTextArea();
@@ -1090,7 +1091,7 @@ public class nTracer_
                         .addComponent(jumpTo_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(editDisplay_jPanelLayout.createSequentialGroup()
-                        .addGap(0, 169, Short.MAX_VALUE)
+                        .addGap(0, 215, Short.MAX_VALUE)
                         .addComponent(delete_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(editSoma_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1692,7 +1693,7 @@ public class nTracer_
                 .addComponent(selected_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(227, Short.MAX_VALUE))
+                .addContainerGap(273, Short.MAX_VALUE))
         );
 
         jPanel1.getAccessibleContext().setAccessibleName("");
@@ -1704,6 +1705,7 @@ public class nTracer_
         tracingMethod_buttonGroup.add(manualTracing_jRadioButton);
         manualTracing_jRadioButton.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
         manualTracing_jRadioButton.setForeground(new java.awt.Color(255, 51, 51));
+        manualTracing_jRadioButton.setSelected(true);
         manualTracing_jRadioButton.setText("Interactive");
         manualTracing_jRadioButton.setFocusable(false);
         manualTracing_jRadioButton.addActionListener(new java.awt.event.ActionListener() {
@@ -2351,8 +2353,8 @@ public class nTracer_
                         .addComponent(tracingMethod_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(labeling_jPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap())
-            .addComponent(channel_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 245, Short.MAX_VALUE)
+                .addContainerGap(15, Short.MAX_VALUE))
+            .addComponent(channel_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 254, Short.MAX_VALUE)
         );
         tracing_jPanelLayout.setVerticalGroup(
             tracing_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2375,7 +2377,7 @@ public class nTracer_
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(channel_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(105, Short.MAX_VALUE))
+                .addContainerGap(151, Short.MAX_VALUE))
         );
 
         main_jTabbedPane.addTab("Tracing   ", tracing_jPanel);
@@ -2427,6 +2429,13 @@ public class nTracer_
             }
         });
 
+        neuronConsensus_jButton.setText("Neuron Consensus");
+        neuronConsensus_jButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                neuronConsensus_jButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -2434,13 +2443,14 @@ public class nTracer_
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(consensusMatches_jLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(consensusStartEnd_jCheckBox)
                     .addComponent(overlayConsensus_jCheckBox)
                     .addComponent(consensusMatched_jCheckBox)
                     .addComponent(consensusResult_jCheckBox)
-                    .addComponent(consensusStartEnd_jCheckBox)
                     .addComponent(branchConsensusButton)
-                    .addComponent(consensusUnmatchedJCheckBox))
+                    .addComponent(consensusUnmatchedJCheckBox)
+                    .addComponent(neuronConsensus_jButton)
+                    .addComponent(consensusMatches_jLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -2448,7 +2458,9 @@ public class nTracer_
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(branchConsensusButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(neuronConsensus_jButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(overlayConsensus_jCheckBox)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(consensusUnmatchedJCheckBox)
@@ -2458,8 +2470,9 @@ public class nTracer_
                 .addComponent(consensusResult_jCheckBox)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(consensusStartEnd_jCheckBox)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(consensusMatches_jLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(24, 24, 24)
+                .addComponent(consensusMatches_jLabel)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Calculate Scores"));
@@ -2525,16 +2538,16 @@ public class nTracer_
                 .addGroup(consensus_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(36, Short.MAX_VALUE))
+                .addContainerGap(35, Short.MAX_VALUE))
         );
         consensus_jPanelLayout.setVerticalGroup(
             consensus_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, consensus_jPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(329, Short.MAX_VALUE))
+                .addContainerGap(337, Short.MAX_VALUE))
         );
 
         main_jTabbedPane.addTab("Consensus", consensus_jPanel);
@@ -3079,7 +3092,7 @@ public class nTracer_
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(setApicalDendrite_jButton, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE)
+                                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 93, Short.MAX_VALUE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(selectNeuronNumber_jTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -3127,7 +3140,7 @@ public class nTracer_
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(connectedSynapse_jLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(main_jTabbedPane, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(0, 0, Short.MAX_VALUE))))))
+                                .addGap(0, 5, Short.MAX_VALUE))))))
         );
 
         layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {endPt_jLabel, startPt_jLabel});
@@ -6013,6 +6026,10 @@ public class nTracer_
     private void consensusStartEnd_jCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consensusStartEnd_jCheckBoxActionPerformed
         updateConsensusCheckboxes();
     }//GEN-LAST:event_consensusStartEnd_jCheckBoxActionPerformed
+
+    private void neuronConsensus_jButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_neuronConsensus_jButtonActionPerformed
+        traceConsensus.outputMatchedNeurons();
+    }//GEN-LAST:event_neuronConsensus_jButtonActionPerformed
 
     private void combineSomaAndBranchesOfTwoNeuronTreeSomas(ntNeuronNode targetNeuronSomaNode, ntNeuronNode sourceNeuronSomaNode) {
         String targetSNeuronNumber = targetNeuronSomaNode.getNeuronNumber();
@@ -9304,6 +9321,7 @@ public class nTracer_
     private javax.swing.JMenuBar menu_jMenuBar;
     private javax.swing.JMenu model3D_jMenu;
     private javax.swing.JMenu model3D_jMenu1;
+    private javax.swing.JButton neuronConsensus_jButton;
     protected javax.swing.JSpinner neuronLineWidth_jSpinner;
     protected javax.swing.JScrollPane neuronList_jScrollPane;
     protected javax.swing.JTree neuronList_jTree;

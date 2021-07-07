@@ -372,7 +372,7 @@
                                       <Component id="setApicalDendrite_jButton" min="-2" pref="110" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
-                                      <Component id="jLabel1" pref="85" max="32767" attributes="0"/>
+                                      <Component id="jLabel1" pref="93" max="32767" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="selectNeuronNumber_jTextField" min="-2" pref="53" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
@@ -433,7 +433,7 @@
                                   <Component id="connectedSynapse_jLabel" alignment="0" min="-2" pref="210" max="-2" attributes="0"/>
                                   <Component id="main_jTabbedPane" alignment="0" min="-2" pref="244" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="5" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -585,7 +585,7 @@
                               <EmptySpace max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" attributes="0">
-                              <EmptySpace min="0" pref="169" max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="215" max="32767" attributes="0"/>
                               <Component id="delete_jPanel" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="editSoma_jPanel" min="-2" max="-2" attributes="0"/>
@@ -1265,7 +1265,7 @@
                       <Component id="selected_jPanel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="227" max="32767" attributes="0"/>
+                      <EmptySpace pref="273" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -2239,9 +2239,9 @@
                               <Component id="labeling_jPanel" max="32767" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace pref="15" max="32767" attributes="0"/>
                   </Group>
-                  <Component id="channel_jPanel" alignment="0" pref="245" max="32767" attributes="0"/>
+                  <Component id="channel_jPanel" alignment="0" pref="254" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
@@ -2266,7 +2266,7 @@
                       <Component id="jPanel4" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="channel_jPanel" min="-2" pref="176" max="-2" attributes="0"/>
-                      <EmptySpace pref="105" max="32767" attributes="0"/>
+                      <EmptySpace pref="151" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -2331,6 +2331,7 @@
                     <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                       <Color blue="33" green="33" red="ff" type="rgb"/>
                     </Property>
+                    <Property name="selected" type="boolean" value="true"/>
                     <Property name="text" type="java.lang.String" value="Interactive"/>
                     <Property name="focusable" type="boolean" value="false"/>
                   </Properties>
@@ -3413,7 +3414,7 @@
                           <Component id="jPanel3" min="-2" pref="178" max="-2" attributes="0"/>
                           <Component id="jPanel2" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="36" max="32767" attributes="0"/>
+                      <EmptySpace pref="35" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -3421,10 +3422,10 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jPanel3" min="-2" pref="188" max="-2" attributes="0"/>
+                      <Component id="jPanel3" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="329" max="32767" attributes="0"/>
+                      <EmptySpace pref="337" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -3445,13 +3446,14 @@
                       <Group type="102" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="consensusMatches_jLabel" min="-2" pref="221" max="-2" attributes="0"/>
+                              <Component id="consensusStartEnd_jCheckBox" min="-2" max="-2" attributes="0"/>
                               <Component id="overlayConsensus_jCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="consensusMatched_jCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="consensusResult_jCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="consensusStartEnd_jCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="branchConsensusButton" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="consensusUnmatchedJCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="neuronConsensus_jButton" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="consensusMatches_jLabel" alignment="0" min="-2" pref="221" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="32767" attributes="0"/>
                       </Group>
@@ -3462,7 +3464,9 @@
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="branchConsensusButton" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="neuronConsensus_jButton" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
                           <Component id="overlayConsensus_jCheckBox" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="consensusUnmatchedJCheckBox" min="-2" max="-2" attributes="0"/>
@@ -3472,8 +3476,9 @@
                           <Component id="consensusResult_jCheckBox" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="consensusStartEnd_jCheckBox" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
+                          <Component id="consensusMatches_jLabel" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="32767" attributes="0"/>
-                          <Component id="consensusMatches_jLabel" min="-2" pref="22" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -3540,6 +3545,14 @@
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
                   </AuxValues>
+                </Component>
+                <Component class="javax.swing.JButton" name="neuronConsensus_jButton">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Neuron Consensus"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="neuronConsensus_jButtonActionPerformed"/>
+                  </Events>
                 </Component>
               </SubComponents>
             </Container>

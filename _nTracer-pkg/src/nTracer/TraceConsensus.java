@@ -5,6 +5,7 @@
  */
 package nTracer;
 
+import ij.IJ;
 import ij.gui.OvalRoi;
 import ij.gui.Overlay;
 import ij.gui.PolygonRoi;
@@ -13,6 +14,9 @@ import ij.gui.TextRoi;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -21,9 +25,11 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Set;
+import javax.swing.JFileChooser;
 import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
+import javax.swing.filechooser.FileFilter;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
@@ -58,6 +64,242 @@ public class TraceConsensus {
     TraceConsensus(nTracer_ nTracer) {
         this.nTracer = nTracer;
         this.combinedBranches = new ArrayList<>();
+    }
+    
+    protected void outputMatchedNeurons() {
+        String directory = IJ.getDirectory("current");
+        String dataFileName = (String) (imp.getTitle() + ".zip");
+        final JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setMultiSelectionEnabled(true);
+        fileChooser.setSelectedFile(new File(directory + "/" + dataFileName));
+        fileChooser.setFileFilter(new FileFilter() {
+            @Override
+            public boolean accept(File f) {
+                if (f.isDirectory()) {
+                    return true;
+                }
+                final String name = f.getName();
+                return name.endsWith(".zip");
+            }
+
+            @Override
+            public String getDescription() {
+                return "*.zip";
+            }
+        });
+        int returnVal = fileChooser.showOpenDialog(nTracer);
+        if (returnVal == JFileChooser.CANCEL_OPTION) {
+            return;
+        }
+        File[] selectedFiles = fileChooser.getSelectedFiles();
+        if (selectedFiles.length == 0 || directory == null || dataFileName == null) {
+            return;
+        }
+        
+        ArrayList<ArrayList<ArrayList<String[]>>> neuronTraces= new ArrayList<>();
+        ArrayList<ntNeuronNode> neuronRoots = new ArrayList<>();
+        
+        ntNeuronNode prevSomaRoot = null, prevSpineRoot = null;
+        
+        for (File selectedFile: selectedFiles) {
+            ArrayList<ArrayList<String[]>> trace = new ArrayList<>();
+            try {
+                System.gc();
+                InputStream parameterAndNeuronIS = nTracer.IO.loadPackagedParameterAndNeuron(selectedFile);
+                DefaultTreeModel[] treeModels = nTracer.IO.loadTracingParametersAndNeurons(parameterAndNeuronIS);
+                ntNeuronNode neuronRoot = (ntNeuronNode) treeModels[1].getRoot();
+                if (prevSomaRoot == null) {
+                    prevSomaRoot = (ntNeuronNode) treeModels[0].getRoot();
+                    prevSpineRoot = (ntNeuronNode) treeModels[2].getRoot();
+                }
+                neuronRoots.add(neuronRoot);
+                for (int n = 0; n < neuronRoot.getChildCount(); ++n) {
+                    ArrayList<String[]> neuronPoints = new ArrayList<>();
+                    
+                    ntNeuronNode neuron = (ntNeuronNode) neuronRoot.getChildAt(n);
+                    ArrayList<ntNeuronNode> branches = new ArrayList<>();
+                    decomposeBranches(neuron, branches);
+                    for (ntNeuronNode branch: branches) {
+                        for (String[] point: branch.getTracingResult()) neuronPoints.add(point);
+                    }
+                    trace.add(neuronPoints);
+                }
+                
+                
+                neuronTraces.add(trace);
+                System.gc();
+            } catch (IOException e) { 
+                return;
+            }
+
+        }
+        
+        
+        String[] panelParameters = {nTracer.xyRadius + "", nTracer.zRadius + "",
+                nTracer.colorThreshold + "", nTracer.intensityThreshold + "",
+                nTracer.extendDisplayPoints + "",
+                nTracer.overlayAllPoints_jCheckBox.isSelected() + "",
+                nTracer.overlayAllName_jCheckBox.isSelected() + "",
+                nTracer.overlayAllSoma_jCheckBox.isSelected() + "",
+                nTracer.overlayAllNeuron_jCheckBox.isSelected() + "",
+                nTracer.overlayAllSpine_jCheckBox.isSelected() + "",
+                nTracer.overlayAllSynapse_jCheckBox.isSelected() + "",
+                nTracer.overlayAllConnection_jCheckBox.isSelected() + "",
+                nTracer.overlayAllSelectedPoints_jCheckBox.isSelected() + "",
+                nTracer.overlaySelectedName_jCheckBox.isSelected() + "",
+                nTracer.overlaySelectedSoma_jCheckBox.isSelected() + "",
+                nTracer.overlaySelectedNeuron_jCheckBox.isSelected() + "",
+                nTracer.overlaySelectedArbor_jCheckBox.isSelected() + "",
+                nTracer.overlaySelectedBranch_jCheckBox.isSelected() + "",
+                nTracer.overlaySelectedSpine_jCheckBox.isSelected() + "",
+                nTracer.overlaySelectedSynapse_jCheckBox.isSelected() + "",
+                nTracer.overlaySelectedConnection_jCheckBox.isSelected() + "",
+                nTracer.overlayPointBox_jCheckBox.isSelected() + "",
+                (int) (nTracer.somaLine * 2) + "", (int) (nTracer.neuronLine * 2) + "",
+                (int) (nTracer.arborLine * 2) + "", (int) (nTracer.branchLine * 2) + "",
+                (int) (nTracer.spineLine * 2) + "", (int) (nTracer.pointBoxLine * 2) + "",
+                (int) nTracer.synapseRadius + "", nTracer.pointBoxRadius + "", (int) (nTracer.lineWidthOffset * 2) + "",
+                nTracer.history.autosaveIntervalMin + "", nTracer.history.delAutosaved + ""};
+        
+        final String folder = IJ.getDirectory("current") + "consensus/";
+        File saveFolder = new File(folder);
+        if (!saveFolder.exists()) {
+            saveFolder.mkdirs();
+        }
+        
+        ArrayList<ArrayList<Integer>> matchings = neuronConsensus(neuronTraces);
+        
+        ArrayList<ntNeuronNode> newNeuronRoots = new ArrayList<>();
+        for (ArrayList<Integer> match: matchings) {
+            ntNeuronNode newNeuronRoot = new ntNeuronNode("root", new ArrayList<String[]>());
+            String fileName = "match";
+            for (int t = 0; t < neuronRoots.size(); ++t) {
+                int n = match.get(t);
+                fileName += "-" + n;
+                ntNeuronNode trace = new ntNeuronNode("", null);
+                copyNeuron((ntNeuronNode) neuronRoots.get(t).getChildAt(n), trace, t + 1);
+                newNeuronRoot.add(trace);
+            }
+            newNeuronRoots.add(newNeuronRoot);
+            
+            String path = folder + fileName + ".zip";
+            File saveFile = new File(path);
+            
+            try {
+                nTracer.IO.savePackagedData(newNeuronRoot, prevSomaRoot, prevSpineRoot,
+                        nTracer.neuronList_jTree, nTracer.displaySomaList_jTree, nTracer.pointTable_jTable, saveFile,
+                        imp.getC(), imp.getZ(), imp.getFrame(), panelParameters);
+            } catch (IOException e) {
+                return;
+            }
+        }
+        
+        return;
+    }
+    
+    private void copyNeuron(ntNeuronNode node, ntNeuronNode newNode, int newNeuronNumber) {
+        String[] splits = node.toString().split("-");
+        String newName = newNeuronNumber + "";
+        for (int s = 1; s < splits.length; ++s) {
+            newName += "-" + splits[s];
+        }
+        newNode.setName(newName);
+        newNode.setTracingResult(node.getTracingResult());
+        
+        for (int i = 0; i < node.getChildCount(); ++i) {
+            ntNeuronNode newChildNode = new ntNeuronNode("", null);
+            newNode.add(newChildNode);
+            copyNeuron((ntNeuronNode) node.getChildAt(i), newChildNode, newNeuronNumber);
+        }
+    }
+    
+    /**
+    * Determine matching neurons
+    */
+    private ArrayList<ArrayList<Integer>> neuronConsensus(ArrayList<ArrayList<ArrayList<String[]>>> neuronTraces) {
+        if (neuronTraces.size() < 2) return new ArrayList<>();
+        
+        Map<String, Integer> neuronMap = new HashMap<>();
+        ArrayList<ArrayList<Integer>> neuronMatchings = new ArrayList<>();
+        
+        for (int n = 0; n < neuronTraces.get(0).size(); ++n) {
+            neuronMatchings.add(new ArrayList<>());
+            neuronMatchings.get(n).add(n);
+            for (int t = 1; t < neuronTraces.size(); ++t) neuronMatchings.get(n).add(-1);
+            
+            ArrayList<String[]> neuron = neuronTraces.get(0).get(n);
+            for (String[] point: neuron) {
+                int POINT_BUFFER = 3;
+                neuronMap.put(point[1] + "," + point[2] + "," + point[3], n);
+                for (int xBuffer = -POINT_BUFFER; xBuffer <= POINT_BUFFER; ++xBuffer) {
+                    for (int yBuffer = -POINT_BUFFER; yBuffer <= POINT_BUFFER; ++yBuffer) {
+                        for (int zBuffer = -POINT_BUFFER; zBuffer <= POINT_BUFFER; ++zBuffer) {
+                           neuronMap.put((Integer.parseInt(point[1]) + xBuffer)
+                                   + "," + (Integer.parseInt(point[2]) + yBuffer)
+                                   + "," + (Integer.parseInt(point[3]) + zBuffer), n);
+                        }
+                    }
+                }
+            }
+        }
+        
+        
+        
+        for (int t = 1; t < neuronTraces.size(); ++t) {
+            ArrayList<ArrayList<String[]>> trace = neuronTraces.get(t);
+            for (int n = 0; n < trace.size(); ++n) {
+                ArrayList<String[]> neuron = trace.get(n);
+                Map<Integer, Integer> potentialMatches = new HashMap<>();
+                for (String[] point: neuron) {
+                    int matchingNeuronIndex = neuronMap.getOrDefault(point[1] + "," + point[2] + "," + point[3], -1);
+                    if (matchingNeuronIndex == -1) continue;
+                    
+                    potentialMatches.put(matchingNeuronIndex, potentialMatches.getOrDefault(matchingNeuronIndex, 0) + 1);
+                }
+                float MATCH_THRESHOLD = (float) 0.05;
+                int bestMatchingNeuronIndex = -1;
+                int bestNeuronMatches = 0;
+                for (Map.Entry<Integer, Integer> entry: potentialMatches.entrySet()) {
+                    if (entry.getValue() > bestNeuronMatches) {
+                        bestNeuronMatches = entry.getValue();
+                        bestMatchingNeuronIndex = entry.getKey();
+                    }
+                }
+                if (bestNeuronMatches / (float) trace.size() > MATCH_THRESHOLD) {
+                    neuronMatchings.get(bestMatchingNeuronIndex).set(t, n);
+                } else {
+                    int newIndex = neuronMatchings.size();
+                    neuronMatchings.add(new ArrayList<>());
+                    for (int m = 0;  m < neuronTraces.size(); ++m) {
+                        if (m == t) neuronMatchings.get(newIndex).add(n);
+                        else neuronMatchings.get(newIndex).add(-1);
+                    }
+                    for (int t2 = 0; t2 < neuronMatchings.size(); ++t2) neuronMatchings.get(newIndex).add(-1);
+                    
+                    int POINT_BUFFER = 3;
+                    for (String[] point: neuron) {
+                        neuronMap.put(point[1] + "," + point[2] + "," + point[3], n);
+                        for (int xBuffer = -POINT_BUFFER; xBuffer <= POINT_BUFFER; ++xBuffer) {
+                            for (int yBuffer = -POINT_BUFFER; yBuffer <= POINT_BUFFER; ++yBuffer) {
+                                for (int zBuffer = -POINT_BUFFER; zBuffer <= POINT_BUFFER; ++zBuffer) {
+                                   neuronMap.put((Integer.parseInt(point[1]) + xBuffer)
+                                           + "," + (Integer.parseInt(point[2]) + yBuffer)
+                                           + "," + (Integer.parseInt(point[3]) + zBuffer), newIndex);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        ArrayList<ArrayList<Integer>> filteredNeuronMatchings = new ArrayList<>();
+        for (ArrayList<Integer> match: neuronMatchings) {
+            int matches = 0;
+            for (int n: match) if (n != -1) ++matches;
+            if (matches > 1) filteredNeuronMatchings.add(match);
+        }
+        return filteredNeuronMatchings;
     }
 
     /**
@@ -243,6 +485,21 @@ public class TraceConsensus {
         nTracer.consensusList_jScrollPane.setViewportView(nTracer.consensusList_jTree);
     }
     
+    protected void clearConsensusTree() {
+        nTracer.consensusList_jTree.removeAll();
+        combinedBranches = new ArrayList<>();
+        consensusRootNode = null;
+        nTracer.consensusList_jScrollPane.setSize(0, 369);
+        nTracer.consensusList_jScrollPane.setPreferredSize(new Dimension(0, 369));
+        nTracer.consensusList_jScrollPane.setLocation(nTracer.consensusList_jScrollPane.getX() + 300, nTracer.consensusList_jScrollPane.getY());
+        
+        nTracer.neuronList_jScrollPane.setSize(600, 369);
+        nTracer.consensusList_jScrollPane.setViewportView(null);
+
+    }
+    
+    
+    
     /**
     * Generate consensus trace
     */
@@ -278,7 +535,7 @@ public class TraceConsensus {
                             visited.add(coordString);
                             double distance = Math.sqrt(dx*dx + dy*dy + dz*dz);
                             float currDensity = densityMap.getOrDefault(coordString, (float) 0);
-                            float weight = (float) (1 / (1 + (((float) branches.size() / (float) 6 ) * distance)));
+                            float weight = (float) (1 / (float) (1 + 0.8 * distance));
                             densityMap.put(coordString, currDensity + weight);
                         }
                     }
@@ -293,10 +550,10 @@ public class TraceConsensus {
         
         
         String[] firstStart = null;
-        float BOUNDARY_THRESHOLD = (float) 1.3;
+        float BOUNDARY_THRESHOLD = (float) 1;
 
         for (ntNeuronNode branch: branches) {
-            int samplingWindow = Math.min((int) ((float) branch.getTracingResult().size() * 0.2), 20);
+            int samplingWindow = Math.min((int) ((float) branch.getTracingResult().size() * 0.05), 20);
             String[] point1 = null, point2 = null;
             for (int b = 0; b < branch.getTracingResult().size(); ++b) {
                 String[] point = branch.getTracingResult().get(b);
@@ -404,25 +661,26 @@ public class TraceConsensus {
                                 continue;
                             }
 
-                            if (densityMap.get(currCoordinates) <= 1) {
+                            if (densityMap.get(currCoordinates) <= 0.5) {
                                 continue;
                             }
 
                             // Use distance as heuristic to estimate future cost of path
-                            float hcost = Float.MAX_VALUE;
+                            float hcost = 0;
                             for (int[] goal: goals) {
                                float distance = (float) Math.sqrt(
                                        Math.pow(goal[0] - currX, 2)
                                        + Math.pow(goal[1] - currY, 2)
                                        +Math.pow(goal[2] - currZ, 2)
                                );
-                               float cost = Math.max(distance - 1, 0) * 1;
-                               if (cost < hcost) {
+                               float cost = Math.max(distance - 1, 0);
+                               if (cost > hcost) {
                                    hcost = cost;
                                }
                             }
 
-                            float ecost = 1 + (1 / densityMap.get(currCoordinates));
+                            float ecost = 1 / densityMap.get(currCoordinates);
+//                            float ecost = 1 + (1 / densityMap.get(currCoordinates));
                             float pcost = visited.getOrDefault(prevCoordinates, (float) 0) + ecost;
                             visited.put(currCoordinates, pcost);
                             history.put(currCoordinates, prevCoordinates);
@@ -501,7 +759,7 @@ public class TraceConsensus {
             for (int b = 0; b < simplifiedTraces[i].size(); ++b) {
                 branchMatchings[b] = new ArrayList<>();
             }
-            final double COST_THRESHOLD = 0.09;
+            final double COST_THRESHOLD = 0.05;
             
             for (int b = 0; b < simplifiedTraces[i].size(); ++b) {
                 ArrayList<String[]> branch = simplifiedTraces[i].get(b);
@@ -564,7 +822,7 @@ public class TraceConsensus {
     protected void decomposeBranches(ntNeuronNode node, ArrayList<ntNeuronNode> branches) {
         for (int i = 0; i < node.getChildCount(); ++i) {
             ntNeuronNode currentNode = (ntNeuronNode) node.getChildAt(i);
-            branches.add(currentNode);
+            if (currentNode.getTracingResult().size() > 1) branches.add(currentNode);
             decomposeBranches(currentNode, branches);
         }
     }
