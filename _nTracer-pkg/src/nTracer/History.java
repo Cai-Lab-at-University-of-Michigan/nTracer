@@ -357,7 +357,7 @@ public class History {
         recordPanelParameters(historyLevel);
         recordImagePosition(historyLevel);
         recordStartEndPointStatus(historyLevel);
-        historyNeuronNode[historyLevel] = ntDataHandler.replicateNodeAndChild(rootNeuronNode);
+        historyNeuronNode[historyLevel] = nTracer.dataHandler.replicateNodeAndChild(rootNeuronNode);
         /*
         IJ.log("new neuron tree");
         for (int i = 0; i<historyNeuronNode[historyLevel].getChildCount();i++){
@@ -367,9 +367,9 @@ public class History {
         IJ.log("after replicate neuron name = "+historyNeuronNode[historyLevel].toString()+"; child = "+historyNeuronNode[historyLevel].getChildCount());
         IJ.log("replicated "+historyNeuronNode[historyLevel].getChildCount());
          */
-        historyAllSomaNode[historyLevel] = ntDataHandler.replicateNodeAndChild(rootAllSomaNode);
+        historyAllSomaNode[historyLevel] = nTracer.dataHandler.replicateNodeAndChild(rootAllSomaNode);
         //IJ.log("after replicate soma name = "+historyAllSomaNode[historyLevel].toString()+"; child = "+historyAllSomaNode[historyLevel].getChildCount());
-        historySpineNode[historyLevel] = ntDataHandler.replicateNodeAndChild(rootSpineNode);
+        historySpineNode[historyLevel] = nTracer.dataHandler.replicateNodeAndChild(rootSpineNode);
         recordTreeExpansionSelectionStatus(historyLevel);
         //IJ.log("ok4 "+(historyExpandedNeuronNames.get(historyLevel)).get(0));        
 //        IJ.log("ok5 "+(historySelectedNeuronNames.get(historyLevel)).get(0)); 
@@ -388,12 +388,12 @@ public class History {
         }
         try {
             nTracer.canUpdateDisplay = false;
-            rootNeuronNode = ntDataHandler.replicateNodeAndChild(historyNeuronNode[historyLevel]);
+            rootNeuronNode = nTracer.dataHandler.replicateNodeAndChild(historyNeuronNode[historyLevel]);
             nTracer.neuronTreeModel.setRoot(rootNeuronNode);
             nTracer.neuronList_jTree.setModel(nTracer.neuronTreeModel);
             //IJ.log("load "+historyLevel);
-            rootAllSomaNode = ntDataHandler.replicateNodeAndChild(historyAllSomaNode[historyLevel]);
-            rootSpineNode = ntDataHandler.replicateNodeAndChild(historySpineNode[historyLevel]);
+            rootAllSomaNode = nTracer.dataHandler.replicateNodeAndChild(historyAllSomaNode[historyLevel]);
+            rootSpineNode = nTracer.dataHandler.replicateNodeAndChild(historySpineNode[historyLevel]);
             if (rootNeuronNode == null || rootAllSomaNode == null) {
                 IJ.error("No neurite tracing data file found !");
                 nTracer.canUpdateDisplay = true;
@@ -510,9 +510,9 @@ public class History {
             Date now = new Date();
             String fileName = imp.getTitle() + "_" + fileFormatter.format(now);
 
-            ntNeuronNode autosaveNeuronNode = ntDataHandler.replicateNodeAndChild(historyNeuronNode[historyLevel]);
-            ntNeuronNode autosaveAllSomaNode = ntDataHandler.replicateNodeAndChild(historyAllSomaNode[historyLevel]);
-            ntNeuronNode autosaveSpineNode = ntDataHandler.replicateNodeAndChild(historySpineNode[historyLevel]);
+            ntNeuronNode autosaveNeuronNode = nTracer.dataHandler.replicateNodeAndChild(historyNeuronNode[historyLevel]);
+            ntNeuronNode autosaveAllSomaNode = nTracer.dataHandler.replicateNodeAndChild(historyAllSomaNode[historyLevel]);
+            ntNeuronNode autosaveSpineNode = nTracer.dataHandler.replicateNodeAndChild(historySpineNode[historyLevel]);
             ArrayList<String> autosaveExpandedNeuronNames = historyExpandedNeuronNames.get(historyLevel);
             ArrayList<String> autosaveSelectedNeuronNames = historySelectedNeuronNames.get(historyLevel);
             ArrayList<String> autosaveSelectedSomaSliceNames = historySelectedSomaSliceNames.get(historyLevel);

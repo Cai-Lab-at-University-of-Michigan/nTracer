@@ -116,7 +116,7 @@ public class TraceHelper {
         nTracer.hasEndPt = true;
         int tableSelectRow = addTracingToSoma(nTracer.Functions.convertIntArray2StringArray(finalPathPoints));
         if (tableSelectRow >= 0) {
-            nTracer.updatePointTable(nTracer.tablePoints);
+            nTracer.update.updatePointTable(nTracer.tablePoints);
             if (nTracer.tablePoints != null) {
                 nTracer.pointTable_jTable.setRowSelectionInterval(tableSelectRow, tableSelectRow);
                 nTracer.scroll2pointTableVisible(tableSelectRow, 0);
@@ -175,7 +175,7 @@ public class TraceHelper {
         // add tracing result to neuron tree at the soma node
         int tableSelectRow = addTracingToSoma(somaPts);
         if (tableSelectRow >= 0) {
-            nTracer.updatePointTable(nTracer.tablePoints);
+            nTracer.update.updatePointTable(nTracer.tablePoints);
             if (nTracer.tablePoints != null) {
                 nTracer.pointTable_jTable.setRowSelectionInterval(tableSelectRow, tableSelectRow);
                 nTracer.scroll2pointTableVisible(tableSelectRow, 0);
@@ -204,7 +204,7 @@ public class TraceHelper {
         nTracer.recordNeuronTreeExpansionStatus();
         int tableSelectRow = addTracingToNeuron(nTracer.Functions.convertIntArray2StringArray(finalPathPoints));
         if (tableSelectRow >= 0) {
-            nTracer.updatePointTable(nTracer.tablePoints);
+            nTracer.update.updatePointTable(nTracer.tablePoints);
             if (nTracer.tablePoints != null) {
                 nTracer.pointTable_jTable.setRowSelectionInterval(tableSelectRow, tableSelectRow);
                 nTracer.scroll2pointTableVisible(tableSelectRow, 0);
@@ -240,7 +240,7 @@ public class TraceHelper {
             // add tracing result to neuron tree
             int tableSelectRow = addTracingToNeuron(nTracer.Functions.convertIntArray2StringArray(finalPathPoints));
             if (tableSelectRow >= 0) {
-                nTracer.updatePointTable(nTracer.tablePoints);
+                nTracer.update.updatePointTable(nTracer.tablePoints);
                 if (nTracer.tablePoints != null) {
                     nTracer.pointTable_jTable.setRowSelectionInterval(tableSelectRow, tableSelectRow);
                     nTracer.scroll2pointTableVisible(tableSelectRow, 0);
@@ -295,7 +295,7 @@ public class TraceHelper {
                      */
                     minCostPathPoints = nTracer.Functions.semiAutoGetMinCostPath3D(nTracer.startPoint, nTracer.tablePoints, nTracer.analysisChannels, nTracer.imp.getFrame(), nTracer.xyRadius, nTracer.zRadius, nTracer.colorThreshold, nTracer.intensityThreshold);
                     if (minCostPathPoints == null) {
-                        nTracer.updatePointTable(nTracer.tablePoints);
+                        nTracer.update.updatePointTable(nTracer.tablePoints);
                         nTracer.pointTable_jTable.setRowSelectionInterval(tableSelectRow1, tableSelectRow1);
                         nTracer.scroll2pointTableVisible(tableSelectRow1, 0);
                     } else {
@@ -304,7 +304,7 @@ public class TraceHelper {
                         // remove redundant points
                         finalPathPoints = nTracer.Functions.removeRedundantTracingPoints(minCostPathPoints);
                         int tableSelectRow2 = addTracingToNeuron(nTracer.Functions.convertIntArray2StringArray(finalPathPoints));
-                        nTracer.updatePointTable(nTracer.tablePoints);
+                        nTracer.update.updatePointTable(nTracer.tablePoints);
                         if (tableSelectRow2 >= 0) {
                             nTracer.pointTable_jTable.setRowSelectionInterval(tableSelectRow2, tableSelectRow2);
                             nTracer.scroll2pointTableVisible(tableSelectRow2, 0);
@@ -349,7 +349,7 @@ public class TraceHelper {
                 int tableSelectRow = addTracingToSoma(nTracer.Functions.convertIntArray2StringArray(finalPathPoints));
                 nTracer.restoreTreeExpansionSelectionStatus();
                 if (tableSelectRow >= 0) {
-                    nTracer.updatePointTable(nTracer.tablePoints);
+                    nTracer.update.updatePointTable(nTracer.tablePoints);
                     if (nTracer.tablePoints != null) {
                         nTracer.pointTable_jTable.setRowSelectionInterval(tableSelectRow, tableSelectRow);
                         nTracer.scroll2pointTableVisible(tableSelectRow, 0);
@@ -427,7 +427,7 @@ public class TraceHelper {
             }
             tableSelectRow = addTracingToNeuron(clusteredCentOfInt);
             if (tableSelectRow >= 0) {
-                nTracer.updatePointTable(nTracer.tablePoints);
+                nTracer.update.updatePointTable(nTracer.tablePoints);
                 if (!nTracer.tablePoints.isEmpty()) {
                     nTracer.pointTable_jTable.setRowSelectionInterval(tableSelectRow, tableSelectRow);
                     nTracer.scroll2pointTableVisible(tableSelectRow, 0);

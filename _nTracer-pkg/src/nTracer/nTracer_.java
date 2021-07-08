@@ -106,6 +106,7 @@ public class nTracer_
         Functions = new ntTracing();
         dataHelper = new DataHelper(this);
         traceHelper = new TraceHelper(this);
+        dataHandler = new ntDataHandler();
 
         if (!IJ.isJava18()) {
             IJ.error("Fiji/ImageJ-Java8 version is required !");
@@ -243,7 +244,7 @@ public class nTracer_
     protected void initPointTable() {
         // set up tracked point table
         pointTableModel = new DefaultTableModel(
-                ntDataHandler.getPointTableData(new ArrayList<String[]>()),
+                dataHandler.getPointTableData(new ArrayList<String[]>()),
                 pointColumnNames) {
             Class[] types = new Class[]{
                 java.lang.String.class, java.lang.Float.class,
@@ -8951,6 +8952,7 @@ public class nTracer_
     protected Update update;
     protected TraceHelper traceHelper;
     protected DataHelper dataHelper;
+    protected ntDataHandler dataHandler;
     public static ImagePlus imp, impZproj;
     protected CompositeImage cmp;
     protected ImageCanvas cns, cnsZproj;

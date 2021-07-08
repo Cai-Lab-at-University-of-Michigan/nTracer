@@ -32,7 +32,7 @@ public class Update {
      */
     
     protected void updatePointTable(ArrayList<String[]> dataPoints) {
-        Object[][] pointData = ntDataHandler.getPointTableData(dataPoints);
+        Object[][] pointData = nTracer.dataHandler.getPointTableData(dataPoints);
         nTracer.pointTableModel = new DefaultTableModel(pointData, nTracer.pointColumnNames) {
             Class[] types = new Class[]{
                 java.lang.String.class, java.lang.Float.class,
