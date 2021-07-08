@@ -494,6 +494,7 @@ public class nTracer_
         overlayAllNeuron_jCheckBox = new javax.swing.JCheckBox();
         overlayAllSoma_jCheckBox = new javax.swing.JCheckBox();
         overlayAllSynapse_jCheckBox = new javax.swing.JCheckBox();
+        blank_jCheckBox = new javax.swing.JCheckBox();
         overlayAllName_jCheckBox = new javax.swing.JCheckBox();
         overlayAllConnection_jCheckBox = new javax.swing.JCheckBox();
         extendAllDisplayPoints_jSpinner = new javax.swing.JSpinner();
@@ -1125,6 +1126,13 @@ public class nTracer_
             }
         });
 
+        blank_jCheckBox.setText("Blank");
+        blank_jCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                blank_jCheckBoxActionPerformed(evt);
+            }
+        });
+
         overlayAllName_jCheckBox.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         overlayAllName_jCheckBox.setForeground(new java.awt.Color(204, 0, 204));
         overlayAllName_jCheckBox.setText("Name");
@@ -1204,15 +1212,13 @@ public class nTracer_
             .addGroup(all_jPanelLayout.createSequentialGroup()
                 .addGroup(all_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(all_jPanelLayout.createSequentialGroup()
-                        .addGap(2, 2, 2)
+                        .addGap(0, 0, 0)
                         .addGroup(all_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(overlayAllName_jCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(overlayAllSoma_jCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(overlayAllNeuron_jCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(overlayAllSoma_jCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, 0)
                         .addGroup(all_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(overlayAllSynapse_jCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(overlayAllConnection_jCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(overlayAllSpine_jCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(all_jPanelLayout.createSequentialGroup()
                         .addContainerGap()
@@ -1227,7 +1233,12 @@ public class nTracer_
                             .addGroup(all_jPanelLayout.createSequentialGroup()
                                 .addGap(47, 47, 47)
                                 .addComponent(overlayAllPoints_jCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(extendAllDisplayPoints_jSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(extendAllDisplayPoints_jSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(all_jPanelLayout.createSequentialGroup()
+                        .addComponent(overlayAllNeuron_jCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, 0)
+                        .addComponent(overlayAllConnection_jCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(blank_jCheckBox))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -1244,19 +1255,21 @@ public class nTracer_
                 .addGroup(all_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(overlayAllName_jCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(overlayAllSpine_jCheckBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(0, 0, 0)
                 .addGroup(all_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(overlayAllSoma_jCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(overlayAllSynapse_jCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addGap(3, 3, 3)
+                .addGap(0, 0, 0)
                 .addGroup(all_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(overlayAllNeuron_jCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(overlayAllConnection_jCheckBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 0, 0)
+                .addComponent(blank_jCheckBox)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(all_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lineWidthOffset_jLabel)
                     .addComponent(allNeuronLineWidthOffset_jSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         all_jPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {overlayAllName_jCheckBox, overlayAllNeuron_jCheckBox, overlayAllSoma_jCheckBox, overlayAllSynapse_jCheckBox});
@@ -1506,7 +1519,7 @@ public class nTracer_
                             .addComponent(overlayPointBox_jCheckBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(overlaySelectedSynapse_jCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(overlaySelectedSpine_jCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
                         .addGroup(selected_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(pointBoxLineWidth_jSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(synapseRadius_jSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1515,7 +1528,7 @@ public class nTracer_
                             .addComponent(arborLineWidth_jSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(neuronLineWidth_jSpinner)
                             .addComponent(somaLineWidth_jSpinner))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
                         .addGroup(selected_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(pointBoxRadiu_jSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(overlaySelectedConnection_jCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -1673,7 +1686,7 @@ public class nTracer_
                 .addComponent(selected_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(153, Short.MAX_VALUE))
+                .addContainerGap(198, Short.MAX_VALUE))
         );
 
         jPanel1.getAccessibleContext().setAccessibleName("");
@@ -1912,7 +1925,7 @@ public class nTracer_
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
+                .addGap(0, 7, Short.MAX_VALUE)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(traceNeurite_jButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel4Layout.createSequentialGroup()
@@ -2355,10 +2368,10 @@ public class nTracer_
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(clearPoints_jButton, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(channel_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(72, Short.MAX_VALUE))
+                .addContainerGap(81, Short.MAX_VALUE))
         );
 
         main_jTabbedPane.addTab("Tracing   ", tracing_jPanel);
@@ -5604,6 +5617,10 @@ public class nTracer_
         logNeuronRGB();
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
+    private void blank_jCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_blank_jCheckBoxActionPerformed
+        updateOverlay();
+    }//GEN-LAST:event_blank_jCheckBoxActionPerformed
+
     private void combineSomaAndBranchesOfTwoNeuronTreeSomas(ntNeuronNode targetNeuronSomaNode, ntNeuronNode sourceNeuronSomaNode) {
         String targetSNeuronNumber = targetNeuronSomaNode.getNeuronNumber();
         String sourceNeuronNumber = sourceNeuronSomaNode.getNeuronNumber();
@@ -7016,6 +7033,9 @@ public class nTracer_
 
             imp.setZ(slice);
             updateZprojectionImp();
+            if (blank_jCheckBox.isSelected()) {
+                updateOverlay();
+            }
         }
 
     }
@@ -8751,6 +8771,7 @@ public class nTracer_
     protected javax.swing.JRadioButton autoTracing_jRadioButton;
     private javax.swing.JMenuItem autosaveSetup_jMenuItem;
     private javax.swing.JRadioButton b_jRadioButton;
+    private javax.swing.JCheckBox blank_jCheckBox;
     private javax.swing.JCheckBox brainbowColor_jCheckBox;
     protected javax.swing.JSpinner branchLineWidth_jSpinner;
     private javax.swing.JButton breakBranch_jButton;
@@ -9424,8 +9445,63 @@ public class nTracer_
                 displayOL.add(i);
             }
         }
-
+        
+        // Overlay blanks
+        updateBlankOverlay();
         cns.setOverlay(displayOL);
+    }
+    
+    protected void updateBlankOverlay() {
+        if (blank_jCheckBox.isSelected()) {
+            int z = imp.getSlice();
+            int BLANK_PADDING = 3;
+            
+            for (int t = 0; t < rootNeuronNode.getChildCount(); ++t) {
+                ntNeuronNode neuron = (ntNeuronNode) rootNeuronNode.getChildAt(t);
+                if (neuron.getChildCount() < 1) continue;
+                float approxZ = Float.parseFloat(((ntNeuronNode)neuron.getChildAt(0)).getTracingResult().get(0)[3]);
+                if(z < approxZ - BLANK_PADDING || z > approxZ + BLANK_PADDING) continue;
+                
+                ArrayList<ntNeuronNode> branches = new ArrayList<>();
+                Stack<ntNeuronNode> st = new Stack<>();
+                st.add(neuron);
+                while (st.size() > 0) {
+                    ntNeuronNode current = st.pop();
+                    branches.add(current);
+                    for (int b = 0; b < current.getChildCount(); ++b) {
+                        st.add((ntNeuronNode) current.getChildAt(b));
+                    }
+                }
+                
+                
+                for (ntNeuronNode node: branches) {
+                    ArrayList<String[]> points = node.getTracingResult();
+
+                    float [] xarr = new float[points.size() * 2 * BLANK_PADDING * 2 * BLANK_PADDING];
+                    float [] yarr = new float[points.size() * 2 * BLANK_PADDING * 2* BLANK_PADDING];
+                    
+                    int arrIndex = 0;
+                    for (int i = 0; i < points.size(); ++i) {
+                        float pointZ = Float.parseFloat(points.get(i)[3]);
+                        if (pointZ == -1 || z > pointZ + BLANK_PADDING || z < pointZ - BLANK_PADDING) continue;
+                        
+                        for (int xp = -BLANK_PADDING; xp < BLANK_PADDING; ++xp) {
+                            for (int yp = -BLANK_PADDING; yp < BLANK_PADDING; ++yp) {
+                                xarr[arrIndex] = Math.max(Float.parseFloat(points.get(i)[1]) + xp, 0);
+                                yarr[arrIndex] = Math.max(Float.parseFloat(points.get(i)[2]) + yp, 0);
+                                ++arrIndex;
+                            }
+                        }
+                    }
+                    
+                    PolygonRoi roiLine = new PolygonRoi(xarr, yarr, Roi.POLYLINE);
+                    roiLine.setStrokeColor(Color.BLACK);
+                    roiLine.setStrokeWidth(2);
+                    displayOL.add(roiLine);
+                }
+            }
+//            cns.setOverlay(displayOL);
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="inner Class for multi-threading -- getAllNeuronAndNameOL">
