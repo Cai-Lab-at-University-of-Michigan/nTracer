@@ -34,6 +34,7 @@ import ij.gui.YesNoCancelDialog;
 import ij.io.DirectoryChooser;
 import ij.io.OpenDialog;
 import ij.measure.Calibration;
+import ij.plugin.ChannelSplitter;
 import ij.plugin.HyperStackConverter;
 import ij.plugin.RGBStackMerge;
 import ij.plugin.frame.MemoryMonitor;
@@ -587,6 +588,7 @@ public class nTracer_
         toggleCh6_jCheckBox = new javax.swing.JCheckBox();
         toggleCh7_jCheckBox = new javax.swing.JCheckBox();
         toggleCh8_jCheckBox = new javax.swing.JCheckBox();
+        showSkeletonized_jButton = new javax.swing.JButton();
         neuronList_jScrollPane = new javax.swing.JScrollPane();
         neuronList_jTree = new javax.swing.JTree();
         somaList_jScrollPane = new javax.swing.JScrollPane();
@@ -1212,7 +1214,6 @@ public class nTracer_
             .addGroup(all_jPanelLayout.createSequentialGroup()
                 .addGroup(all_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(all_jPanelLayout.createSequentialGroup()
-                        .addGap(0, 0, 0)
                         .addGroup(all_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(overlayAllName_jCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(overlayAllSoma_jCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -2330,10 +2331,18 @@ public class nTracer_
                 .addGap(128, 128, 128))
         );
 
+        showSkeletonized_jButton.setText("Show Skeletonized");
+        showSkeletonized_jButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                showSkeletonized_jButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout tracing_jPanelLayout = new javax.swing.GroupLayout(tracing_jPanel);
         tracing_jPanel.setLayout(tracing_jPanelLayout);
         tracing_jPanelLayout.setHorizontalGroup(
             tracing_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(channel_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 244, Short.MAX_VALUE)
             .addGroup(tracing_jPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(tracing_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2346,9 +2355,11 @@ public class nTracer_
                     .addGroup(tracing_jPanelLayout.createSequentialGroup()
                         .addComponent(tracingMethod_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(labeling_jPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(labeling_jPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(tracing_jPanelLayout.createSequentialGroup()
+                        .addComponent(showSkeletonized_jButton)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addComponent(channel_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 244, Short.MAX_VALUE)
         );
         tracing_jPanelLayout.setVerticalGroup(
             tracing_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2371,7 +2382,9 @@ public class nTracer_
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(channel_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(81, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(showSkeletonized_jButton)
+                .addContainerGap(47, Short.MAX_VALUE))
         );
 
         main_jTabbedPane.addTab("Tracing   ", tracing_jPanel);
@@ -5621,6 +5634,10 @@ public class nTracer_
         updateOverlay();
     }//GEN-LAST:event_blank_jCheckBoxActionPerformed
 
+    private void showSkeletonized_jButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showSkeletonized_jButtonActionPerformed
+        showSkeletonizedChannel();
+    }//GEN-LAST:event_showSkeletonized_jButtonActionPerformed
+
     private void combineSomaAndBranchesOfTwoNeuronTreeSomas(ntNeuronNode targetNeuronSomaNode, ntNeuronNode sourceNeuronSomaNode) {
         String targetSNeuronNumber = targetNeuronSomaNode.getNeuronNumber();
         String sourceNeuronNumber = sourceNeuronSomaNode.getNeuronNumber();
@@ -5887,6 +5904,33 @@ public class nTracer_
         imp.updateAndRepaintWindow();
         updateDisplay();
     }
+    
+    private void toggleSkeletonizedChannel() {
+        int numChannels = imp.getNChannels();
+        boolean[] chActive = ((CompositeImage) imp).getActiveChannels();
+        
+        String activeChannels = "";
+        for (int i = 0; i < numChannels - 1; ++i) {
+            if (chActive[i]) {
+                activeChannels += "1";
+            } else {
+                activeChannels += "0";
+            }
+        }
+        if (chActive[numChannels - 1]) {
+            activeChannels += "0";
+        } else {
+            activeChannels += "1";
+        }
+        
+        imp.setActiveChannels(activeChannels);
+    }
+    
+    private void showSkeletonizedChannel() {
+        ImagePlus[] splitImages = ChannelSplitter.split(imp);
+        impSkeletonized = splitImages[splitImages.length - 1];
+        impSkeletonized.show();
+    }
 
     // <editor-fold defaultstate="collapsed" desc="ImageWindow, Mouse, Keyboard listeners">
     /**
@@ -6116,7 +6160,7 @@ public class nTracer_
     
     @Override
     public void mouseMoved(MouseEvent me) {
-        if (me.getSource() == cns && impZproj != null) {
+        if (me.getSource() == cns) {
             Point pt = cns.getCursorLoc();
             if (pt == null) {
                 return;
@@ -6150,7 +6194,12 @@ public class nTracer_
             cursorRoi.setStrokeWidth(3);
             cursorRoi.setNonScalable(true);
             cursorRoi.setIsCursor(true);
-            impZproj.setOverlay(cursorOL);
+            if (impZproj != null) {
+                impZproj.setOverlay(cursorOL);
+            }
+            if (impSkeletonized != null) {
+                impSkeletonized.setOverlay(cursorOL);
+            }
         }
     }
 
@@ -7033,6 +7082,9 @@ public class nTracer_
 
             imp.setZ(slice);
             updateZprojectionImp();
+            if (impSkeletonized != null) {
+                impSkeletonized.setZ(slice);
+            }
             if (blank_jCheckBox.isSelected()) {
                 updateOverlay();
             }
@@ -7290,6 +7342,9 @@ public class nTracer_
                 break;
             case 117: // 'u'
                 updateDisplay();
+                break;
+            case 118: // 'v'
+                toggleSkeletonizedChannel();
                 break;
             case 119: // 'w' 
                 locIn = cns.getCursorLoc();
@@ -8911,6 +8966,7 @@ public class nTracer_
     private javax.swing.JMenuItem setScale_jMenuItem;
     private javax.swing.JButton showConnectedNeurons_jButton;
     private javax.swing.ButtonGroup showConnected_buttonGroup;
+    private javax.swing.JButton showSkeletonized_jButton;
     private javax.swing.JMenuItem skeleton_jMenuItem;
     protected javax.swing.JSpinner somaLineWidth_jSpinner;
     private javax.swing.JScrollPane somaList_jScrollPane;
@@ -8974,7 +9030,8 @@ public class nTracer_
     protected TraceHelper traceHelper;
     protected DataHelper dataHelper;
     protected ntDataHandler dataHandler;
-    public static ImagePlus imp, impZproj;
+    protected static ImagePlus imp, impZproj;
+    protected static ImagePlus impSkeletonized = null;
     protected CompositeImage cmp;
     protected ImageCanvas cns, cnsZproj;
     public static ImageStack stk;
