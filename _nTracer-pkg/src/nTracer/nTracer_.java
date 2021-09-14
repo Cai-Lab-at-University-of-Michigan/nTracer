@@ -5928,34 +5928,56 @@ public class nTracer_
         
         String activeChannels = "";
         for (int i = 0; i < numChannels - 1; ++i) {
-            if (chActive[i]) {
-                activeChannels += "1";
-            } else {
+            if (chActive[0]) {
                 activeChannels += "0";
+            } else {
+                activeChannels += "1";
             }
         }
-        if (chActive[numChannels - 1]) {
-            activeChannels += "0";
-        } else {
-            activeChannels += "1";
-        }
+        activeChannels += "1";
         
         imp.setActiveChannels(activeChannels);
     }
     
     private void showSkeletonizedChannel() {
-        ImagePlus[] splitImages = ChannelSplitter.split(imp);
-        impSkeletonized = splitImages[splitImages.length - 1];
+        if (impSkeletonizedCache == null) {
+            createSkeletonizedCache();
+        }
+        
+        impSkeletonized = new ImagePlus("", impSkeletonizedCache.getImageStack());
         impSkeletonized.show();
     }
     
+    private void updateSkeletonizedProjection() {
+        if (impSkeletonizedProjection == null) return;
+        
+        int currentZ = imp.getZ();
+        int minZ = Math.max(currentZ - zProjInterval, 0);
+        int maxZ = Math.min(currentZ + zProjInterval, imp.getNSlices());
+;
+        ImagePlus temp = DuplicateProjector.duplicateAndProject(impSkeletonizedCache, impSkeletonizedProjection, 1, 1, minZ, maxZ, imp.getRoi());
+        impSkeletonizedProjection.setImage(temp);
+        impSkeletonizedProjection.updateAndDraw();
+    }
+    
     private void showSkeletonizedProjection() {
-        ImagePlus[] splitImages = ChannelSplitter.split(imp);
-        impSkeletonized = splitImages[splitImages.length - 1];
-        ImagePlus impSkeletonizedProjection = new ImagePlus();
-        ImagePlus temp = DuplicateProjector.duplicateAndProject(impSkeletonized, impSkeletonizedProjection, 1, 1, 1, impSkeletonized.getNSlices(), impSkeletonized.getRoi());
+        int currentZ = imp.getZ();
+        int minZ = Math.max(currentZ - zProjInterval, 0);
+        int maxZ = Math.min(currentZ + zProjInterval, imp.getNSlices());
+        
+        if (impSkeletonizedCache == null) {
+            createSkeletonizedCache();
+        }
+        
+        impSkeletonizedProjection = new ImagePlus();
+        ImagePlus temp = DuplicateProjector.duplicateAndProject(impSkeletonizedCache, impSkeletonizedProjection, 1, 1, minZ, maxZ, imp.getRoi());
         impSkeletonizedProjection.setImage(temp);
         impSkeletonizedProjection.show();
+    }
+    
+    private void createSkeletonizedCache() {
+        ImagePlus[] splitImages = ChannelSplitter.split(imp);
+        impSkeletonizedCache = splitImages[splitImages.length - 1];
     }
 
     // <editor-fold defaultstate="collapsed" desc="ImageWindow, Mouse, Keyboard listeners">
@@ -6225,6 +6247,9 @@ public class nTracer_
             }
             if (impSkeletonized != null) {
                 impSkeletonized.setOverlay(cursorOL);
+            }
+            if (impSkeletonizedProjection != null) {
+                impSkeletonizedProjection.setOverlay(cursorOL);
             }
         }
     }
@@ -7110,7 +7135,13 @@ public class nTracer_
             updateZprojectionImp();
             if (impSkeletonized != null) {
                 impSkeletonized.setZ(slice);
+                impSkeletonized.updateAndDraw();
             }
+            
+            if (impSkeletonizedProjection != null) {
+                updateSkeletonizedProjection();
+            }
+            
             if (blank_jCheckBox.isSelected()) {
                 updateOverlay();
             }
@@ -9059,6 +9090,8 @@ public class nTracer_
     protected ntDataHandler dataHandler;
     protected static ImagePlus imp, impZproj;
     protected static ImagePlus impSkeletonized = null;
+    protected static ImagePlus impSkeletonizedCache = null;
+    protected static ImagePlus impSkeletonizedProjection = null;
     protected CompositeImage cmp;
     protected ImageCanvas cns, cnsZproj;
     public static ImageStack stk;
