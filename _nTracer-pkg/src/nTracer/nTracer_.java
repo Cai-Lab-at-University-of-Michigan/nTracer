@@ -35,12 +35,12 @@ import ij.io.DirectoryChooser;
 import ij.io.OpenDialog;
 import ij.measure.Calibration;
 import ij.plugin.ChannelSplitter;
+import ij.plugin.RGBStackMerge;
 import ij.plugin.HyperStackConverter;
 import ij.plugin.RGBStackMerge;
 import ij.plugin.frame.MemoryMonitor;
 import ij.plugin.ZProjector;
 import ij.process.ByteProcessor;
-import ij.process.FloatPolygon;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -590,6 +590,7 @@ public class nTracer_
         toggleCh8_jCheckBox = new javax.swing.JCheckBox();
         showSkeletonized_jButton = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        skeletonizedShowTracedPoints_jButton = new javax.swing.JCheckBox();
         neuronList_jScrollPane = new javax.swing.JScrollPane();
         neuronList_jTree = new javax.swing.JTree();
         somaList_jScrollPane = new javax.swing.JScrollPane();
@@ -642,6 +643,7 @@ public class nTracer_
         setScale_jMenuItem = new javax.swing.JMenuItem();
         data_jMenu = new javax.swing.JMenu();
         loadData_jMenuItem = new javax.swing.JMenuItem();
+        loadSkeletonized_jMenuItem = new javax.swing.JMenuItem();
         saveData_jMenuItem = new javax.swing.JMenuItem();
         clearData_jMenuItem = new javax.swing.JMenuItem();
         cropData_jMenuItem = new javax.swing.JMenuItem();
@@ -1689,7 +1691,7 @@ public class nTracer_
                 .addComponent(selected_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(198, Short.MAX_VALUE))
+                .addContainerGap(211, Short.MAX_VALUE))
         );
 
         jPanel1.getAccessibleContext().setAccessibleName("");
@@ -2347,6 +2349,14 @@ public class nTracer_
             }
         });
 
+        skeletonizedShowTracedPoints_jButton.setSelected(true);
+        skeletonizedShowTracedPoints_jButton.setText("Show traced points");
+        skeletonizedShowTracedPoints_jButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                skeletonizedShowTracedPoints_jButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout tracing_jPanelLayout = new javax.swing.GroupLayout(tracing_jPanel);
         tracing_jPanel.setLayout(tracing_jPanelLayout);
         tracing_jPanelLayout.setHorizontalGroup(
@@ -2368,7 +2378,8 @@ public class nTracer_
                     .addGroup(tracing_jPanelLayout.createSequentialGroup()
                         .addGroup(tracing_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(showSkeletonized_jButton)
-                            .addComponent(jButton3))
+                            .addComponent(jButton3)
+                            .addComponent(skeletonizedShowTracedPoints_jButton))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -2393,11 +2404,13 @@ public class nTracer_
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(channel_jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(showSkeletonized_jButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton3)
-                .addContainerGap(13, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(skeletonizedShowTracedPoints_jButton)
+                .addContainerGap())
         );
 
         main_jTabbedPane.addTab("Tracing   ", tracing_jPanel);
@@ -2731,6 +2744,15 @@ public class nTracer_
             }
         });
         data_jMenu.add(loadData_jMenuItem);
+
+        loadSkeletonized_jMenuItem.setText("Load Skeletonized");
+        loadSkeletonized_jMenuItem.setToolTipText("");
+        loadSkeletonized_jMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                loadSkeletonized_jMenuItemActionPerformed(evt);
+            }
+        });
+        data_jMenu.add(loadSkeletonized_jMenuItem);
 
         saveData_jMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         saveData_jMenuItem.setText("Save Data");
@@ -3147,6 +3169,30 @@ public class nTracer_
         cns.addKeyListener(this);
         cns.disablePopupMenu(true);
     }
+    
+    private void initImageWithSkeletonized() {
+        stk = imp.getImageStack();
+        cns = imp.getCanvas();
+        win = imp.getWindow();
+        // initiate display event responses
+        WindowListener impWL[] = win.getWindowListeners();
+        for (WindowListener impWL1 : impWL) {
+            win.removeWindowListener(impWL1);
+        }
+        MouseWheelListener[] mwl = win.getMouseWheelListeners();
+        for (MouseWheelListener mwl1 : mwl) {
+            win.removeMouseWheelListener(mwl1);
+        }
+        win.addMouseWheelListener(this);
+        cns.addMouseListener(this);
+        cns.addMouseMotionListener(this);
+
+        // remove default keyboard shortcut
+        cns.removeKeyListener(IJ.getInstance());
+        cns.addKeyListener(this);
+        cns.disablePopupMenu(true);
+        updateDisplay();
+    }
 
     private void initImageZproj() {
         //impZproj = DuplicateProjector.duplicateAndProject( imp, 1, 1, 1, 1 );
@@ -3236,7 +3282,7 @@ public class nTracer_
         
         deselectInvisualizeAllChannelCheckboxes();
         for (int i = 0; i < 8; ++i) {
-            if (impNChannel >= i) {
+            if (impNChannel > i) {
                 toggleCh_jCheckboxes[i].setVisible(true);
                 toggleCh_jCheckboxes[i].setEnabled(true);
                 analysisCh_jCheckboxes[i].setVisible(true);
@@ -5655,6 +5701,14 @@ public class nTracer_
         showSkeletonizedProjection();
     }//GEN-LAST:event_jButton3ActionPerformed
 
+    private void loadSkeletonized_jMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadSkeletonized_jMenuItemActionPerformed
+        loadSkeletonizedFile();
+    }//GEN-LAST:event_loadSkeletonized_jMenuItemActionPerformed
+
+    private void skeletonizedShowTracedPoints_jButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_skeletonizedShowTracedPoints_jButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_skeletonizedShowTracedPoints_jButtonActionPerformed
+
     private void combineSomaAndBranchesOfTwoNeuronTreeSomas(ntNeuronNode targetNeuronSomaNode, ntNeuronNode sourceNeuronSomaNode) {
         String targetSNeuronNumber = targetNeuronSomaNode.getNeuronNumber();
         String sourceNeuronNumber = sourceNeuronSomaNode.getNeuronNumber();
@@ -5922,7 +5976,30 @@ public class nTracer_
         updateDisplay();
     }
     
+    private void loadSkeletonizedFile() {
+        ImagePlus newImp = IJ.openImage();
+        if (newImp == null || newImp.getNChannels() != 1) {
+            IJ.error("Invalid skeletonized image");
+        }
+        ImagePlus[] splits = ChannelSplitter.split(imp);
+        ImagePlus[] newChannels;
+        if (impSkeletonizedSource == null) {
+            newChannels = new ImagePlus[splits.length + 1];
+            for (int i = 0; i < splits.length; ++i) newChannels[i] = splits[i];
+        } else {
+            newChannels = new ImagePlus[splits.length];
+            for (int i = 0; i < splits.length - 1; ++i) newChannels[i] = splits[i];
+        }
+        impSkeletonizedSource = newImp;
+        newChannels[newChannels.length - 1] = impSkeletonizedSource;
+        ImagePlus mergedImp = RGBStackMerge.mergeChannels(newChannels, true);
+        imp.setImage(mergedImp);
+        initImageWithSkeletonized();
+    }
+    
     private void toggleSkeletonizedChannel() {
+        if (impSkeletonizedSource == null) return;
+        
         int numChannels = imp.getNChannels();
         boolean[] chActive = ((CompositeImage) imp).getActiveChannels();
         
@@ -5940,44 +6017,37 @@ public class nTracer_
     }
     
     private void showSkeletonizedChannel() {
-        if (impSkeletonizedCache == null) {
-            createSkeletonizedCache();
-        }
+        if (impSkeletonizedSource == null) return;
         
-        impSkeletonized = new ImagePlus("", impSkeletonizedCache.getImageStack());
+        impSkeletonized = new ImagePlus("", impSkeletonizedSource.getImageStack());
         impSkeletonized.show();
     }
     
     private void updateSkeletonizedProjection() {
-        if (impSkeletonizedProjection == null) return;
+        if (impSkeletonizedSource == null || impSkeletonizedProjection == null) return;
         
         int currentZ = imp.getZ();
         int minZ = Math.max(currentZ - zProjInterval, 0);
         int maxZ = Math.min(currentZ + zProjInterval, imp.getNSlices());
 ;
-        ImagePlus temp = DuplicateProjector.duplicateAndProject(impSkeletonizedCache, impSkeletonizedProjection, 1, 1, minZ, maxZ, imp.getRoi());
+        ImagePlus temp = DuplicateProjector.duplicateAndProject(impSkeletonizedSource, impSkeletonizedProjection, 1, 1, minZ, maxZ, imp.getRoi());
         impSkeletonizedProjection.setImage(temp);
+        updateSkeletonizedTracing();
         impSkeletonizedProjection.updateAndDraw();
     }
     
     private void showSkeletonizedProjection() {
+        if (impSkeletonizedSource == null) return;
+
         int currentZ = imp.getZ();
         int minZ = Math.max(currentZ - zProjInterval, 0);
         int maxZ = Math.min(currentZ + zProjInterval, imp.getNSlices());
         
-        if (impSkeletonizedCache == null) {
-            createSkeletonizedCache();
-        }
-        
         impSkeletonizedProjection = new ImagePlus();
-        ImagePlus temp = DuplicateProjector.duplicateAndProject(impSkeletonizedCache, impSkeletonizedProjection, 1, 1, minZ, maxZ, imp.getRoi());
+        ImagePlus temp = DuplicateProjector.duplicateAndProject(impSkeletonizedSource, impSkeletonizedProjection, 1, 1, minZ, maxZ, imp.getRoi());
         impSkeletonizedProjection.setImage(temp);
         impSkeletonizedProjection.show();
-    }
-    
-    private void createSkeletonizedCache() {
-        ImagePlus[] splitImages = ChannelSplitter.split(imp);
-        impSkeletonizedCache = splitImages[splitImages.length - 1];
+        updateSkeletonizedTracing();
     }
 
     // <editor-fold defaultstate="collapsed" desc="ImageWindow, Mouse, Keyboard listeners">
@@ -6247,9 +6317,6 @@ public class nTracer_
             }
             if (impSkeletonized != null) {
                 impSkeletonized.setOverlay(cursorOL);
-            }
-            if (impSkeletonizedProjection != null) {
-                impSkeletonizedProjection.setOverlay(cursorOL);
             }
         }
     }
@@ -8964,6 +9031,7 @@ public class nTracer_
     private javax.swing.JLabel linkRadius_jLabel;
     private javax.swing.JSpinner linkRadius_jSpinner;
     private javax.swing.JMenuItem loadData_jMenuItem;
+    private javax.swing.JMenuItem loadSkeletonized_jMenuItem;
     private javax.swing.JMenuItem logColorRatio_jMenuItem;
     private javax.swing.JMenuItem logNeuronConnection_jMenuItem;
     private javax.swing.JMenuItem logNormChIntensity_jMenuItem;
@@ -9026,6 +9094,7 @@ public class nTracer_
     private javax.swing.ButtonGroup showConnected_buttonGroup;
     private javax.swing.JButton showSkeletonized_jButton;
     private javax.swing.JMenuItem skeleton_jMenuItem;
+    private javax.swing.JCheckBox skeletonizedShowTracedPoints_jButton;
     protected javax.swing.JSpinner somaLineWidth_jSpinner;
     private javax.swing.JScrollPane somaList_jScrollPane;
     protected javax.swing.JSpinner spineLineWidth_jSpinner;
@@ -9090,7 +9159,7 @@ public class nTracer_
     protected ntDataHandler dataHandler;
     protected static ImagePlus imp, impZproj;
     protected static ImagePlus impSkeletonized = null;
-    protected static ImagePlus impSkeletonizedCache = null;
+    protected static ImagePlus impSkeletonizedSource = null;
     protected static ImagePlus impSkeletonizedProjection = null;
     protected CompositeImage cmp;
     protected ImageCanvas cns, cnsZproj;
@@ -9619,6 +9688,80 @@ public class nTracer_
             }
 //            cns.setOverlay(displayOL);
         }
+    }
+    
+    protected void updateSkeletonizedTracing() {
+        if (!skeletonizedShowTracedPoints_jButton.isSelected()) return;
+        
+        int z = imp.getSlice();
+        
+        Overlay tracingOL = new Overlay();
+        
+        for (int t = 0; t < rootNeuronNode.getChildCount(); ++t) {
+            ntNeuronNode neuron = (ntNeuronNode) rootNeuronNode.getChildAt(t);
+            if (neuron.getChildCount() < 1) continue;
+
+            ArrayList<ntNeuronNode> branches = new ArrayList<>();
+            Stack<ntNeuronNode> st = new Stack<>();
+            st.add(neuron);
+            while (st.size() > 0) {
+                ntNeuronNode current = st.pop();
+                branches.add(current);
+                
+                for (int b = 0; b < current.getChildCount(); ++b) {
+                    st.add((ntNeuronNode) current.getChildAt(b));
+                }
+            }
+
+
+            for (ntNeuronNode node: branches) {
+                ArrayList<String[]> points = node.getTracingResult();
+                
+                ArrayList<Float> xList = new ArrayList<>();
+                ArrayList<Float> yList = new ArrayList<>();
+                boolean pathStarted = false;
+
+                for (int i = 0; i < points.size(); ++i) {
+                    float currentZ = Float.parseFloat(points.get(i)[3]);
+                    if (z < currentZ - zProjInterval || z > currentZ + zProjInterval) {
+                        if (pathStarted) {
+                            float[] xArr = new float[xList.size()];
+                            float[] yArr = new float[yList.size()];
+                            for (int l = 0; l < xArr.length; ++l) {
+                                xArr[l] = xList.get(l);
+                                yArr[l] = yList.get(l);
+                            }
+
+                            PolygonRoi roiLine = new PolygonRoi(xArr, yArr, Roi.POLYLINE);
+                            roiLine.setStrokeColor(Color.YELLOW);
+                            roiLine.setStrokeWidth(2);
+                            tracingOL.add(roiLine);
+                            xList = new ArrayList<>();
+                            yList = new ArrayList<>();
+                            pathStarted = false;
+                        }
+                        continue;
+                    }
+                    pathStarted = true;
+                    xList.add(Float.parseFloat(points.get(i)[1]));
+                    yList.add(Float.parseFloat(points.get(i)[2]));
+                }
+                if (xList.size() > 0) {
+                    float[] xArr = new float[xList.size()];
+                    float[] yArr = new float[yList.size()];
+                    for (int l = 0; l < xArr.length; ++l) {
+                        xArr[l] = xList.get(l);
+                        yArr[l] = yList.get(l);
+                    }
+
+                    PolygonRoi roiLine = new PolygonRoi(xArr, yArr, Roi.POLYLINE);
+                    roiLine.setStrokeColor(Color.YELLOW);
+                    roiLine.setStrokeWidth(2);
+                    tracingOL.add(roiLine);
+                }
+            }
+        }
+        impSkeletonizedProjection.getCanvas().setOverlay(tracingOL);
     }
 
     // <editor-fold defaultstate="collapsed" desc="inner Class for multi-threading -- getAllNeuronAndNameOL">
